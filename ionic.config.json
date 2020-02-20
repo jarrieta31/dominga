@@ -1,0 +1,7 @@
+{
+  "name": "dominga",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
