@@ -1,5 +1,5 @@
 
- <ion-header collapse="condense">
+ <ion-header>
              <ion-toolbar color="primary">
              	<ion-title>Basílica Catedral</ion-title>
         <ion-buttons slot="primary">
@@ -7,22 +7,73 @@
            <ion-icon name="business"></ion-icon>
           </ion-button>
         </ion-buttons>
-
-        
       </ion-toolbar>
-       
       </ion-header>
 
 <ion-content>
-	<ion-grid>
-        <ion-row>
+	 <!-- 2.5% margin top -->
+	<ion-grid class="infoLugar">
+		 <!-- 30% -->
+        <ion-row class="imagenPrincipal"> 
           <ion-col>
-            <div>1 of 1</div>
+            <div class="imagenPrincipal"><img class="imgGrande" id="foto"></div>
           </ion-col>      
         </ion-row>
+         <!-- 15% -->
+         <ion-row class="galeria">
+         <ion-col>
+         <ion-slides pager="true" [options]="slideOpts">
+      <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral.jpg"></div>
+      </ion-slide>
+      <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral2.jpeg"></div>
+      </ion-slide>
+      <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral.jpg"></div>
+      </ion-slide>
+       <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral3.jpg"></div>
+      </ion-slide>
+      <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral.jpg"></div>
+      </ion-slide>
+      <ion-slide>
+        <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/catedral4.JPG"></div>
+      </ion-slide>
+    </ion-slides>
+    </ion-col>
+    </ion-row>
+         <!-- 25% -->
+        <ion-row class="descripcion">
+          <ion-col class="texto">
+            <p>La Catedral Basílica de San José de Mayo es sede catedralicia de la Diócesis de San José de Mayo, Uruguay. Está situada en la plaza "Treinta y Tres", plaza central de la ciudad de San José de Mayo, departamento de San José.</p>
+            <p>Esta obra es un exponente de los estilos arquitectónicos predominantes en...<a (click)=openModal()>Ver más</a></p>
+          </ion-col>      
+        </ion-row>
+         <!-- 20% -->
+        <ion-row class="mapa">
+          <ion-col>
+            <div><img class="imgMapa" src="../../../assets/icon/mapa.PNG"></div>
+          </ion-col>      
+        </ion-row>
+         <!-- 5% -->
+        <ion-row class="calificacion">
+          <ion-col>
+            <div>100 mts</div>
+          </ion-col> 
+          <ion-col class="estrellas">
+          	<ion-icon name="star-outline"></ion-icon>
+          	<ion-icon name="star-outline"></ion-icon>
+          	<ion-icon name="star-outline"></ion-icon>
+          	<ion-icon name="star-outline"></ion-icon>
+          	<ion-icon name="star-outline"></ion-icon>
+          </ion-col>     
+        </ion-row>
     </ion-grid>
+     <!-- 2.5% margin bottom -->
 
-<ion-slides pager="true" [options]="slideOpts">
+<!-- <ion-slides pager="true" [options]="slideOpts">
    <ion-grid>
         <ion-row class="ion-text-center">
         	<ion-slide>
@@ -38,4 +89,4 @@
         </ion-row>
     </ion-grid>
       </ion-slides>
-</ion-content>
+</ion-content> -->

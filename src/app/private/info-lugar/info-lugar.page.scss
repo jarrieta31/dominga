@@ -1,0 +1,57 @@
+.infoLugar{
+	margin: 2.5% 2% 2.5% 2%;
+	padding: 0;
+}
+
+.imagenPrincipal{
+	height: 170px;
+}
+
+.galeria{
+	height: 90px;
+}
+
+.descripcion{
+	height: 140px;
+	margin: 0;
+}
+
+.mapa{
+	height: 120px;
+	margin: 0;
+}
+
+.calificacion{
+	height: 50px;
+	margin-top: 2%;
+}
+
+.imgGrande{
+	height: 170px;
+	width: 100%;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+
+.imgGaleria{
+	height: 90px;
+	width: 100%;
+}
+
+.texto{
+	//background-color: #E7E7E7;
+	font-size: 12px;
+}
+
+.imgMapa{
+	height: 120px;
+	width: 100%;
+}
+
+.estrellas{
+	text-align: right;
+}
+
+ion-slides{
+	margin-top: 2px;
+}

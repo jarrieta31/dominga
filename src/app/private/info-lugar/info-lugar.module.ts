@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { InfoLugarPageRoutingModule } from './info-lugar-routing.module';
 
 import { InfoLugarPage } from './info-lugar.page';
+import { DescripcionLugarPage } from '../../core/modals/descripcion-lugar/descripcion-lugar.page'
+
 
 @NgModule({
   imports: [
@@ -15,6 +17,12 @@ import { InfoLugarPage } from './info-lugar.page';
     IonicModule,
     InfoLugarPageRoutingModule
   ],
-  declarations: [InfoLugarPage]
+  declarations: [
+  	InfoLugarPage,
+  	DescripcionLugarPage
+  	],
+  entryComponents: [
+  	DescripcionLugarPage
+  	]
 })
 export class InfoLugarPageModule {}

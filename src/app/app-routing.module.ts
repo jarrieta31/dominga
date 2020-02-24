@@ -14,7 +14,11 @@ const routes: Routes = [
   {
     path: 'lugar',
     loadChildren: () => import('./private/info-lugar/info-lugar.module').then( m => m.InfoLugarPageModule)
+  },  {
+    path: 'descripcion-lugar',
+    loadChildren: () => import('./core/modals/descripcion-lugar/descripcion-lugar.module').then( m => m.DescripcionLugarPageModule)
   },
+
 
 ];
 
