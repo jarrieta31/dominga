@@ -1,7 +1,7 @@
 
  <ion-header>
              <ion-toolbar color="primary">
-             	<ion-title>Basílica Catedral</ion-title>
+             	<ion-title>{{ infoLugar.nombre }}</ion-title>
         <ion-buttons slot="primary">
           <ion-button>
            <ion-icon name="business"></ion-icon>
@@ -46,15 +46,14 @@
     </ion-row>
          <!-- 25% -->
         <ion-row class="descripcion">
-          <ion-col class="texto">
-            <p>La Catedral Basílica de San José de Mayo es sede catedralicia de la Diócesis de San José de Mayo, Uruguay. Está situada en la plaza "Treinta y Tres", plaza central de la ciudad de San José de Mayo, departamento de San José.</p>
-            <p>Esta obra es un exponente de los estilos arquitectónicos predominantes en...<a (click)=openModal()>Ver más</a></p>
+          <ion-col class="texto" id="desc">
+            <p class="text">{{ infoLugar.descripcion }}<!-- <a class="verMas" (click)=openModal()>Ver más</a> --></p>
           </ion-col>      
         </ion-row>
          <!-- 20% -->
         <ion-row class="mapa">
           <ion-col>
-            <div><img class="imgMapa" src="../../../assets/icon/mapa.PNG"></div>
+            <div id="mapa-box"></div>
           </ion-col>      
         </ion-row>
          <!-- 5% -->

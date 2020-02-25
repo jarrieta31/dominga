@@ -1,5 +1,14 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+ion-title{
+	margin-left: 3%;
+}
+
 .infoLugar{
-	margin: 2.5% 2% 2.5% 2%;
+	margin: 2.5% 4% 2.5% 4%;
 	padding: 0;
 }
 
@@ -12,17 +21,16 @@
 }
 
 .descripcion{
-	height: 140px;
-	margin: 0;
+	height: 150px;
+	overflow: auto;
 }
 
 .mapa{
 	height: 120px;
-	margin: 0;
 }
 
 .calificacion{
-	height: 50px;
+	height: 30px;
 	margin-top: 2%;
 }
 
@@ -39,11 +47,11 @@
 }
 
 .texto{
-	//background-color: #E7E7E7;
+	background-color: #F0F0F0;
 	font-size: 12px;
 }
 
-.imgMapa{
+#mapa-box{
 	height: 120px;
 	width: 100%;
 }
@@ -54,4 +62,12 @@
 
 ion-slides{
 	margin-top: 2px;
+}
+
+.verMas{
+	text-decoration: underline;
+}
+
+.text{
+	margin: 4%;
 }
