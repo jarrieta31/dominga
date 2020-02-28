@@ -1,9 +1,69 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Regresar" defaultHref="home"></ion-back-button>
+      <ion-button (click)="obtenerPosicion()">GPS</ion-button>
+    </ion-buttons>
+    <ion-title>
+      Home
+    </ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
+<!-- <div class="relleno" ></div> -->
+<div class="slider contenedor" >
+  <ion-slides scrollbar="true" pager="true" >
+    <ion-slide class="slide-1">
+      <ion-img src="/assets/img/slider1.jpeg"></ion-img>
+    </ion-slide>
+    <ion-slide class="slide-2">
+      <ion-img src="/assets/img/slider2.png"></ion-img>
+    </ion-slide>
+    <ion-slide class="slide-3">
+      <ion-img src="/assets/img/slider3.png"></ion-img>
+    </ion-slide>
+  </ion-slides>
+  <div class="iconos contenedor">
+    <div class="circulo icon1"></div>
+    <div class="circulo icon2"></div>
+    <div class="circulo icon3"></div>
+    <div class="circulo icon4"></div>
+  </div>
+</div>
+<ion-content scroll-y="true">
+  
+  <ion-grid>
+ 
+  
+    <ion-row >
+      <ion-col>        
+  
+        
+          <ion-virtual-scroll [items]="items" approxItemHeight="300px">
+            <ion-card *virtualItem="let item">
+              <ion-card-header>
+                
+                  <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
+                  
+              </ion-card-header>
+              <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
+            <ion-card-content>
+              <ion-item>
+                <ion-label slot="start">100 metros</ion-label>
+                <ion-icon class="estrella" name="star"></ion-icon>
+                <ion-icon class="estrella" name="star"></ion-icon>
+                <ion-icon class="estrella" name="star"></ion-icon>
+                <ion-icon class="estrella" name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+              </ion-item>             
+            </ion-card-content>
+            </ion-card>
+          </ion-virtual-scroll>
+                
+        
+      </ion-col>
+    </ion-row>
+    
+  </ion-grid>   
+  
 </ion-content>
