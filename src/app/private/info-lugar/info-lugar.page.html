@@ -1,25 +1,62 @@
-
- <ion-header>
-             <ion-toolbar color="primary">
-             	<ion-title>{{ infoLugar.nombre }}</ion-title>
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>{{ infoLugar.nombre }}</ion-title>
         <ion-buttons slot="primary">
-          <ion-button>
-           <ion-icon name="business"></ion-icon>
-          </ion-button>
+            <ion-button>
+                <ion-icon name="business"></ion-icon>
+            </ion-button>
         </ion-buttons>
-      </ion-toolbar>
-      </ion-header>
-
+    </ion-toolbar>
+</ion-header>
 <ion-content>
-	 <!-- 2.5% margin top -->
+    <div class="padre">
+        <div class="diva"><img class="imgPrincipal" id="foto"></div>
+        <div class="divb">
+            <ion-slides class="slidePadre" pager="TRUE" [options]="slideOpts">
+                <ion-slide class="slideHijo">
+                   <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro.jpg"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro1.jpg"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro3.jpg"></div> </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro4.jpg"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro5.jpg"></div> </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/icon/teatro6.JPG"></div>
+                </ion-slide>
+            </ion-slides>
+        </div>
+        <div class="divc">
+            <p class="text">{{ infoLugar.descripcion }}<a class="verMas" (click)=openModal()>Ver más</a></p>
+        </div>
+        <div class="divd">
+            <div id="mapa-box"></div>
+        </div>
+        <div class="dive">
+            <div class="distancia">100 mts</div>
+            <div class="estrellas">
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+            </div>
+        </div>
+    </div>
+    <!-- 2.5% margin top
 	<ion-grid class="infoLugar">
-		 <!-- 30% -->
+		 30%
         <ion-row class="imagenPrincipal"> 
-          <ion-col>
-            <div class="imagenPrincipal"><img class="imgGrande" id="foto"></div>
+          <ion-col class="sos">
+            <div class="imgGrande"><img id="foto"></div>
           </ion-col>      
         </ion-row>
-         <!-- 15% -->
+         15%
          <ion-row class="galeria">
          <ion-col>
          <ion-slides pager="true" [options]="slideOpts">
@@ -44,19 +81,19 @@
     </ion-slides>
     </ion-col>
     </ion-row>
-         <!-- 25% -->
+         25%
         <ion-row class="descripcion">
           <ion-col class="texto" id="desc">
-            <p class="text">{{ infoLugar.descripcion }}<!-- <a class="verMas" (click)=openModal()>Ver más</a> --></p>
+            <p class="text">{{ infoLugar.descripcion }}<a class="verMas" (click)=openModal()>Ver más</a></p>
           </ion-col>      
         </ion-row>
-         <!-- 20% -->
+         20%
         <ion-row class="mapa">
           <ion-col>
-            <div id="mapa-box"></div>
+            
           </ion-col>      
         </ion-row>
-         <!-- 5% -->
+         5%
         <ion-row class="calificacion">
           <ion-col>
             <div>100 mts</div>
@@ -70,22 +107,5 @@
           </ion-col>     
         </ion-row>
     </ion-grid>
-     <!-- 2.5% margin bottom -->
-
-<!-- <ion-slides pager="true" [options]="slideOpts">
-   <ion-grid>
-        <ion-row class="ion-text-center">
-        	<ion-slide>
-          <ion-col>
-            hola
-          </ion-col>
-          </ion-slide>
-          <ion-slide>
-          <ion-col>
-            hola
-          </ion-col>
-          </ion-slide>
-        </ion-row>
-    </ion-grid>
-      </ion-slides>
-</ion-content> -->
+     2.5% margin bottom -->
+</ion-content>

@@ -29,7 +29,7 @@ export class InfoLugarPage implements OnInit {
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
-  	var cambio = "../../../assets/icon/catedral.jpg";
+  	var cambio = "../../../assets/icon/teatro.jpg";
   	$("#foto").attr("src",cambio);
 
   	Mapboxgl.accessToken = environment.mapBoxKey;
@@ -37,16 +37,25 @@ export class InfoLugarPage implements OnInit {
 		container: 'mapa-box',
 		style: 'mapbox://styles/mapbox/streets-v11',
 		center: [-56.713438, -34.340118],
-		zoom: 16
-	});
+		zoom: 16,
+
+	}
+
+	);
 
 		const marker = new Mapboxgl.Marker({
 			draggable: false
 		}).setLngLat([-56.713438, -34.340118]).addTo(this.mapa);
+
+		this.mapa.on('load', () => {
+  			this.mapa.resize();
+  })
   }
 
+
+
   async cambiarImagen() {
-  	$("#imagenMini img").click(function(){ 
+  	$(".imgGaleria").click(function(){ 
     var imagenSrc = $(this).attr('src');
     $("#foto").attr("src",imagenSrc);  
 });
