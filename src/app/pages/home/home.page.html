@@ -55,7 +55,9 @@
                   <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
                   
               </ion-card-header>
-              <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
+              <a routerLink="/places" >
+                <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
+              </a>
             <ion-card-content>
               <ion-item>
                 <ion-label slot="start">100 metros</ion-label>
