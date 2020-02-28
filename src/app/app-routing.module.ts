@@ -63,6 +63,10 @@ const routes: Routes = [
     path: 'sj-events',
     loadChildren: () => import('./pages/sj-events/sj-events.module').then( m => m.SjEventsPageModule)
   },
+  {
+    path: 'circuits',
+    loadChildren: () => import('./pages/circuits/circuits.module').then( m => m.CircuitsPageModule)
+  },
 ];
 
 @NgModule({

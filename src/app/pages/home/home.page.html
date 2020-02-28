@@ -1,8 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button text="Regresar" defaultHref="home"></ion-back-button>
-      <ion-button (click)="obtenerPosicion()">GPS</ion-button>
+      <ion-back-button text="Regresar" defaultHref="/login"></ion-back-button>
     </ion-buttons>
     <ion-title>
       Home
@@ -13,7 +12,10 @@
 <div class="slider contenedor" >
   <ion-slides scrollbar="true" pager="true" >
     <ion-slide class="slide-1">
-      <ion-img src="/assets/img/slider1.jpeg"></ion-img>
+      
+      <a routerLink="/sj-events" >
+        <ion-img src="/assets/img/slider1.jpeg"></ion-img>
+      </a>
     </ion-slide>
     <ion-slide class="slide-2">
       <ion-img src="/assets/img/slider2.png"></ion-img>
@@ -23,10 +25,18 @@
     </ion-slide>
   </ion-slides>
   <div class="iconos contenedor">
-    <div class="circulo icon1"></div>
-    <div class="circulo icon2"></div>
-    <div class="circulo icon3"></div>
-    <div class="circulo icon4"></div>
+    <a routerLink="/circuits" >
+      <div class="circulo icon1"></div>
+    </a>    
+    <a routerLink="/favorite" >
+      <div class="circulo icon2"></div>
+    </a>
+    <a routerLink="/information" >
+      <div class="circulo icon3"></div>
+    </a>
+    <a routerLink="/more-options" >
+      <div class="circulo icon4"></div>
+    </a>
   </div>
 </div>
 <ion-content scroll-y="true">
