@@ -1,7 +1,8 @@
 {
   "name": "dominga",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

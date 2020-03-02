@@ -48,29 +48,29 @@
       <ion-col>        
   
         
-          <ion-virtual-scroll [items]="items" approxItemHeight="300px">
-            <ion-card *virtualItem="let item">
-              <ion-card-header>
+        <ion-virtual-scroll [items]="items" approxItemHeight="300px">
+          <ion-card *virtualItem="let item">
+            <ion-card-header>
+              
+                <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
                 
-                  <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
-                  
-              </ion-card-header>
-              <a routerLink="/places" >
-                <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
-              </a>
-            <ion-card-content>
-              <ion-item>
-                <ion-label slot="start">100 metros</ion-label>
-                <ion-icon class="estrella" name="star"></ion-icon>
-                <ion-icon class="estrella" name="star"></ion-icon>
-                <ion-icon class="estrella" name="star"></ion-icon>
-                <ion-icon class="estrella" name="star"></ion-icon>
-                <ion-icon name="star"></ion-icon>
-                <ion-icon name="star"></ion-icon>
-              </ion-item>             
-            </ion-card-content>
-            </ion-card>
-          </ion-virtual-scroll>
+            </ion-card-header>
+            <a routerLink="/places" >
+              <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
+            </a>
+          <ion-card-content>
+            <ion-item>
+              <ion-label slot="start">100 metros</ion-label>
+              <ion-icon class="estrella" name="star"></ion-icon>
+              <ion-icon class="estrella" name="star"></ion-icon>
+              <ion-icon class="estrella" name="star"></ion-icon>
+              <ion-icon class="estrella" name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </ion-item>             
+          </ion-card-content>
+          </ion-card>
+        </ion-virtual-scroll>
                 
         
       </ion-col>
