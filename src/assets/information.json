@@ -1,0 +1,37 @@
+{
+    "items": [
+    {
+        "name": "Teléfonos importantes",
+        "children": [
+        {
+            "info": "Policía",
+            "number": 911
+        },
+        {
+            "info": "Bomberos",
+            "number": 104
+        },
+        {
+        	"info": "Emergencia Médica",
+        	"number": 43423718
+        },
+    {
+        	"info": "Ambulancias",
+        	"number": 105
+        }]
+    },
+    {
+        "name": "¿Cómo moverse?",
+        "children": [
+        {
+            "info": "Taxi"
+        }]
+    },
+    {
+        "name": "Cambio",
+        "children": [
+        {
+            "info": "Cambio San José"
+        }]
+    }]
+}

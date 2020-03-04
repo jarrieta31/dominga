@@ -1,9 +1,52 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>places</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-title>Teatro</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button>
+                <ion-icon name="business"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
-</ion-content>
+    <div class="padre">
+        <div class="diva"><img class="imgPrincipal" id="foto"></div>
+        <div class="divb">
+            <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+                <ion-slide class="slideHijo">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="../../../assets/img/afe.JPG"></div>
+                </ion-slide>
+            </ion-slides>
+        </div>
+        <div class="divc">
+            <p class="text">Algo<!-- <a class="verMas" (click)=openModal()>Ver más</a> --></p>
+        </div>
+        <div class="divd">
+            <div id="mapa-box"></div>
+        </div>
+        <div class="dive">
+            <div class="distancia">100 mts</div>
+            <div class="estrellas">
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+            </div>
+        </div>
+    </div>
