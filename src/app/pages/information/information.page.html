@@ -17,7 +17,7 @@
             <ion-icon class="info-name" slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
             <ion-label class="info-name">{{ item.name }}</ion-label>
         </ion-item>
-        <div *ngIf="item.children && item.open">
+        <div class="children-content" *ngIf="item.children && item.open">
     	<ion-list *ngFor="let child of item.children; let j = index" lines="none" class="child-list">
     		<ion-item class="item-children">
             <!-- <ion-icon slot="start" name="add" *ngIf="!child.open"></ion-icon>

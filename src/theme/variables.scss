@@ -90,6 +90,30 @@
   --ion-color-acorddion-contrast-rgb: 0,0,0;
   --ion-color-acorddion-shade: #cacaca;
   --ion-color-acorddion-tint: #e8e8e8;
+
+  /** favorite **/
+  --ion-color-favorite: #c706ff;
+  --ion-color-favorite-rgb: 199,6,255;
+  --ion-color-favorite-contrast: #ffffff;
+  --ion-color-favorite-contrast-rgb: 255,255,255;
+  --ion-color-favorite-shade: #af05e0;
+  --ion-color-favorite-tint: #cd1fff;
+
+  /** more-options **/
+  --ion-color-options: #10dda6;
+  --ion-color-options-rgb: 16,221,166;
+  --ion-color-options-contrast: #000000;
+  --ion-color-options-contrast-rgb: 0,0,0;
+  --ion-color-options-shade: #0ec292;
+  --ion-color-options-tint: #28e0af;
+
+  /** circuits **/
+  --ion-color-circuits: #0ae9e6;
+  --ion-color-circuits-rgb: 10,233,230;
+  --ion-color-circuits-contrast: #000000;
+  --ion-color-circuits-contrast-rgb: 0,0,0;
+  --ion-color-circuits-shade: #09cdca;
+  --ion-color-circuits-tint: #23ebe9;
 }
 
 .ion-color-information{
@@ -108,6 +132,33 @@
   --ion-color-contrast-rgb: var(--ion-color-acorddion-contrast-rgb) !important;
   --ion-color-shade: var(--ion-color-acorddion-shade) !important;
   --ion-color-tint: var(--ion-color-acorddion-tint) !important;
+}
+
+.ion-color-favorite{
+  --ion-color-base: var(--ion-color-favorite) !important;
+  --ion-color-base-rgb: var(--ion-color-favorite-rgb) !important;
+  --ion-color-contrast: var(--ion-color-favorite-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-favorite-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-favorite-shade) !important;
+  --ion-color-tint: var(--ion-color-favorite-tint) !important;
+}
+
+.ion-color-options{
+  --ion-color-base: var(--ion-color-options) !important;
+  --ion-color-base-rgb: var(--ion-color-options-rgb) !important;
+  --ion-color-contrast: var(--ion-color-options-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-options-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-options-shade) !important;
+  --ion-color-tint: var(--ion-color-options-tint) !important;
+}
+
+.ion-color-circuits{
+  --ion-color-base: var(--ion-color-circuits) !important;
+  --ion-color-base-rgb: var(--ion-color-circuits-rgb) !important;
+  --ion-color-contrast: var(--ion-color-circuits-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-circuits-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-circuits-shade) !important;
+  --ion-color-tint: var(--ion-color-circuits-tint) !important;
 }
 
 @media (prefers-color-scheme: dark) {
