@@ -1,14 +1,44 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button routerLink="/home">
-        Ir a home
-      </ion-button>
+      <ion-button routerLink="/home">Ir a home</ion-button>
+      
     </ion-buttons>
+    <ion-button slot="end" *ngIf="authenticationService.userData | async" (click)="signOut()">Salir</ion-button> 
     <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<h1>pantalla de login</h1>
+
+  <h1 *ngIf="authenticationService.userData | async">Hello {{ (authenticationService.userData | async)?.email }}</h1>
+
+   <div *ngIf="!(authenticationService.userData | async)"> 
+  <!-- <form #formulario="ngForm" (ngSubmit)="onSubmit()"></form> -->
+    <ion-list>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input name="email" type="email" [(ngModel)]="email" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input name="password" type="password" [(ngModel)]="password" ></ion-input>
+      </ion-item>
+
+      <ion-item button (click)="signUp()">
+        <ion-label color="primary" >Registrarse</ion-label>
+      </ion-item>
+
+    </ion-list>
+
+    <ion-button expand="full" (click)="signIn()">Entrar</ion-button>
+    
+      
+  <!-- </form> -->
+  
+  
+
+</div>
 </ion-content>
