@@ -11,6 +11,9 @@ import { FirebaseService } from '../../services/firebase.service';
 })
 export class LoginPage implements OnInit {
 
+  data: any;
+  datos = [];
+
   email: string;
   password: string;
   lugar: Place = {$key: "", 
@@ -23,12 +26,23 @@ export class LoginPage implements OnInit {
   };
 
   constructor( public authenticationService: AuthService, public fireServ: FirebaseService) {
+    fireServ.getPlace('-M1cQY4zLjoLbSTAk7bB').subscribe( data => {
+      this.data = data;
+      console.log(data);
+    });
+
+    fireServ.getPlaceList().subscribe( data => {
+      this.datos = data;
+      console.log(this.datos);
+    });
     
+    //console.log(fireServ.getPlaceList());
   }
 
   ngOnInit() { 
     //this.addPlace(); //Agrega un nuevo logar
-    console.log("Mostrar lugar: ", this.fireServ.getPlaceList());
+    //this.data = this.fireServ.getPlaceList('place');
+    
   }
 
   signUp() {

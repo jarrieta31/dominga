@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
 import { Place } from '../shared/place';
 import { Observable } from 'rxjs';
+import 'firebase/database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-
+  datos: any[];
   placeListRef: AngularFireList<any>;
   placeRef: AngularFireObject<any>;
-  item: Observable<any>;
+  items: Observable<any[]>;
 
   constructor( private db: AngularFireDatabase ) {
-    this.placeListRef = this.db.list('/place');
-    
+    // this.items = db.list('place/').valueChanges();
+    // //this.datos = this.placeListRef['place'];
+    // console.log("hola mundo", this.items);
   }
 
   // Create
@@ -32,15 +34,15 @@ export class FirebaseService {
 
   // Get Single
   getPlace(id: string) {
-    this.placeRef = this.db.object('/place/' + id);
+    return this.db.object('/place/' + id).valueChanges();
 
-    return this.placeRef;
+    // return this.placeRef;
   }
 
   // Get List
   getPlaceList() {
-    this.placeListRef = this.db.list('/place');
-    return this.placeListRef;
+    //this.placeListRef = this.db.list('place');
+    return this.db.list('/place').valueChanges();
   }
 
   // Update
