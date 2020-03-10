@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Place } from 'src/app/shared/place';
 import { FirebaseService } from '../../services/firebase.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -13,48 +14,49 @@ export class LoginPage implements OnInit {
 
   email: string;
   password: string;
-  lugar: Place = {$key: "", 
-    name: "Casa Dominga", 
-    description: "Espacio de cowork",
-    position: ["892", "178"],
-    image: "/assets/miimagen",
-    audio: "/assets/miaudio",
-    video: "/assets/mivideo"
-  };
+  emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 
-  constructor( public authenticationService: AuthService, public fireServ: FirebaseService) {
+  loginForm: FormGroup = new FormGroup ({
+      email: new FormControl('',Validators.compose([ 
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(50),
+        Validators.pattern(this.emailPattern)
+      ])),
+      password: new FormControl('',Validators.compose([
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(25)
+      ]))
+  })
+  
+
+  constructor( public authenticationService: AuthService) {
     
   }
 
   ngOnInit() { 
-    //this.addPlace(); //Agrega un nuevo logar
-    console.log("Mostrar lugar: ", this.fireServ.getPlaceList());
-  }
-
-  signUp() {
-    this.authenticationService.SignUp(this.email, this.password);
-    this.email = ''; 
-    this.password = '';
-  }
-
-  signIn() {
-    this.email = ''; 
-    this.password = '';
-  }
-
-  signOut() {
-    this.authenticationService.SignOut();
-  }
-
-  onSubmit(){
     
   }
 
-  addPlace(){
-    
-    this.fireServ.createPlace(this.lugar);
+  onResetForm() {
+    this.loginForm.reset;
   }
 
+  onSubmit() {
+    if(this.loginForm.valid){
+      //let datos: Array<any> = Object.values(this.loginForm.value);
+      this.email = this.loginForm.get('email').value;
+      this.password = this.loginForm.get('password').value;
+      this.authenticationService.SignIn(this.email, this.password);
+      this.onResetForm();
+      
+      console.log("Login corrento:", this.loginForm.value.email);
+    }else{
+      console.log("No valido");
+    }
+  }
+  
   
   
 

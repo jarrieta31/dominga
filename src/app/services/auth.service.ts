@@ -19,10 +19,10 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(res => {
-        console.log('Successfully signed up!', res);
+        console.log('¡Registrado con exito!', res);
       })
       .catch(error => {
-        console.log('Something is wrong:', error.message);
+        console.log('Algo salió mal en el registro:', error.message);
       });    
   }
 
@@ -32,10 +32,10 @@ export class AuthService {
       .auth
       .signInWithEmailAndPassword(email, password)
       .then(res => {
-        console.log('Successfully signed in!');
+        console.log('Accedido correctamente');
       })
       .catch(err => {
-        console.log('Something is wrong:',err.message);
+        console.log('Algo salió mal al inicio de sesión:',err.message);
       });
   }
 

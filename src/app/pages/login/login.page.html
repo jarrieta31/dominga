@@ -4,27 +4,24 @@
       <ion-button routerLink="/home">Ir a home</ion-button>
       
     </ion-buttons>
-    <ion-button slot="end" *ngIf="authenticationService.userData | async" (click)="signOut()">Salir</ion-button> 
     <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <h1 *ngIf="authenticationService.userData | async">Hello {{ (authenticationService.userData | async)?.email }}</h1>
+  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-   <div *ngIf="!(authenticationService.userData | async)"> 
-  <!-- <form #formulario="ngForm" (ngSubmit)="onSubmit()"></form> -->
     <ion-list>
-
       <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input name="email" type="email" [(ngModel)]="email" ></ion-input>
+        <ion-label for="email" position="floating">Email</ion-label>
+        <ion-input name="email" type="email" formControlName="email" ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input name="password" type="password" [(ngModel)]="password" ></ion-input>
+        <ion-label for="password" position="floating">Contraseña</ion-label>
+        <ion-input name="password" type="password" formControlName="password" ></ion-input>
       </ion-item>
 
       <ion-item button (click)="signUp()">
@@ -33,12 +30,12 @@
 
     </ion-list>
 
-    <ion-button expand="full" (click)="signIn()">Entrar</ion-button>
+    
+    <ion-button type="ngSubmit" expand="full" >Entrar</ion-button>
     
       
-  <!-- </form> -->
+  </form>
   
   
 
-</div>
 </ion-content>

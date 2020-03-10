@@ -21,6 +21,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 // Importas para geolocalización
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { environment } from '../environments/environment';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -35,7 +36,8 @@ import { environment } from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    ReactiveFormsModule
   ],
   providers: [
     StatusBar,
