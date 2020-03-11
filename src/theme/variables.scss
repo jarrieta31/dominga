@@ -124,6 +124,10 @@
   --ion-color-back-tint: #ffffff;
 }
 
+ion-item{
+  --border-color: white;
+}
+
 .ion-color-information{
   --ion-color-base: var(--ion-color-information) !important;
   --ion-color-base-rgb: var(--ion-color-information-rgb) !important;

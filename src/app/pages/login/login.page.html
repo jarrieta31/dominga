@@ -10,6 +10,10 @@
 </ion-header>
 
 <ion-content>
+  <div class="container">
+     <img class="logo" src="../../../assets/img/logo.jpg"/>
+  </div>
+ 
 
   <h1 *ngIf="authenticationService.userData | async">Hello {{ (authenticationService.userData | async)?.email }}</h1>
 
@@ -17,28 +21,29 @@
   <!-- <form #formulario="ngForm" (ngSubmit)="onSubmit()"></form> -->
     <ion-list>
 
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input name="email" type="email" [(ngModel)]="email" ></ion-input>
+      <ion-item class="itemName">
+        <!-- <ion-label position="floating">Email</ion-label> -->
+        <ion-input class="email" name="email" type="email" placeholder="E-mail" [(ngModel)]="email" ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input name="password" type="password" [(ngModel)]="password" ></ion-input>
+       <!--  <ion-label position="floating">Contraseña</ion-label> -->
+        <ion-input class="password" name="password" type="password" placeholder="Contraseña" [(ngModel)]="password" ></ion-input>
       </ion-item>
 
-      <ion-item button (click)="signUp()">
+      <!-- <ion-item button (click)="signUp()">
         <ion-label color="primary" >Registrarse</ion-label>
-      </ion-item>
+      </ion-item> -->
 
     </ion-list>
 
-    <ion-button expand="full" (click)="signIn()">Entrar</ion-button>
+    <ion-button color="dark" expand="block" (click)="signIn()">Iniciar</ion-button>
     
       
   <!-- </form> -->
   
   
-
+<p class="remember">¿Has olvidado tu contraseña? <a class="register">Registrate</a></p>
     </div>
+    <h3 class="continue"><a class="cont">Continuar sin registro</a></h3>
 </ion-content>
