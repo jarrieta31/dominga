@@ -1,55 +1,53 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/auth";
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+
+export interface AuthResponseData {
+  kind: string;
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  localId: string;
+  expiresIn: string;
+  registered?: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private _userIsAuthenticated = false;
+  private _userId = null;
 
-  userData: Observable<firebase.User>;
-
-  constructor( private angularFireAuth: AngularFireAuth ) { 
-    this.userData = angularFireAuth.authState;
+  get userIsAuthenticated() {
+    return this._userIsAuthenticated;
   }
 
-  /* Sign up */
-  SignUp(email: string, password: string) {
-    this.angularFireAuth
-      .auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(res => {
-        console.log('¡Registrado con exito!', res);
-      })
-      .catch(error => {
-        console.log('Algo salió mal en el registro:', error.message);
-      });    
+  get userId() {
+    return this._userId;
   }
 
-  /* Sign in */
-  SignIn(email: string, password: string) {
-    this.angularFireAuth
-      .auth
-      .signInWithEmailAndPassword(email, password)
-      .then(res => {
-        console.log('Accedido correctamente');
-      })
-      .catch(err => {
-        console.log('Algo salió mal al inicio de sesión:',err.message);
-      });
+  constructor(private http: HttpClient) {}
+
+  signup(email: string, password: string) {
+    return this.http.post<AuthResponseData>(
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
+        environment.firebaseAPIKey
+      }`,
+      { email: email, password: password, returnSecureToken: true }
+    );
   }
 
-  /* Sign out */
-  SignOut() {
-    this.angularFireAuth
-      .auth
-      .signOut();
-  }  
+  login(email: string, password: string) {
+    return this.http.post<AuthResponseData>(
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
+        environment.firebaseAPIKey
+      }`,
+      { email: email, password: password }
+    );
+  }
 
-
-  
- 
-  
+  logout() {
+    this._userIsAuthenticated = false;
+  }
 }
-
-

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "99878739465",
+    "firebase_url": "https://appdominga.firebaseio.com",
+    "project_id": "appdominga",
+    "storage_bucket": "appdominga.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99878739465:android:9e37f0fb8633035c5be2d8",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99878739465-jgo586t9hiu95pfo4p62l6cv4a6d2qvg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "9421b37e8b27dc8c640046df210b1048262fd7c8"
+          }
+        },
+        {
+          "client_id": "99878739465-fabejfeok0a4pvicef7ot21autg6u993.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVLCUctYMMIk4oW4ScDF6dBolnIc7mxJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99878739465-fabejfeok0a4pvicef7ot21autg6u993.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
