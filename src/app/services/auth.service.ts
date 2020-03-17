@@ -7,8 +7,9 @@ export interface AuthResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
-  localId: string;
   expiresIn: string;
+  localId: string;
+  //expiresIn: string;
   registered?: boolean;
 }
 
@@ -30,8 +31,9 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
+    console.log("eston en signup");
     return this.http.post<AuthResponseData>(
-      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
         environment.firebaseAPIKey
       }`,
       { email: email, password: password, returnSecureToken: true }
@@ -40,10 +42,10 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${
         environment.firebaseAPIKey
       }`,
-      { email: email, password: password }
+      { email: email, password: password, returnSecureToken:true }
     );
   }
 

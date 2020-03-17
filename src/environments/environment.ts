@@ -14,8 +14,8 @@ export const environment = {
     appId: "1:99878739465:web:b831cd823949fc045be2d8",
     measurementId: "G-BPNTCZ1PC9"
   },
-  firebaseAPIKey: 'AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM',
-  mapBoxToken:"pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+  firebaseAPIKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
+  mapBoxToken: "pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
 };
 
 /*

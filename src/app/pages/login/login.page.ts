@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Place } from 'src/app/shared/place';
-//import { FirebaseService } from '../../services/firebase.service';
+import { AuthService, AuthResponseData } from '../../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { LoadingController, AlertController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +11,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
+  
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+  isLoading = false;
+  isLogin = true;
 
+  // Creo el formulario con las validaciones
   loginForm: FormGroup = new FormGroup ({
       email: new FormControl('',Validators.compose([ 
         Validators.required,
@@ -30,14 +33,14 @@ export class LoginPage implements OnInit {
       ]))
   })
   
-
-  constructor( public authenticationService: AuthService) {
-    
+  constructor( 
+    public authService: AuthService,
+    private router: Router,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController) {    
   }
 
-  ngOnInit() { 
-    
-  }
+  ngOnInit() {}
 
   onResetForm() {
     this.loginForm.reset;
@@ -45,10 +48,9 @@ export class LoginPage implements OnInit {
 
   onSubmit() {
     if(this.loginForm.valid){
-      //let datos: Array<any> = Object.values(this.loginForm.value);
       this.email = this.loginForm.get('email').value;
       this.password = this.loginForm.get('password').value;
-      this.authenticationService.signup(this.email, this.password);
+      this.authenticate(this.email, this.password);
       this.onResetForm();
       
       console.log("Login corrento:", this.loginForm.value.email);
@@ -57,7 +59,51 @@ export class LoginPage implements OnInit {
     }
   }
   
-  
+  authenticate(email: string, password: string) {
+    this.isLoading = true;
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Logging in...' })
+      .then(loadingEl => {
+        loadingEl.present();
+        let authObs: Observable<AuthResponseData>;
+        if (this.isLogin) {
+          authObs = this.authService.login(email, password);
+        } else {
+          authObs = this.authService.signup(email, password);
+        }
+        authObs.subscribe(
+          resData => {
+            console.log(resData);
+            this.isLoading = false;
+            loadingEl.dismiss();
+            this.router.navigateByUrl('/home');
+          },
+          errRes => {
+            loadingEl.dismiss();
+            const code = errRes.error.error.message;
+            let message = 'No se pudo registrar, intente nuevamente.';
+            if (code === 'EMAIL_EXISTS') {
+              message = '¡Esta dirección de correo electrónico ya existe!';
+            } else if (code === 'EMAIL_NOT_FOUND') {
+              message = 'No se pudo encontrar la dirección de correo electrónico.';
+            } else if (code === 'INVALID_PASSWORD') {
+              message = 'La contraseña no es correcta';
+            }
+            this.showAlert(message);
+          }
+        );
+      });
+  }
+
+  private showAlert(message: string) {
+    this.alertCtrl
+      .create({
+        header: 'Error de autencitación',
+        message: message,
+        buttons: ['Cerrar']
+      })
+      .then(alertEl => alertEl.present());
+  }
   
 
 }

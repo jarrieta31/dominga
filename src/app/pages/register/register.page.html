@@ -5,5 +5,23 @@
 </ion-header>
 
 <ion-content>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
+    <ion-list>
+      <ion-item>
+        <ion-label for="email" position="floating">Email</ion-label>
+        <ion-input name="email" type="email" formControlName="email" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label for="password" position="floating">Contraseña</ion-label>
+        <ion-input name="password" type="password" formControlName="password" ></ion-input>
+      </ion-item>
+
+    </ion-list>
+    
+    <ion-button type="ngSubmit" expand="full" >Registrarse</ion-button>
+    
+      
+  </form>
 </ion-content>
