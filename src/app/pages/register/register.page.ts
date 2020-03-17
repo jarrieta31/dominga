@@ -18,7 +18,7 @@ export class RegisterPage implements OnInit {
   isLoading = false;
   isLogin = true;
 
-  // Creo el formulario
+  // Creo el formulario de registro
   registerForm: FormGroup = new FormGroup ({
       email: new FormControl('',Validators.compose([ 
         Validators.required,
@@ -33,8 +33,11 @@ export class RegisterPage implements OnInit {
       ]))
   })
   
-  constructor( public authService: AuthService) {
-    
+  constructor( 
+    public authService: AuthService,
+    private router: Router,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController) {    
   }
   
   ngOnInit() {
@@ -48,13 +51,52 @@ export class RegisterPage implements OnInit {
     if(this.registerForm.valid){
       this.email = this.registerForm.get('email').value;
       this.password = this.registerForm.get('password').value;
-      this.authService.signup(this.email, this.password);
+      this.register(this.email, this.password);
       this.onResetForm();
       
       console.log("Registro enviado");
     }else{
       console.log("Formulario registro no valido");
     }
+  }
+
+  register(email: string, password: string) {
+    this.isLoading = true;
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Logging in...' })
+      .then(loadingEl => {
+        loadingEl.present();
+        let authObs: Observable<AuthResponseData>;        
+        authObs = this.authService.signup(email, password);
+        
+        authObs.subscribe(
+          resData => {
+            console.log(resData);
+            this.isLoading = false;
+            loadingEl.dismiss();
+            this.router.navigateByUrl('/home');
+          },
+          errRes => {
+            loadingEl.dismiss();
+            const code = errRes.error.error.message;
+            let message = 'No se pudo registrar, intente nuevamente.';
+            if (code === 'EMAIL_EXISTS') {
+              message = '¡La dirección de correo electrónico ya existe!';
+            }
+            this.showAlert(message);
+          }
+        );
+      });
+  }
+
+  private showAlert(message: string) {
+    this.alertCtrl
+      .create({
+        header: 'Registro fallido',
+        message: message,
+        buttons: ['Cerrar']
+      })
+      .then(alertEl => alertEl.present());
   }
 
 }

@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
   isLoading = false;
-  isLogin = true;
+  //isLogin = true;
 
   // Creo el formulario con las validaciones
   loginForm: FormGroup = new FormGroup ({
@@ -53,7 +53,7 @@ export class LoginPage implements OnInit {
       this.authenticate(this.email, this.password);
       this.onResetForm();
       
-      console.log("Login corrento:", this.loginForm.value.email);
+      console.log("Form Login corrento:", this.loginForm.value.email);
     }else{
       console.log("No valido");
     }
@@ -65,12 +65,8 @@ export class LoginPage implements OnInit {
       .create({ keyboardClose: true, message: 'Logging in...' })
       .then(loadingEl => {
         loadingEl.present();
-        let authObs: Observable<AuthResponseData>;
-        if (this.isLogin) {
-          authObs = this.authService.login(email, password);
-        } else {
-          authObs = this.authService.signup(email, password);
-        }
+        let authObs: Observable<AuthResponseData>;        
+        authObs = this.authService.login(email, password);        
         authObs.subscribe(
           resData => {
             console.log(resData);
@@ -81,10 +77,8 @@ export class LoginPage implements OnInit {
           errRes => {
             loadingEl.dismiss();
             const code = errRes.error.error.message;
-            let message = 'No se pudo registrar, intente nuevamente.';
-            if (code === 'EMAIL_EXISTS') {
-              message = '¡Esta dirección de correo electrónico ya existe!';
-            } else if (code === 'EMAIL_NOT_FOUND') {
+            let message = 'No se pudo ingresar, intente nuevamente.';
+            if (code === 'EMAIL_NOT_FOUND') {
               message = 'No se pudo encontrar la dirección de correo electrónico.';
             } else if (code === 'INVALID_PASSWORD') {
               message = 'La contraseña no es correcta';
@@ -98,11 +92,15 @@ export class LoginPage implements OnInit {
   private showAlert(message: string) {
     this.alertCtrl
       .create({
-        header: 'Error de autencitación',
+        header: 'Autencitación fallida',
         message: message,
         buttons: ['Cerrar']
       })
       .then(alertEl => alertEl.present());
+  }
+
+  resetPassword(){
+    
   }
   
 

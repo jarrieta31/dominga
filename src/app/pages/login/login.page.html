@@ -10,7 +10,7 @@
 
 <ion-content>
 
-  
+  <ion-img src="assets/img/logo_login.jpeg"></ion-img>  
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
     <ion-list>
@@ -24,14 +24,16 @@
         <ion-input name="password" type="password" formControlName="password" ></ion-input>
       </ion-item>
 
-      <ion-item button routerLink='/register'>
-        <ion-label color="primary" >Registrarse</ion-label>
+      
+        <ion-button type="ngSubmit" expand="full" >Iniciar</ion-button>
+      
+
+      <ion-item >
+        <ion-label onclick="resetPassword()">¿Haz olvidado tu contraseña?</ion-label>
+        <ion-label color="primary" button routerLink='/register' >Registrate</ion-label>
       </ion-item>
 
-    </ion-list>
-
-    
-    <ion-button type="ngSubmit" expand="full" >Entrar</ion-button>
+    </ion-list> 
     
       
   </form>
