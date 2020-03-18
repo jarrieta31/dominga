@@ -1,9 +1,62 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>more-options</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="options">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home" color="back"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+    <ion-searchbar placeholder=""></ion-searchbar>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="2"><a routerLink="#">
+                    <div class="circulo icon1 sleep">
+                        <ion-icon class="icon-options" name="bed"></ion-icon>
+                    </div>
+                </a> </ion-col>
+            <ion-col>
+                <p class="text">¿Dónde Dormir?</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="2"><a routerLink="#">
+                    <div class="circulo icon2 eat">
+                        <ion-icon class="icon-options" name="restaurant"></ion-icon>
+                    </div>
+                </a></ion-col>
+            <ion-col>
+                <p class="text">¿Dónde Comer?</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="2"><a routerLink="#">
+                    <div class="circulo icon3 art">
+                        <ion-icon class="icon-options" name="musical-notes"></ion-icon>
+                    </div>
+                </a></ion-col>
+            <ion-col>
+                <p class="text">Arte y Cultura</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="2"><a routerLink="#">
+                    <div class="circulo icon4 events">
+                        <ion-icon class="icon-options" name="megaphone"></ion-icon>
+                    </div>
+                </a></ion-col>
+            <ion-col>
+                <p class="text">SJ Eventos</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="2"><a routerLink="#">
+                    <div class="circulo icon5 visits">
+                        <ion-icon class="icon-options" name="walk"></ion-icon>
+                    </div>
+                </a></ion-col>
+            <ion-col>
+                <p class="text">Visitas guiadas</p>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

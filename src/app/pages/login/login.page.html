@@ -1,43 +1,34 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/home">Ir a home</ion-button>
-      
-    </ion-buttons>
-    <ion-title></ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button routerLink="/home">Ir a home</ion-button>
+        </ion-buttons>
+        <ion-title></ion-title>
+    </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
-  <ion-img src="assets/img/logo_login.jpeg"></ion-img>  
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-    <ion-list>
-      <ion-item>
-        <ion-label for="email" position="floating">Email</ion-label>
-        <ion-input name="email" type="email" formControlName="email" ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label for="password" position="floating">Contraseña</ion-label>
-        <ion-input name="password" type="password" formControlName="password" ></ion-input>
-      </ion-item>
-
-      
-        <ion-button type="ngSubmit" expand="full" >Iniciar</ion-button>
-      
-
-      <ion-item >
-        <ion-label onclick="resetPassword()">¿Haz olvidado tu contraseña?</ion-label>
-        <ion-label color="primary" button routerLink='/register' >Registrate</ion-label>
-      </ion-item>
-
-    </ion-list> 
-    
-      
-  </form>
-  
-  
-
+    <div class="container">
+        <img class="logo" src="../../../assets/img/logo.jpg" />
+    </div>
+    <ion-img src="assets/img/logo_login.jpeg"></ion-img>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <ion-list>
+            <ion-item class="itemName">
+                <!-- <ion-label position="floating">Email</ion-label> -->
+                <ion-input class="email" name="email" type="email" placeholder="E-mail" [(ngModel)]="email"></ion-input>
+            </ion-item>
+            <ion-item>
+                <!--  <ion-label position="floating">Contraseña</ion-label> -->
+                <ion-input class="password" name="password" type="password" placeholder="Contraseña" [(ngModel)]="password"></ion-input>
+            </ion-item>
+            <!-- <ion-item button (click)="signUp()">
+        <ion-label color="primary" >Registrarse</ion-label>
+      </ion-item> -->
+            <ion-item>
+                <ion-label class="remember" onclick="resetPassword()">¿Haz olvidado tu contraseña?</ion-label>
+                <ion-label color="primary" button routerLink='/register'><a class="register">Registrate</a></ion-label>
+            </ion-item>
+        </ion-list>
+        <ion-button color="dark" expand="block" (click)="signIn()">Iniciar</ion-button>
+    </form>
 </ion-content>

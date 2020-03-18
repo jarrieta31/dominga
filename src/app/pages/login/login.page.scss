@@ -1,0 +1,48 @@
+.container{
+	display: flex;
+	justify-content: center;
+}
+
+.logo{
+	width: 75%;
+}
+
+.email, .password{
+	background-color: #EAEAEA;
+	border-radius: 8px;
+	padding-left: 4% !important;
+}
+
+ion-item{
+	border-bottom: 0px solid white !important;
+}
+
+ion-button{
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.remember{
+	margin-left: 5%;
+	font-weight: bold;
+	font-size: 65%;
+}
+
+.register{
+	font-weight: normal;
+}
+
+.continue{
+	text-align: center;
+	font-weight: bold;
+	font-size: 95%;
+	margin-top: 15%;
+}
+
+.cont{
+	color: black;
+}
+
+ion-item{
+	border-bottom: none !important;
+}

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+
   
   email: string;
   password: string;
@@ -37,8 +38,7 @@ export class LoginPage implements OnInit {
     public authService: AuthService,
     private router: Router,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) {    
-  }
+    private alertCtrl: AlertController) {}
 
   ngOnInit() {}
 

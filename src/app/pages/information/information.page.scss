@@ -1,0 +1,52 @@
+.child-item {
+    --ion-item-background: #f3f2f1;
+    --padding-start: 8px;
+    --inner-padding-end: 8px;
+    margin-bottom: 2px;
+}
+
+.icon-info {
+    color: #fff;
+    font-size: 250%;
+    margin-right: 6%;
+}
+
+.item-accordion {
+    background-color: grey !important;
+    border-radius: 8px;
+    margin: 0 2% 0 2%;
+}
+
+.list-md {
+    padding: 1% 0 1% 0 !important;
+}
+
+.info-name {
+    font-weight: bold;
+    color: #A6A6A6;
+}
+
+.sc-ion-searchbar-md-h {
+    --box-shadow: none !important;
+}
+
+.child-list{
+	padding: 0 0 0 0 !important;
+	margin: 0 2% 0 2%;
+	height: 31px;
+}
+
+.label-child{
+	font-size: 80%;
+}
+
+.label-child.sc-ion-label-md-h.sc-ion-label-md-s.md.hydrated {
+    margin-left: 0px !important; 
+    margin-right: 0px !important; 
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.children-content{
+	margin-bottom: 7%;
+}

@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 //import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
 import { Place } from '../shared/place';
 import { Observable } from 'rxjs';
+import 'firebase/database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
+
   // placeListRef: AngularFireList<any>;
   // placeRef: AngularFireObject<any>;
   // item: Observable<any>;
 
   constructor() {
+}
 
-  }
 
   // constructor( private db: AngularFireDatabase ) {
   //   this.placeListRef = this.db.list('/place');
