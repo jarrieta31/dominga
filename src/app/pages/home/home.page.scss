@@ -1,4 +1,8 @@
-ion-card-header {
+  ion-card-header {
+    background-color: #00dea5;
+  }
+
+  .cabezera {
     background-color: #00dea5;
   }
   
@@ -7,15 +11,17 @@ ion-card-header {
     color: #ffb134;
   }
   
-  .circulo {
-    width: 60px;
-    height: 60px;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
+  // .circulo {
+  //   width: 60px;
+  //   height: 60px;
+  //   -moz-border-radius: 50%;
+  //   -webkit-border-radius: 50%;
+  //   border-radius: 50%;
+  // }
+  .icono {
+    width: 70px;
   }
-  
-  .iconos {
+  .contenedor-iconos {
     //background-color: rgb(192, 233, 43);
     width: 95%;
     display: flex;
@@ -23,24 +29,24 @@ ion-card-header {
     justify-content: space-around;
     justify-items: center;
     padding-bottom: 30px;
-    margin: 2% 20px 20px 2%;
+    margin: 2% 5px 20px 2%;
   }
   
-  .icon1 {
-    background-color: #0ae9e6;
-  } 
+  // .icon1 {
+  //   background-color: #0ae9e6;
+  // } 
   
-  .icon2 {
-    background-color: #c706ff;
-  } 
+  // .icon2 {
+  //   background-color: #c706ff;
+  // } 
   
-  .icon3 {
-    background-color: #ffd200;
-  } 
+  // .icon3 {
+  //   background-color: #ffd200;
+  // } 
   
-  .icon4 {
-    background-color: #10dda6;
-  }
+  // .icon4 {
+  //   background-color: #10dda6;
+  // }
   
   ion-slides {
     width: 95%;

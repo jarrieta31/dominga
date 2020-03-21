@@ -20,18 +20,26 @@
             <ion-img src="/assets/img/slider3.png"></ion-img>
         </ion-slide>
     </ion-slides>
-    <div class="iconos contenedor">
+    <div class="contenedor-iconos">
         <a routerLink="/circuits">
-            <div class="circulo icon1"></div>
+            <div class="icono">
+              <ion-img src="/assets/icon/location.png"></ion-img>
+            </div>
         </a>
         <a routerLink="/favorite">
-            <div class="circulo icon2"></div>
+            <div class="icono">
+              <ion-img src="/assets/icon/favorito.png"></ion-img>
+            </div>
         </a>
         <a routerLink="/information">
-            <div class="circulo icon3"></div>
+          <div class="icono">
+            <ion-img src="/assets/icon/info.png"></ion-img>
+          </div>
         </a>
         <a routerLink="/more-options">
-            <div class="circulo icon4"></div>
+          <div class="icono">
+            <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+          </div>
         </a>
     </div>
 </div>
@@ -46,8 +54,13 @@
         <ion-virtual-scroll [items]="items" approxItemHeight="300px">
           <ion-card *virtualItem="let item">
             <ion-card-header>
-              
-                <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
+                <ion-list>
+                  <ion-item class="cabezera">
+                    <ion-label>Awesome Label</ion-label>
+                    <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
+                  </ion-item>
+                </ion-list>
+                
                 
             </ion-card-header>
             <a routerLink="/places" >
