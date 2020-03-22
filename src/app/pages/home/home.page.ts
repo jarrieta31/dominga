@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -10,7 +12,7 @@ export class HomePage implements OnInit {
 
   items: any[] = [];
 
-  constructor() { 
+  constructor( public authService: AuthService, private router: Router) { 
     this.items = [
       {
         name: "Intendencia",
@@ -71,6 +73,11 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  cerrarSesion() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
 }
