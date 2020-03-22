@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { DatabaseService } from '../../services/database.service';
+
+import { CircuitsModel } from '../../models/circuits';
+
+
 @Component({
   selector: 'app-circuits',
   templateUrl: './circuits.page.html',
@@ -7,9 +12,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CircuitsPage implements OnInit {
 
-  constructor() { }
+  constructor(public database: DatabaseService) { }
 
   ngOnInit() {
+  	this.addCircuit();
+  }
+
+  addCircuit() {
+    
+      var circuito: CircuitsModel = new CircuitsModel();
+      
+      circuito.nombre = "nombre";
+      circuito.descripcion = "descripcion";
+      circuito.arrayLugares[].idLugar = "1";
+
+      console.log(circuito);
+
+      this.database.addCircuits(circuito).subscribe(resultado => {
+        console.log(resultado);
+      });
+    
   }
 
 }
