@@ -15,16 +15,15 @@ export class CircuitsPage implements OnInit {
   constructor(public database: DatabaseService) { }
 
   ngOnInit() {
-  	this.addCircuit();
+  	//this.addCircuit();
   }
 
   addCircuit() {
     
       var circuito: CircuitsModel = new CircuitsModel();
-      
-      circuito.nombre = "nombre";
-      circuito.descripcion = "descripcion";
-      circuito.arrayLugares[].idLugar = "1";
+      console.log(circuito);
+      circuito.nombre = "teatro";
+      circuito.descripcion = "arte";
 
       console.log(circuito);
 

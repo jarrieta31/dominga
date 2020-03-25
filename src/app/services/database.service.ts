@@ -24,7 +24,7 @@ getPlaces(){
 // }
 
 addCircuits(circuits: CircuitsModel){
-	var formulario = {nombre: circuits.nombre, descripcion: circuits.descripcion, idLugar: circuits.arrayLugares.idLugar};
+	var formulario = {nombre: circuits.nombre, descripcion: circuits.descripcion};
 	return this.http.post('https://appdominga.firebaseio.com/circuito.json', formulario);
 }
 
