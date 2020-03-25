@@ -18,22 +18,28 @@ export class MapPage implements OnInit {
 
   	ngOnInit() {
   		this.getCircuitos();
+  		//console.log("Soy resultados");
+  		//console.log(this.Arraycircuits);
+
   }
 
   public getCircuitos(){
   	this.database.getCircuits().subscribe((resultado: Array<CircuitsModel>) => {
 				// Se limpian los circuitos que ya teniamos
-				this.Arraycircuits = [];
-				this.sinCircuitos = false;
-				console.log(resultado);
+				 this.Arraycircuits = [];
+				// this.sinCircuitos = false;
+				//console.log(resultado);
+				// resultado.forEach(element => console.log(element));
 				
 				// Se setea en el atributo que se mostrara en el HTML
-				resultado.forEach((circuito: CircuitsModel) => {
-					circuito.descripcion = circuito.descripcion.substr(0, 81) + " ...";
-				});
+				// resultado.forEach((circuito: CircuitsModel) => {
+				// 	circuito.descripcion = circuito.descripcion.substr(0, 4) + " ...";
+				// });
+				//this.Arraycircuits.push(resultado);
 				this.Arraycircuits = resultado;
-			});
-
-
+				
+		});
   }
 }
+
+
