@@ -19,7 +19,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // Almacenamiento de datos 
 import { IonicStorageModule } from '@ionic/storage';
-//import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage/ngx';
+
+
+//Guard 
+import { UnauthGuard } from './shared/guards/unauth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
+
 
 
 
@@ -39,7 +44,9 @@ import { IonicStorageModule } from '@ionic/storage';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AuthGuard,
+    UnauthGuard
   ],
   bootstrap: [AppComponent]
 })

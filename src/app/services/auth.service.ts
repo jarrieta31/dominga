@@ -35,12 +35,15 @@ export class AuthService {
     //Con el operador mapa convierto los datos en 
     return from (this.storage.get('authData')).pipe(
       map(storedData => {
+        console.log("estoy en autoLogin, los datos son: ", storedData);
         //Si no hay datos o si el valor es null
-        if(!storedData || !storedData.value){
+        console.log( typeof(storedData));
+        if(storedData == ""){
+          console.log("estoy en autoLogin: No hay datos almacenados");
           return null;
         }
         //Convierte los datos de string a un objeto json
-        const parsedData = JSON.parse(storedData.value) as {
+        const parsedData = JSON.parse(storedData) as {
           tonken: string; 
           tokenExpirationDate: string;
           userId: string;
@@ -50,9 +53,11 @@ export class AuthService {
         const expirationTime = new Date(parsedData.tokenExpirationDate);
         //Si el tiempo de expiración no es válido
         if(expirationTime <= new Date()){
+          console.log("estoy en autoLogin: se superó el tiempo de expiración");
           return null;
         }
         //Se crea un nuevo usuario con los dato almacenados
+        console.log("estoy en autoLogin: Se creó una nueva instancia de usuario");
         const user = new User(
           parsedData.userId, 
           parsedData.email, 
@@ -97,7 +102,7 @@ export class AuthService {
   }
 
   signup(email: string, password: string) {
-    console.log("eston en signup");
+    console.log("estoy en signup");
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
         environment.firebaseAPIKey
@@ -123,6 +128,7 @@ export class AuthService {
   //Guarda todos los datos del usuario devueltos en la respuesta
   private setUserData(userData: AuthResponseData){
     //Hora de expiracion es la hora actual + 1 hora en milisegundos
+    console.log("estoy en setUserData");
     const expirationTime = new Date(
       new Date().getTime() + (+userData.expiresIn * 1000)
     );
@@ -157,7 +163,7 @@ export class AuthService {
     // Hay que probar si el token sigue siendo válido
     // set a key/value
     this.storage.set('authData', data);
-
+    console.log("estoy en storeAuthData");
     // Or to get a key/value pair
     this.storage.get('authData').then((val) => {
       console.log('La informacion almacenada es: ', val);
