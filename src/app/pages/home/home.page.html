@@ -56,13 +56,14 @@
             <ion-card-header>
                 <ion-list>
                   <ion-item class="cabezera">
-                    <ion-label>Awesome Label</ion-label>
+                    <ion-label>{{ item.nombre }}</ion-label>
                     <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
                   </ion-item>
                 </ion-list>
                 
                 
             </ion-card-header>
+            <p>{{ item.descripcion }}</p>
             <a routerLink="/places" >
               <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
             </a>

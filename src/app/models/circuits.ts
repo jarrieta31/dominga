@@ -1,7 +1,7 @@
 export class CircuitsModel {
-	id: number;
-	nombre: string;
-	descripcion: string;
+	public id: number;
+	public nombre: string;
+	public descripcion: string;
 
 	constructor(){}	
 }

@@ -17,8 +17,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
