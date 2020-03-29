@@ -16,9 +16,11 @@ export class HomePage implements OnInit {
   items : CircuitsModel[] = [];
 
 
-  constructor(public database: DatabaseService) { 
-
-  }
+  constructor(
+      private database: DatabaseService,
+      private authService: AuthService,
+      private router: Router
+      ) {}
 
   ngOnInit() {
     this.getLugares();
@@ -29,9 +31,6 @@ export class HomePage implements OnInit {
           this.items = [];
         //console.log(resultado);
 
-        resultado.forEach((circuito: any) => {
-           circuito.descripcion = circuito.descripcion.substr(0, 40) + " ...";
-         });
         this.items = resultado;
     });
   }

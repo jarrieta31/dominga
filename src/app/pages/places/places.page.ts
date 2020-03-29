@@ -36,7 +36,7 @@ export class PlacesPage implements OnInit {
 
  
   constructor(
-    public database: DatabaseService, 
+    private database: DatabaseService, 
     private activatedRoute: ActivatedRoute, 
     private router: Router,
     private modalCtrl: ModalController
