@@ -4,10 +4,15 @@ import { HttpClient } from '@angular/common/http';
 
 import { CircuitsModel } from '../models/circuits';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
+
+  lugares = environment.firebaseConfig.databaseURL + '/lugar.json';
+  lugaresId = environment.firebaseConfig.databaseURL + '/lugar/';
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +21,17 @@ export class DatabaseService {
 }
 
 getPlaces(){
-	return this.http.get('https://appdominga.firebaseio.com/lugares.json');
+	return this.http.get(this.lugares);
+}
+
+getPlacesId(id){
+	const url = `${this.lugaresId}${id}.json`;
+	return this.http.get(url);
+}
+
+getInfoAll(id){
+	const url = `${this.lugaresId}${id}.json`;
+	return this.http.get(url);
 }
 
 // getUsers(id: string){

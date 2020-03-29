@@ -12,74 +12,17 @@ import { CircuitsModel } from '../../models/circuits'
 export class HomePage implements OnInit {
 
   items : CircuitsModel[] = [];
-  //items: any[] = [];
 
   constructor(public database: DatabaseService) { 
-    // this.items = [
-    //   {
-    //     name: "Intendencia",
-    //     description: "",
-    //     coordinates: [
-    //         -56.713244,
-    //         -34.341157
-    //     ],
-    //     image: "/assets/img/intendencia2.jpg"
-    //   },
-    //   {
-    //     name: "Capilla Nuestra Sra. del Huerto",
-    //     description: "",
-    //     coordinates: [
-    //         -56.710823,
-    //         -34.337895
-    //     ],
-    //     image: "/assets/img/capilla.jpg"
-    //   },
-    //   {
-    //     name: "Casa Dominga",
-    //     description: "",
-    //     coordinates: [
-    //         -56.714517,
-    //         -34.339999
-    //     ],
-    //     image: "/assets/img/casa_01.png"
-    //   },
-    //   {
-    //     name: "Catedral Basílica de San José",
-    //     description: "",
-    //     coordinates: [
-    //         -56.713524,
-    //         -34.340187
-    //     ],
-    //     image: "/assets/img/basilica-catedral.jpg"
-    //   },
-    //   {
-    //     name: "Antigua Estación de AFE",
-    //     description: "",
-    //     coordinates: [
-    //         -56.712935,
-    //         -34.332543
-    //     ],
-    //     image: "/assets/img/afe.JPG"
-    //   },
-    //   {
-    //     name: "Teatro Macció",
-    //     description: "",
-    //     coordinates: [
-    //         -56.71354,
-    //         -34.338858
-    //     ],
-    //     image: "/assets/img/teatro.jpg"
-    //   }
-        
-    // ];
+  
   }
 
   ngOnInit() {
-    this.getCircuitos();
+    this.getLugares();
   }
 
-   async getCircuitos(){
-    this.database.getCircuits().subscribe((resultado: any) => {
+   async getLugares(){
+    this.database.getPlaces().subscribe((resultado: any) => {
           this.items = [];
         //console.log(resultado);
 
@@ -89,5 +32,4 @@ export class HomePage implements OnInit {
         this.items = resultado;
     });
   }
-
 }

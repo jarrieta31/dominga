@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
   },
   {
-    path: 'places',
+    path: 'places/:id',
     loadChildren: () => import('./pages/places/places.module').then( m => m.PlacesPageModule)
   },
   {
@@ -67,6 +67,13 @@ const routes: Routes = [
     path: 'circuits',
     loadChildren: () => import('./pages/circuits/circuits.module').then( m => m.CircuitsPageModule)
   },
+  {
+    path: 'modal-info/:id',
+    loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
+  },
+
+  
+
 ];
 
 @NgModule({

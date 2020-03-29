@@ -1,6 +1,9 @@
 <ion-header>
     <ion-toolbar color="primary">
-        <ion-title>Teatro</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home" color="back"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{items.nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button>
                 <ion-icon name="business"></ion-icon>
@@ -34,7 +37,7 @@
             </ion-slides>
         </div>
         <div class="divc">
-            <p class="text">Algo<!-- <a class="verMas" (click)=openModal()>Ver más</a> --></p>
+            <p class="text">{{items.descripcion}}<a class="verMas" [routerLink]="['/modal-info', items.id]">Ver más</a></p>
         </div>
         <div class="divd">
             <div id="mapa-box"></div>
