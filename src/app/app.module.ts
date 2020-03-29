@@ -17,6 +17,16 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 
+
+// Almacenamiento de datos 
+import { IonicStorageModule } from '@ionic/storage';
+
+
+//Guard 
+// import { UnauthGuard } from './shared/guards/unauth.guard';
+// import { AuthGuard } from './shared/guards/auth.guard';
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -25,7 +35,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     IonicModule.forRoot(), 
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonicStorageModule.forRoot()
+    
   ],
   providers: [
     StatusBar,

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 import { DatabaseService } from '../../services/database.service';
 
@@ -13,8 +15,9 @@ export class HomePage implements OnInit {
 
   items : CircuitsModel[] = [];
 
+
   constructor(public database: DatabaseService) { 
-  
+
   }
 
   ngOnInit() {
@@ -32,4 +35,10 @@ export class HomePage implements OnInit {
         this.items = resultado;
     });
   }
+
+  cerrarSesion() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
 }
