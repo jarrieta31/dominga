@@ -65,7 +65,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/circuits/circuits.module').then( m => m.CircuitsPageModule)
   },
   {
-    path: 'modal-info/:id',
+    path: 'descripcion/:id',
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
   },
 

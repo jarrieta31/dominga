@@ -7,8 +7,6 @@ import { CircuitsModel } from '../../models/circuits';
 
 import {Router, ActivatedRoute, Params} from '@angular/router';
 
-import { ModalController } from '@ionic/angular';
-
 import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 
 import * as Mapboxgl from 'mapbox-gl';
@@ -38,8 +36,7 @@ export class PlacesPage implements OnInit {
   constructor(
     private database: DatabaseService, 
     private activatedRoute: ActivatedRoute, 
-    private router: Router,
-    private modalCtrl: ModalController
+    private router: Router
     ) {}
 
   ngOnInit() {
