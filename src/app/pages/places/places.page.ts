@@ -40,9 +40,7 @@ export class PlacesPage implements OnInit {
     ) {}
 
   ngOnInit() {
-  	var cambio = "../../../assets/img/basilica-catedral.jpg";
-  	$("#foto").attr("src",cambio);
-
+  
   	Mapboxgl.accessToken = environment.mapBoxToken;
 		this.mapa = new Mapboxgl.Map({
 		container: 'mapa-box',
