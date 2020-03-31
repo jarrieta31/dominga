@@ -62,14 +62,11 @@
                     <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
                   </ion-item>
                 </ion-list>
-                
-                
             </ion-card-header>
-            <p></p>
-            <a>
-              <ion-img class="foto" [src]="item.image"  [alt]="item.name"></ion-img>
-            </a>
           <ion-card-content>
+            <ion-item>
+              <ion-img class="foto" [src]="item.url"  [alt]="item.nombre"></ion-img>
+            </ion-item>
             <ion-item>
               <ion-label slot="start">100 metros</ion-label>
               <ion-icon class="estrella" name="star"></ion-icon>
