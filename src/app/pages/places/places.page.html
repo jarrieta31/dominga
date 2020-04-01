@@ -23,9 +23,9 @@
         </div>
         <div class="divc">
             <div class="iconos">
-                <div *ngIf="items.auto == 1"><ion-icon name="car-outline"></ion-icon></div>
-                <div *ngIf="items.bicicleta == 1"><ion-icon name="bicycle-outline"></ion-icon></div>
-                <div *ngIf="items.caminar == 1"><ion-icon name="walk-outline"></ion-icon></div>
+                <div class="iconAuto" *ngIf="items.auto == 1"><ion-icon name="car-outline"></ion-icon></div>
+                <div class="iconEstilos" *ngIf="items.bicicleta == 1"><ion-icon name="bicycle-outline"></ion-icon></div>
+                <div class="iconEstilos" *ngIf="items.caminar == 1"><ion-icon name="walk-outline"></ion-icon></div>
             </div>
             <p class="text">{{items.descripcion}}<a class="verMas" [routerLink]="['/descripcion', items.id]">Ver más</a></p>
         </div>
@@ -42,9 +42,15 @@
                 <ion-icon name="star-outline"></ion-icon>
             </div>
         </div>
-        <h5>Te puede interesar</h5>
+        <h5 class="interes">Te puede interesar</h5>
         <div class="divf">
-            <div class="sugerencia">sugerencia_1</div>
-            <div class="sugerencia">sugerencia_2</div>
+            <div class="sugerencia" [routerLink]="['/home']">
+                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+                <div class="infoSug">Nombre diraccion</div>
+            </div>
+            <div class="sugerencia" [routerLink]="['/home']">
+                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+                <div class="infoSug">Nombre direccion</div>
+            </div>
         </div>
     </div>
