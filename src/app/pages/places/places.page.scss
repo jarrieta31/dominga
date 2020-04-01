@@ -124,6 +124,8 @@ ion-title {
 
 .interes{
     margin: 0 0 2% 0;
+    font-weight: 400;
+    color: #00dea5;
 }
 
 .infoSug{
@@ -138,6 +140,28 @@ ion-title {
     margin: 2% 2% 0 0;
 }
 
+.sugNombre{
+    font-weight: bold;
+    color: #B6B6B6;
+}
+
+.sugDireccion{
+    font-weight: 600;
+    color: #000000;
+    font-size: 80%;
+}
+
+.sugTelefono{
+    font-weight: 600;
+    color: #000000;
+    font-size: 80%;
+    display: flex;
+    flex-direction: row;
+}
+
+.numTelefono{
+    font-weight: 100;
+}
 // .estrellas{
 // 	text-align: right;
 // }
