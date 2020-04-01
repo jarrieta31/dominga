@@ -48,11 +48,8 @@
 </div>
 <ion-content scroll-y="true">
   <ion-grid>
- 
-  
     <ion-row >
       <ion-col>        
-  
         <ion-virtual-scroll [items]="items" approxItemHeight="300px">
           <ion-card *virtualItem="let item" id="{{ item.id }}" [routerLink]="['/places', item.id]">
             <ion-card-header>
@@ -72,19 +69,14 @@
               <ion-icon class="estrella" name="star"></ion-icon>
               <ion-icon class="estrella" name="star"></ion-icon>
               <ion-icon class="estrella" name="star"></ion-icon>
-              <ion-icon class="estrella" name="star"></ion-icon>
               <ion-icon name="star"></ion-icon>
               <ion-icon name="star"></ion-icon>
             </ion-item>             
           </ion-card-content>
           </ion-card>
         </ion-virtual-scroll>
-                
-        
       </ion-col>
     </ion-row>
-    
   </ion-grid>   
-  
 </ion-content>
 

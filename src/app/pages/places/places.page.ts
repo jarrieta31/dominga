@@ -32,7 +32,6 @@ export class PlacesPage implements OnInit {
 
   mapa: Mapboxgl.Map;
 
- 
   constructor(
     private database: DatabaseService, 
     private activatedRoute: ActivatedRoute, 
@@ -76,7 +75,14 @@ async getLugaresId(){
          this.items = [];
 
          resultado.descripcion = resultado.descripcion.substr(0, 44) + " ...";
-       
+
+         // const mapped = Object.keys(resultado.valoracion).map(key => ({nombreUsuario: key, valoracion: resultado.valoracion[key]}));
+
+         // console.log(mapped);
+
+         // resultado.valoracion = mapped;
+
+
         this.items = resultado;
         console.log(this.items);
       }); 

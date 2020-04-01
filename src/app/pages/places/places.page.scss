@@ -20,20 +20,27 @@ ion-title {
 
 .divc {
     width: 100%;
-    height: 6%;
+    height: 9%;
     overflow: auto;
     background-color: #F0F0F0;
 }
 
 .divd {
     width: 100%;
-    height: 30%;
+    height: 22%;
 }
 
 .dive {
     width: 100%;
     height: 5%;
     padding-top: 1%;
+}
+
+.divf{
+    width: 100%;
+    height: 18%;
+    display: flex;
+    flex-direction: row;
 }
 
 
@@ -80,7 +87,7 @@ ion-title {
 
 .text{
 	font-size: 12px;
-	margin: 4%;
+	margin: 1% 4% 4% 4%;
 }
 
 #mapa-box{
@@ -97,6 +104,16 @@ ion-title {
 	float: right;
 	width: 50%;
 	text-align: right;
+}
+
+.iconos{
+    display: flex;
+    flex-direction: row;
+    margin: 1% 4% 0 4%;
+}
+
+.sugerencia{
+    width: 50%;
 }
 
 // .estrellas{

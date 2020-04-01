@@ -6,7 +6,7 @@
         <ion-title>{{items.nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button>
-                <ion-icon name="business"></ion-icon>
+                <ion-icon name="heart"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -22,6 +22,11 @@
             </ion-slides>
         </div>
         <div class="divc">
+            <div class="iconos">
+                <div *ngIf="items.auto == 1"><ion-icon name="car-outline"></ion-icon></div>
+                <div *ngIf="items.bicicleta == 1"><ion-icon name="bicycle-outline"></ion-icon></div>
+                <div *ngIf="items.caminar == 1"><ion-icon name="walk-outline"></ion-icon></div>
+            </div>
             <p class="text">{{items.descripcion}}<a class="verMas" [routerLink]="['/descripcion', items.id]">Ver más</a></p>
         </div>
         <div class="divd">
@@ -36,5 +41,10 @@
                 <ion-icon name="star-outline"></ion-icon>
                 <ion-icon name="star-outline"></ion-icon>
             </div>
+        </div>
+        <h5>Te puede interesar</h5>
+        <div class="divf">
+            <div class="sugerencia">sugerencia_1</div>
+            <div class="sugerencia">sugerencia_2</div>
         </div>
     </div>
