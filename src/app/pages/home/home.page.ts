@@ -15,6 +15,21 @@ export class HomePage implements OnInit {
 
   items : CircuitsModel[] = [];
 
+  slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    slidesPerView: 1,
+    spaceBetween: 1
+  };
+
+  cards = {
+    initialSlide: 0,
+    speed: 400,
+    slidesPerView: 1,
+    spaceBetween: 1,
+    direction: 'vertical'
+  };
+
 
   constructor(
       private database: DatabaseService,

@@ -1,11 +1,11 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="home" color="back"></ion-back-button>
+            <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
         <ion-title>{{items.nombre}}</ion-title>
         <ion-buttons slot="primary">
-            <ion-button>
+            <ion-button (click)=agregarFavorito()>
                 <ion-icon name="heart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -13,11 +13,13 @@
 </ion-header>
 <ion-content>
     <div class="padre">
-        <div class="diva"><img class="imgPrincipal" id="foto" src="{{ items.url }}"></div>
+        <div class="diva">
+            <img class="imgPrincipal" id="foto" src="{{ items.url }}" />
+        </div>
         <div class="divb">
             <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let item of items.url">
-                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item }}"></div>
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item }}" /></div>
                 </ion-slide>
             </ion-slides>
         </div>
@@ -74,3 +76,4 @@
             </div>
         </div>
     </div>
+</ion-content>

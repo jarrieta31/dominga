@@ -27,7 +27,7 @@ export class PlacesPage implements OnInit {
     initialSlide: 0,
     speed: 400,
     slidesPerView: 3,
-    spaceBetween: 1
+    spaceBetween: 1,
   };
 
   mapa: Mapboxgl.Map;
@@ -82,11 +82,14 @@ async getLugaresId(){
 
          // resultado.valoracion = mapped;
 
-
         this.items = resultado;
         console.log(this.items);
       }); 
    });
+  }
+
+  async agregarFavorito(){
+
   }
 }
 
