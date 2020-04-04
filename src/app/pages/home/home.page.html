@@ -8,34 +8,7 @@
         </ion-button>
     </ion-toolbar>
 </ion-header>
-<!-- <div class="relleno" ></div> -->
 <ion-content scroll-y="false">
-    <!-- <ion-grid>
-        <ion-row>
-            <ion-col>
-                <ion-virtual-scroll [items]="items" approxItemHeight="300px">
-                    <ion-card *virtualItem="let item" id="{{ item.id }}" [routerLink]="['/places', item.id]">
-                        <ion-card-header color="options">
-                            <ion-card-title class="cardTitle">{{ item.nombre }} <span class="categoria">(Rural)</span>
-                                <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
-                            </ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <img class="foto" [src]="item.url" [alt]="item.nombre" />
-                            <ion-item>
-                                <ion-label slot="start">100 metros</ion-label>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                            </ion-item>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-virtual-scroll>
-            </ion-col>
-        </ion-row>
-    </ion-grid> -->
     <div class="padre">
         <div class="slider">
             <ion-slides scrollbar="true" pager="true" [options]="slideOpts">
@@ -75,27 +48,26 @@
             </div>
         </div>
         <div class="cards">
-            <ion-slides scrollbar="false" pager="true" [options]="cards">
+            <ion-slides scrollbar="false" pager="false" [options]="cards">
                 <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.id]">
-                        <ion-card>
-                            <ion-card-header color="options">
-                                <ion-card-title class="cardTitle">{{ item.nombre }} <span class="categoria">(Rural)</span>
-                                    <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
-                                </ion-card-title>
-                            </ion-card-header>
-                            <ion-card-content>
-                                <img class="foto" [src]="item.url" [alt]="item.nombre" />
-                                <ion-item>
-                                    <ion-label slot="start">100 metros</ion-label>
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                </ion-item>
-                            </ion-card-content>
-                        </ion-card>
-                   
+                    <ion-card>
+                        <ion-card-header color="options">
+                            <ion-card-title class="cardTitle">{{ item.nombre }} <span class="categoria">(Rural)</span>
+                                <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
+                            </ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <img class="foto" [src]="item.url" [alt]="item.nombre" />
+                            <ion-item>
+                                <ion-label slot="start">100 metros</ion-label>
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                            </ion-item>
+                        </ion-card-content>
+                    </ion-card>
                 </ion-slide>
             </ion-slides>
         </div>

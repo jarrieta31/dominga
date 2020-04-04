@@ -14,6 +14,7 @@ export class DatabaseService {
   lugares = environment.firebaseConfig.databaseURL + '/lugar.json';
   lugaresId = environment.firebaseConfig.databaseURL + '/lugar/';
   dondeDormir = environment.firebaseConfig.databaseURL + '/donde_dormir.json';
+  tipoCircuito = environment.firebaseConfig.databaseURL + '/tipo_circuito.json';
 
   constructor(private http: HttpClient) { }
 
@@ -37,6 +38,10 @@ getInfoAll(id){
 
 getSleep(){
 	return this.http.get(this.dondeDormir);
+}
+
+getTypeCircuits(){
+	return this.http.get(this.tipoCircuito);
 }
 
 // getUsers(id: string){

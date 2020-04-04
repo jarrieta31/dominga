@@ -3,8 +3,27 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
-        <ion-icon class="icon-info" slot="end" name="map"></ion-icon>
+        <ion-img src="/assets/icon/location.png" class="iconInfo" slot="end"></ion-img>
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <ion-searchbar placeholder="¡Elegí tu itinerario!"></ion-searchbar>
+    <ion-card *ngFor="let item of tipoCircuito">
+        <ion-card-header color="circuits">
+            {{ item.nombre }}
+        </ion-card-header>
+        <ion-card-content>
+            <img width="auto" height="40%" src="{{ item.imagen }}" alt="{{ item.nombre }}">
+            <div>
+                {{ item.duracion }}
+                <div class="estrellas">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

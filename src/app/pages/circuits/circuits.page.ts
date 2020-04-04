@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { DatabaseService } from '../../services/database.service';
 
-import { CircuitsModel } from '../../models/circuits';
-
-
 @Component({
   selector: 'app-circuits',
   templateUrl: './circuits.page.html',
@@ -12,23 +9,19 @@ import { CircuitsModel } from '../../models/circuits';
 })
 export class CircuitsPage implements OnInit {
 
+  tipoCircuito = [];
+
   constructor(public database: DatabaseService) { }
 
   ngOnInit() {
-  	//this.addCircuit();
+  	this.getTipoCircuito();
   }
 
-  addCircuit() {
+  getTipoCircuito() {
     
-      var circuito: CircuitsModel = new CircuitsModel();
-      console.log(circuito);
-      circuito.nombre = "teatro";
-      circuito.descripcion = "arte";
-
-      console.log(circuito);
-
-      this.database.addCircuits(circuito).subscribe(resultado => {
-        console.log(resultado);
+      this.database.getTypeCircuits().subscribe((resultado: any) => {
+            this.tipoCircuito = [];
+            this.tipoCircuito = resultado;
       });
     
   }
