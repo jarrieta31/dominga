@@ -13,6 +13,7 @@ export class DatabaseService {
 
   lugares = environment.firebaseConfig.databaseURL + '/lugar.json';
   lugaresId = environment.firebaseConfig.databaseURL + '/lugar/';
+  dondeDormir = environment.firebaseConfig.databaseURL + '/donde_dormir.json';
 
   constructor(private http: HttpClient) { }
 
@@ -32,6 +33,10 @@ getPlacesId(id){
 getInfoAll(id){
 	const url = `${this.lugaresId}${id}.json`;
 	return this.http.get(url);
+}
+
+getSleep(){
+	return this.http.get(this.dondeDormir);
 }
 
 // getUsers(id: string){

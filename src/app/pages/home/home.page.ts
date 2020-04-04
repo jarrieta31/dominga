@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
 
   cards = {
     initialSlide: 0,
-    speed: 400,
+    speed: 100,
     slidesPerView: 1,
     spaceBetween: 1,
     direction: 'vertical'
