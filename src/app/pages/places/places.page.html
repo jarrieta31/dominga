@@ -1,11 +1,11 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="home" color="back"></ion-back-button>
+            <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
         <ion-title>{{items.nombre}}</ion-title>
         <ion-buttons slot="primary">
-            <ion-button>
+            <ion-button (click)=agregarFavorito()>
                 <ion-icon name="heart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -13,19 +13,27 @@
 </ion-header>
 <ion-content>
     <div class="padre">
-        <div class="diva"><img class="imgPrincipal" id="foto" src="{{ items.url }}"></div>
+        <div class="diva">
+            <img class="imgPrincipal" id="foto" src="{{ items.url }}" />
+        </div>
         <div class="divb">
             <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let item of items.url">
-                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item }}"></div>
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item }}" /></div>
                 </ion-slide>
             </ion-slides>
         </div>
         <div class="divc">
             <div class="iconos">
-                <div *ngIf="items.auto == 1"><ion-icon name="car-outline"></ion-icon></div>
-                <div *ngIf="items.bicicleta == 1"><ion-icon name="bicycle-outline"></ion-icon></div>
-                <div *ngIf="items.caminar == 1"><ion-icon name="walk-outline"></ion-icon></div>
+                <div class="iconAuto" *ngIf="items.auto == 1">
+                    <ion-icon name="car-outline"></ion-icon>
+                </div>
+                <div class="iconEstilos" *ngIf="items.bicicleta == 1">
+                    <ion-icon name="bicycle-outline"></ion-icon>
+                </div>
+                <div class="iconEstilos" *ngIf="items.caminar == 1">
+                    <ion-icon name="walk-outline"></ion-icon>
+                </div>
             </div>
             <p class="text">{{items.descripcion}}<a class="verMas" [routerLink]="['/descripcion', items.id]">Ver más</a></p>
         </div>
@@ -42,9 +50,30 @@
                 <ion-icon name="star-outline"></ion-icon>
             </div>
         </div>
-        <h5>Te puede interesar</h5>
+        <h5 class="interes">Te puede interesar</h5>
         <div class="divf">
-            <div class="sugerencia">sugerencia_1</div>
-            <div class="sugerencia">sugerencia_2</div>
+            <div class="sugerencia" [routerLink]="['/home']">
+                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+                <div class="infoSug">
+                    <div class="sugNombre">Nombre</div>
+                    <div class="sugDireccion">Direccion</div>
+                    <div class="sugTelefono">
+                        <div>Tel: &nbsp;</div>
+                        <div class="numTelefono">43423658</div>
+                    </div>
+                </div>
+            </div>
+            <div class="sugerencia" [routerLink]="['/home']">
+                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+                <div class="infoSug">
+                    <div class="sugNombre">Nombre</div>
+                    <div class="sugDireccion">Direccion</div>
+                    <div class="sugTelefono">
+                        <div>Tel:&nbsp;</div>
+                        <div class="numTelefono">43423658</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</ion-content>

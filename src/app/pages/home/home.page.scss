@@ -1,93 +1,91 @@
-  ion-card-header {
-    background-color: #00dea5;
-  }
+* {
+    padding: 0;
+    margin: 0;
+}
 
-  .cabezera {
+.cabezera {
     background-color: #00dea5;
-  }
-  
-  
-  .estrella {
+}
+
+.estrella {
     color: #ffb134;
-  }
-  
-  // .circulo {
-  //   width: 60px;
-  //   height: 60px;
-  //   -moz-border-radius: 50%;
-  //   -webkit-border-radius: 50%;
-  //   border-radius: 50%;
-  // }
-  .icono {
-    width: 70px;
-  }
-  .contenedor-iconos {
-    //background-color: rgb(192, 233, 43);
-    width: 95%;
+}
+
+.icono {
+    width: 65%;
+}
+
+.iconMenu{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.contenedor-iconos {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     justify-items: center;
-    padding-bottom: 30px;
-    margin: 2% 5px 20px 2%;
-  }
-  
-  // .icon1 {
-  //   background-color: #0ae9e6;
-  // } 
-  
-  // .icon2 {
-  //   background-color: #c706ff;
-  // } 
-  
-  // .icon3 {
-  //   background-color: #ffd200;
-  // } 
-  
-  // .icon4 {
-  //   background-color: #10dda6;
-  // }
-  
-  ion-slides {
-    width: 95%;
-    
-  }
-  
-  .slider {
-    // position: -webkit-sticky;  // required for Safari
-    //position: fixed;
-    //top: 45px; // required as well.
-    //z-index: 3;
-    padding: 0px auto 10px auto;
-    margin: 5px auto 10px auto;
-    //margin-top: 10px;
-    width: 100%;
-    height: 48%;
-    //border-bottom: solid 2px red;
-    //background-color: rgb(245, 245, 247);
-  }
-  
-  
-  .foto {
-    width: 100%;
-  }
-  
-  ion-content {
-    border-top: 1px #eff0f1 solid;
-  //  box-shadow: 5px 5px 5px black ;
-  }
-  
-  ion-card {
-    height: 20rem;
-  }
-  
-  .titulo {
-    color: aliceblue;
+    margin: 2% 4% 3% 4%;
+}
+
+.imgSlider{
+  width: 100%;
+  height: 100%;
+}
+
+ion-card {
+    height: 30%;
+    margin: 0 6% 5% 6%;
+}
+
+ion-card-header {
+    padding: 4% !important;
+}
+
+ion-label {
     font-family: 'Barlow', ;
-    font-size: medium;
-  }
-  
-  ion-label {
-    font-family: 'Barlow', ;
-    font-size: 16pt;
-  }
+    font-size: 11pt;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.card-content-md {
+    padding: 0px !important;
+}
+
+.cardTitle {
+    font-weight: bold;
+    color: #ffffff !important;
+}
+
+.iconTitle {
+    float: right;
+}
+
+.categoria {
+    font-size: 60%;
+    font-weight: 100;
+    color: #000000;
+}
+
+.padre{
+  height: 100%;
+}
+
+.slider{
+  height: 45%;
+}
+
+.menu{
+  height: 10%;
+}
+
+.cards{
+  height: 40%;
+}
+
+ion-card{
+  height: 100%;
+  margin: 0 8% 0 8%;
+}

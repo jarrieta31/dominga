@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { DatabaseService } from '../../services/database.service';
+
 @Component({
   selector: 'app-where-sleep',
   templateUrl: './where-sleep.page.html',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WhereSleepPage implements OnInit {
 
-  constructor() { }
+	sleep = [];
+
+  constructor(private database: DatabaseService) { }
 
   ngOnInit() {
+  	this.getWhereSleep();
+  }
+
+  async getWhereSleep(){
+  	this.database.getSleep().subscribe( (resultado: any) => {
+  		this.sleep = [];
+  		this.sleep = resultado;
+  		console.log(this.sleep);
+
+  	})
   }
 
 }
