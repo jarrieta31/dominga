@@ -25,6 +25,8 @@ import { IonicStorageModule } from '@ionic/storage';
 //Guard 
 // import { UnauthGuard } from './shared/guards/unauth.guard';
 // import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthService } from './services/auth.service';
+
 
 
 @NgModule({
@@ -42,7 +44,8 @@ import { IonicStorageModule } from '@ionic/storage';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
