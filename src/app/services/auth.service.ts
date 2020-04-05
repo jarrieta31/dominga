@@ -24,7 +24,7 @@ export interface AuthResponseData {
 export class AuthService {
   
   private _user = new BehaviorSubject<User>(null);
-  private _token = new BehaviorSubject<string>('');
+  private _token = new BehaviorSubject<string>("");
 
 
   constructor(private http: HttpClient, private storage: Storage) {}
@@ -32,14 +32,14 @@ export class AuthService {
   //
   autoLogin() {
     //Obtiene los datos almacenados y los convierte en un observable para obtener una promesa
-    //Con el operador mapa convierto los datos en 
+    //Con el operador mapa convierto los datos en string
     return from (this.storage.get('authData')).pipe(
       map(storedData => {
-        console.log("estoy en autoLogin, los datos son: ", storedData);
+        // console.log("autoLogin 1, storedData: ", storedData);
         //Si no hay datos o si el valor es null
-        console.log( typeof(storedData));
-        if(storedData == ""){
-          console.log("estoy en autoLogin: No hay datos almacenados");
+        
+        if(storedData == "" || storedData == null){
+          // console.log("autoLogin 2, No hay datos almacenados");
           return null;
         }
         //Convierte los datos de string a un objeto json
@@ -50,14 +50,15 @@ export class AuthService {
           email: string;
         };
         //Variable para convertir el tiempo de expiración en fecha
+        console.log("Fecha de expiración: ", parsedData.tokenExpirationDate);
         const expirationTime = new Date(parsedData.tokenExpirationDate);
         //Si el tiempo de expiración no es válido
         if(expirationTime <= new Date()){
-          console.log("estoy en autoLogin: se superó el tiempo de expiración");
+          // console.log("autoLogin 3, se superó el tiempo de expiración");
           return null;
         }
         //Se crea un nuevo usuario con los dato almacenados
-        console.log("estoy en autoLogin: Se creó una nueva instancia de usuario");
+        // console.log("autoLogin 4, Se creó una nueva instancia de usuario con los datos almacenados");
         const user = new User(
           parsedData.userId, 
           parsedData.email, 
@@ -80,7 +81,7 @@ export class AuthService {
   }
 
   get userIsAuthenticated() {
-    return this._user.asObservable().pipe( 
+    return this._user.asObservable().pipe(
       map(user => {
         if(user){
           return !!user.token;
@@ -92,17 +93,18 @@ export class AuthService {
 
   // Obtiene el id o devuelve falso
   get userId() {
-    return this._user.asObservable().pipe( map(user => {
-      if (user){
-        return user.id 
-      }else{
-        return null;
-      }
-    }));
+    return this._user.asObservable().pipe( 
+      map(user => {
+        if (user){
+          return user.id 
+        }else{
+          return null;
+        }
+      })
+    );
   }
 
   signup(email: string, password: string) {
-    console.log("estoy en signup");
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
         environment.firebaseAPIKey
@@ -123,14 +125,14 @@ export class AuthService {
 
   logout() {
     this._user.next(null);
+    this.clearSotreAuthData(); //Borra todos los datos almacenados
   }
 
   //Guarda todos los datos del usuario devueltos en la respuesta
   private setUserData(userData: AuthResponseData){
     //Hora de expiracion es la hora actual + 1 hora en milisegundos
-    console.log("estoy en setUserData");
     const expirationTime = new Date(
-      new Date().getTime() + (+userData.expiresIn * 1000)
+      new Date().getTime() + (+userData.expiresIn * 10000 * 1000)
     );
     //Guardo los datos del usuario que vino en la respuesta
     this._user.next( 
@@ -169,6 +171,10 @@ export class AuthService {
       console.log('La informacion almacenada es: ', val);
     });
     
+  }
+
+  private clearSotreAuthData(){
+    this.storage.clear();
   }
 
 }

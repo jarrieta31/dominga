@@ -6,6 +6,7 @@ import { DatabaseService } from '../../services/database.service';
 
 import { CircuitsModel } from '../../models/circuits'
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -17,10 +18,12 @@ export class HomePage implements OnInit {
 
 
   constructor(
+
       private database: DatabaseService,
       private authService: AuthService,
       private router: Router
       ) {}
+
 
   ngOnInit() {
     this.getLugares();

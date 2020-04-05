@@ -3,7 +3,9 @@ import { AuthService, AuthResponseData } from '../../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
   
   email: string;
   password: string;
@@ -40,7 +41,16 @@ export class LoginPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.userIsAuthenticated.pipe(
+      take(1),
+      switchMap(isAuthenticated => {
+        if(!isAuthenticated){
+          return this.authService.autoLogin()
+        }
+      })
+    )
+  }
 
   onResetForm() {
     this.loginForm.reset;

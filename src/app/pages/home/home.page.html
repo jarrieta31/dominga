@@ -53,12 +53,12 @@
         <ion-virtual-scroll [items]="items" approxItemHeight="300px">
           <ion-card *virtualItem="let item" id="{{ item.id }}" [routerLink]="['/places', item.id]">
             <ion-card-header>
-                <ion-list>
-                  <ion-item class="cabezera">
+              
+                  
                     <ion-label>{{ item.nombre }}</ion-label>
                     <ion-card-title class="titulo" >{{ item.name }}</ion-card-title>
-                  </ion-item>
-                </ion-list>
+                
+                
             </ion-card-header>
           <ion-card-content>
             <ion-item>

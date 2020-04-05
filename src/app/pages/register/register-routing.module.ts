@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { RegisterPage } from './register.page';
 
-//Guard que no permite el acceso a usuarios que iniarion sesión
-import { UnauthGuard } from '../../shared/guards/unauth.guard';
 
 const routes: Routes = [
   {
