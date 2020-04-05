@@ -27,7 +27,7 @@ export class HomePage implements OnInit {
     initialSlide: 0,
     speed: 100,
     slidesPerView: 1,
-    spaceBetween: 1,
+    spaceBetween: 20,
     direction: 'vertical'
   };
 
