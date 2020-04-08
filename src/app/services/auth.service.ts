@@ -6,7 +6,7 @@ import { map, tap } from 'rxjs/operators';
 import { User } from '../shared/user.model';
 import { Storage } from '@ionic/storage';
 
-
+//Interfaz que recibe las respuesta de autenticacion de firebase
 export interface AuthResponseData {
   kind: string;
   idToken: string;
@@ -16,6 +16,12 @@ export interface AuthResponseData {
   localId: string;
   //expiresIn: string;
   registered?: boolean;
+}
+
+//Interfaz que recibe la respuesta del reset de password
+export interface ResetPasswordtResponseData{
+  kind: string;
+  email:string;
 }
 
 @Injectable({
@@ -104,6 +110,16 @@ export class AuthService {
     );
   }
 
+  recoveryPassword(email: string){
+    return this.http.post<AuthResponseData>(
+      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
+        environment.firebaseAPIKey
+      }`,
+      {"requestType":"PASSWORD_RESET","email":email}
+    ).pipe(tap(this.setUserData.bind(this))
+    )
+  }
+
   signup(email: string, password: string) {
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
@@ -125,7 +141,7 @@ export class AuthService {
 
   logout() {
     this._user.next(null);
-    this.clearSotreAuthData(); //Borra todos los datos almacenados
+    this.storage.remove('authData');; //Borra todos los datos almacenados con la key authData
   }
 
   //Guarda todos los datos del usuario devueltos en la respuesta
@@ -173,8 +189,7 @@ export class AuthService {
     
   }
 
-  private clearSotreAuthData(){
-    this.storage.clear();
-  }
+  
+  
 
 }

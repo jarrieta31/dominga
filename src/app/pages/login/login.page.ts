@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthResponseData } from '../../services/auth.service';
+import { AuthService, AuthResponseData, ResetPasswordtResponseData } from '../../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  
+
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -72,7 +72,7 @@ export class LoginPage implements OnInit {
   authenticate(email: string, password: string) {
     this.isLoading = true;
     this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Logging in...' })
+      .create({ keyboardClose: true, message: 'Enviando sus datos...' })
       .then(loadingEl => {
         loadingEl.present();
         let authObs: Observable<AuthResponseData>;        
@@ -93,25 +93,96 @@ export class LoginPage implements OnInit {
             } else if (code === 'INVALID_PASSWORD') {
               message = 'La contraseña no es correcta';
             }
-            this.showAlert(message);
+            let title = 'Autencitación fallida';
+            this.showAlert(message, title);
           }
         );
       });
   }
 
-  private showAlert(message: string) {
+  private showAlert(message: string, title: string) {
     this.alertCtrl
       .create({
-        header: 'Autencitación fallida',
+        header: title,
         message: message,
         buttons: ['Cerrar']
       })
       .then(alertEl => alertEl.present());
   }
 
-  resetPassword(){
+  resetPassword(email: string) {
+
+    this.resetPasswordAlertPrompt();
+
     
   }
+
+  async resetPasswordAlertPrompt() {
+
+    if(this.loginForm.get('email').value != ""){
+      this.email= this.loginForm.get('email').value;
+    }
+
+    const input = await this.alertCtrl.create({
+      header: 'Restablecer Contraseña',
+      subHeader: 'Ingrese su email',
+      inputs: [
+        {
+          name: 'txtEmail',
+          type: 'email',
+          placeholder: 'Ingrese su email',
+          value: this.email
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'primary',
+          handler: () => {
+            console.log('Boton cancelar reset contraseña');
+          }
+        }, {
+          text: 'Cambiar Contraseña',
+          handler: (data) => {
+            console.log('Boton confirmar reset contraseña', data);
+            this.email = data.txtEmail;
+            this.loadingResetPassword();
+          }
+        }
+      ]
+    });
+
+    await input.present();
+  }
   
+  loadingResetPassword() {
+    this.isLoading = true;
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Enviando solicitud...' })
+      .then(loadingEl => {
+        loadingEl.present();
+        let resetPassObs: Observable<ResetPasswordtResponseData>;        
+        resetPassObs = this.authService.recoveryPassword(this.email);        
+        resetPassObs.subscribe(
+          resData => {
+            console.log(resData);
+            this.isLoading = false;
+            loadingEl.dismiss();
+            //this.router.navigateByUrl('/home');
+          },
+          errRes => {
+            loadingEl.dismiss();
+            const code = errRes.error.error.message;
+            let message = '¡No se pudo enviar el reset!';
+            if (code === 'EMAIL_NOT_FOUND') {
+              message = 'No hay registro de usuario correspondiente a este email. El usuario puede haber sido eliminado.';
+            }
+            let title = 'Reset de contraseña fallida';
+            this.showAlert(message, title);
+          }
+        );
+      });
+  }
 
 }
