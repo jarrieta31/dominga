@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
-        <ion-title>{{items.nombre}}</ion-title>
+        <ion-title *ngFor="let item of items">{{item.nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button (click)=agregarFavorito()>
                 <ion-icon name="heart"></ion-icon>
@@ -12,34 +12,34 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div class="padre">
+    <div class="padre" *ngFor="let item of items; let indice = index">
         <div class="diva">
-            <img class="imgPrincipal" id="foto" src="{{ items.url }}" />
+            <img class="imgPrincipal" id="foto" src="{{ item.url[0].url }}" />
         </div>
         <div class="divb">
             <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
-                <ion-slide class="slideHijo" *ngFor="let item of items.url">
-                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item }}" /></div>
+                <ion-slide class="slideHijo" *ngFor="let img of items[indice].url; let i = index">
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ item.url[i].url }}" /></div>
                 </ion-slide>
             </ion-slides>
         </div>
         <div class="divc">
             <div class="iconos">
-                <div class="iconAuto" *ngIf="items.auto == 1">
+                <div class="iconAuto" *ngIf="item.auto == 1">
                     <ion-icon name="car-outline"></ion-icon>
                 </div>
-                <div class="iconEstilos" *ngIf="items.bicicleta == 1">
+                <div class="iconEstilos" *ngIf="item.bicicleta == 1">
                     <ion-icon name="bicycle-outline"></ion-icon>
                 </div>
-                <div class="iconEstilos" *ngIf="items.caminar == 1">
+                <div class="iconEstilos" *ngIf="item.caminar == 1">
                     <ion-icon name="walk-outline"></ion-icon>
                 </div>
             </div>
-            <p class="text">{{items.descripcion}}<a class="verMas" [routerLink]="['/descripcion', items.id]">Ver más</a></p>
+            <p class="text">{{item.descripcion}}<a class="verMas" [routerLink]="['/descripcion', item.$key]">Ver más</a></p>
         </div>
-        <div class="divd">
-            <div id="mapa-box"></div>
-        </div>
+       <!--  <div class="divd">
+            <div id="mapaBox"></div>
+        </div> -->
         <div class="dive">
             <div class="distancia">100 mts</div>
             <div class="estrellas">

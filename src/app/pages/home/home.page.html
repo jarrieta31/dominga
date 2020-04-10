@@ -42,14 +42,14 @@
                 </a>
                 <a class="iconMenu" routerLink="/more-options">
                     <div class="icono">
-                        <ion-img src="/assets/icon/info.png"></ion-img>
+                        <ion-img src="/assets/icon/masOpciones.png"></ion-img>
                     </div>
                 </a>
             </div>
         </div>
         <div class="cards">
             <ion-slides scrollbar="false" pager="false" [options]="cards">
-                <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.id]">
+                <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
                     <ion-card>
                         <ion-card-header color="options">
                             <ion-card-title class="cardTitle">
@@ -58,7 +58,7 @@
                             </ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <img class="foto" [src]="item.url" [alt]="item.nombre" />
+                            <img class="foto" [src]="item.url[0]" [alt]="item.nombre" />
                             <div>
                                 <div class="distancia">
                                     <ion-label slot="start">100 metros</ion-label>

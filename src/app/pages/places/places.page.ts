@@ -3,9 +3,9 @@ import { environment } from '../../../environments/environment';
 
 import { DatabaseService } from '../../services/database.service';
 
-import { CircuitsModel } from '../../models/circuits';
+import { Place } from '../../shared/place';
 
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 
@@ -15,83 +15,92 @@ declare var jQuery: any;
 declare var $: any;
 
 @Component({
-  selector: 'app-info-lugar',
-  templateUrl: './places.page.html',
-  styleUrls: ['./places.page.scss'],
+    selector: 'app-info-lugar',
+    templateUrl: './places.page.html',
+    styleUrls: ['./places.page.scss'],
 })
 export class PlacesPage implements OnInit {
 
-  items : CircuitsModel[] = [];
+    items: Place[];
 
-	slideOpts = {
-    initialSlide: 0,
-    speed: 400,
-    slidesPerView: 3,
-    spaceBetween: 1,
-  };
+    slideOpts = {
+        initialSlide: 0,
+        speed: 400,
+        slidesPerView: 3,
+        spaceBetween: 1
+    };
 
-  mapa: Mapboxgl.Map;
+    mapa: Mapboxgl.Map;
 
-  constructor(
-    private database: DatabaseService, 
-    private activatedRoute: ActivatedRoute, 
-    private router: Router
+    constructor(
+        private database: DatabaseService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {}
 
-  ngOnInit() {
-  
-  	Mapboxgl.accessToken = environment.mapBoxToken;
-		this.mapa = new Mapboxgl.Map({
-		container: 'mapa-box',
-		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [-56.713438, -34.340118],
-		zoom: 16,
-	}
+    ngOnInit() {
 
-	);
+        this.getCargarLugar();
 
-		const marker = new Mapboxgl.Marker({
-			draggable: false
-		}).setLngLat([-56.713438, -34.340118]).addTo(this.mapa);
+        // Mapboxgl.accessToken = environment.mapBoxToken;
+        // this.mapa = new Mapboxgl.Map({
+        //         container: 'mapaBox',
+        //         style: 'mapbox://styles/mapbox/streets-v11',
+        //         center: [-56.713438, -34.340118],
+        //         zoom: 16,
+        //     }
+        // );
 
-		this.mapa.on('load', () => {
-  			this.mapa.resize();
-  });
+        // const marker = new Mapboxgl.Marker({
+        //     draggable: false
+        // }).setLngLat([-56.713438, -34.340118]).addTo(this.mapa);
 
-     this.getLugaresId();
-  }
+        // this.mapa.on('load', () => {
+        //     this.mapa.resize();
+        // });
+    }
 
-  async cambiarImagen() {
-  	$(".imgGaleria").click(function(){ 
-    var imagenSrc = $(this).attr('src');
-    $("#foto").attr("src",imagenSrc);  
-});
-  }
+    async cambiarImagen() {
+        $(".imgGaleria").click(function() {
+            var imagenSrc = $(this).attr('src');
+            $("#foto").attr("src", imagenSrc);
+        });
+    }
 
-async getLugaresId(){
-  this.activatedRoute.paramMap.subscribe(params => {
-      //console.log(params.get("id"));
-         this.database.getPlacesId(params.get("id")).subscribe((resultado: any) => {
-         this.items = [];
+    async getCargarLugar() {
+        this.activatedRoute.paramMap.subscribe(params => {
+            // Dentro de la variable s colocamos el método database y hacemos llamado al 
+            // método getPlaces() que se encuentra en el servicio 'DataService'
 
-         resultado.descripcion = resultado.descripcion.substr(0, 44) + " ...";
+            let par = params.get("id");
+                     
+            let s = this.database.getPlaces();
+            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
+            // último pasamos los datos a JSON
+            s.snapshotChanges().subscribe(data => {
+                    this.items = [];
+                    data.forEach(item => {
 
-         // const mapped = Object.keys(resultado.valoracion).map(key => ({nombreUsuario: key, valoracion: resultado.valoracion[key]}));
+                        if (par == item.key) {
+                          var num = '0';
+                            let a = item.payload.toJSON();
+                            a['$key'] = item.key;
+                            this.items.push(a as Place);
+                         
+                            this.items[num].descripcion = this.items[num].descripcion.substr(0, 44) + " ...";
 
-         // console.log(mapped);
+                            let mapped = Object.keys(this.items[num].url).map(key => ({ id: key, url: this.items[num].url[key] }));
 
-         // resultado.valoracion = mapped;
+                            this.items[num].url = mapped;                          
+                        }
+                    })
 
-        this.items = resultado;
-        console.log(this.items);
-      }); 
-   });
-  }
+                }),
+                err => console.log(err)
+        });
+    }
 
-  async agregarFavorito(){
+    async agregarFavorito() {
 
-  }
+    }
 }
-
-
-

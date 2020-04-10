@@ -5,6 +5,7 @@ import { LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+// import { AngularFireAuth } from '@angular/fire/auth';
 
 
 @Component({
@@ -39,7 +40,9 @@ export class LoginPage implements OnInit {
     public authService: AuthService,
     private router: Router,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) {}
+    private alertCtrl: AlertController,
+    //public afAuth: AngularFireAuth
+    ) {}
 
   ngOnInit() {
     this.authService.userIsAuthenticated.pipe(
@@ -112,6 +115,17 @@ export class LoginPage implements OnInit {
   resetPassword(){
     
   }
+
+  // onLoginFacebook(): void {
+  //   this.authService.loginFacebookUser()
+  //     .then((res) => {
+  //       this.onLoginRedirect();
+  //     }).catch(err => console.log('err', err.message));
+  // }
+
+  //  onLoginRedirect(): void {
+  //   this.router.navigate(['/home']);
+  // }
   
 
 }

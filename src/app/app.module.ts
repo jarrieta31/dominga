@@ -27,7 +27,17 @@ import { IonicStorageModule } from '@ionic/storage';
 // import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthService } from './services/auth.service';
 
+import { AngularFireAuth } from '@angular/fire/auth';
 
+import { AngularFireModule } from '@angular/fire';
+
+import { environment } from '../environments/environment';
+
+import { AngularFirestore } from '@angular/fire/firestore';
+
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+
+//install firebase @angular/fire --save
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +48,8 @@ import { AuthService } from './services/auth.service';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
     IonicStorageModule.forRoot()
     
   ],
@@ -45,7 +57,9 @@ import { AuthService } from './services/auth.service';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AuthService
+    AuthService,
+    AngularFireAuth,
+    AngularFirestore
   ],
   bootstrap: [AppComponent]
 })

@@ -5,6 +5,9 @@ import { BehaviorSubject, from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User } from '../shared/user.model';
 import { Storage } from '@ionic/storage';
+// import { AngularFireAuth } from '@angular/fire/auth';
+// import { auth } from 'firebase/app';
+// import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 
 export interface AuthResponseData {
@@ -27,7 +30,12 @@ export class AuthService {
   private _token = new BehaviorSubject<string>("");
 
 
-  constructor(private http: HttpClient, private storage: Storage) {}
+  constructor(
+    private http: HttpClient, 
+    private storage: Storage, 
+    //private afsAuth: AngularFireAuth,
+    //private afs: AngularFirestore
+    ) {}
 
   //
   autoLogin() {
@@ -176,5 +184,19 @@ export class AuthService {
   private clearSotreAuthData(){
     this.storage.clear();
   }
+
+  // private updateUserData(user) {
+  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+  //   const data: User = {
+  //     id: user.uid,
+  //     email: user.email
+  //   }
+  //   return userRef.set(data, { merge: true })
+  // }
+
+  //  loginFacebookUser() {
+  //   return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
+  //     .then(credential => this.updateUserData(credential.user))
+  // }
 
 }
