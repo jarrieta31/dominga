@@ -68,6 +68,15 @@ const routes: Routes = [
     path: 'descripcion/:id',
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
   },
+  {
+    path: 'Rural',
+    loadChildren: () => import('./pages/rural-circuit/rural-circuit.module').then( m => m.RuralCircuitPageModule)
+  },
+  {
+    path: 'Urbano',
+    loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
+  },
+
 
   
 
