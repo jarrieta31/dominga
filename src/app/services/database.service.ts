@@ -35,6 +35,11 @@ export class DatabaseService {
         return this.appsRef;
     }
 
+    getEat() {
+        this.appsRef = this.db.list('donde_comer');
+        return this.appsRef;
+    }
+
     getTypeCircuits() {
         this.appsRef = this.db.list('tipo_circuito');
         return this.appsRef;

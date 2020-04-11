@@ -10,16 +10,16 @@
 <ion-content>
 	<ion-searchbar placeholder=""></ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of sleep">
+        <ion-item *ngFor="let item of eat">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar slot="start">
-                        <img src="">
+                        <img src="{{ item.imagen }}">
                     </ion-avatar>
                 </div>
                 <div class="info">
                     <ion-label>
-                        <h2></h2>
+                        <h2>{{ item.nombre }}</h2>
                         <div class="infoAbajo">
                             <h3></h3>
                             <p><span>Tel: </span></p>
