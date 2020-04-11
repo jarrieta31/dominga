@@ -64,7 +64,7 @@ export class RuralCircuitPage implements OnInit {
                 this.items.forEach(data => {
                     if (data.tipo == 'Rural') {
                         var popup = new Mapboxgl.Popup({ offset: 25 }).setHTML(
-                            '<img src="'+data.url[0]+'"/>' + data.nombre
+                            '<img src="'+data.url[0]+'" /><h5 style="text-align: center">'+data.nombre+'</h5>' 
                         );
                         const marker = new Mapboxgl.Marker({
                             draggable: false
