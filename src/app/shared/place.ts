@@ -7,4 +7,7 @@ export interface Place {
     nombre: string;
     url: string[];
     valoracion: string[];
+    tipo: string;
+    latitud: string;
+    longitud: string;
 }

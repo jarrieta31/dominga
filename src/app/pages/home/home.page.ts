@@ -57,7 +57,6 @@ export class HomePage implements OnInit {
       //console.log(this.items);
     }),
     err => console.log(err);
-   
   }
 
     cerrarSesion() {
