@@ -12,21 +12,24 @@ import { AppRoutingModule } from './app-routing.module';
 // Imports para cliente http
 import { HttpClientModule } from '@angular/common/http';
 
+// Import enviroments
+import { environment } from '../environments/environment';
+
 // Importas para geolocalización
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 // Almacenamiento de datos 
 import { IonicStorageModule } from '@ionic/storage';
 
+// Imports para firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
-//Guard 
-// import { UnauthGuard } from './shared/guards/unauth.guard';
-// import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthService } from './services/auth.service';
-
 
 
 @NgModule({
@@ -37,6 +40,10 @@ import { AuthService } from './services/auth.service';
     IonicModule.forRoot(), 
     AppRoutingModule,
     HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
     ReactiveFormsModule,
     IonicStorageModule.forRoot()
     

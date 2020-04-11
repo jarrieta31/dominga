@@ -14,21 +14,23 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item class="itemName">
-                <!-- <ion-label position="floating">Email</ion-label> -->
                 <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email"></ion-input>
             </ion-item>
-            <ion-item>
-                <!--  <ion-label position="floating">Contraseña</ion-label> -->
+
+            <ion-item>                
                 <ion-input class="password" name="password" type="password" placeholder="Contraseña" formControlName="password"></ion-input>
             </ion-item>
-            <!-- <ion-item button (click)="signUp()">
-        <ion-label color="primary" >Registrarse</ion-label>
-      </ion-item> -->
+
             <ion-item>
                 <ion-label class="remember" (click)="resetPassword()">¿Has olvidado tu contraseña?</ion-label>
                 <ion-label color="dark" button routerLink='/register'><a class="register">Registrate</a></ion-label>
             </ion-item>
+
         </ion-list>
-        <ion-button color="dark" expand="block"  type="ngSubmit">Iniciar</ion-button>
+        <ion-button color="dark" expand="block" size="large"  type="ngSubmit">Iniciar</ion-button>
     </form>
+
+    <ion-button (click)="loginGoogle()" expand="block" fill="clear" >
+        Ingresar con google
+    </ion-button>
 </ion-content>

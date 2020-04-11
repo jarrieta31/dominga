@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthResponseData } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { User } from '../../shared/user.class';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
 
+  user: User = new User();
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -51,43 +53,43 @@ export class RegisterPage implements OnInit {
     if(this.registerForm.valid){
       this.email = this.registerForm.get('email').value;
       this.password = this.registerForm.get('password').value;
-      this.register(this.email, this.password);
+      this.onRegister();
       this.onResetForm();
       
-      console.log("Registro enviado");
+      //console.log("Registro enviado");
     }else{
       console.log("Formulario registro no valido");
     }
   }
 
-  register(email: string, password: string) {
-    this.isLoading = true;
-    this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Logging in...' })
-      .then(loadingEl => {
-        loadingEl.present();
-        let authObs: Observable<AuthResponseData>;        
-        authObs = this.authService.signup(email, password);
+  // register(email: string, password: string) {
+  //   this.isLoading = true;
+  //   this.loadingCtrl
+  //     .create({ keyboardClose: true, message: 'Logging in...' })
+  //     .then(loadingEl => {
+  //       loadingEl.present();
+  //       let authObs: Observable<AuthResponseData>;        
+  //       authObs = this.authService.signup(email, password);
         
-        authObs.subscribe(
-          resData => {
-            console.log(resData);
-            this.isLoading = false;
-            loadingEl.dismiss();
-            this.router.navigateByUrl('/home');
-          },
-          errRes => {
-            loadingEl.dismiss();
-            const code = errRes.error.error.message;
-            let message = 'No se pudo registrar, intente nuevamente.';
-            if (code === 'EMAIL_EXISTS') {
-              message = '¡La dirección de correo electrónico ya existe!';
-            }
-            this.showAlert(message);
-          }
-        );
-      });
-  }
+  //       authObs.subscribe(
+  //         resData => {
+  //           console.log(resData);
+  //           this.isLoading = false;
+  //           loadingEl.dismiss();
+  //           this.router.navigateByUrl('/home');
+  //         },
+  //         errRes => {
+  //           loadingEl.dismiss();
+  //           const code = errRes.error.error.message;
+  //           let message = 'No se pudo registrar, intente nuevamente.';
+  //           if (code === 'EMAIL_EXISTS') {
+  //             message = '¡La dirección de correo electrónico ya existe!';
+  //           }
+  //           this.showAlert(message);
+  //         }
+  //       );
+  //     });
+  // }
 
   private showAlert(message: string) {
     this.alertCtrl
@@ -97,6 +99,14 @@ export class RegisterPage implements OnInit {
         buttons: ['Cerrar']
       })
       .then(alertEl => alertEl.present());
+  }
+
+  async onRegister(){
+    const user = await this.authService.signUpWithEmail(this.email, this.password);
+    if(user){
+      console.log('Se creó el usuario');
+      this.router.navigateByUrl('/home')
+    }
   }
 
 }

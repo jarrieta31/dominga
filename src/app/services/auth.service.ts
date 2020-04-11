@@ -1,183 +1,132 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BehaviorSubject, from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { User } from '../shared/user.model';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from "@angular/fire/auth";
+import AuthProvider = firebase.auth.AuthProvider;
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators'
+import { User } from '../shared/user.class';
+import { UrlTree } from '@angular/router';
 import { Storage } from '@ionic/storage';
 
-//Interfaz que recibe las respuesta de autenticacion de firebase
-export interface AuthResponseData {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  //expiresIn: string;
-  registered?: boolean;
-}
-
-//Interfaz que recibe la respuesta del reset de password
-export interface ResetPasswordtResponseData{
-  kind: string;
-  email:string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  // public isLogged :any = false;
+  //user: Observable<firebase.User | null >;
+  private user: firebase.User;
+
+  constructor( private afAuth: AngularFireAuth, private storage: Storage ) { 
+    //Si el usuario está logueado devuelve true y null en caso contrario
+    //afAuth.authState.subscribe( user => (this.isLogged = true))
+    this.afAuth.authState.subscribe(user => {
+      this.user = user;
+    })
+  }
+
+  // Registro con email
+  signUpWithEmail(email:string, pass:string): Promise<firebase.auth.UserCredential> {
+    try {
+      const res = this.afAuth.auth.createUserWithEmailAndPassword(email,pass)
+      console.log('Registro correcto!')
+      return res
+    } catch (error) {
+      console.log('Error en registro con email: ', error.message);
+    }
+  }
   
-  private _user = new BehaviorSubject<User>(null);
-  private _token = new BehaviorSubject<string>("");
-
-
-  constructor(private http: HttpClient, private storage: Storage) {}
-
-  //
-  autoLogin() {
-    //Obtiene los datos almacenados y los convierte en un observable para obtener una promesa
-    //Con el operador mapa convierto los datos en string
-    return from (this.storage.get('authData')).pipe(
-      map(storedData => {
-        // console.log("autoLogin 1, storedData: ", storedData);
-        //Si no hay datos o si el valor es null
-        
-        if(storedData == "" || storedData == null){
-          // console.log("autoLogin 2, No hay datos almacenados");
-          return null;
-        }
-        //Convierte los datos de string a un objeto json
-        const parsedData = JSON.parse(storedData) as {
-          tonken: string; 
-          tokenExpirationDate: string;
-          userId: string;
-          email: string;
-        };
-        //Variable para convertir el tiempo de expiración en fecha
-        console.log("Fecha de expiración: ", parsedData.tokenExpirationDate);
-        const expirationTime = new Date(parsedData.tokenExpirationDate);
-        //Si el tiempo de expiración no es válido
-        if(expirationTime <= new Date()){
-          // console.log("autoLogin 3, se superó el tiempo de expiración");
-          return null;
-        }
-        //Se crea un nuevo usuario con los dato almacenados
-        // console.log("autoLogin 4, Se creó una nueva instancia de usuario con los datos almacenados");
-        const user = new User(
-          parsedData.userId, 
-          parsedData.email, 
-          parsedData.tonken, 
-          expirationTime
-        );
-        return user;
-      }),
-      tap( user => {
-        // Si se creó el usuario
-        if(user){
-          this._user.next(user);
-        }
-      }),
-      // Dado que el metodo debe devolver un boolean se hace este último paso
-      map(user => {
-        return !!user;
-      })
-    );
+  // Ingreso con email
+  signInWithEmail(email:string, pass:string): Promise<firebase.auth.UserCredential>{
+    try {
+      const res = this.afAuth.auth.signInWithEmailAndPassword(email,pass)
+      console.log('Ingreso con email correcto')
+      return res
+    } catch (error) {
+      console.log('Error en ingreso con email: ', error)
+    }       
   }
 
-  get userIsAuthenticated() {
-    return this._user.asObservable().pipe(
-      map(user => {
-        if(user){
-          return !!user.token;
-        }else{
-          return false;
-        }
-      }));
+  // Auto login
+  autoLogin(): boolean{
+    try {
+      let email: string, pass: string;
+      if(this.storage.get('authData') != null ){
+        this.storage.get('email').then((res) => email = res);
+        this.storage.get('password').then((res) => pass = res);
+        console.log(`Datos almacenados: email: ${email}, password: ${pass}`);
+        this.signInWithEmail(email, pass).then((res) => {
+          if(res === null){
+            return false
+          }else{
+            return true
+          }
+        });
+      }else{
+        return  false;
+      }      
+    } catch (error) {
+      console.log('¡Error en autologin!');
+    }
   }
 
-  // Obtiene el id o devuelve falso
-  get userId() {
-    return this._user.asObservable().pipe( 
-      map(user => {
-        if (user){
-          return user.id 
-        }else{
-          return null;
-        }
-      })
-    );
+  // Obtener el estado de autenticación
+  get authenticated():boolean {
+    // True ó False
+    return this.user !== null ? true : false   
+  }
+  
+  // Obtener el observador del usuario actual
+  get currentUser(){
+    return this.user;
   }
 
-  recoveryPassword(email: string){
-    return this.http.post<AuthResponseData>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
-        environment.firebaseAPIKey
-      }`,
-      {"requestType":"PASSWORD_RESET","email":email}
-    ).pipe(tap(this.setUserData.bind(this))
-    )
-  }
-
-  signup(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
-        environment.firebaseAPIKey
-      }`,
-      { email: email, password: password, returnSecureToken: true }
-    ).pipe(tap( this.setUserData.bind(this) ));
-  }
-
-  login(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${
-        environment.firebaseAPIKey
-      }`,
-      { email: email, password: password, returnSecureToken:true }
-    )
-    .pipe(tap( this.setUserData.bind(this) ));
-  }
-
-  logout() {
-    this._user.next(null);
-    this.storage.remove('authData');; //Borra todos los datos almacenados con la key authData
-  }
-
-  //Guarda todos los datos del usuario devueltos en la respuesta
-  private setUserData(userData: AuthResponseData){
-    //Hora de expiracion es la hora actual + 1 hora en milisegundos
-    const expirationTime = new Date(
-      new Date().getTime() + (+userData.expiresIn * 10000 * 1000)
-    );
-    //Guardo los datos del usuario que vino en la respuesta
-    this._user.next( 
-      new User(
-        userData.localId, 
-        userData.email, 
-        userData.idToken, 
-        expirationTime
-      )
-    );
+  // Finalizar sesión
+  signOut(): Promise<void> {
+    this.storage.clear(); //borra los datos almacenados
+    this.storage.get('authData').then((val) => {
+      console.log('datos almacenados: ', val);
+    })
     
-    //Llama a la funcion storeAuthData para almacenar los datos
-    this.storeAuthData(
-      userData.localId, 
-      userData.idToken, 
-      expirationTime.toISOString(),
-      userData.email);
+    return this.afAuth.auth.signOut();
   }
+
+  // Recuperar contraseña
+  resetPassword(email:string): Promise<void> {
+    try {
+      return this.afAuth.auth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.log('Error al recuperar contraseña: ', error);
+    }  
+  }
+
+  // Autenticación con Google
+  authWithGoogle(): Promise<firebase.auth.UserCredential> {
+    const provider: firebase.auth.GoogleAuthProvider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    try {
+      return this.afAuth.auth.signInWithPopup(new  firebase.auth.GoogleAuthProvider());
+    } catch (error) {
+      console.log('Error en autenticación con google: ', error);
+    }  
+  }
+
+    
+  //   //Llama a la funcion storeAuthData para almacenar los datos
+  // this.storeAuthData(
+  //     userData.localId, 
+  //     userData.idToken, 
+  //     expirationTime.toISOString(),
+  //     userData.email);
+  // }
 
   // Es necesario instalar "Ionic Storage" con los siguientes comandos:
   // ionic cordova plugin add cordova-sqlite-storage
   // npm install --save @ionic/storage
-  private storeAuthData(
-    userId: string, 
-    token: string, 
-    tokenExpirationDate: string,
-    email: string) {
-    
-    const data = JSON.stringify({userId: userId, token: token, tokenExpirationDate: tokenExpirationDate, email: email});
+  public storeAuthData(email: string, password: string) {  
+    //console.log('Id de usuario: ',this.afAuth.auth.currentUser.uid)
+    const data = JSON.stringify({email: email, password: password});
     // Hay que probar si el token sigue siendo válido
     // set a key/value
     this.storage.set('authData', data);
@@ -185,8 +134,7 @@ export class AuthService {
     // Or to get a key/value pair
     this.storage.get('authData').then((val) => {
       console.log('La informacion almacenada es: ', val);
-    });
-    
+    });    
   }
 
   

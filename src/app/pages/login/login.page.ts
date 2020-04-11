@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthResponseData, ResetPasswordtResponseData } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../shared/user.class';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+
 import { switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -14,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
+  user: User = new User();
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -42,14 +45,14 @@ export class LoginPage implements OnInit {
     private alertCtrl: AlertController) {}
 
   ngOnInit() {
-    this.authService.userIsAuthenticated.pipe(
-      take(1),
-      switchMap(isAuthenticated => {
-        if(!isAuthenticated){
-          return this.authService.autoLogin()
-        }
-      })
-    )
+    // this.authService.userIsAuthenticated.pipe(
+    //   take(1),
+    //   switchMap(isAuthenticated => {
+    //     if(!isAuthenticated){
+    //       return this.authService.autoLogin()
+    //     }
+    //   })
+    // )
   }
 
   onResetForm() {
@@ -60,44 +63,22 @@ export class LoginPage implements OnInit {
     if(this.loginForm.valid){
       this.email = this.loginForm.get('email').value;
       this.password = this.loginForm.get('password').value;
-      this.authenticate(this.email, this.password);
-      this.onResetForm();
-      
+      this.onLogin();
+      this.loginForm.reset;      
       console.log("Form Login corrento:", this.loginForm.value.email);
     }else{
-      console.log("No valido");
+      console.log("Formulario no valido");
     }
   }
-  
-  authenticate(email: string, password: string) {
-    this.isLoading = true;
-    this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Enviando sus datos...' })
-      .then(loadingEl => {
-        loadingEl.present();
-        let authObs: Observable<AuthResponseData>;        
-        authObs = this.authService.login(email, password);        
-        authObs.subscribe(
-          resData => {
-            console.log(resData);
-            this.isLoading = false;
-            loadingEl.dismiss();
-            this.router.navigateByUrl('/home');
-          },
-          errRes => {
-            loadingEl.dismiss();
-            const code = errRes.error.error.message;
-            let message = 'No se pudo ingresar, intente nuevamente.';
-            if (code === 'EMAIL_NOT_FOUND') {
-              message = 'No se pudo encontrar la dirección de correo electrónico.';
-            } else if (code === 'INVALID_PASSWORD') {
-              message = 'La contraseña no es correcta';
-            }
-            let title = 'Autencitación fallida';
-            this.showAlert(message, title);
-          }
-        );
-      });
+
+  //Funcion que llama al método onLogin del servicio
+  async onLogin(){
+    const user = await this.authService.signInWithEmail(this.email, this.password);
+    if(user){
+      console.log('Login correcto!!');
+      this.savePassword(this.email, this.password);
+      this.router.navigateByUrl('/home');
+    }
   }
 
   private showAlert(message: string, title: string) {
@@ -111,10 +92,7 @@ export class LoginPage implements OnInit {
   }
 
   resetPassword(email: string) {
-
-    this.resetPasswordAlertPrompt();
-
-    
+    this.resetPasswordAlertPrompt();    
   }
 
   async resetPasswordAlertPrompt() {
@@ -122,7 +100,6 @@ export class LoginPage implements OnInit {
     if(this.loginForm.get('email').value != ""){
       this.email= this.loginForm.get('email').value;
     }
-
     const input = await this.alertCtrl.create({
       header: 'Restablecer Contraseña',
       subHeader: 'Ingrese su email',
@@ -152,7 +129,6 @@ export class LoginPage implements OnInit {
         }
       ]
     });
-
     await input.present();
   }
   
@@ -161,13 +137,11 @@ export class LoginPage implements OnInit {
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'Enviando solicitud...' })
       .then(loadingEl => {
-        loadingEl.present();
-        let resetPassObs: Observable<ResetPasswordtResponseData>;        
-        resetPassObs = this.authService.recoveryPassword(this.email);        
+        loadingEl.present();      
+        let resetPassObs = of(this.authService.resetPassword(this.email));        
         resetPassObs.subscribe(
           resData => {
             console.log(resData);
-            this.isLoading = false;
             loadingEl.dismiss();
             //this.router.navigateByUrl('/home');
           },
@@ -177,12 +151,43 @@ export class LoginPage implements OnInit {
             let message = '¡No se pudo enviar el reset!';
             if (code === 'EMAIL_NOT_FOUND') {
               message = 'No hay registro de usuario correspondiente a este email. El usuario puede haber sido eliminado.';
+            }else if( code === 'auth/user-not-found'){
+              message = 'mensaje user not found'
             }
             let title = 'Reset de contraseña fallida';
             this.showAlert(message, title);
           }
         );
       });
+  }
+
+  async savePassword(email:string, password:string){
+    const alertSavePassword = await this.alertCtrl.create({
+      header: 'Alerta de seguridad',
+      subHeader: '¿Deséa guardar su contraseña?',
+      message:  '<strong>Talvez desee guardar sus datos para ingresar</strong>',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'primary',
+          handler: () => {
+            console.log('No guardo sus datos contraseña');
+          }
+        }, {
+          text: 'Si',
+          handler: (data) => {
+            console.log('Guardando su contraseña', data);
+            this.authService.storeAuthData(email,password);
+          }
+        }
+      ]
+    });
+    await alertSavePassword.present();
+  }
+
+  loginGoogle(){
+    this.authService.authWithGoogle();
   }
 
 }

@@ -54,7 +54,7 @@ export class HomePage implements OnInit {
   }
 
   cerrarSesion() {
-    this.authService.logout();
+    this.authService.signOut();
     this.router.navigateByUrl('/login');
   }
 
