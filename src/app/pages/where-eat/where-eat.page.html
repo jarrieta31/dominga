@@ -1,10 +1,32 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
+    <ion-toolbar color="eat">
+    	<ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
-        <ion-title>whereEat</ion-title>
+    	<ion-img slot="start" src="/assets/icon/comida.png"></ion-img>
+        <ion-title>¿Dónde Comer?</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
+	<ion-searchbar placeholder=""></ion-searchbar>
+    <ion-list>
+        <ion-item *ngFor="let item of sleep">
+            <div class="padre">
+                <div class="imagen">
+                    <ion-avatar slot="start">
+                        <img src="">
+                    </ion-avatar>
+                </div>
+                <div class="info">
+                    <ion-label>
+                        <h2></h2>
+                        <div class="infoAbajo">
+                            <h3></h3>
+                            <p><span>Tel: </span></p>
+                        </div>
+                    </ion-label>
+                </div>
+            </div>
+        </ion-item>
+    </ion-list>
 </ion-content>

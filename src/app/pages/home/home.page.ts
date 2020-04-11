@@ -42,7 +42,7 @@ export class HomePage implements OnInit {
 
     dataState() {     
     // Dentro de la variable s colocamos el método database y hacemos llamado al 
-    // método listarDatos()que se encuentra en el servicio 'DataService'
+    // método getPlaces() que se encuentra en el servicio 'DataService'
     let s = this.database.getPlaces(); 
  
     // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
