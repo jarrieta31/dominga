@@ -30,6 +30,8 @@ export class PlacesPage implements OnInit {
     bicicleta: boolean;
     caminar: boolean;
     imagenes = new Array();
+    latitud: string;
+    longitud: string;
 
     cont = 0;
 
@@ -51,22 +53,6 @@ export class PlacesPage implements OnInit {
     ngOnInit() {
 
         this.getCargarLugar();
-
-        Mapboxgl.accessToken = environment.mapBoxToken;
-        this.mapa = new Mapboxgl.Map({
-            container: 'mapaBox',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-56.713438, -34.340118],
-            zoom: 16,
-        });
-
-        const marker = new Mapboxgl.Marker({
-            draggable: false
-        }).setLngLat([-56.713438, -34.340118]).addTo(this.mapa);
-
-        this.mapa.on('load', () => {
-            this.mapa.resize();
-        });
     }
 
     async cambiarImagen() {
@@ -110,10 +96,29 @@ export class PlacesPage implements OnInit {
                             this.caminar = this.items[num].caminar;
 
                             mapped.forEach(data => {
-                                this.cont;                               
-                                this.imagenes[this.cont] = data.url;                              
+                                this.cont;
+                                this.imagenes[this.cont] = data.url;
                                 this.cont++;
-                            })                                                   
+                            })
+
+                            this.latitud = this.items[num].latitud;
+                            this.longitud = this.items[num].longitud;
+
+                            Mapboxgl.accessToken = environment.mapBoxToken;
+                            this.mapa = new Mapboxgl.Map({
+                                container: 'mapaBox',
+                                style: 'mapbox://styles/mapbox/streets-v11',
+                                center: [this.longitud, this.latitud],
+                                zoom: 6,
+                            });
+
+                            const marker = new Mapboxgl.Marker({
+                                draggable: false
+                            }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
+
+                            this.mapa.on('load', () => {
+                                this.mapa.resize();
+                            });
                         }
                     })
 
