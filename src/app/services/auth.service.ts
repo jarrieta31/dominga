@@ -3,9 +3,7 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import AuthProvider = firebase.auth.AuthProvider;
 import { Observable, from } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
-import { User } from '../shared/user.class';
-import { UrlTree } from '@angular/router';
+import { tap, map, first } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 
 
@@ -14,19 +12,15 @@ import { Storage } from '@ionic/storage';
 })
 export class AuthService {
 
-  public isLogged :any = false;
   private user: Observable<firebase.User | null >;
 
-
   constructor( private afAuth: AngularFireAuth, private storage: Storage ) { 
-    //Si el usuario está logueado devuelve true y null en caso contrario
-    afAuth.authState.subscribe( user => {
-      this.isLogged = true
-      
-    })
-    // this.afAuth.authState.subscribe(user => {
-    //   this.user = user;
-    // })
+    // authState es la instancia de autentificación actual
+    this.user = this.afAuth.authState;    
+  }
+
+  isLoggedIn() {
+    return this.afAuth.authState.pipe(first())
   }
 
   // Registro con email
@@ -50,47 +44,6 @@ export class AuthService {
       console.log('Error en ingreso con email: ', error)
     }       
   }
-
-  // Auto login
-  autoLogin(){   
-     
-    return from(this.storage.get('authData')).pipe(
-      map(storedData => {
-        if(storedData == '' || storedData == null){
-          return null
-        }          
-        //Convierte los datos de string a un objeto json
-        const parsedData = JSON.parse(storedData) as {email: string; password: string}
-        return parsedData
-      }),
-      tap(datos => {
-        console.log(`Datos almacenados: email: ${datos.email}, password: ${datos.password}`);
-        this.signInWithEmail(datos.email, datos.password).then((res) => {
-          if(res === null){
-            return false
-          }else{
-            return true
-          }
-        });
-      }),
-      map(res => {
-        if(res){
-          return true
-        }else{
-          return false
-        }
-      }),
-      tap(res => {
-        console.log('respuesta de autologin:', res)
-      })
-    )    
-  }
-
-  // Obtener el estado de autenticación
-  get authenticated():boolean {
-    // True ó False
-    return this.isLogged  
-  }
   
   // Obtener el observador del usuario actual
   get currentUser(){
@@ -103,7 +56,6 @@ export class AuthService {
     this.storage.get('authData').then((val) => {
       console.log('datos almacenados: ', val);
     })
-    this.isLogged = false
     return this.afAuth.auth.signOut();
   }
 
@@ -127,21 +79,52 @@ export class AuthService {
     }  
   }
 
+  // Auto login
+  // autoLogin(){     
+  //   return from(this.storage.get('authData')).pipe(
+  //     map(storedData => {
+  //       if(storedData == '' || storedData == null){
+  //         return null
+  //       }          
+  //       //Convierte los datos de string a un objeto json
+  //       const parsedData = JSON.parse(storedData) as {email: string; password: string}
+  //       return parsedData
+  //     }),
+  //     tap(datos => {
+  //       console.log(`Datos almacenados: email: ${datos.email}, password: ${datos.password}`);
+  //       this.signInWithEmail(datos.email, datos.password).then((res) => {
+  //         if(res === null){
+  //           return false
+  //         }else{
+  //           return true
+  //         }
+  //       });
+  //     }),
+  //     map(res => {
+  //       if(res){
+  //         return true
+  //       }else{
+  //         return false
+  //       }
+  //     }),
+  //     tap(res => {
+  //       console.log('respuesta de autologin:', res)
+  //     })
+  //   )    
+  // }
+
   // Es necesario instalar "Ionic Storage" con los siguientes comandos:
   // ionic cordova plugin add cordova-sqlite-storage
   // npm install --save @ionic/storage
-  public storeAuthData(email: string, password: string) {  
-    const data = JSON.stringify({email: email, password: password});
-    // set a key/value
-    this.storage.set('authData', data);
-    console.log("estoy en storeAuthData");
-    // Or to get a key/value pair
-    this.storage.get('authData').then((val) => {
-      console.log('La informacion almacenada es: ', val);
-    });    
-  }
-
-  
-  
+  // public storeAuthData(email: string, password: string) {  
+  //   const data = JSON.stringify({email: email, password: password});
+  //   // set a key/value
+  //   this.storage.set('authData', data);
+  //   console.log("estoy en storeAuthData");
+  //   // Or to get a key/value pair
+  //   this.storage.get('authData').then((val) => {
+  //     console.log('La informacion almacenada es: ', val);
+  //   });    
+   
 
 }

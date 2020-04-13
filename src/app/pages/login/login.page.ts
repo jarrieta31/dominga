@@ -3,9 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../shared/user.class';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { Observable, of } from 'rxjs';
-
-import { switchMap, take } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
 
@@ -16,12 +14,10 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  user: User = new User();
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-  isLoading = false;
-  //isLogin = true;
+  isLoading = false;  
 
   // Creo el formulario con las validaciones
   loginForm: FormGroup = new FormGroup ({
@@ -44,16 +40,7 @@ export class LoginPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController) {}
 
-  ngOnInit() {
-    // this.authService.userIsAuthenticated.pipe(
-    //   take(1),
-    //   switchMap(isAuthenticated => {
-    //     if(!isAuthenticated){
-    //       return this.authService.autoLogin()
-    //     }
-    //   })
-    // )
-  }
+  ngOnInit() {}
 
   onResetForm() {
     this.loginForm.reset;
@@ -76,7 +63,7 @@ export class LoginPage implements OnInit {
     const user = await this.authService.signInWithEmail(this.email, this.password);
     if(user){
       console.log('Login correcto!!');
-      this.savePassword(this.email, this.password);
+      //this.savePassword(this.email, this.password);
       this.router.navigateByUrl('/home');
     }
   }
@@ -91,12 +78,7 @@ export class LoginPage implements OnInit {
       .then(alertEl => alertEl.present());
   }
 
-  resetPassword(email: string) {
-    this.resetPasswordAlertPrompt();    
-  }
-
   async resetPasswordAlertPrompt() {
-
     if(this.loginForm.get('email').value != ""){
       this.email= this.loginForm.get('email').value;
     }
@@ -161,30 +143,30 @@ export class LoginPage implements OnInit {
       });
   }
 
-  async savePassword(email:string, password:string){
-    const alertSavePassword = await this.alertCtrl.create({
-      header: 'Alerta de seguridad',
-      subHeader: '¿Deséa guardar su contraseña?',
-      message:  '<strong>Talvez desee guardar sus datos para ingresar</strong>',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          cssClass: 'primary',
-          handler: () => {
-            console.log('No guardo sus datos contraseña');
-          }
-        }, {
-          text: 'Si',
-          handler: (data) => {
-            console.log('Guardando su contraseña', data);
-            this.authService.storeAuthData(email,password);
-          }
-        }
-      ]
-    });
-    await alertSavePassword.present();
-  }
+  // async savePassword(email:string, password:string){
+  //   const alertSavePassword = await this.alertCtrl.create({
+  //     header: 'Alerta de seguridad',
+  //     subHeader: '¿Deséa guardar su contraseña?',
+  //     message:  '<strong>Talvez desee guardar sus datos para ingresar</strong>',
+  //     buttons: [
+  //       {
+  //         text: 'No',
+  //         role: 'cancel',
+  //         cssClass: 'primary',
+  //         handler: () => {
+  //           console.log('No guardo sus datos contraseña');
+  //         }
+  //       }, {
+  //         text: 'Si',
+  //         handler: (data) => {
+  //           console.log('Guardando su contraseña', data);
+  //           this.authService.storeAuthData(email,password);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alertSavePassword.present();
+  // }
 
   loginGoogle(){
     this.authService.authWithGoogle();

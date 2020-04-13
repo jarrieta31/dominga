@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { take, tap, switchMap,map } from 'rxjs/operators';
+import { take, tap,map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -18,32 +18,24 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
-      // return this.authService.userIsAuthenticated.pipe(
-      //   take(1),
-      //   switchMap(isAuthenticated => {
-      //     if(!isAuthenticated){//Si no está logueado intenta ingresar con los datos guardados
-      //       return this.authService.autoLogin(); //Llama al método autoLogin
-      //     }else{
-      //       return of(isAuthenticated); //nuevo observable
-      //     }
-      //   }),
-      //   tap(isAuthenticated => {
-      //     // console.log("authGuard 2, ",isAuthenticated);
-      //     // console.log("authGuard 3",typeof isAuthenticated);
-      //     if(!isAuthenticated){
-      //       this.router.navigateByUrl("/login");
-      //     }
-      //   })
-      // )
-      if(this.authService.authenticated){
-        console.log('authGuard 1, authenticated vale: ', this.authService.authenticated);
-        return true
-      }else{
-        //this.router.navigateByUrl('/login')
-        console.log('authGuard 2, authenticated vale: ', this.authService.authenticated);
-        return true
-      }      
+          
+      return this.authService.isLoggedIn().pipe(
+        take(1),
+        map(user => {
+          if (user) {
+            return true;
+          } else {
+            return false;
+          }
+        }),
+        tap(isAuthenticated => {
+          if (!isAuthenticated) {                   
+            console.log('ESTAS EN AUTHGUARD, Y NO ESTAS AUTENTICADO');
+            this.router.navigateByUrl('/login')           
+          }
+        })
+      )
+
   }
   
 }

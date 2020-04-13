@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-button routerLink="/home">Ir a home</ion-button>
         </ion-buttons>
-        <ion-title></ion-title>
+        <ion-title>Iniciar Sesión</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -22,12 +22,12 @@
             </ion-item>
 
             <ion-item>
-                <ion-label class="remember" (click)="resetPassword()">¿Has olvidado tu contraseña?</ion-label>
+                <ion-label class="remember" (click)="resetPasswordAlertPrompt()">¿Has olvidado tu contraseña?</ion-label>
                 <ion-label color="dark" button routerLink='/register'><a class="register">Registrate</a></ion-label>
             </ion-item>
 
         </ion-list>
-        <ion-button color="dark" expand="block" size="large"  type="ngSubmit">Iniciar</ion-button>
+        <ion-button color="dark" expand="block" size="large" type="ngSubmit">Iniciar</ion-button>
     </form>
 
     <ion-button (click)="loginGoogle()" expand="block" fill="clear" >

@@ -1,26 +1,32 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>register</ion-title>
+    <ion-buttons slot="start">
+            <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrarse</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <div class="container">
+    <img class="logo" src="../../../assets/img/logo.jpg" />
+  </div>
+
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
-    <ion-list>
-      <ion-item>
-        <ion-label for="email" position="floating">Email</ion-label>
-        <ion-input name="email" type="email" formControlName="email" ></ion-input>
+    <ion-list>      
+      <ion-item class="itemName">
+        <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label for="password" position="floating">Contraseña</ion-label>
-        <ion-input name="password" type="password" formControlName="password" ></ion-input>
+      <ion-item>                
+        <ion-input class="password" name="password" type="password" placeholder="Contraseña" formControlName="password"></ion-input>
       </ion-item>
 
     </ion-list>
     
-    <ion-button type="ngSubmit" expand="full" >Registrarse</ion-button>
+    <ion-button color="dark" expand="block" size="large" type="ngSubmit">Registrarse</ion-button>
     
       
   </form>
