@@ -16,44 +16,15 @@ export class LoginGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-      // return this.authService.userIsAuthenticated.pipe(
-      //   take(1),
-      //   tap((isAuthenticated) => console.log("loginGuard 1, ",isAuthenticated)),
-      //   switchMap(isAuthenticated => {
-      //     if(!isAuthenticated){//Si no está logueado intenta ingresar con los datos guardados
-      //       return this.authService.autoLogin(); //Llama al método autoLogin
-      //     }else{
-      //       return of(isAuthenticated); //nuevo observable
-      //     }
-      //   }),
-      //   tap(x => {console.log("loginGuard 2, ",x)}),
-      //   map(isAuthenticated => {
-      //     if(!isAuthenticated){
-      //       return true;
-      //     }else{
-      //       return false;
-      //     }
-      //   }),
-      //   tap(notIsAuthenticated => {
-      //     console.log("loginGuard 3, ",notIsAuthenticated);
-      //     console.log("loginGuard 4",typeof notIsAuthenticated);
-      //     if(!notIsAuthenticated){
-      //       console.log("loginGuard 5, ",notIsAuthenticated);
-      //       this.router.navigateByUrl("/home");
-      //     }
-      //   })
-      // )
-     
-      console.log('authenticated es: ',this.authService.authenticated)
-
+      console.log('loginGuard 1, authenticated vale: ',this.authService.authenticated)
       if(this.authService.authenticated){
         console.log('loginGuard 1, esta autenticado y se redirecciona al home');
-        this.router.navigateByUrl('/home');
+        this.router.navigate(['/home'])
         return false;
-      }else{
-        if(this.authService.autoLogin){
+      }else{        
+        if(this.authService.autoLogin()){
           console.log('loginGuard 2, se autologueo y se redirecciona al home');
-          this.router.navigateByUrl('/home');
+          this.router.navigate(["/home"]);
           return false
         }else{
           console.log('loginGuard 3');

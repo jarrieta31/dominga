@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import AuthProvider = firebase.auth.AuthProvider;
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators'
+import { Observable, from } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { User } from '../shared/user.class';
 import { UrlTree } from '@angular/router';
 import { Storage } from '@ionic/storage';
@@ -14,16 +14,19 @@ import { Storage } from '@ionic/storage';
 })
 export class AuthService {
 
-  // public isLogged :any = false;
-  //user: Observable<firebase.User | null >;
-  private user: firebase.User;
+  public isLogged :any = false;
+  private user: Observable<firebase.User | null >;
+
 
   constructor( private afAuth: AngularFireAuth, private storage: Storage ) { 
     //Si el usuario está logueado devuelve true y null en caso contrario
-    //afAuth.authState.subscribe( user => (this.isLogged = true))
-    this.afAuth.authState.subscribe(user => {
-      this.user = user;
+    afAuth.authState.subscribe( user => {
+      this.isLogged = true
+      
     })
+    // this.afAuth.authState.subscribe(user => {
+    //   this.user = user;
+    // })
   }
 
   // Registro con email
@@ -49,32 +52,44 @@ export class AuthService {
   }
 
   // Auto login
-  autoLogin(): boolean{
-    try {
-      let email: string, pass: string;
-      if(this.storage.get('authData') != null ){
-        this.storage.get('email').then((res) => email = res);
-        this.storage.get('password').then((res) => pass = res);
-        console.log(`Datos almacenados: email: ${email}, password: ${pass}`);
-        this.signInWithEmail(email, pass).then((res) => {
+  autoLogin(){   
+     
+    return from(this.storage.get('authData')).pipe(
+      map(storedData => {
+        if(storedData == '' || storedData == null){
+          return null
+        }          
+        //Convierte los datos de string a un objeto json
+        const parsedData = JSON.parse(storedData) as {email: string; password: string}
+        return parsedData
+      }),
+      tap(datos => {
+        console.log(`Datos almacenados: email: ${datos.email}, password: ${datos.password}`);
+        this.signInWithEmail(datos.email, datos.password).then((res) => {
           if(res === null){
             return false
           }else{
             return true
           }
         });
-      }else{
-        return  false;
-      }      
-    } catch (error) {
-      console.log('¡Error en autologin!');
-    }
+      }),
+      map(res => {
+        if(res){
+          return true
+        }else{
+          return false
+        }
+      }),
+      tap(res => {
+        console.log('respuesta de autologin:', res)
+      })
+    )    
   }
 
   // Obtener el estado de autenticación
   get authenticated():boolean {
     // True ó False
-    return this.user !== null ? true : false   
+    return this.isLogged  
   }
   
   // Obtener el observador del usuario actual
@@ -88,7 +103,7 @@ export class AuthService {
     this.storage.get('authData').then((val) => {
       console.log('datos almacenados: ', val);
     })
-    
+    this.isLogged = false
     return this.afAuth.auth.signOut();
   }
 
@@ -112,22 +127,11 @@ export class AuthService {
     }  
   }
 
-    
-  //   //Llama a la funcion storeAuthData para almacenar los datos
-  // this.storeAuthData(
-  //     userData.localId, 
-  //     userData.idToken, 
-  //     expirationTime.toISOString(),
-  //     userData.email);
-  // }
-
   // Es necesario instalar "Ionic Storage" con los siguientes comandos:
   // ionic cordova plugin add cordova-sqlite-storage
   // npm install --save @ionic/storage
   public storeAuthData(email: string, password: string) {  
-    //console.log('Id de usuario: ',this.afAuth.auth.currentUser.uid)
     const data = JSON.stringify({email: email, password: password});
-    // Hay que probar si el token sigue siendo válido
     // set a key/value
     this.storage.set('authData', data);
     console.log("estoy en storeAuthData");

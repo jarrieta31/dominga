@@ -37,11 +37,11 @@ export class AuthGuard implements CanActivate {
       //   })
       // )
       if(this.authService.authenticated){
-        console.log('authGuard 1');
+        console.log('authGuard 1, authenticated vale: ', this.authService.authenticated);
         return true
       }else{
         //this.router.navigateByUrl('/login')
-        console.log('authGuard 2');
+        console.log('authGuard 2, authenticated vale: ', this.authService.authenticated);
         return true
       }      
   }
