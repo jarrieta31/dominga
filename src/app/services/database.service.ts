@@ -2,56 +2,57 @@ import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 
-import { CircuitsModel } from '../models/circuits';
-
 import { environment } from '../../environments/environment';
 
+import { TipoCircuito } from '../shared/tipo-circuito';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DatabaseService {
 
-  lugares = environment.firebaseConfig.databaseURL + '/lugar.json';
-  lugaresId = environment.firebaseConfig.databaseURL + '/lugar/';
-  dondeDormir = environment.firebaseConfig.databaseURL + '/donde_dormir.json';
-  tipoCircuito = environment.firebaseConfig.databaseURL + '/tipo_circuito.json';
+    // Usamos el Servicio 'AngularFireList' de Angular Fire para listar los datos
+    appsRef: AngularFireList < any > ;
 
-  constructor(private http: HttpClient) { }
+    // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
+    constructor(private http: HttpClient, private db: AngularFireDatabase) {}
 
-  getCircuits(){
-	return this.http.get('https://appdominga.firebaseio.com/circuito.json');
-}
+    // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
+    // queremos usar, la colección que usaremos se llama 'tipo_circuito'
+    listarDatos() {
+        this.appsRef = this.db.list('tipo_circuito');
+        return this.appsRef;
+    }
 
-getPlaces(){
-	return this.http.get(this.lugares);
-}
+    getPlaces() {
+        this.appsRef = this.db.list('lugar');
+        return this.appsRef;
+    }
 
-getPlacesId(id){
-	const url = `${this.lugaresId}${id}.json`;
-	return this.http.get(url);
-}
+    getSleep() {
+        this.appsRef = this.db.list('donde_dormir');
+        return this.appsRef;
+    }
 
-getInfoAll(id){
-	const url = `${this.lugaresId}${id}.json`;
-	return this.http.get(url);
-}
+    getEat() {
+        this.appsRef = this.db.list('donde_comer');
+        return this.appsRef;
+    }
 
-getSleep(){
-	return this.http.get(this.dondeDormir);
-}
+    getTypeCircuits() {
+        this.appsRef = this.db.list('tipo_circuito');
+        return this.appsRef;
+    }
 
-getTypeCircuits(){
-	return this.http.get(this.tipoCircuito);
-}
+    // getUsers(id: string){
+    // 	return this.http.get('https://appdominga.firebaseio.com/users/');
+    // }
 
-// getUsers(id: string){
-// 	return this.http.get('https://appdominga.firebaseio.com/users/');
-// }
+    // addCircuits(circuits: CircuitsModel) {
+    //     var formulario = { nombre: circuits.nombre, descripcion: circuits.descripcion };
+    //     return this.http.post('https://appdominga.firebaseio.com/circuito.json', formulario);
+    // }
 
-addCircuits(circuits: CircuitsModel){
-	var formulario = {nombre: circuits.nombre, descripcion: circuits.descripcion};
-	return this.http.post('https://appdominga.firebaseio.com/circuito.json', formulario);
-}
 
- 
 }

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { DatabaseService } from '../../services/database.service';
 
-import { CircuitsModel } from '../../models/circuits';
-
 import {Router, ActivatedRoute, Params} from '@angular/router';
 
 @Component({
@@ -13,7 +11,8 @@ import {Router, ActivatedRoute, Params} from '@angular/router';
 })
 export class ModalInfoPage implements OnInit {
 
-	items : CircuitsModel[] = [];
+  nombre: string;
+  descripcion: string;
 
   constructor(
   	private database: DatabaseService,
@@ -22,20 +21,32 @@ export class ModalInfoPage implements OnInit {
   	) { }
 
   ngOnInit() {
-  	this.getLugaresId();
+  	this.getInfoLugar();
   }
 
-  async getLugaresId(){
-  this.activatedRoute.paramMap.subscribe(params => {
-      //console.log(params.get("id"));
-         this.database.getPlacesId(params.get("id")).subscribe((resultado: any) => {
-         this.items = [];
+  async getInfoLugar() {
+        this.activatedRoute.paramMap.subscribe(params => {
+            // Dentro de la variable s colocamos el método database y hacemos llamado al 
+            // método getPlaces() que se encuentra en el servicio 'DataService'
 
-        
-        this.items = resultado;
-        console.log(this.items);
-      }); 
-   });
-  }
+            let par = params.get("id");
+                     
+            let s = this.database.getPlaces();
+            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
+            // último pasamos los datos a JSON
+            s.snapshotChanges().subscribe(data => {
+                    
+                    data.forEach(item => {
+                        if (par == item.key) {
+                            let a = item.payload.toJSON();
+                            a['$key'] = item.key; 
+                            this.nombre = a['nombre'];
+                            this.descripcion = a['descripcion'];                     
+                        }
+                    })
+                }),
+                err => console.log(err)
+        });
+    }
 
 }

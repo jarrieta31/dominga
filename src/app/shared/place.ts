@@ -1,9 +1,13 @@
 export interface Place {
     $key: string;
-    name: string;
-    description: string;
-    position: string[];
-    image: string;
-    audio: string;
-    video: string;
+    auto: boolean;
+    bicicleta: boolean;
+    caminar: boolean;
+    descripcion: string;
+    nombre: string;
+    url: string[];
+    valoracion: string[];
+    tipo: string;
+    latitud: string;
+    longitud: string;
 }

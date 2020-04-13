@@ -5,6 +5,9 @@ import AuthProvider = firebase.auth.AuthProvider;
 import { Observable, from } from 'rxjs';
 import { tap, map, first } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
+// import { AngularFireAuth } from '@angular/fire/auth';
+// import { auth } from 'firebase/app';
+// import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -126,5 +129,19 @@ export class AuthService {
   //     console.log('La informacion almacenada es: ', val);
   //   });    
    
+
+  // private updateUserData(user) {
+  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+  //   const data: User = {
+  //     id: user.uid,
+  //     email: user.email
+  //   }
+  //   return userRef.set(data, { merge: true })
+  // }
+
+  //  loginFacebookUser() {
+  //   return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
+  //     .then(credential => this.updateUserData(credential.user))
+  // }
 
 }

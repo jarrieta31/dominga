@@ -3,9 +3,9 @@ import { environment } from '../../../environments/environment';
 
 import { DatabaseService } from '../../services/database.service';
 
-import { CircuitsModel } from '../../models/circuits';
+import { Place } from '../../shared/place';
 
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 
@@ -15,83 +15,119 @@ declare var jQuery: any;
 declare var $: any;
 
 @Component({
-  selector: 'app-info-lugar',
-  templateUrl: './places.page.html',
-  styleUrls: ['./places.page.scss'],
+    selector: 'app-info-lugar',
+    templateUrl: './places.page.html',
+    styleUrls: ['./places.page.scss'],
 })
 export class PlacesPage implements OnInit {
 
-  items : CircuitsModel[] = [];
+    items: Place[];
 
-	slideOpts = {
-    initialSlide: 0,
-    speed: 400,
-    slidesPerView: 3,
-    spaceBetween: 1,
-  };
+    nombre: string;
+    descripcion: string;
+    key: string;
+    auto: boolean;
+    bicicleta: boolean;
+    caminar: boolean;
+    imagenes = new Array();
+    latitud: string;
+    longitud: string;
 
-  mapa: Mapboxgl.Map;
+    cont = 0;
 
-  constructor(
-    private database: DatabaseService, 
-    private activatedRoute: ActivatedRoute, 
-    private router: Router
+    slideOpts = {
+        initialSlide: 0,
+        speed: 400,
+        slidesPerView: 3,
+        spaceBetween: 1
+    };
+
+    mapa: Mapboxgl.Map;
+
+    constructor(
+        private database: DatabaseService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {}
 
-  ngOnInit() {
-  
-  	Mapboxgl.accessToken = environment.mapBoxToken;
-		this.mapa = new Mapboxgl.Map({
-		container: 'mapa-box',
-		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [-56.713438, -34.340118],
-		zoom: 16,
-	}
+    ngOnInit() {
 
-	);
+        this.getCargarLugar();
+    }
 
-		const marker = new Mapboxgl.Marker({
-			draggable: false
-		}).setLngLat([-56.713438, -34.340118]).addTo(this.mapa);
+    async cambiarImagen() {
+        $(".imgGaleria").click(function() {
+            var imagenSrc = $(this).attr('src');
+            $("#foto").attr("src", imagenSrc);
+        });
+    }
 
-		this.mapa.on('load', () => {
-  			this.mapa.resize();
-  });
+    async getCargarLugar() {
+        this.activatedRoute.paramMap.subscribe(params => {
+            // Dentro de la variable s colocamos el método database y hacemos llamado al 
+            // método getPlaces() que se encuentra en el servicio 'DataService'
 
-     this.getLugaresId();
-  }
+            let par = params.get("id");
 
-  async cambiarImagen() {
-  	$(".imgGaleria").click(function(){ 
-    var imagenSrc = $(this).attr('src');
-    $("#foto").attr("src",imagenSrc);  
-});
-  }
+            let s = this.database.getPlaces();
+            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
+            // último pasamos los datos a JSON
+            s.snapshotChanges().subscribe(data => {
+                    this.items = [];
+                    data.forEach(item => {
 
-async getLugaresId(){
-  this.activatedRoute.paramMap.subscribe(params => {
-      //console.log(params.get("id"));
-         this.database.getPlacesId(params.get("id")).subscribe((resultado: any) => {
-         this.items = [];
+                        if (par == item.key) {
+                            var num = '0';
+                            let a = item.payload.toJSON();
+                            a['$key'] = item.key;
+                            this.items.push(a as Place);
 
-         resultado.descripcion = resultado.descripcion.substr(0, 44) + " ...";
+                            this.items[num].descripcion = this.items[num].descripcion.substr(0, 44) + " ...";
 
-         // const mapped = Object.keys(resultado.valoracion).map(key => ({nombreUsuario: key, valoracion: resultado.valoracion[key]}));
+                            let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
-         // console.log(mapped);
+                            this.items[num].url = mapped;
 
-         // resultado.valoracion = mapped;
+                            this.nombre = this.items[num].nombre;
+                            this.descripcion = this.items[num].descripcion;
+                            this.key = this.items[num].$key;
+                            this.auto = this.items[num].auto;
+                            this.bicicleta = this.items[num].bicicleta;
+                            this.caminar = this.items[num].caminar;
 
-        this.items = resultado;
-        console.log(this.items);
-      }); 
-   });
-  }
+                            mapped.forEach(data => {
+                                this.cont;
+                                this.imagenes[this.cont] = data.url;
+                                this.cont++;
+                            })
 
-  async agregarFavorito(){
+                            this.latitud = this.items[num].latitud;
+                            this.longitud = this.items[num].longitud;
 
-  }
+                            Mapboxgl.accessToken = environment.mapBoxToken;
+                            this.mapa = new Mapboxgl.Map({
+                                container: 'mapaBox',
+                                style: 'mapbox://styles/mapbox/streets-v11',
+                                center: [this.longitud, this.latitud],
+                                zoom: 6,
+                            });
+
+                            const marker = new Mapboxgl.Marker({
+                                draggable: false
+                            }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
+
+                            this.mapa.on('load', () => {
+                                this.mapa.resize();
+                            });
+                        }
+                    })
+
+                }),
+                err => console.log(err)
+        });
+    }
+
+    async agregarFavorito() {
+
+    }
 }
-
-
-

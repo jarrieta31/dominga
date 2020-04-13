@@ -8,4 +8,25 @@
 </ion-header>
 <ion-content>
     <ion-searchbar placeholder=""></ion-searchbar>
+    <table class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Duracion</th>
+          <th scope="col">Imagen</th>          
+        </tr>
+      </thead>
+      <tbody>
+        
+        <!-- Listamos los datos mediante la directiva ngFor -->        
+        <tr *ngFor="let dato of Dato">
+          <th>{{dato.$key}}</th>
+          <td>{{dato.nombre}}</td>
+          <td>{{dato.duracion}}</td>
+          <td><img src="{{dato.imagen}}" alt="" width="50px" height="50px"></td>          
+        </tr>
+ 
+      </tbody>
+    </table>
 </ion-content>

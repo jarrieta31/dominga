@@ -23,6 +23,10 @@ ion-card{
 
 ion-card-header{
 	padding: 4% !important;
+	font-family: Barlow;
+	font-weight: 600;
+	font-size: 120%;
+	color: #ffffff;
 }
 
 ion-card {
@@ -40,4 +44,9 @@ ion-card {
 
 .estrellas{
 	float: right;
+}
+
+.duracion{
+	font-family: Barlow;
+	margin-left: 1%;
 }

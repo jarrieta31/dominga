@@ -8,7 +8,7 @@
         </ion-button>
     </ion-toolbar>
 </ion-header>
-<ion-content scroll-y="false">
+<ion-content>
     <div class="padre">
         <div class="slider">
             <ion-slides scrollbar="true" pager="true" [options]="slideOpts">
@@ -42,30 +42,35 @@
                 </a>
                 <a class="iconMenu" routerLink="/more-options">
                     <div class="icono">
-                        <ion-img src="/assets/icon/info.png"></ion-img>
+                        <ion-img src="/assets/icon/masOpciones.png"></ion-img>
                     </div>
                 </a>
             </div>
         </div>
         <div class="cards">
             <ion-slides scrollbar="false" pager="false" [options]="cards">
-                <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.id]">
+                <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
                     <ion-card>
                         <ion-card-header color="options">
-                            <ion-card-title class="cardTitle">{{ item.nombre }} <span class="categoria">(Rural)</span>
-                                <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
+                            <ion-card-title class="cardTitle">
+                                <div style="text-align: left">{{ item.nombre }}<span class="categoria">&nbsp;(Rural)</span>
+                                <ion-icon class="iconTitle" name="leaf-outline"></ion-icon></div> 
                             </ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <img class="foto" [src]="item.url" [alt]="item.nombre" />
-                            <ion-item>
-                                <ion-label slot="start">100 metros</ion-label>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                            </ion-item>
+                            <img class="foto" [src]="item.url[0]" [alt]="item.nombre" />
+                            <div>
+                                <div class="distancia">
+                                    <ion-label slot="start">100 metros</ion-label>
+                                </div>
+                                <div class="valoracion">
+                                    <ion-icon class="estrella" name="star"></ion-icon>
+                                    <ion-icon class="estrella" name="star"></ion-icon>
+                                    <ion-icon class="estrella" name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                </div>
+                            </div>
                         </ion-card-content>
                     </ion-card>
                 </ion-slide>
