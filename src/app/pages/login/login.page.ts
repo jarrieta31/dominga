@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../shared/user.class';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -186,7 +186,5 @@ export class LoginPage implements OnInit {
   //  onLoginRedirect(): void {
   //   this.router.navigate(['/home']);
   // }
-  
-
 
 }

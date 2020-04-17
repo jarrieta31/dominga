@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 
@@ -21,21 +21,7 @@ export class RuralCircuitPage implements OnInit {
 
     mapa: Mapboxgl.Map;
 
-    constructor(private database: DatabaseService) {}
-
-    ngOnInit() {
-        this.cargarMarcadores();
-    }
-
-
-    cargarMarcadores() {
-        // Dentro de la variable s colocamos el método database y hacemos llamado al 
-        // método getPlaces() que se encuentra en el servicio 'DataService'
-        let s = this.database.getPlaces();
-
-        // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-        // último pasamos los datos a JSON
-        s.snapshotChanges().subscribe(data => {
+    su = this.database.getPlaces().snapshotChanges().subscribe(data => {
                 this.items = [];
                 data.forEach(item => {
                     let a = item.payload.toJSON();
@@ -176,7 +162,15 @@ export class RuralCircuitPage implements OnInit {
                         }
                     });
                 });
-            }),
-            err => console.log(err);
+            })
+
+    constructor(private database: DatabaseService) {}
+
+    ngOnInit() {
+        this.su;
+    }
+
+    ngOnDestroy(){
+        this.su.unsubscribe();
     }
 }

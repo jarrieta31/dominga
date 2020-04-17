@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
-
 import { environment } from '../../environments/environment';
 
 import { TipoCircuito } from '../shared/tipo-circuito';
@@ -16,7 +14,7 @@ export class DatabaseService {
     appsRef: AngularFireList < any > ;
 
     // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
-    constructor(private http: HttpClient, private db: AngularFireDatabase) {}
+    constructor(private db: AngularFireDatabase) {}
 
     // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
     // queremos usar, la colección que usaremos se llama 'tipo_circuito'

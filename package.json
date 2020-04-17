@@ -34,7 +34,7 @@
     "cordova-sqlite-storage": "^5.0.0",
     "core-js": "^2.5.4",
     "fire": "^0.55.1",
-    "firebase": "^7.13.2",
+    "firebase": "^7.14.0",
     "mapbox-gl": "^1.8.1",
     "rxjs": "~6.5.1",
     "tslib": "^1.11.1",

@@ -21,7 +21,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // Almacenamiento de datos 
-import { IonicStorageModule } from '@ionic/storage';
+//import { IonicStorageModule } from '@ionic/storage';
 
 // Imports para firebase
 import { AngularFireModule } from '@angular/fire';
@@ -58,9 +58,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule,
-    IonicStorageModule.forRoot()
+    //IonicStorageModule.forRoot()
     
   ],
   providers: [

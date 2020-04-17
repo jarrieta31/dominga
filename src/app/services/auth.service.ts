@@ -4,7 +4,8 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import AuthProvider = firebase.auth.AuthProvider;
 import { Observable, from } from 'rxjs';
 import { tap, map, first } from 'rxjs/operators';
-import { Storage } from '@ionic/storage';
+import { Router } from '@angular/router';
+
 // import { AngularFireAuth } from '@angular/fire/auth';
 // import { auth } from 'firebase/app';
 // import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -17,19 +18,19 @@ export class AuthService {
 
   private user: Observable<firebase.User | null >;
 
-  constructor( private afAuth: AngularFireAuth, private storage: Storage ) { 
+  constructor( private afAuth: AngularFireAuth, private router: Router ) { 
     // authState es la instancia de autentificación actual
     this.user = this.afAuth.authState;    
   }
 
   isLoggedIn() {
-    return this.afAuth.authState.pipe(first())
+    return this.afAuth.authState.pipe(tap(res => console.log(res)), first())
   }
 
   // Registro con email
   signUpWithEmail(email:string, pass:string): Promise<firebase.auth.UserCredential> {
     try {
-      const res = this.afAuth.auth.createUserWithEmailAndPassword(email,pass)
+      const res = this.afAuth.createUserWithEmailAndPassword(email,pass)
       console.log('Registro correcto!')
       return res
     } catch (error) {
@@ -40,7 +41,7 @@ export class AuthService {
   // Ingreso con email
   signInWithEmail(email:string, pass:string): Promise<firebase.auth.UserCredential>{
     try {
-      const res = this.afAuth.auth.signInWithEmailAndPassword(email,pass)
+      const res = this.afAuth.signInWithEmailAndPassword(email,pass)
       console.log('Ingreso con email correcto')
       return res
     } catch (error) {
@@ -54,18 +55,19 @@ export class AuthService {
   }
 
   // Finalizar sesión
-  signOut(): Promise<void> {
-    this.storage.clear(); //borra los datos almacenados
-    this.storage.get('authData').then((val) => {
-      console.log('datos almacenados: ', val);
+  signOut() {   
+    this.afAuth.signOut().then((res) => {
+      console.log('saliste', res);
+      this.router.navigateByUrl('/login');
+    }).catch((res)=>{
+      console.log('error en signOut');
     })
-    return this.afAuth.auth.signOut();
   }
 
   // Recuperar contraseña
   resetPassword(email:string): Promise<void> {
     try {
-      return this.afAuth.auth.sendPasswordResetEmail(email);
+      return this.afAuth.sendPasswordResetEmail(email);
     } catch (error) {
       console.log('Error al recuperar contraseña: ', error);
     }  
@@ -76,7 +78,7 @@ export class AuthService {
     const provider: firebase.auth.GoogleAuthProvider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     try {
-      return this.afAuth.auth.signInWithPopup(new  firebase.auth.GoogleAuthProvider());
+      return this.afAuth.signInWithPopup(new  firebase.auth.GoogleAuthProvider());
     } catch (error) {
       console.log('Error en autenticación con google: ', error);
     }  

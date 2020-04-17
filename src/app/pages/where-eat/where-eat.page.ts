@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { DondeComer } from '../../shared/donde-comer';
 
@@ -15,24 +15,21 @@ export class WhereEatPage implements OnInit {
 
   constructor(private database: DatabaseService) { }
 
-  ngOnInit() {
-  	this.getWhereEat();
-  }
-
-  async getWhereEat() {
-        let s = this.database.getEat();
-        // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-        // último pasamos los datos a JSON
-        s.snapshotChanges().subscribe(data => {
+  su = this.database.getEat().snapshotChanges().subscribe(data => {
                 this.eat = [];
                 data.forEach(item => {
                     let a = item.payload.toJSON();
                     a['$key'] = item.key;
                     this.eat.push(a as DondeComer);
                 })            
-            }),
-            err => console.log(err)
-}
+            });
 
+  ngOnInit() {
+  	this.su;
+  }
+
+  ngOnDestroy(){
+    this.su.unsubscribe();
+  }
 
 }

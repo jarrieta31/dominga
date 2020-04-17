@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { DatabaseService } from '../../services/database.service';
 
@@ -15,24 +15,21 @@ export class CircuitsPage implements OnInit {
 
     constructor(public database: DatabaseService) {}
 
-    ngOnInit() {
-        this.getTipoCircuito();
-    }
-
-    getTipoCircuito() {
-
-        let s = this.database.getTypeCircuits();
-        // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-        // último pasamos los datos a JSON
-        s.snapshotChanges().subscribe(data => {
+    su = this.database.getTypeCircuits().snapshotChanges().subscribe(data => {
                 this.tipoCircuito = [];
                 data.forEach(item => {
                     let a = item.payload.toJSON();
                     a['$key'] = item.key;
                     this.tipoCircuito.push(a as TipoCircuito);
                 })
-            }),
-            err => console.log(err)
-    }
+                console.log(this.tipoCircuito);
+            });
 
+    ngOnInit() {
+        this.su;
+    } 
+
+    ngOnDestroy(){
+        this.su.unsubscribe();
+    }
 }

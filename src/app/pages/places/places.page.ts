@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { DatabaseService } from '../../services/database.service';
@@ -10,6 +10,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 
 import * as Mapboxgl from 'mapbox-gl';
+
+import 'rxjs';
 
 declare var jQuery: any;
 declare var $: any;
@@ -43,6 +45,7 @@ export class PlacesPage implements OnInit {
     };
 
     mapa: Mapboxgl.Map;
+    par: string;
 
     constructor(
         private database: DatabaseService,
@@ -50,33 +53,20 @@ export class PlacesPage implements OnInit {
         private router: Router
     ) {}
 
-    ngOnInit() {
-
-        this.getCargarLugar();
-    }
-
-    async cambiarImagen() {
-        $(".imgGaleria").click(function() {
-            var imagenSrc = $(this).attr('src');
-            $("#foto").attr("src", imagenSrc);
-        });
-    }
-
-    async getCargarLugar() {
-        this.activatedRoute.paramMap.subscribe(params => {
+    subscription = this.activatedRoute.paramMap.subscribe(params => {
             // Dentro de la variable s colocamos el método database y hacemos llamado al 
             // método getPlaces() que se encuentra en el servicio 'DataService'
 
-            let par = params.get("id");
-
-            let s = this.database.getPlaces();
+            this.par = params.get("id");
+});
+            
             // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
             // último pasamos los datos a JSON
-            s.snapshotChanges().subscribe(data => {
+            su = this.database.getPlaces().snapshotChanges().subscribe(data => {
                     this.items = [];
                     data.forEach(item => {
 
-                        if (par == item.key) {
+                        if (this.par == item.key) {
                             var num = '0';
                             let a = item.payload.toJSON();
                             a['$key'] = item.key;
@@ -121,11 +111,28 @@ export class PlacesPage implements OnInit {
                             });
                         }
                     })
+                });
+       
 
-                }),
-                err => console.log(err)
+    ngOnInit() {
+        this.subscription; 
+        this.su; 
+    }
+
+    ngOnDestroy(){
+        this.subscription.unsubscribe();
+        this.su.unsubscribe();
+    }
+
+   
+    async cambiarImagen() {
+        $(".imgGaleria").click(function() {
+            var imagenSrc = $(this).attr('src');
+            $("#foto").attr("src", imagenSrc);
         });
     }
+
+    
 
     async agregarFavorito() {
 
