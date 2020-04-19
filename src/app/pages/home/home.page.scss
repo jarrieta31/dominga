@@ -3,35 +3,25 @@
     margin: 0;
 }
 
-.cabezera {
-    background-color: #00dea5;
-}
+// .cabezera {
+//     background-color: #00dea5;
+// }
 
 .estrella {
     color: #ffb134;
 }
 
-.icono {
-    width: 65%;
-}
-
-.iconMenu {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-}
+// .icono {
+//     border: 1px solid green;
+// }
 
 .contenedor-iconos {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     justify-items: center;
-    margin: 2% 4% 3% 4%;
-}
-
-.imgSlider {
-    width: 100%;
+    margin: auto;
+    //border: 2px solid red;
     height: 100%;
 }
 
@@ -50,7 +40,8 @@ ion-label {
 }
 
 .cardTitle ion-inherit-color .md .hydrated {
-    font-weight: 500;
+    
+    font-size: 150%;
 }
 
 .iconTitle {
@@ -70,16 +61,26 @@ ion-label {
 
 .slider {
     height: 45%;
+    //border: 1px solid black;
 }
 
 .menu {
-    margin-right: 5%;
-    margin-left: 5%;
+    margin: 1.5% 5% 1.5% 5%;
     height: 10%;
+    //border: 1px solid black;
+}
+
+.icono {
+    .iconMenu {
+        ion-img {
+            height: 100%;
+        }
+    }
 }
 
 .cards {
-    height: 40%;
+    height: 42%;
+    //border: 1px solid black;
 }
 
 ion-card {
@@ -106,4 +107,9 @@ ion-card {
     float: right;
     margin-right: 3%;
     padding: 0;
+}
+
+.sliderPrimero, .sliderHijo, .imgSlider{
+    height: 100%;
+    width: 100%;
 }

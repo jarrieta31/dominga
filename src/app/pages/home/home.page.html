@@ -11,40 +11,40 @@
 <ion-content>
     <div class="padre">
         <div class="slider">
-            <ion-slides scrollbar="true" pager="true" [options]="slideOpts">
-                <ion-slide [routerLink]="['/']">
-                    <ion-img class="imgSlider" src="/assets/img/slider1.jpeg"></ion-img>
+             <ion-slides class="sliderPrimero" scrollbar="true" pager="true" [options]="slideOpts">
+                <ion-slide class="sliderHijo" [routerLink]="['/']">
+                    <img class="imgSlider" src="/assets/img/slider1.jpeg"/>
                 </ion-slide>
-                <ion-slide [routerLink]="['/']">
-                    <ion-img class="imgSlider" src="/assets/img/slider2.png"></ion-img>
+                <ion-slide class="sliderHijo" [routerLink]="['/']">
+                    <img class="imgSlider" src="/assets/img/slider2.png"/>
                 </ion-slide>
-                <ion-slide [routerLink]="['/']">
-                    <ion-img class="imgSlider" src="/assets/img/slider3.png"></ion-img>
+                <ion-slide class="sliderHijo" [routerLink]="['/']">
+                    <img class="imgSlider" src="/assets/img/slider3.png"/>
                 </ion-slide>
             </ion-slides>
         </div>
         <div class="menu">
             <div class="contenedor-iconos">
-                <a class="iconMenu" routerLink="/circuits">
-                    <div class="icono">
+                <div class="icono">
+                    <a class="iconMenu" routerLink="/circuits">
                         <ion-img src="/assets/icon/location.png"></ion-img>
-                    </div>
-                </a>
-                <a class="iconMenu" routerLink="/favorite">
-                    <div class="icono">
+                    </a>
+                </div>
+                <div class="icono">
+                    <a class="iconMenu" routerLink="/favorite">
                         <ion-img src="/assets/icon/favorito.png"></ion-img>
-                    </div>
-                </a>
-                <a class="iconMenu" routerLink="/information">
-                    <div class="icono">
+                    </a>
+                </div>
+                <div class="icono">
+                    <a class="iconMenu" routerLink="/information">
                         <ion-img src="/assets/icon/info.png"></ion-img>
-                    </div>
-                </a>
-                <a class="iconMenu" routerLink="/more-options">
-                    <div class="icono">
+                    </a>
+                </div>
+                <div class="icono">
+                    <a class="iconMenu" routerLink="/more-options">
                         <ion-img src="/assets/icon/masOpciones.png"></ion-img>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="cards">
@@ -58,7 +58,7 @@
                             </ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <img class="foto" [src]="item.url[0]" [alt]="item.nombre" />
+                            <img class="foto" [src]="item.url[0].url" [alt]="item.nombre" />
                             <div>
                                 <div class="distancia">
                                     <ion-label slot="start">100 metros</ion-label>

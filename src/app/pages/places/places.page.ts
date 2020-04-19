@@ -91,6 +91,8 @@ export class PlacesPage implements OnInit {
                                 this.cont++;
                             })
 
+                            console.log(this.imagenes);
+
                             this.latitud = this.items[num].latitud;
                             this.longitud = this.items[num].longitud;
 
@@ -127,14 +129,16 @@ export class PlacesPage implements OnInit {
    
     async cambiarImagen() {
         $(".imgGaleria").click(function() {
-            var imagenSrc = $(this).attr('src');
+            var nombre = $(this).attr('alt');
+            var imagenSrc = 'https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2F'+ nombre +'_medium.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3';
+            //console.log(nombre);
+            //console.log(imagenSrc);
             $("#foto").attr("src", imagenSrc);
         });
     }
-
-    
 
     async agregarFavorito() {
 
     }
 }
+

@@ -14,12 +14,12 @@
 <ion-content>
     <div class="padre">
         <div class="diva" >
-            <img class="imgPrincipal" id="foto" src="{{ imagenes[0] }}" />
+            <img class="imgPrincipal" id="foto" src="{{ imagenes }}" />
         </div>
         <div class="divb">
             <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let img of imagenes">
-                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ img }}" /></div>
+                    <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" alt="{{ img.nombre }}" src="{{ img.url }}" /></div>
                 </ion-slide>
             </ion-slides>
         </div>
