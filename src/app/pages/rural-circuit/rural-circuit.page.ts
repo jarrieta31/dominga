@@ -29,15 +29,27 @@ export class RuralCircuitPage implements OnInit {
                     this.items.push(a as Place);
                 })
 
-                var largo = this.items.length;
+                var largo = 0;
+
+                this.items.forEach(data =>{
+                    if(data.tipo == 'Rural'){
+                        largo = largo + 1;
+                    }
+                })
+
+                //console.log(largo);
                
                 this.items.forEach(data => {
-                    this.lat = this.lat + parseFloat(data.latitud);
-                    this.lon = this.lon + parseFloat(data.longitud);
+                    if(data.tipo == 'Rural'){
+                        this.lat = this.lat + parseFloat(data.latitud);
+                        this.lon = this.lon + parseFloat(data.longitud);
+                    }
                 })
 
                 var PromLat = this.lat / largo;
                 var PromLon = this.lon / largo;
+
+                //console.log(PromLat, PromLon);
 
                 Mapboxgl.accessToken = environment.mapBoxToken;
                 this.mapa = new Mapboxgl.Map({
@@ -57,9 +69,9 @@ export class RuralCircuitPage implements OnInit {
                 );
 
                 this.items.forEach(data => {
-                    if (data.tipo == 'Rural') {
+                    if (data.tipo == 'Rural') {                               
                         var popup = new Mapboxgl.Popup({ offset: 25 }).setHTML(
-                            '<a href="http://localhost:8100/places/' + data.$key + '"><img src="' + data.url[0] + '" /><h5 style="text-align: center">' + data.nombre + '</h5></a>'
+                            '<a href="http://localhost:8100/places/' + data.$key + '"><img src="' + data.imagenPrincipal + '" /><h5 style="text-align: center">' + data.nombre + '</h5></a>'
                         );
                         const marker = new Mapboxgl.Marker({
                                 draggable: false
@@ -67,9 +79,7 @@ export class RuralCircuitPage implements OnInit {
                             .setPopup(popup)
                             .addTo(this.mapa);
                     }
-                })
-
-                var largo = this.items.length;               
+                })             
 
                 this.mapa.on('load', () => {
                     this.mapa.addSource('route', {

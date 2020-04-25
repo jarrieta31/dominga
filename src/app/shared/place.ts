@@ -10,4 +10,5 @@ export interface Place {
     tipo: string;
     latitud: string;
     longitud: string;
+    imagenPrincipal: string;
 }
