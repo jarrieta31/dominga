@@ -61,27 +61,9 @@ ion-title {
     padding: 3% 3% 0 3%;
 }
 
-.slidePadre{
-    height: 100%;
-    width: 100%;
-}
-
-@supports(object-fit: cover){
-    .imagenMini .imgGaleria{
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: center center;
-    }
-}
-.slideHijo
+.slideHijo, .imagenMini, .slidePadre
  {
     height: 100%;
-    width: 100%;
-}
-
-.imagenMini{
-	height: 100%;
     width: 100%;
 }
 

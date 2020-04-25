@@ -20,7 +20,7 @@ export class AuthService {
 
   constructor( private afAuth: AngularFireAuth, private router: Router ) { 
     // authState es la instancia de autentificación actual
-    this.user = this.afAuth.authState;    
+    this.user = this.afAuth.authState;   
   }
 
   isLoggedIn() {

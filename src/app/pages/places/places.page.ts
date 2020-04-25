@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 
 import { Place } from '../../shared/place';
 
@@ -34,6 +35,7 @@ export class PlacesPage implements OnInit {
     imagenes = new Array();
     latitud: string;
     longitud: string;
+    imagenPrincipal: string;
 
     cont = 0;
 
@@ -49,6 +51,7 @@ export class PlacesPage implements OnInit {
 
     constructor(
         private database: DatabaseService,
+        private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
         private router: Router
     ) {}
@@ -84,6 +87,9 @@ export class PlacesPage implements OnInit {
                             this.auto = this.items[num].auto;
                             this.bicicleta = this.items[num].bicicleta;
                             this.caminar = this.items[num].caminar;
+                            this.imagenPrincipal = this.items[num].imagenPrincipal;
+
+                            this.imagenes = [];
 
                             mapped.forEach(data => {
                                 this.cont;
@@ -91,7 +97,7 @@ export class PlacesPage implements OnInit {
                                 this.cont++;
                             })
 
-                            console.log(this.imagenes);
+                            //console.log(this.imagenes);
 
                             this.latitud = this.items[num].latitud;
                             this.longitud = this.items[num].longitud;
@@ -129,16 +135,16 @@ export class PlacesPage implements OnInit {
    
     async cambiarImagen() {
         $(".imgGaleria").click(function() {
-            var nombre = $(this).attr('alt');
-            var imagenSrc = 'https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/0%2F'+ nombre +'_medium.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3';
-            //console.log(nombre);
-            //console.log(imagenSrc);
-            $("#foto").attr("src", imagenSrc);
+            var src = $(this).attr('src');
+            //var imagenSrc = 'https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2F'+ nombre +'_medium.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3';
+            $("#foto").attr("src", src);
         });
     }
 
     async agregarFavorito() {
-
+        let uid = this.authSvc.isLoggedIn();
+        console.log("soy el uid", uid);
+        //return uid;
     }
 }
 
