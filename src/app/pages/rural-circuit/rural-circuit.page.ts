@@ -7,6 +7,9 @@ import { Place } from '../../shared/place';
 import { DatabaseService } from '../../services/database.service';
 
 import * as Mapboxgl from 'mapbox-gl';
+import { GeolocationService } from '../../services/geolocation.service';
+
+
 
 @Component({
     selector: 'app-rural-circuit',
@@ -19,7 +22,7 @@ export class RuralCircuitPage implements OnInit {
     lat = 0;
     lon = 0;
 
-    mapa: Mapboxgl.Map;
+    //mapa: Mapboxgl.Map;
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
                 this.items = [];
@@ -51,22 +54,7 @@ export class RuralCircuitPage implements OnInit {
 
                 //console.log(PromLat, PromLon);
 
-                Mapboxgl.accessToken = environment.mapBoxToken;
-                this.mapa = new Mapboxgl.Map({
-                    container: 'mapaRural',
-                    style: 'mapbox://styles/mapbox/streets-v11',
-                    center: [PromLon, PromLat],
-                    zoom: 11,
-                });
-
-                this.mapa.addControl(
-                    new Mapboxgl.GeolocateControl({
-                        positionOptions: {
-                            enableHighAccuracy: false
-                        },
-                        trackUserLocation: false
-                    })
-                );
+                this.geolocationService.crearMapa(PromLon, PromLat)
 
                 this.items.forEach(data => {
                     if (data.tipo == 'Rural') {                               
@@ -77,12 +65,21 @@ export class RuralCircuitPage implements OnInit {
                                 draggable: false
                             }).setLngLat([data.longitud, data.latitud])
                             .setPopup(popup)
-                            .addTo(this.mapa);
+                            .addTo(this.geolocationService.mapa);
                     }
-                })             
+                })  
+                
+                this.geolocationService.mapa.addControl(
+                    new Mapboxgl.GeolocateControl({
+                        positionOptions: {
+                            enableHighAccuracy: true
+                        },
+                        trackUserLocation: true
+                    })
+                );
 
-                this.mapa.on('load', () => {
-                    this.mapa.addSource('route', {
+                this.geolocationService.mapa.on('load', () => {
+                    this.geolocationService.mapa.addSource('route', {
                         'type': 'geojson',
                         'data': {
                             'type': 'Feature',
@@ -158,7 +155,7 @@ export class RuralCircuitPage implements OnInit {
                             }
                         }
                     });
-                    this.mapa.addLayer({
+                    this.geolocationService.mapa.addLayer({
                         'id': 'route',
                         'type': 'line',
                         'source': 'route',
@@ -172,9 +169,14 @@ export class RuralCircuitPage implements OnInit {
                         }
                     });
                 });
+
+
+
+                this.geolocationService.checkPermisosGPS(PromLon, PromLat);
             })
 
-    constructor(private database: DatabaseService) {}
+    constructor(private database: DatabaseService,
+                private geolocationService: GeolocationService) {}
 
     ngOnInit() {
         this.su;

@@ -28,6 +28,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+//Permisos
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+//Plataforma
+import { Platform } from '@ionic/angular';
 
 // import { AuthService } from './services/auth.service';
 
@@ -64,6 +68,9 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
+    Platform,
+    AndroidPermissions,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     // AuthService,
     // AngularFireAuth,
