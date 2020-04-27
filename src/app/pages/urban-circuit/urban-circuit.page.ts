@@ -55,14 +55,14 @@ export class UrbanCircuitPage implements OnInit {
         this.geolocationService.crearMapa(PromLon, PromLat)
 
 
-        this.geolocationService.mapa.addControl(
-            new Mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: false
-                },
-                trackUserLocation: false
-            })
-        );
+        // this.geolocationService.mapa.addControl(
+        //     new Mapboxgl.GeolocateControl({
+        //         positionOptions: {
+        //             enableHighAccuracy: false
+        //         },
+        //         trackUserLocation: false
+        //     })
+        // );
 
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
@@ -217,7 +217,7 @@ export class UrbanCircuitPage implements OnInit {
             });
         });
 
-		this.geolocationService.checkPermisosGPS(PromLon, PromLat);
+		this.geolocationService.checkGPSPermission();
 
     })
 
@@ -232,6 +232,7 @@ export class UrbanCircuitPage implements OnInit {
 
     ngOnDestroy() {
         this.su.unsubscribe();
+        this.geolocationService.stopLocationWatch()
     }
 
 }

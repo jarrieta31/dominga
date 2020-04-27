@@ -54,7 +54,7 @@ export class RuralCircuitPage implements OnInit {
 
                 //console.log(PromLat, PromLon);
 
-                this.geolocationService.crearMapa(PromLon, PromLat)
+                this.geolocationService.crearMapa(PromLon, PromLat);
 
                 this.items.forEach(data => {
                     if (data.tipo == 'Rural') {                               
@@ -69,14 +69,14 @@ export class RuralCircuitPage implements OnInit {
                     }
                 })  
                 
-                this.geolocationService.mapa.addControl(
-                    new Mapboxgl.GeolocateControl({
-                        positionOptions: {
-                            enableHighAccuracy: true
-                        },
-                        trackUserLocation: true
-                    })
-                );
+                // this.geolocationService.mapa.addControl(
+                //     new Mapboxgl.GeolocateControl({
+                //         positionOptions: {
+                //             enableHighAccuracy: true
+                //         },
+                //         trackUserLocation: true
+                //     })
+                // );
 
                 this.geolocationService.mapa.on('load', () => {
                     this.geolocationService.mapa.addSource('route', {
@@ -172,7 +172,9 @@ export class RuralCircuitPage implements OnInit {
 
 
 
-                this.geolocationService.checkPermisosGPS(PromLon, PromLat);
+                //this.geolocationService.checkPermisosGPS();
+                //this.geolocationService.watchLocation()
+                this.geolocationService.checkGPSPermission()
             })
 
     constructor(private database: DatabaseService,
@@ -180,9 +182,13 @@ export class RuralCircuitPage implements OnInit {
 
     ngOnInit() {
         this.su;
+        //this.geolocationService.verificarPermiso();
     }
 
     ngOnDestroy(){
         this.su.unsubscribe();
+        if(this.geolocationService.isWatching){
+            this.geolocationService.stopLocationWatch();            
+        }
     }
 }
