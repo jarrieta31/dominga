@@ -17,6 +17,8 @@ import { environment } from '../environments/environment';
 
 // Importas para geolocalización
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -69,6 +71,7 @@ import { Platform } from '@ionic/angular';
     StatusBar,
     SplashScreen,
     Geolocation,
+    LocationAccuracy,
     Platform,
     AndroidPermissions,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
