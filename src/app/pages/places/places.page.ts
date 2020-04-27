@@ -119,17 +119,20 @@ export class PlacesPage implements OnInit {
                     })
                 });
        
-    ngOnInit() {
-        this.authSvc.currentUser.subscribe( authData =>{
+       user = this.authSvc.currentUser.subscribe( authData =>{
             //console.log(authData);
             this.users = authData.uid;
             //console.log(this.users);
         });
+
+    ngOnInit() {
+        this.users;
         this.subscription; 
         this.su; 
     }
 
     ngOnDestroy(){
+        this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
     }
