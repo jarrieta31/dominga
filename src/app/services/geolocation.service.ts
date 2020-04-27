@@ -36,7 +36,7 @@ export class GeolocationService {
 
   //Obtener coordenadas actuales del dispositivo
   getGeolocation(){
-    this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }).then((resp) => {
+    this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 6000, enableHighAccuracy: true }).then((resp) => {
       this.locationCoords.latitude = resp.coords.latitude;
       this.locationCoords.longitude = resp.coords.longitude;
      }).catch((error) => {
@@ -145,7 +145,7 @@ export class GeolocationService {
         // Cuando el GPS se activó el método de llamada para obtener coordenadas de ubicación precisas
         
         this.createMarker();
-        this.watchLocation();
+        //this.watchLocation();
       },
       error => alert('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
     );

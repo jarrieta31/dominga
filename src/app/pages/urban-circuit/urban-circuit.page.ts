@@ -55,14 +55,14 @@ export class UrbanCircuitPage implements OnInit {
         this.geolocationService.crearMapa(PromLon, PromLat)
 
 
-        this.geolocationService.mapa.addControl(
-            new Mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: false
-                },
-                trackUserLocation: false
-            })
-        );
+        // this.geolocationService.mapa.addControl(
+        //     new Mapboxgl.GeolocateControl({
+        //         positionOptions: {
+        //             enableHighAccuracy: false
+        //         },
+        //         trackUserLocation: false
+        //     })
+        // );
 
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
