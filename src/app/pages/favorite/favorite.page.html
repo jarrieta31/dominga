@@ -8,7 +8,7 @@
 </ion-header>
 <ion-content>
     <ion-searchbar placeholder=""></ion-searchbar>
-    <ion-card *ngFor="let item of favourite" routerLink="/{{item.nombre}}">
+    <ion-card *ngFor="let item of favourite">
         <ion-card-header color="circuits">
             {{ item.nombre }}
         </ion-card-header>
