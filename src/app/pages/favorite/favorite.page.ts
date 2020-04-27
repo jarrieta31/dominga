@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 
-import { TipoCircuito } from '../../shared/tipo-circuito';  
+import { Favourite } from '../../shared/favourite';
 
 @Component({
   selector: 'app-favorite',
@@ -11,30 +12,39 @@ import { TipoCircuito } from '../../shared/tipo-circuito';
 })
 export class FavoritePage implements OnInit {
 
-  // Colocamos en la variable Dato la interface Favoritos[] 
-  Dato: TipoCircuito[]; 
- 
-  constructor(public database: DatabaseService) { }
+  favourite: Favourite[];
+
+  users: string;
+
+  su = this.authSvc.currentUser.subscribe( authData =>{
+            //console.log(authData);
+            this.users = authData.uid;
+            this.getFavUser();
+            //console.log(this.users);
+        });
+
+  constructor(
+    public database: DatabaseService,
+    public authSvc: AuthService
+    ) { }
 
   ngOnInit() {
-  	this.dataState();
+    this.su;
   }
 
-  dataState() {     
-    // Dentro de la variable s colocamos el método database y hacemos llamado al 
-    // método listarDatos()que se encuentra en el servicio 'DataService'
-    let s = this.database.listarDatos(); 
- 
-    // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-    // último pasamos los datos a JSON
-    s.snapshotChanges().subscribe(data => { 
-      this.Dato = [];
-      data.forEach(item => {
-        let a = item.payload.toJSON(); 
-        a['$key'] = item.key;
-        this.Dato.push(a as TipoCircuito);
-      })
-    })
+  ngOnDestroy(){
+    this.su.unsubscribe();
   }
 
+  getFavUser(){
+    this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
+                this.favourite = [];
+                data.forEach(item => {
+                    let a = item.payload.toJSON();
+                    a['$key'] = item.key;
+                    this.favourite.push(a as Favourite);
+                })
+                console.log(this.favourite);
+            });
+  }
 }

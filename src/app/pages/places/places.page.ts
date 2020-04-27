@@ -26,6 +26,8 @@ export class PlacesPage implements OnInit {
 
     items: Place[];
 
+    users: string;
+
     nombre: string;
     descripcion: string;
     key: string;
@@ -57,14 +59,10 @@ export class PlacesPage implements OnInit {
     ) {}
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
-            // Dentro de la variable s colocamos el método database y hacemos llamado al 
-            // método getPlaces() que se encuentra en el servicio 'DataService'
 
             this.par = params.get("id");
 });
             
-            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-            // último pasamos los datos a JSON
             su = this.database.getPlaces().snapshotChanges().subscribe(data => {
                     this.items = [];
                     data.forEach(item => {
@@ -121,30 +119,33 @@ export class PlacesPage implements OnInit {
                     })
                 });
        
+       user = this.authSvc.currentUser.subscribe( authData =>{
+            //console.log(authData);
+            this.users = authData.uid;
+            //console.log(this.users);
+        });
 
     ngOnInit() {
+        this.users;
         this.subscription; 
         this.su; 
     }
 
     ngOnDestroy(){
+        this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
     }
 
-   
     async cambiarImagen() {
         $(".imgGaleria").click(function() {
             var src = $(this).attr('src');
-            //var imagenSrc = 'https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2F'+ nombre +'_medium.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3';
             $("#foto").attr("src", src);
         });
     }
 
     async agregarFavorito() {
-        let uid = this.authSvc.isLoggedIn();
-        console.log("soy el uid", uid);
-        //return uid;
+         this.database.addFavourite(this.nombre, this.key, this.users, this.imagenPrincipal);     
     }
 }
 
