@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
-        <ion-title >{{nombre}}</ion-title>
+        <ion-title id="nombre">{{nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button (click)=agregarFavorito()>
                 <ion-icon name="heart"></ion-icon>
@@ -12,6 +12,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <div id="key">{{ key }}</div>
     <div class="padre">
         <div class="diva" >
             <img class="imgPrincipal" id="foto" src="{{ imagenPrincipal }}" />

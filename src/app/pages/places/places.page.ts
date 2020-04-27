@@ -26,6 +26,8 @@ export class PlacesPage implements OnInit {
 
     items: Place[];
 
+    users: string;
+
     nombre: string;
     descripcion: string;
     key: string;
@@ -123,6 +125,11 @@ export class PlacesPage implements OnInit {
        
 
     ngOnInit() {
+        this.authSvc.currentUser.subscribe( authData =>{
+            //console.log(authData);
+            this.users = authData.uid;
+            //console.log(this.users);
+        });
         this.subscription; 
         this.su; 
     }
@@ -136,15 +143,14 @@ export class PlacesPage implements OnInit {
     async cambiarImagen() {
         $(".imgGaleria").click(function() {
             var src = $(this).attr('src');
-            //var imagenSrc = 'https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2F'+ nombre +'_medium.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3';
             $("#foto").attr("src", src);
         });
     }
 
     async agregarFavorito() {
-        let uid = this.authSvc.isLoggedIn();
-        console.log("soy el uid", uid);
-        //return uid;
+         let nombre : string = document.getElementById('nombre').innerHTML; 
+         let id : string = document.getElementById('key').innerHTML; 
+         this.database.addFavourite(nombre, id, this.users);     
     }
 }
 
