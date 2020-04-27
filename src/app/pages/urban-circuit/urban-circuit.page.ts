@@ -217,7 +217,7 @@ export class UrbanCircuitPage implements OnInit {
             });
         });
 
-		this.geolocationService.checkPermisosGPS(PromLon, PromLat);
+		this.geolocationService.checkGPSPermission();
 
     })
 
@@ -232,6 +232,7 @@ export class UrbanCircuitPage implements OnInit {
 
     ngOnDestroy() {
         this.su.unsubscribe();
+        this.geolocationService.stopLocationWatch()
     }
 
 }
