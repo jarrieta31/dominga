@@ -44,21 +44,21 @@ export class DatabaseService {
         return this.appsRef;
     }
 
-     getFavouriteUser(uid: string){
+    getFavouriteUser(uid: string) {
         this.appsRef = this.db.list('usuario_favoritos/' + uid);
         return this.appsRef;
     }
 
-    addFavourite(nombreLugar: string, id: string, uid: string) {
-        
-        this.dbRef.child(uid + '/' + id).set(
-            {
-                nombre: nombreLugar
-  });
-     }
+    addFavourite(nombreLugar: string, id: string, uid: string, 
+                imagenLugar: string) {
+        this.dbRef.child(uid + '/' + id).set({
+            nombre: nombreLugar,
+            imagen: imagenLugar
+        });
+    }
 
     // getUsers(id: string){
-    // 	return this.http.get('https://appdominga.firebaseio.com/users/');
+    //     return this.http.get('https://appdominga.firebaseio.com/users/');
     // }
 
     // addCircuits(circuits: CircuitsModel) {

@@ -8,5 +8,22 @@
 </ion-header>
 <ion-content>
     <ion-searchbar placeholder=""></ion-searchbar>
-    
+    <ion-card *ngFor="let item of favourite" routerLink="/{{item.nombre}}">
+        <ion-card-header color="circuits">
+            {{ item.nombre }}
+        </ion-card-header>
+        <ion-card-content>
+            <img width="auto" height="40%" src="{{ item.imagen }}" alt="{{ item.nombre }}">
+            <div class="duracion">
+                
+                <div class="estrellas">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

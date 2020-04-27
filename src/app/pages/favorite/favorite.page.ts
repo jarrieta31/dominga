@@ -14,17 +14,17 @@ export class FavoritePage implements OnInit {
 
   favourite: Favourite[];
 
-  users = null;
+  users: string;
 
-  su = this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
-                this.favourite = [];
-                data.forEach(item => {
-                    let a = item.payload.toJSON();
-                    a['$key'] = item.key;
-                    this.favourite.push(a as Favourite);
-                })
-                console.log(this.favourite);
-            });
+  // su = this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
+  //               this.favourite = [];
+  //               data.forEach(item => {
+  //                   let a = item.payload.toJSON();
+  //                   a['$key'] = item.key;
+  //                   this.favourite.push(a as Favourite);
+  //               })
+  //               console.log(this.favourite);
+  //           });
 
   constructor(
     public database: DatabaseService,
@@ -35,14 +35,21 @@ export class FavoritePage implements OnInit {
     this.authSvc.currentUser.subscribe( authData =>{
             //console.log(authData);
             this.users = authData.uid;
+            this.getFavUser();
             //console.log(this.users);
         });
-    this.su;
+   
   }
 
-  ngOnDestroy(){
-    this.su.unsubscribe();
+  getFavUser(){
+    this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
+                this.favourite = [];
+                data.forEach(item => {
+                    let a = item.payload.toJSON();
+                    a['$key'] = item.key;
+                    this.favourite.push(a as Favourite);
+                })
+                console.log(this.favourite);
+            });
   }
-
-
 }

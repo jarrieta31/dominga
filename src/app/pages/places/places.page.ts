@@ -59,14 +59,10 @@ export class PlacesPage implements OnInit {
     ) {}
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
-            // Dentro de la variable s colocamos el método database y hacemos llamado al 
-            // método getPlaces() que se encuentra en el servicio 'DataService'
 
             this.par = params.get("id");
 });
             
-            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-            // último pasamos los datos a JSON
             su = this.database.getPlaces().snapshotChanges().subscribe(data => {
                     this.items = [];
                     data.forEach(item => {
@@ -123,7 +119,6 @@ export class PlacesPage implements OnInit {
                     })
                 });
        
-
     ngOnInit() {
         this.authSvc.currentUser.subscribe( authData =>{
             //console.log(authData);
@@ -139,7 +134,6 @@ export class PlacesPage implements OnInit {
         this.su.unsubscribe();
     }
 
-   
     async cambiarImagen() {
         $(".imgGaleria").click(function() {
             var src = $(this).attr('src');
@@ -148,9 +142,7 @@ export class PlacesPage implements OnInit {
     }
 
     async agregarFavorito() {
-         let nombre : string = document.getElementById('nombre').innerHTML; 
-         let id : string = document.getElementById('key').innerHTML; 
-         this.database.addFavourite(nombre, id, this.users);     
+         this.database.addFavourite(this.nombre, this.key, this.users, this.imagenPrincipal);     
     }
 }
 

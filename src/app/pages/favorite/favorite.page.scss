@@ -7,3 +7,35 @@
 .sc-ion-searchbar-md-h {
     --box-shadow: none !important;
 }
+
+ion-card{
+	margin: 0 5% 5% 5%;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 15px !important;
+}
+
+ion-card-header{
+	padding: 4% !important;
+	font-family: Barlow;
+	font-weight: 600;
+	font-size: 120%;
+	color: #ffffff;
+}
+
+ion-card {
+    img {
+        height: 25vh !important;
+        width: 100% !important;
+        max-width: 100%;
+        align-items: center;
+    }
+
+    ion-card-content {
+        padding: 0 !important;
+    }
+}
+
+.estrellas{
+	float: right;
+}
