@@ -49,12 +49,16 @@ export class DatabaseService {
         return this.appsRef;
     }
 
-    addFavourite(nombreLugar: string, id: string, uid: string, 
-                imagenLugar: string) {
+    addFavourite(nombreLugar: string, id: string, uid: string,
+        imagenLugar: string) {
         this.dbRef.child(uid + '/' + id).set({
             nombre: nombreLugar,
             imagen: imagenLugar
         });
+    }
+
+    removeFavourite(uid: string, id: string) {
+        this.dbRef.child(uid + '/' + id).remove();
     }
 
     // getUsers(id: string){

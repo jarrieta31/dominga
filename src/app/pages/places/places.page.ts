@@ -5,6 +5,7 @@ import { DatabaseService } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
 
 import { Place } from '../../shared/place';
+import { Favourite } from '../../shared/favourite';
 
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -25,6 +26,7 @@ declare var $: any;
 export class PlacesPage implements OnInit {
 
     items: Place[];
+    fav: Favourite[];
 
     users: string;
 
@@ -60,78 +62,77 @@ export class PlacesPage implements OnInit {
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
 
-            this.par = params.get("id");
-});
-            
-            su = this.database.getPlaces().snapshotChanges().subscribe(data => {
-                    this.items = [];
-                    data.forEach(item => {
+        this.par = params.get("id");
+    });
 
-                        if (this.par == item.key) {
-                            var num = '0';
-                            let a = item.payload.toJSON();
-                            a['$key'] = item.key;
-                            this.items.push(a as Place);
+    su = this.database.getPlaces().snapshotChanges().subscribe(data => {
+        this.items = [];
+        data.forEach(item => {
 
-                            this.items[num].descripcion = this.items[num].descripcion.substr(0, 44) + " ...";
+            if (this.par == item.key) {
+                var num = '0';
+                let a = item.payload.toJSON();
+                a['$key'] = item.key;
+                this.items.push(a as Place);
 
-                            let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
+                this.items[num].descripcion = this.items[num].descripcion.substr(0, 44) + " ...";
 
-                            this.items[num].url = mapped;
+                let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
-                            this.nombre = this.items[num].nombre;
-                            this.descripcion = this.items[num].descripcion;
-                            this.key = this.items[num].$key;
-                            this.auto = this.items[num].auto;
-                            this.bicicleta = this.items[num].bicicleta;
-                            this.caminar = this.items[num].caminar;
-                            this.imagenPrincipal = this.items[num].imagenPrincipal;
+                this.items[num].url = mapped;
 
-                            this.imagenes = [];
+                this.nombre = this.items[num].nombre;
+                this.descripcion = this.items[num].descripcion;
+                this.key = this.items[num].$key;
+                this.auto = this.items[num].auto;
+                this.bicicleta = this.items[num].bicicleta;
+                this.caminar = this.items[num].caminar;
+                this.imagenPrincipal = this.items[num].imagenPrincipal;
 
-                            mapped.forEach(data => {
-                                this.cont;
-                                this.imagenes[this.cont] = data.url;
-                                this.cont++;
-                            })
+                this.imagenes = [];
 
-                            //console.log(this.imagenes);
+                mapped.forEach(data => {
+                    this.cont;
+                    this.imagenes[this.cont] = data.url;
+                    this.cont++;
+                })
 
-                            this.latitud = this.items[num].latitud;
-                            this.longitud = this.items[num].longitud;
+                //console.log(this.imagenes);
 
-                            Mapboxgl.accessToken = environment.mapBoxToken;
-                            this.mapa = new Mapboxgl.Map({
-                                container: 'mapaBox',
-                                style: 'mapbox://styles/mapbox/streets-v11',
-                                center: [this.longitud, this.latitud],
-                                zoom: 6,
-                            });
+                this.latitud = this.items[num].latitud;
+                this.longitud = this.items[num].longitud;
 
-                            const marker = new Mapboxgl.Marker({
-                                draggable: false
-                            }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
-
-                            this.mapa.on('load', () => {
-                                this.mapa.resize();
-                            });
-                        }
-                    })
+                Mapboxgl.accessToken = environment.mapBoxToken;
+                this.mapa = new Mapboxgl.Map({
+                    container: 'mapaBox',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [this.longitud, this.latitud],
+                    zoom: 6,
                 });
-       
-       user = this.authSvc.currentUser.subscribe( authData =>{
-            //console.log(authData);
-            this.users = authData.uid;
-            //console.log(this.users);
-        });
+
+                const marker = new Mapboxgl.Marker({
+                    draggable: false
+                }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
+
+                this.mapa.on('load', () => {
+                    this.mapa.resize();
+                });
+            }
+        })
+    });
+
+    user = this.authSvc.currentUser.subscribe(authData => {
+        this.users = authData.uid;
+        this.checkFav();
+    });
 
     ngOnInit() {
-        this.users;
-        this.subscription; 
-        this.su; 
+        this.user;
+        this.subscription;
+        this.su;
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
@@ -145,7 +146,27 @@ export class PlacesPage implements OnInit {
     }
 
     async agregarFavorito() {
-         this.database.addFavourite(this.nombre, this.key, this.users, this.imagenPrincipal);     
+        this.database.addFavourite(this.nombre, this.key, this.users, this.imagenPrincipal);
+    }
+
+    async checkFav() {
+        this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
+            this.fav = [];
+
+
+            data.forEach(item => {
+                if(this.par == item.key){
+                    let a = item.payload.toJSON();
+                    a['$key'] = item.key;
+                    this.fav.push(a as Favourite); 
+                }          
+            })
+            console.log(this.fav);
+        });
+    }
+
+    async deleteFav() {
+        this.database.removeFavourite(this.users, this.key);
+
     }
 }
-

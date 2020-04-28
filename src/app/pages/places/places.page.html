@@ -5,8 +5,11 @@
         </ion-buttons>
         <ion-title id="nombre">{{nombre}}</ion-title>
         <ion-buttons slot="primary">
-            <ion-button (click)=agregarFavorito()>
+            <ion-button *ngIf="fav?.length == 0" (click)=agregarFavorito()>
                 <ion-icon name="heart"></ion-icon>
+            </ion-button>
+            <ion-button (click)=deleteFav()>
+                <ion-icon *ngIf="fav?.length != 0" name="heart-dislike-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -14,7 +17,7 @@
 <ion-content>
     <div id="key">{{ key }}</div>
     <div class="padre">
-        <div class="diva" >
+        <div class="diva">
             <img class="imgPrincipal" id="foto" src="{{ imagenPrincipal }}" />
         </div>
         <div class="divb">
