@@ -83,12 +83,6 @@ ion-title {
 	float: left;
 }
 
-.estrellas{
-	float: right;
-	width: 50%;
-	text-align: right;
-}
-
 .iconos{
     display: flex;
     flex-direction: row;
@@ -150,18 +144,7 @@ ion-title {
 #key{
     display: none;
 }
-// .estrellas{
-// 	text-align: right;
-// }
 
-// ion-slides{
-// 	margin-top: 2px;
-// }
-
-// .verMas{
-// 	text-decoration: underline;
-// }
-
-// .text{
-// 	margin: 4%;
-// }
+ion-rating{
+    margin: 0 !important;
+}

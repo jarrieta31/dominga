@@ -35,6 +35,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 //Plataforma
 import { Platform } from '@ionic/angular';
 
+import { IonicRatingModule } from 'ionic-rating';
+
 // import { AuthService } from './services/auth.service';
 
 // import { AngularFireAuth } from '@angular/fire/auth';
@@ -64,6 +66,7 @@ import { Platform } from '@ionic/angular';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
+    IonicRatingModule
     //IonicStorageModule.forRoot()
     
   ],

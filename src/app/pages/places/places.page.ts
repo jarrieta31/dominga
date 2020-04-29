@@ -37,11 +37,15 @@ export class PlacesPage implements OnInit {
     bicicleta: boolean;
     caminar: boolean;
     imagenes = new Array();
+    valoracion = new Array();
     latitud: string;
     longitud: string;
     imagenPrincipal: string;
 
     cont = 0;
+    val = 0;
+    totalValoracion = 0;
+    cantidadVotos = 0;
 
     slideOpts = {
         initialSlide: 0,
@@ -79,6 +83,27 @@ export class PlacesPage implements OnInit {
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
+                if (this.items[num].valoracion != undefined) {
+                    this.val = 0;
+                    this.totalValoracion = 0;
+                    this.cantidadVotos = 0;
+                    let valorar = Object.keys(this.items[num].valoracion).map(key => ({ valor: this.items[num].valoracion[key] }));
+
+                    valorar.forEach(data => {
+                        this.val;
+                        this.valoracion[this.val] = data.valor;
+                        this.val++;
+                    })
+
+                    this.cantidadVotos = this.valoracion.length;
+
+                    this.valoracion.forEach(votos => {
+                        this.totalValoracion = this.totalValoracion + votos;
+                    })
+
+                    this.totalValoracion = this.totalValoracion / this.cantidadVotos;
+                }
+
                 this.items[num].url = mapped;
 
                 this.nombre = this.items[num].nombre;
@@ -89,15 +114,15 @@ export class PlacesPage implements OnInit {
                 this.caminar = this.items[num].caminar;
                 this.imagenPrincipal = this.items[num].imagenPrincipal;
 
-                this.imagenes = [];
+                this.imagenes.length = 0;
+                this.valoracion.length = 0;
+                this.cont = 0;
 
                 mapped.forEach(data => {
                     this.cont;
                     this.imagenes[this.cont] = data.url;
                     this.cont++;
                 })
-
-                //console.log(this.imagenes);
 
                 this.latitud = this.items[num].latitud;
                 this.longitud = this.items[num].longitud;
@@ -153,15 +178,13 @@ export class PlacesPage implements OnInit {
         this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
             this.fav = [];
 
-
             data.forEach(item => {
-                if(this.par == item.key){
+                if (this.par == item.key) {
                     let a = item.payload.toJSON();
                     a['$key'] = item.key;
-                    this.fav.push(a as Favourite); 
-                }          
+                    this.fav.push(a as Favourite);
+                }
             })
-            console.log(this.fav);
         });
     }
 
