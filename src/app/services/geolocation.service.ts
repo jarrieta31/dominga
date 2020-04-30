@@ -76,7 +76,10 @@ export class GeolocationService {
     Mapboxgl.accessToken = environment.mapBoxToken;
     this.mapa = new Mapboxgl.Map({
       container: 'mapaBox',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
+      pitch: 60,
+      bearing: -17.6,
+      antialias: true,
       center: [centro.longitud, centro.latitud],
       zoom: zoom
     });
