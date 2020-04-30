@@ -8,7 +8,7 @@ import { DatabaseService } from '../../services/database.service';
 
 import * as Mapboxgl from 'mapbox-gl';
 import { GeolocationService } from '../../services/geolocation.service';
-
+import { Point } from '../../shared/point';
 
 
 @Component({
@@ -19,8 +19,10 @@ import { GeolocationService } from '../../services/geolocation.service';
 export class RuralCircuitPage implements OnInit {
 
     items: Place[];
-    lat = 0;
-    lon = 0;
+    points: Point[]=[];
+    point: Point;
+    
+    distancia: number = 0;
 
     //mapa: Mapboxgl.Map;
 
@@ -44,17 +46,16 @@ export class RuralCircuitPage implements OnInit {
                
                 this.items.forEach(data => {
                     if(data.tipo == 'Rural'){
-                        this.lat = this.lat + parseFloat(data.latitud);
-                        this.lon = this.lon + parseFloat(data.longitud);
+                        console.log(typeof data.longitud)
+                        this.point = {latitud: +data.latitud, longitud: +data.longitud}
+                        this.points.push(this.point);
                     }
                 })
 
-                var PromLat = this.lat / largo;
-                var PromLon = this.lon / largo;
 
                 //console.log(PromLat, PromLon);
-
-                this.geolocationService.crearMapa(PromLon, PromLat);
+                //this.geolocationService.points = this.items;
+                this.geolocationService.crearMapa(this.points);
 
                 this.items.forEach(data => {
                     if (data.tipo == 'Rural') {                               
@@ -169,12 +170,14 @@ export class RuralCircuitPage implements OnInit {
                         }
                     });
                 });
+                
 
 
-
-                //this.geolocationService.checkPermisosGPS();
+                
                 //this.geolocationService.watchLocation()
-                this.geolocationService.checkGPSPermission()
+                //this.geolocationService.checkGPSPermission()
+                
+                this.distancia = this.geolocationService.distancia;
             })
 
     constructor(private database: DatabaseService,
@@ -188,7 +191,7 @@ export class RuralCircuitPage implements OnInit {
     ngOnDestroy(){
         this.su.unsubscribe();
         if(this.geolocationService.isWatching){
-            this.geolocationService.stopLocationWatch();            
+            this.geolocationService.sourceGpsSubject.unsubscribe();           
         }
     }
 }
