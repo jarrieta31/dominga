@@ -8,6 +8,8 @@ import { DatabaseService } from '../../services/database.service';
 
 import * as Mapboxgl from 'mapbox-gl';
 import { GeolocationService } from '../../services/geolocation.service';
+import { Point } from '../../shared/point';
+
 
 @Component({
     selector: 'app-urban-circuit',
@@ -17,6 +19,8 @@ import { GeolocationService } from '../../services/geolocation.service';
 export class UrbanCircuitPage implements OnInit {
 
     items: Place[];
+    points: Point[] = [];
+    point: Point;
     lat = 0;
     lon = 0;
 
@@ -42,27 +46,12 @@ export class UrbanCircuitPage implements OnInit {
 
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
-                this.lat = this.lat + parseFloat(data.latitud);
-                this.lon = this.lon + parseFloat(data.longitud);
+                this.point = {latitud: +data.latitud, longitud: +data.longitud}
+                this.points.push(this.point);
             }
         })
 
-        var PromLat = this.lat / largo;
-        var PromLon = this.lon / largo;
-
-        //console.log(PromLat, PromLon);
-
-        this.geolocationService.crearMapa(PromLon, PromLat)
-
-
-        // this.geolocationService.mapa.addControl(
-        //     new Mapboxgl.GeolocateControl({
-        //         positionOptions: {
-        //             enableHighAccuracy: false
-        //         },
-        //         trackUserLocation: false
-        //     })
-        // );
+        this.geolocationService.crearMapa(this.points)
 
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
@@ -217,8 +206,6 @@ export class UrbanCircuitPage implements OnInit {
             });
         });
 
-		this.geolocationService.checkGPSPermission();
-
     })
 
     constructor(
@@ -232,7 +219,7 @@ export class UrbanCircuitPage implements OnInit {
 
     ngOnDestroy() {
         this.su.unsubscribe();
-        this.geolocationService.stopLocationWatch()
+        this.geolocationService.sourceGpsSubject.unsubscribe();
     }
 
 }
