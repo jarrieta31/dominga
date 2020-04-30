@@ -46,7 +46,6 @@ export class RuralCircuitPage implements OnInit {
                
                 this.items.forEach(data => {
                     if(data.tipo == 'Rural'){
-                        console.log(typeof data.longitud)
                         this.point = {latitud: +data.latitud, longitud: +data.longitud}
                         this.points.push(this.point);
                     }
@@ -70,15 +69,6 @@ export class RuralCircuitPage implements OnInit {
                     }
                 })  
                 
-                // this.geolocationService.mapa.addControl(
-                //     new Mapboxgl.GeolocateControl({
-                //         positionOptions: {
-                //             enableHighAccuracy: true
-                //         },
-                //         trackUserLocation: true
-                //     })
-                // );
-
                 this.geolocationService.mapa.on('load', () => {
                     this.geolocationService.mapa.addSource('route', {
                         'type': 'geojson',

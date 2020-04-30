@@ -90,7 +90,7 @@ export class GeolocationService {
   }
 
   createMarker(){     
-    this.geolocation.getCurrentPosition().then((resp) => {
+    this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 6000, enableHighAccuracy: true }).then((resp) => {
       this.locationCoords.latitude = resp.coords.latitude;
       this.locationCoords.longitude = resp.coords.longitude;
       this.locationCoords.accuracy = resp.coords.accuracy;
@@ -118,8 +118,8 @@ export class GeolocationService {
       let zoom = this.calculateZoom(this.distancia);
       this.mapa.setCenter([centro.longitud, centro.latitud]);
       this.mapa.setZoom(zoom);
-      alert('Zoom = ' + zoom);
-      this.createMarkerCenter(centro);
+      //alert('Zoom = ' + zoom);
+      //this.createMarkerCenter(centro);
     }).catch((error) => {
       alert('Error al obtener la ubicación para crear el marcador' + error);
     });      
