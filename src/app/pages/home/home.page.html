@@ -11,15 +11,17 @@
 <ion-content>
     <div class="padre">
         <div class="slider">
-             <ion-slides class="sliderPrimero" scrollbar="true" pager="true" [options]="slideOpts">
-                <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <img class="imgSlider" src="/assets/img/slider1.jpeg"/>
+            <ion-slides class="sliderPrimero" scrollbar="true" pager="true" [options]="slideOpts">
+                <ion-slide class="sliderHijo">
+                    <a href="https://wa.me/59895030529?text=Hola,%20quería%20consultar%20sobre%20el%20servicio%20de%20bicicletas.">
+                        <img class="imgSlider" src="/assets/img/slider1.jpeg" />
+                    </a>
                 </ion-slide>
                 <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <img class="imgSlider" src="/assets/img/slider2.png"/>
+                    <img class="imgSlider" src="/assets/img/slider2.png" />
                 </ion-slide>
                 <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <img class="imgSlider" src="/assets/img/slider3.png"/>
+                    <img class="imgSlider" src="/assets/img/slider3.png" />
                 </ion-slide>
             </ion-slides>
         </div>
@@ -54,7 +56,8 @@
                         <ion-card-header color="options">
                             <ion-card-title class="cardTitle">
                                 <div style="text-align: left">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span>
-                                <ion-icon class="iconTitle" name="leaf-outline"></ion-icon></div> 
+                                    <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
+                                </div>
                             </ion-card-title>
                         </ion-card-header>
                         <ion-card-content>

@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return this.afAuth.authState.pipe(tap(res => console.log(res)), first())
+    return this.afAuth.authState.pipe(first())
   }
 
   // Registro con email

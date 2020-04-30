@@ -44,7 +44,6 @@ export class FavoritePage implements OnInit {
                     a['$key'] = item.key;
                     this.favourite.push(a as Favourite);
                 })
-                console.log(this.favourite);
             });
   }
 }

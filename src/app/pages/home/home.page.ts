@@ -44,7 +44,6 @@ export class HomePage implements OnInit {
         a['$key'] = item.key;
         this.items.push(a as Place);
       })
-      console.log(this.items);
     });
 
     ngOnInit() {
