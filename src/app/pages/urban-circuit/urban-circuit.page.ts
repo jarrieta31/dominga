@@ -220,6 +220,7 @@ export class UrbanCircuitPage implements OnInit {
     ngOnDestroy() {
         this.su.unsubscribe();
         this.geolocationService.sourceGpsSubject.unsubscribe();
+        //this.geolocationService.stopLocationWatch()  
     }
 
 }

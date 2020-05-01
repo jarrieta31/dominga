@@ -22,7 +22,8 @@ export class RuralCircuitPage implements OnInit {
     points: Point[]=[];
     point: Point;
     
-    distancia: number = 0;
+    distancia: any;
+    posicion: any;
 
     //mapa: Mapboxgl.Map;
 
@@ -167,11 +168,13 @@ export class RuralCircuitPage implements OnInit {
                 //this.geolocationService.watchLocation()
                 //this.geolocationService.checkGPSPermission()
                 
-                this.distancia = this.geolocationService.distancia;
+                
             })
 
     constructor(private database: DatabaseService,
-                private geolocationService: GeolocationService) {}
+                private geolocationService: GeolocationService) {
+                    this.posicion = this.geolocationService.posicionActual.subscribe()
+                }
 
     ngOnInit() {
         this.su;
@@ -181,7 +184,8 @@ export class RuralCircuitPage implements OnInit {
     ngOnDestroy(){
         this.su.unsubscribe();
         if(this.geolocationService.isWatching){
-            this.geolocationService.sourceGpsSubject.unsubscribe();           
+            this.geolocationService.sourceGpsSubject.unsubscribe(); 
+            //this.geolocationService.stopLocationWatch()          
         }
     }
 }
