@@ -9,6 +9,7 @@ import { DatabaseService } from '../../services/database.service';
 import * as Mapboxgl from 'mapbox-gl';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class RuralCircuitPage implements OnInit {
     point: Point;
     
     distancia: any;
-    posicion: any;
+    posicion: Point = {longitud: 0, latitud:0};
+    posicion$: Observable<Point>;
 
     //mapa: Mapboxgl.Map;
 
@@ -173,11 +175,15 @@ export class RuralCircuitPage implements OnInit {
 
     constructor(private database: DatabaseService,
                 private geolocationService: GeolocationService) {
-                    this.posicion = this.geolocationService.posicionActual.subscribe()
-                }
+        //this.posicion = this.geolocationService.posicionActual.subscribe()
+        
+
+    }
 
     ngOnInit() {
         this.su;
+        this.posicion$ = this.geolocationService.getPosicionActual$();
+        //this.posicion$.subscribe(pos => this.posicion = pos);
         //this.geolocationService.verificarPermiso();
     }
 

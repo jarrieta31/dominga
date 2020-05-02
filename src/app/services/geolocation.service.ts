@@ -24,13 +24,14 @@ export class GeolocationService {
   watchLocationUpdates:any;
   isWatching:boolean;
   distancia:number;
-  distanciaActual: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  posicionActual: BehaviorSubject<Point> = new BehaviorSubject<Point>({longitud:0, latitud:0});
+  distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  posicionActual$: Subject<Point> = new Subject<Point>();
+  posicion: Point = {longitud: 0, latitud:0};
   latCenter:number = 0;
   longCenter:number = 0;
   locationCoords: any;
   timetest: any;
-  sourceClock: Observable<number> = timer(30000, 30000);
+  sourceClock: Observable<number> = timer(500, 30000);
   sourceGpsSubject = new Subject();
   observerGps: any;
   
@@ -39,7 +40,6 @@ export class GeolocationService {
 
     this.locationCoords = {latitude: "",longitude: "", accuracy: "", timestamp: "" };
     this.timetest = Date.now(); 
-    
   }
 
   //Obtener coordenadas actuales del dispositivo
@@ -199,8 +199,9 @@ export class GeolocationService {
     this.isWatching = true;
     //Subjet que se subscribe al reloj y obtiene la posicion actual cambiando la posición del marcador
     this.sourceGpsSubject.subscribe(clock => {
-      this.geolocation.getCurrentPosition({ maximumAge: 0, timeout: 4000, enableHighAccuracy: true }).then(res =>{
-        this.posicionActual.next({longitud: res.coords.longitude, latitud: res.coords.latitude});
+      this.geolocation.getCurrentPosition({ maximumAge: 0, timeout: 10000, enableHighAccuracy: true }).then(res =>{
+        let point: Point = {longitud: res.coords.longitude, latitud: res.coords.latitude};
+        this.actualizarPosicion$(point);
         this.locationCoords.latitude = res.coords.latitude;
         this.locationCoords.longitude = res.coords.longitude;
         this.locationCoords.accuracy = res.coords.accuracy;
@@ -211,7 +212,7 @@ export class GeolocationService {
       }).catch( e => console.log('error = ',e))
     })
     this.sourceClock.subscribe(this.sourceGpsSubject);
-    //se desubscribe a los 30 minutos, luego corta la subscripsion
+    //se desubscribe a los 120 minutos, luego corta la subscripsion
     timer(1000 * 60 * 120).subscribe(() => this.sourceGpsSubject.unsubscribe())
 
   }
@@ -291,6 +292,15 @@ export class GeolocationService {
       }      
     }
     return zoom
+  }
+
+  getPosicionActual$(): Observable<Point> {
+    return this.posicionActual$.asObservable();
+  }
+
+  actualizarPosicion$(point: Point) {
+    this.posicion = point;
+    this.posicionActual$.next(this.posicion);
   }
 
 }
