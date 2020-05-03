@@ -176,21 +176,26 @@ export class RuralCircuitPage implements OnInit {
     constructor(private database: DatabaseService,
                 private geolocationService: GeolocationService) {
         //this.posicion = this.geolocationService.posicionActual.subscribe()
-        
+        //this.geolocationService.checkGPSPermission()
 
     }
 
     ngOnInit() {
         this.su;
-        this.posicion$ = this.geolocationService.getPosicionActual$();
+        this.geolocationService.checkGPSPermission()
+        this.posicion$ = this.geolocationService.getPosicionActual$()
         //this.posicion$.subscribe(pos => this.posicion = pos);
+        
         //this.geolocationService.verificarPermiso();
     }
 
     ngOnDestroy(){
         this.su.unsubscribe();
         if(this.geolocationService.isWatching){
-            this.geolocationService.sourceGpsSubject.unsubscribe(); 
+            this.geolocationService.isWatching = false;
+            //this.geolocationService.sourceGpsSubject$.unsubscribe(); 
+            this.geolocationService.myPositionMarker = null;
+            this.geolocationService.points = []
             //this.geolocationService.stopLocationWatch()          
         }
     }

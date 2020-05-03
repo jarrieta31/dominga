@@ -9,6 +9,7 @@ import { timer, Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
+import { tap, map, share} from 'rxjs/operators';
 
 
 @Injectable({
@@ -18,55 +19,36 @@ import { Point } from '../shared/point';
 export class GeolocationService {
   
   mapa: Mapboxgl.Map;
-  myPositionMarker: any
+  myPositionMarker: any = null;
   points: Point[];
   
   watchLocationUpdates:any;
   isWatching:boolean;
   distancia:number;
   distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  posicionActual$: Subject<Point> = new Subject<Point>();
+  posicionActual$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = {longitud: 0, latitud:0};
   latCenter:number = 0;
   longCenter:number = 0;
   locationCoords: any;
   timetest: any;
-  sourceClock: Observable<number> = timer(500, 30000);
-  sourceGpsSubject = new Subject();
+  sourceClock: Observable<any> = timer(500, 10000).pipe(
+    tap((clock) => {      
+      console.log("clock: ", clock)      
+    }),share()
+  )
+  sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
+  gps: boolean = false;
   
   constructor(private androidPermissions: AndroidPermissions, private platform: Platform,
               private geolocation: Geolocation, private locationAccuracy: LocationAccuracy) {
 
     this.locationCoords = {latitude: "",longitude: "", accuracy: "", timestamp: "" };
-    this.timetest = Date.now(); 
+    this.timetest = Date.now();
+    
   }
 
-  //Obtener coordenadas actuales del dispositivo
-  getGeolocation(){
-    this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 6000, enableHighAccuracy: true }).then((resp) => {
-      this.locationCoords.latitude = resp.coords.latitude;
-      this.locationCoords.longitude = resp.coords.longitude;
-     }).catch((error) => {
-       console.log('Error al obtener la posicion acctual: ',error);
-     });
-  }
-
-  // Iniciar vigilancia de actualización de ubicación
-  watchLocation(){
-    this.isWatching = true;
-    this.watchLocationUpdates = this.geolocation.watchPosition();
-    this.watchLocationUpdates.subscribe((resp) => {
-      this.myPositionMarker.remove();
-      this.myPositionMarker.setLngLat([ resp.coords.longitude, resp.coords.latitude]).addTo(this.mapa);
-    });
-  }
-
-  //Detiene la vigilancia de la actualización de ubicación
-  stopLocationWatch(){
-    this.isWatching = false;
-    this.watchLocationUpdates.unsubscribe();
-  }
 
   crearMapa(points: Array<Point>){
     console.log('cantidad de Puntos: ', points.length)
@@ -95,12 +77,7 @@ export class GeolocationService {
     
   }
 
-  createMarker(){     
-    this.geolocation.getCurrentPosition({ maximumAge: 6000, timeout: 15000, enableHighAccuracy: true }).then((resp) => {
-      this.locationCoords.latitude = resp.coords.latitude;
-      this.locationCoords.longitude = resp.coords.longitude;
-      this.locationCoords.accuracy = resp.coords.accuracy;
-      this.locationCoords.timestamp = resp.timestamp;
+  createMarker(){         
       //Crea html para el marcador
       var el = document.createElement("div");
       el.className = "marker";
@@ -111,11 +88,11 @@ export class GeolocationService {
       el.style.boxShadow = '1px 1px 40px #81bdda';
       //Agrega el marcador al mapa
       this.myPositionMarker = new Mapboxgl.Marker(el, {draggable: false})
-        .setLngLat([resp.coords.longitude , resp.coords.latitude ])
+        .setLngLat([this.posicion.longitud , this.posicion.latitud ])
         .addTo(this.mapa);
       //Agrega la posición del usuario a la lista de puntos
-      const lugar_user:Point = { latitud: +resp.coords.latitude, longitud: +resp.coords.longitude};      
-      this.points.push(lugar_user as Point);
+           
+      this.points.push(this.posicion as Point);
       //Recalcula los puntos extremos
       let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
       //Recalcula el centro del mapa
@@ -126,9 +103,7 @@ export class GeolocationService {
       this.mapa.setZoom(zoom);
       //alert('Zoom = ' + zoom);
       //this.createMarkerCenter(centro);
-    }).catch((error) => {
-      alert('Error al obtener la ubicación para crear el marcador' + error);
-    });      
+        
   }
 
   //Compruebe si la aplicación tiene permiso de acceso GPS 
@@ -174,8 +149,8 @@ export class GeolocationService {
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
       () => {
-        // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas        
-        this.createMarker();       
+        // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas     
+        this.gps = true
         this.invento()
       },
       error => alert('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
@@ -183,37 +158,40 @@ export class GeolocationService {
   }
 
   // Métodos para obtener coordenadas precisas del dispositivo utilizando el dispositivo GPS
-  getLocationCoordinates() {
-    this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
-      this.locationCoords.latitude = resp.coords.latitude;
-      this.locationCoords.longitude = resp.coords.longitude;
-      this.locationCoords.accuracy = resp.coords.accuracy;
-      this.locationCoords.timestamp = resp.timestamp;
-      console.log('longitud: ' + this.locationCoords.longitude + 'latitud: ' + this.locationCoords.latitude)
-    }).catch((error) => {
-      alert('Error al obtener la ubicación' + error);
-    });
-  }
+  // getLocationCoordinates() {
+  //   this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
+  //     this.locationCoords.latitude = resp.coords.latitude;
+  //     this.locationCoords.longitude = resp.coords.longitude;
+  //     this.locationCoords.accuracy = resp.coords.accuracy;
+  //     this.locationCoords.timestamp = resp.timestamp;
+  //     console.log('longitud: ' + this.locationCoords.longitude + 'latitud: ' + this.locationCoords.latitude)
+  //   }).catch((error) => {
+  //     alert('Error al obtener la ubicación' + error);
+  //   });
+  // }
 
   invento(){
     this.isWatching = true;
-    //Subjet que se subscribe al reloj y obtiene la posicion actual cambiando la posición del marcador
-    this.sourceGpsSubject.subscribe(clock => {
-      this.geolocation.getCurrentPosition({ maximumAge: 0, timeout: 10000, enableHighAccuracy: true }).then(res =>{
-        let point: Point = {longitud: res.coords.longitude, latitud: res.coords.latitude};
-        this.actualizarPosicion$(point);
-        this.locationCoords.latitude = res.coords.latitude;
-        this.locationCoords.longitude = res.coords.longitude;
-        this.locationCoords.accuracy = res.coords.accuracy;
-        this.locationCoords.timestamp = res.timestamp;
-        this.myPositionMarker.remove();        
-        this.myPositionMarker.setLngLat([ res.coords.longitude, res.coords.latitude]).addTo(this.mapa);
-        console.log('longitud: ' + res.coords.longitude + ', latitud: ' + res.coords.longitude );              
-      }).catch( e => console.log('error = ',e))
-    })
-    this.sourceClock.subscribe(this.sourceGpsSubject);
+    if(this.gps){
+      //Subjet que se subscribe al reloj y obtiene la posicion actual cambiando la posición del marcador
+      this.sourceGpsSubject$.subscribe(clock => {
+        this.geolocation.getCurrentPosition({ maximumAge: 0, timeout: 10000, enableHighAccuracy: true }).then(res =>{
+          let point: Point = {longitud: res.coords.longitude, latitud: res.coords.latitude};
+          this.actualizarPosicion$(point);
+          if(this.myPositionMarker == null){
+            this.createMarker()
+          }          
+          this.myPositionMarker.remove();        
+          this.myPositionMarker.setLngLat([ res.coords.longitude, res.coords.latitude]).addTo(this.mapa);
+          console.log('longitud: ' + res.coords.longitude + ', latitud: ' + res.coords.longitude ); 
+          return point             
+        }).catch( e => console.log('error = ',e))
+      })
+    }
+    //El subjet se subscribe al observable que genera los puntos
+    this.sourceClock.subscribe(this.sourceGpsSubject$)
     //se desubscribe a los 120 minutos, luego corta la subscripsion
-    timer(1000 * 60 * 120).subscribe(() => this.sourceGpsSubject.unsubscribe())
+    timer(1000 * 60 * 120).subscribe(() => this.sourceGpsSubject$.unsubscribe())
 
   }
 
@@ -281,7 +259,7 @@ export class GeolocationService {
 
   calculateZoom(distancia:number):number{
     let zoom:number = 1;
-    let rangos = [[5,14], [10,13], [15,12], [20, 11], [40, 9.5], [60,8], [80,7.5], [100, 7], [120, 6.5], [150,6], [180,5.5], [200,5]]
+    let rangos = [[5,12.4], [10,12.6], [15,13], [20, 11], [40, 9.5], [60,8], [80,7.5], [100, 7], [120, 6.5], [150,6], [180,5.5], [200,5]]
     for (let i = 0; i < rangos.length; i++) {
       for (let j = 0; j < rangos[i].length; j++) {
         console.log(rangos[i][0])
@@ -295,12 +273,17 @@ export class GeolocationService {
   }
 
   getPosicionActual$(): Observable<Point> {
-    return this.posicionActual$.asObservable();
+    return this.posicionActual$.asObservable()
   }
 
   actualizarPosicion$(point: Point) {
     this.posicion = point;
     this.posicionActual$.next(this.posicion);
+  }
+
+  calculateDistances(points: Point[]){
+    let distancias:number[] = [];
+
   }
 
 }

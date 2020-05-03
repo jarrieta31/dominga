@@ -13,7 +13,6 @@ import { Place } from '../../shared/place';
 })
 export class HomePage implements OnInit {
 
-
     items: Place[];
 
     slideOpts = {

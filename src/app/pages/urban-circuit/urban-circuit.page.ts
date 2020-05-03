@@ -215,12 +215,18 @@ export class UrbanCircuitPage implements OnInit {
 
     ngOnInit() {
         this.su;
+        this.geolocationService.checkGPSPermission()
     }
 
     ngOnDestroy() {
         this.su.unsubscribe();
-        this.geolocationService.sourceGpsSubject.unsubscribe();
-        //this.geolocationService.stopLocationWatch()  
+        if(this.geolocationService.isWatching){
+            this.geolocationService.isWatching = false;
+            //this.geolocationService.sourceGpsSubject$.unsubscribe(); 
+            this.geolocationService.myPositionMarker = null;
+            this.geolocationService.points = [];
+            //this.geolocationService.stopLocationWatch()          
+        }
     }
 
 }
