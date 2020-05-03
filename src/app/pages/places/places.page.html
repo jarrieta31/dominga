@@ -21,7 +21,7 @@
             <img class="imgPrincipal" id="foto" src="{{ imagenPrincipal }}" />
         </div>
         <div class="divb">
-            <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
+            <ion-slides class="slidePadre" pager="false" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let img of imagenes">
                     <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ img.url }}" /></div>
                 </ion-slide>
@@ -38,8 +38,13 @@
                 <div class="iconEstilos" *ngIf="caminar == 1">
                     <ion-icon name="walk-outline"></ion-icon>
                 </div>
-                <div class="estrellas"><ion-rating [rate]="totalValoracion" readonly="true" size="small">
-                </ion-rating></div>  
+                 <div class="iconEstilos">
+                    100 mts
+                </div>
+                <div class="estrellas">
+                    <ion-rating [rate]="totalValoracion" readonly="true" size="small">
+                    </ion-rating>
+                </div>
             </div>
             <p class="text">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
         </div>
@@ -48,15 +53,11 @@
         </div>
         <h5 class="interes">Te puede interesar</h5>
         <div class="divf">
-            <div class="sugerencia" *ngFor="let s of sug_2" [routerLink]="['/places', s.$key]">
-                <img class="sug" src="{{ s.imagenPrincipal }}" alt="" width="40%" height="60%">
+            <div class="sugerencia" *ngFor="let s of sug_2">
+                <img class="sug" src="{{ s.imagenPrincipal }}" alt="">
                 <div class="infoSug">
                     <div class="sugNombre">{{ s.nombre }}</div>
-                    <div class="sugDireccion">{{ s.distancia }} km desde {{ nombre }}</div>
-                    <div class="sugTelefono">
-                        <div></div>
-                        <div class="numTelefono"></div>
-                    </div>
+                    <div class="sugDistancia">{{ s.distancia }} km desde {{ nombre }}</div>
                 </div>
             </div>
         </div>

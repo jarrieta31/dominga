@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    //overflow-y: hidden;
 }
 
 ion-title {
@@ -14,14 +15,12 @@ ion-title {
 
 .divb {
     width: 100%;
-    height: 15%;
+    height: 11%;
     margin-top: 0.5%;
 }
 
 .divc {
     width: 100%;
-    height: 14%;
-    overflow: auto;
     background-color: #F0F0F0;
 }
 
@@ -30,9 +29,9 @@ ion-title {
     height: 22%;
 }
 
-.divf{
+.divf {
     width: 100%;
-    height: 18%;
+    height: 14%;
     display: flex;
     flex-direction: row;
 }
@@ -44,101 +43,148 @@ ion-title {
     border-radius: 5px 5px 0 0;
 }
 
-// .imgGaleria{
-// 	width: 100%;
-// 	height: 100%;
-// }
-
 .padre {
     width: 100%;
     height: 100%;
     padding: 3% 3% 0 3%;
 }
 
-.slideHijo, .imagenMini, .slidePadre
- {
+.slideHijo,
+.imagenMini,
+.slidePadre {
     height: 100%;
     width: 100%;
 }
 
-.text{
-	font-size: 12px;
-	margin: 1% 4% 4% 4%;
+.text {
+    font-size: 12px;
+    margin: 0 4% 0 4%;
     font-family: Barlow;
+    padding-bottom: 2%;
 }
 
-#mapaBox{
-	height: 100%;
-	width: 100%;
+#mapaBox {
+    height: 100%;
+    width: 100%;
 }
 
-.distancia{
-	width: 50%;
-	float: left;
+.distancia {
+    width: 50%;
+    float: left;
 }
 
-.iconos{
+.iconos {
     display: flex;
     flex-direction: row;
     margin: 1% 4% 0 4%;
 }
 
-.sugerencia{
+.sugerencia {
     width: 50%;
     display: flex;
     flex-direction: row;
 }
 
-.sug{
+.sug {
     border-radius: 8px;
+    width: 45%;
+    height: 75%;
 }
 
-.interes{
-    margin: 0 0 2% 0;
+.interes {
+    margin: 2% 0 2% 0;
     font-weight: 400;
     color: #00dea5;
 }
 
-.infoSug{
+.infoSug {
     margin: 0 0 0 5%;
 }
 
-.iconEstilos{
-    margin: 2% 2% 0 2%;
+.iconEstilos {
+    margin: 5% 2% 0 2%;
 }
 
-.iconAuto{
-    margin: 2% 2% 0 0;
+.iconAuto {
+    margin: 5% 2% 0 0;
 }
 
-.sugNombre{
+.sugNombre {
     font-weight: bold;
     color: #B6B6B6;
-    font-size: 90%;
+    font-size: 13px;
 }
 
-.sugDireccion{
+.sugDistancia {
     font-weight: 600;
     color: #000000;
-    font-size: 80%;
+    font-size: 10px;
 }
 
-.sugTelefono{
-    font-weight: 600;
-    color: #000000;
-    font-size: 80%;
-    display: flex;
-    flex-direction: row;
-}
-
-.numTelefono{
-    font-weight: 100;
-}
-
-#key{
+#key {
     display: none;
 }
 
-ion-rating{
-    margin: 0 !important;
+.estrellas {
+    margin-left: auto;
+}
+
+@media only screen and (min-width: 768px) {
+    .interes {
+        margin: 2% 0 2% 0;
+        font-weight: 400;
+        color: #00dea5;
+        font-size: 32px;
+    }
+
+    .sugNombre {
+        font-weight: bold;
+        color: #B6B6B6;
+        font-size: 25px;
+    }
+
+    .sugDistancia {
+        font-weight: 600;
+        color: #000000;
+        font-size: 18px;
+    }
+}
+
+@media only screen and (min-height: 1024px) {
+    .interes {
+        margin: 6% 0 6% 0;
+        font-weight: 400;
+        color: #00dea5;
+        font-size: 32px;
+    }
+
+    .sugNombre {
+        font-weight: bold;
+        color: #B6B6B6;
+        font-size: 25px;
+    }
+
+    .sugDistancia {
+        font-weight: 600;
+        color: #000000;
+        font-size: 18px;
+    }
+
+    .iconEstilos {
+        margin: 3% 2% 0 2%;
+    }
+
+    .iconAuto {
+        margin: 3% 2% 0 0;
+    }
+}
+
+@media only screen and (min-height: 1366px) {
+    .iconEstilos {
+        margin: 2% 2% 0 2%;
+    }
+
+    .iconAuto {
+        margin: 2% 2% 0 0;
+    }
 }

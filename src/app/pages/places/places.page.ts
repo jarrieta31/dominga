@@ -88,7 +88,7 @@ export class PlacesPage implements OnInit {
                 a['$key'] = item.key;
                 this.items.push(a as Place);
 
-                this.items[num].descripcion = this.items[num].descripcion.substr(0, 100) + " ...";
+                this.items[num].descripcion = this.items[num].descripcion.substr(0, 145) + " ...";
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
