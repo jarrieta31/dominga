@@ -13,6 +13,8 @@ import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 
 import * as Mapboxgl from 'mapbox-gl';
 
+import distance from '@turf/distance';
+
 import 'rxjs';
 
 declare var jQuery: any;
@@ -27,6 +29,11 @@ export class PlacesPage implements OnInit {
 
     items: Place[];
     fav: Favourite[];
+    sugerencias: Place[] = [];
+    sug: Place[] = [];
+    sug_2: Place[] = [];
+
+
 
     users: string;
 
@@ -44,6 +51,7 @@ export class PlacesPage implements OnInit {
 
     cont = 0;
     val = 0;
+    index = 0;
     totalValoracion = 0;
     cantidadVotos = 0;
 
@@ -71,6 +79,7 @@ export class PlacesPage implements OnInit {
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
         this.items = [];
+        this.sugerencias.length = 0;
         data.forEach(item => {
 
             if (this.par == item.key) {
@@ -79,7 +88,7 @@ export class PlacesPage implements OnInit {
                 a['$key'] = item.key;
                 this.items.push(a as Place);
 
-                this.items[num].descripcion = this.items[num].descripcion.substr(0, 44) + " ...";
+                this.items[num].descripcion = this.items[num].descripcion.substr(0, 145) + " ...";
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
@@ -123,16 +132,15 @@ export class PlacesPage implements OnInit {
                     this.imagenes[this.cont] = data.url;
                     this.cont++;
                 })
-
                 this.latitud = this.items[num].latitud;
                 this.longitud = this.items[num].longitud;
 
                 Mapboxgl.accessToken = environment.mapBoxToken;
                 this.mapa = new Mapboxgl.Map({
                     container: 'mapaBox',
-                    style: 'mapbox://styles/mapbox/streets-v11',
+                    style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
                     center: [this.longitud, this.latitud],
-                    zoom: 6,
+                    zoom: 13,
                 });
 
                 const marker = new Mapboxgl.Marker({
@@ -143,7 +151,23 @@ export class PlacesPage implements OnInit {
                     this.mapa.resize();
                 });
             }
+
+            let b = item.payload.toJSON();
+            b['$key'] = item.key;
+            this.sugerencias.push(b as Place);
         })
+        console.log(this.sugerencias);
+        this.sugerencias.forEach(sug => {
+            var options = { units: 'kilometers' };
+            var dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
+            var red = parseFloat(dist).toFixed(2);
+            this.index;
+            this.sugerencias[this.index].distancia = red;
+            this.index++;
+        })
+        this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
+        this.sug_2[0] = this.sugerencias[1];
+        this.sug_2[1] = this.sugerencias[2];
     });
 
     user = this.authSvc.currentUser.subscribe(authData => {

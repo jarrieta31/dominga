@@ -21,7 +21,7 @@
             <img class="imgPrincipal" id="foto" src="{{ imagenPrincipal }}" />
         </div>
         <div class="divb">
-            <ion-slides class="slidePadre" pager="true" [options]="slideOpts">
+            <ion-slides class="slidePadre" pager="false" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let img of imagenes">
                     <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ img.url }}" /></div>
                 </ion-slide>
@@ -38,39 +38,26 @@
                 <div class="iconEstilos" *ngIf="caminar == 1">
                     <ion-icon name="walk-outline"></ion-icon>
                 </div>
-                <div class="estrellas"><ion-rating [rate]="totalValoracion" readonly="true" size="small">
-                </ion-rating></div>  
+                 <div class="iconEstilos">
+                    100 mts
+                </div>
+                <div class="estrellas">
+                    <ion-rating [rate]="totalValoracion" readonly="true" size="small">
+                    </ion-rating>
+                </div>
             </div>
             <p class="text">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
         </div>
         <div class="divd">
             <div id="mapaBox"></div>
         </div>
-        <!-- <div class="dive">
-            <div class="distancia">100 mts</div>
-        </div> -->
         <h5 class="interes">Te puede interesar</h5>
         <div class="divf">
-            <div class="sugerencia" [routerLink]="['/home']">
-                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+            <div class="sugerencia" *ngFor="let s of sug_2">
+                <img class="sug" src="{{ s.imagenPrincipal }}" alt="">
                 <div class="infoSug">
-                    <div class="sugNombre">Nombre</div>
-                    <div class="sugDireccion">Direccion</div>
-                    <div class="sugTelefono">
-                        <div>Tel: &nbsp;</div>
-                        <div class="numTelefono">43423658</div>
-                    </div>
-                </div>
-            </div>
-            <div class="sugerencia" [routerLink]="['/home']">
-                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3 " alt="" width="40%" height="60%">
-                <div class="infoSug">
-                    <div class="sugNombre">Nombre</div>
-                    <div class="sugDireccion">Direccion</div>
-                    <div class="sugTelefono">
-                        <div>Tel:&nbsp;</div>
-                        <div class="numTelefono">43423658</div>
-                    </div>
+                    <div class="sugNombre">{{ s.nombre }}</div>
+                    <div class="sugDistancia">{{ s.distancia }} km desde {{ nombre }}</div>
                 </div>
             </div>
         </div>

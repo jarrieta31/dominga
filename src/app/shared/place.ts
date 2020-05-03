@@ -11,4 +11,5 @@ export interface Place {
     latitud: string;
     longitud: string;
     imagenPrincipal: string;
+    distancia: string;
 }
