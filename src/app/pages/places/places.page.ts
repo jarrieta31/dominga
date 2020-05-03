@@ -160,8 +160,9 @@ export class PlacesPage implements OnInit {
         this.sugerencias.forEach(sug => {
             var options = { units: 'kilometers' };
             var dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
+            var red = parseFloat(dist).toFixed(2);
             this.index;
-            this.sugerencias[this.index].distancia = dist;
+            this.sugerencias[this.index].distancia = red;
             this.index++;
         })
         this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
