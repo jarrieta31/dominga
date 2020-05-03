@@ -156,19 +156,17 @@ export class PlacesPage implements OnInit {
             b['$key'] = item.key;
             this.sugerencias.push(b as Place);
         })
-
+        console.log(this.sugerencias);
         this.sugerencias.forEach(sug => {
             var options = { units: 'kilometers' };
             var dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
             this.index;
-            this.sug.push(sug);
-            this.sug[this.index].distancia = dist;
-
+            this.sugerencias[this.index].distancia = dist;
             this.index++;
         })
-        this.sug.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
-        this.sug_2[0] = this.sug[1];
-        this.sug_2[1] = this.sug[2];
+        this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
+        this.sug_2[0] = this.sugerencias[1];
+        this.sug_2[1] = this.sugerencias[2];
     });
 
     user = this.authSvc.currentUser.subscribe(authData => {
