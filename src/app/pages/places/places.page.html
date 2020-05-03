@@ -51,25 +51,14 @@
         </div> -->
         <h5 class="interes">Te puede interesar</h5>
         <div class="divf">
-            <div class="sugerencia" [routerLink]="['/home']">
-                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3" alt="" width="40%" height="60%">
+            <div class="sugerencia" *ngFor="let s of sug_2" [routerLink]="['/places', s.$key]">
+                <img class="sug" src="{{ s.imagenPrincipal }}" alt="" width="40%" height="60%">
                 <div class="infoSug">
-                    <div class="sugNombre">Nombre</div>
-                    <div class="sugDireccion">Direccion</div>
+                    <div class="sugNombre">{{ s.nombre }}</div>
+                    <div class="sugDireccion"></div>
                     <div class="sugTelefono">
-                        <div>Tel: &nbsp;</div>
-                        <div class="numTelefono">43423658</div>
-                    </div>
-                </div>
-            </div>
-            <div class="sugerencia" [routerLink]="['/home']">
-                <img class="sug" src="https://firebasestorage.googleapis.com/v0/b/appdominga.appspot.com/o/lugares%2Ffincapiedra-01.jpg?alt=media&token=7cbc502b-13fc-4b19-b1b5-6bf30aea69c3 " alt="" width="40%" height="60%">
-                <div class="infoSug">
-                    <div class="sugNombre">Nombre</div>
-                    <div class="sugDireccion">Direccion</div>
-                    <div class="sugTelefono">
-                        <div>Tel:&nbsp;</div>
-                        <div class="numTelefono">43423658</div>
+                        <div></div>
+                        <div class="numTelefono"></div>
                     </div>
                 </div>
             </div>
