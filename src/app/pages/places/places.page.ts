@@ -14,8 +14,11 @@ import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
 import * as Mapboxgl from 'mapbox-gl';
 
 import distance from '@turf/distance';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { GeolocationService } from '../../services/geolocation.service';
 
 import 'rxjs';
+import { Point } from '../../shared/point';
 
 declare var jQuery: any;
 declare var $: any;
@@ -32,6 +35,10 @@ export class PlacesPage implements OnInit {
     sugerencias: Place[] = [];
     sug: Place[] = [];
     sug_2: Place[] = [];
+
+    distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
+    obsDistancia$ = this.distancia$.asObservable();
+    posicion$: Observable<Point>;
 
 
     distancia_cd: string;
@@ -158,18 +165,39 @@ export class PlacesPage implements OnInit {
         })
 
         this.sugerencias.forEach(sug => {
-            var options = { units: 'kilometers' };
-            var dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
-            var red = parseFloat(dist).toFixed(2);
+            let options = { units: 'kilometers' };
+            let dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
+            let red = parseFloat(dist).toFixed(2);
             this.index;
             this.sugerencias[this.index].distancia = red;
             this.index++;
 
             if (sug.nombre == 'Casa Dominga') {
-                var dist_cd = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
-                var red_cd = parseFloat(dist_cd).toFixed(3);
+                let dist_cd = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
+                let red_cd = parseFloat(dist_cd).toFixed(3);
                 this.distancia_cd = red_cd;
             }
+
+            //this.distancia$.next(this.distancia_cd)
+            
+
+            this.posicion$.subscribe(posicion => {
+                if(posicion != null){
+                    let options = { units: 'kilometers' }; 
+                    let dist = distance([this.longitud, this.latitud], [posicion.longitud , posicion.latitud], options);
+                    let distFormat, distancia;
+                    if(dist > 1){
+                        distFormat = parseFloat(dist).toFixed(3);
+                        distancia = "Estás a "+ distFormat + " Km";
+                    }else{
+                        dist = dist*1000 ;
+                        distFormat = parseFloat(dist).toFixed(0); 
+                        distancia = "Estás a "+ distFormat + " mts"
+                    }                   
+                    // Actualiza el observable de lugares con toda la información
+                    this.distancia$.next(distancia);
+                }
+            });
         })
         this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];
@@ -191,6 +219,7 @@ export class PlacesPage implements OnInit {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
+        this.distancia$.unsubscribe()
     }
 
     async cambiarImagen() {

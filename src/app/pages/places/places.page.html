@@ -39,7 +39,7 @@
                     <ion-icon name="walk-outline"></ion-icon>
                 </div>
                  <div class="iconEstilos">
-                    {{ distancia_cd}} km
+                    {{ obsDistancia$ | async }}
                 </div>
                 <div class="estrellas">
                     <ion-rating [rate]="totalValoracion" readonly="true" size="small">

@@ -61,8 +61,15 @@ export class HomePage implements OnInit {
       this.items.forEach(place =>{       
         let options = { units: 'kilometers' }; 
         let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud ,this.casaDominga.latitud], options);
-        let distFormat = parseFloat(dist).toFixed(3);
-        place.distancia = "Desde C. Dominga "+ distFormat + " Km";
+        let distFormat;
+        if(dist > 1){
+            distFormat = parseFloat(dist).toFixed(3);
+            place.distancia = "Desde C. Dominga "+ distFormat + " Km";
+        }else{
+            dist = dist*1000 ;
+            distFormat = parseFloat(dist).toFixed(0); 
+            place.distancia = "Desde C. Dominga "+ distFormat + " mts"
+        }              
       })
       // Actualiza el observable de lugares con toda la información
       this.items$.next(this.items);
@@ -80,8 +87,16 @@ export class HomePage implements OnInit {
                     console.log('posicion actual',posicion.latitud)     
                     let options = { units: 'kilometers' }; 
                     let dist = distance([place.longitud, place.latitud], [posicion.longitud , posicion.latitud], options);
-                    let distFormat = parseFloat(dist).toFixed(3);
-                    place.distancia = "Estás a "+ distFormat + " Km";
+                    let distFormat;
+                    if(dist > 1){
+                        distFormat = parseFloat(dist).toFixed(3);
+                        place.distancia = "Estás a "+ distFormat + " Km";
+                    }else{
+                        dist = dist*1000 ;
+                        distFormat = parseFloat(dist).toFixed(0); 
+                        place.distancia = "Estás a "+ distFormat + " mts"
+                    }              
+                    
                 })
                 // Actualiza el observable de lugares con toda la información
                 this.items$.next(this.items);
