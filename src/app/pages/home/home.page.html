@@ -51,7 +51,7 @@
         </div>
         <div class="cards">
             <ion-slides scrollbar="false" pager="false" [options]="cards">
-                <ion-slide *ngFor="let item of items" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
+                <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
                     <ion-card>
                         <ion-card-header color="options">
                             <ion-card-title class="cardTitle">

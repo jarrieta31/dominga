@@ -36,6 +36,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Platform } from '@ionic/angular';
 
 import { IonicRatingModule } from 'ionic-rating';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 // import { AuthService } from './services/auth.service';
 
@@ -77,6 +78,7 @@ import { IonicRatingModule } from 'ionic-rating';
     LocationAccuracy,
     Platform,
     AndroidPermissions,
+    ScreenOrientation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     // AuthService,
     // AngularFireAuth,

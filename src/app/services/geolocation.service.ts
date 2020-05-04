@@ -32,7 +32,7 @@ export class GeolocationService {
   longCenter:number = 0;
   locationCoords: any;
   timetest: any;
-  sourceClock: Observable<any> = timer(500, 10000).pipe(
+  sourceClock: Observable<any> = timer(500, 36000).pipe(
     tap((clock) => {      
       console.log("clock: ", clock)      
     }),share()
@@ -259,7 +259,7 @@ export class GeolocationService {
 
   calculateZoom(distancia:number):number{
     let zoom:number = 1;
-    let rangos = [[5,12.4], [10,12.6], [15,13], [20, 11], [40, 9.5], [60,8], [80,7.5], [100, 7], [120, 6.5], [150,6], [180,5.5], [200,5]]
+    let rangos = [[5,12.6], [10,12.6], [15,13], [20, 11], [40, 9.5], [60,8], [80,7.5], [100, 7], [120, 6.5], [150,6], [180,5.5], [200,5]]
     for (let i = 0; i < rangos.length; i++) {
       for (let j = 0; j < rangos[i].length; j++) {
         console.log(rangos[i][0])
@@ -281,11 +281,7 @@ export class GeolocationService {
     this.posicionActual$.next(this.posicion);
   }
 
-  calculateDistances(points: Point[]){
-    let distancias:number[] = [];
-
-  }
-
+  
 }
 
 
