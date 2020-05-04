@@ -34,7 +34,7 @@ export class PlacesPage implements OnInit {
     sug_2: Place[] = [];
 
 
-
+    distancia_cd: string;
     users: string;
 
     nombre: string;
@@ -88,7 +88,7 @@ export class PlacesPage implements OnInit {
                 a['$key'] = item.key;
                 this.items.push(a as Place);
 
-                this.items[num].descripcion = this.items[num].descripcion.substr(0, 145) + " ...";
+                this.items[num].descripcion = this.items[num].descripcion.substr(0, 140) + " ...";
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
@@ -156,7 +156,7 @@ export class PlacesPage implements OnInit {
             b['$key'] = item.key;
             this.sugerencias.push(b as Place);
         })
-        console.log(this.sugerencias);
+
         this.sugerencias.forEach(sug => {
             var options = { units: 'kilometers' };
             var dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
@@ -164,6 +164,12 @@ export class PlacesPage implements OnInit {
             this.index;
             this.sugerencias[this.index].distancia = red;
             this.index++;
+
+            if (sug.nombre == 'Casa Dominga') {
+                var dist_cd = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
+                var red_cd = parseFloat(dist_cd).toFixed(3);
+                this.distancia_cd = red_cd;
+            }
         })
         this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];

@@ -1,7 +1,7 @@
 {
     "items": [
     {
-        "name": "Teléfonos importantes",
+        "name": "Números de Emergencia",
         "children": [
         {
             "info": "Policía",
@@ -12,12 +12,12 @@
             "number": 104
         },
         {
-        	"info": "Emergencia Médica",
-        	"number": 43423718
+            "info": "Emergencia Médica",
+            "number": 43423718
         },
-    {
-        	"info": "Ambulancias",
-        	"number": 105
+        {
+            "info": "Ambulancias",
+            "number": 105
         }]
     },
     {
@@ -33,5 +33,12 @@
         {
             "info": "Cambio San José"
         }]
+    },
+    {
+        "name": "Tarifado",
+        "children" : [
+            {
+                "info": "El tarifado tendrá 260 lugares para estacionamiento, en la zona comprendida por las calles Ciganda, Colón, Bengoa e Ituzaingó, incluyendo los 80 cupos de la plaza"
+            }]
     }]
 }
