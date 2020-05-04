@@ -4,12 +4,6 @@
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
         <ion-icon class="icon-info" slot="end" name="information-outline"></ion-icon>
-        <!--  <ion-buttons>
-            <ion-button (click)="automaticClose = !automaticClose">
-                <ion-icon slot="icon-only" name="close" *ngIf="automaticClose"></ion-icon>
-                <ion-icon slot="icon-only" name="resize" *ngIf="!automaticClose"></ion-icon>
-            </ion-button>
-        </ion-buttons> -->
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -23,8 +17,6 @@
         <div class="children-content" *ngIf="item.children && item.open">
             <ion-list *ngFor="let child of item.children; let j = index" lines="none" class="child-list">
                 <ion-item class="item-children">
-                    <!-- <ion-icon slot="start" name="add" *ngIf="!child.open"></ion-icon>
-            <ion-icon slot="start" name="close" *ngIf="child.open"></ion-icon> -->
                     <ion-label class="label-child"><b>{{ child.info }}</b> {{ child.number }}</ion-label>
                 </ion-item>
             </ion-list>

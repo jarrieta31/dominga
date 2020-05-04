@@ -39,7 +39,7 @@
                     <ion-icon name="walk-outline"></ion-icon>
                 </div>
                  <div class="iconEstilos">
-                    100 mts
+                    {{ distancia_cd}} km
                 </div>
                 <div class="estrellas">
                     <ion-rating [rate]="totalValoracion" readonly="true" size="small">
@@ -51,7 +51,7 @@
         <div class="divd">
             <div id="mapaBox"></div>
         </div>
-        <h5 class="interes">Te puede interesar</h5>
+        <h6 class="interes">Te puede interesar</h6>
         <div class="divf">
             <div class="sugerencia" *ngFor="let s of sug_2">
                 <img class="sug" src="{{ s.imagenPrincipal }}" alt="">
