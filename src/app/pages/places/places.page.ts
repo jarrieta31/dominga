@@ -19,6 +19,8 @@ import { GeolocationService } from '../../services/geolocation.service';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
+import { LoadingController } from '@ionic/angular';
+
 
 declare var jQuery: any;
 declare var $: any;
@@ -71,12 +73,15 @@ export class PlacesPage implements OnInit {
 
     mapa: Mapboxgl.Map;
     par: string;
+    isLoading = false;
 
     constructor(
         private database: DatabaseService,
         private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        public loadingController: LoadingController
+
     ) {}
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
@@ -180,7 +185,6 @@ export class PlacesPage implements OnInit {
 
             //this.distancia$.next(this.distancia_cd)
             
-
             this.posicion$.subscribe(posicion => {
                 if(posicion != null){
                     let options = { units: 'kilometers' }; 
@@ -199,6 +203,7 @@ export class PlacesPage implements OnInit {
                 }
             });
         })
+        console.log(this.sugerencias);
         this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];
         this.sug_2[1] = this.sugerencias[2];
@@ -210,9 +215,11 @@ export class PlacesPage implements OnInit {
     });
 
     ngOnInit() {
+        this.present();
         this.user;
         this.subscription;
         this.su;
+        this.dismiss();
     }
 
     ngOnDestroy() {
@@ -249,6 +256,24 @@ export class PlacesPage implements OnInit {
 
     async deleteFav() {
         this.database.removeFavourite(this.users, this.key);
-
     }
+
+     async present() {
+    this.isLoading = true;
+    return await this.loadingController.create({
+        message: 'Por favor espere...'
+      // duration: 5000,
+    }).then(a => {
+      a.present().then(() => {
+        if (!this.isLoading) {
+          a.dismiss().then();
+        }
+      });
+    });
+  }
+
+  async dismiss() {
+    this.isLoading = false;
+    return await this.loadingController.dismiss().then();
+  }
 }

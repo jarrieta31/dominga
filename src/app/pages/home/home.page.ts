@@ -10,7 +10,7 @@ import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-
+import { LoadingController } from '@ionic/angular';
 
 @Component({
     selector: 'app-home',
@@ -40,12 +40,15 @@ export class HomePage implements OnInit {
         direction: 'vertical'
     };
 
+    isLoading = false;
+
     constructor(
         private database: DatabaseService,
         private authService: AuthService,
         private router: Router,
         private geolocationService:GeolocationService,
-        private screenOrientation: ScreenOrientation
+        private screenOrientation: ScreenOrientation,
+        public loadingController: LoadingController
     ) {
         this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
@@ -62,6 +65,7 @@ export class HomePage implements OnInit {
         let options = { units: 'kilometers' }; 
         let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud ,this.casaDominga.latitud], options);
         let distFormat;
+        //console.log(dist);
         if(dist > 1){
             distFormat = parseFloat(dist).toFixed(3);
             place.distancia = "Desde C. Dominga "+ distFormat + " Km";
@@ -78,13 +82,16 @@ export class HomePage implements OnInit {
     });
 
     ngOnInit() {
+        this.present();
         this.geolocationService.checkGPSPermission()
         this.su; 
+        this.dismiss();
         this.posicion$ = this.geolocationService.getPosicionActual$();
         this.posicion$.subscribe(posicion => {
+            // alert(posicion);
             if(posicion != null){
                 this.items.forEach(place =>{  
-                    console.log('posicion actual',posicion.latitud)     
+                    //console.log('posicion actual',posicion.latitud)     
                     let options = { units: 'kilometers' }; 
                     let dist = distance([place.longitud, place.latitud], [posicion.longitud , posicion.latitud], options);
                     let distFormat;
@@ -101,8 +108,7 @@ export class HomePage implements OnInit {
                 // Actualiza el observable de lugares con toda la información
                 this.items$.next(this.items);
             }
-        });
-        
+        }); 
     }
 
     cerrarSesion() {
@@ -110,7 +116,23 @@ export class HomePage implements OnInit {
         this.authService.signOut();
     }
 
-    
-    
 
+ async present() {
+    this.isLoading = true;
+    return await this.loadingController.create({
+        message: 'Por favor espere...'
+      // duration: 5000,
+    }).then(a => {
+      a.present().then(() => {
+        if (!this.isLoading) {
+          a.dismiss().then();
+        }
+      });
+    });
+  }
+
+  async dismiss() {
+    this.isLoading = false;
+    return await this.loadingController.dismiss().then();
+  }
 }
