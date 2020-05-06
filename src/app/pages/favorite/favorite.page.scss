@@ -39,3 +39,20 @@ ion-card {
 .estrellas{
 	float: right;
 }
+
+.sinFavoritos{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: 'Barlow';
+    font-size: 140%;
+    color: #c706ff;
+}
+
+.iconSinFav{
+    font-size: 60px;
+    color: #c706ff;
+}

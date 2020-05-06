@@ -16,10 +16,11 @@ import * as Mapboxgl from 'mapbox-gl';
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
+import { LoaderService } from '../../services/loader.service';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
-import { LoadingController } from '@ionic/angular';
+
 
 
 declare var jQuery: any;
@@ -73,14 +74,13 @@ export class PlacesPage implements OnInit {
 
     mapa: Mapboxgl.Map;
     par: string;
-    isLoading = false;
 
     constructor(
         private database: DatabaseService,
         private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        public loadingController: LoadingController
+        public loader: LoaderService
 
     ) {}
 
@@ -215,13 +215,12 @@ export class PlacesPage implements OnInit {
     });
 
     ngOnInit() {
-        this.present();
+        this.loader.show('Cargando lugar...');
         this.user;
         this.subscription;
         this.su;
-        this.dismiss();
-    }
-
+        this.loader.hide();
+}
     ngOnDestroy() {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
@@ -257,23 +256,4 @@ export class PlacesPage implements OnInit {
     async deleteFav() {
         this.database.removeFavourite(this.users, this.key);
     }
-
-     async present() {
-    this.isLoading = true;
-    return await this.loadingController.create({
-        message: 'Por favor espere...'
-      // duration: 5000,
-    }).then(a => {
-      a.present().then(() => {
-        if (!this.isLoading) {
-          a.dismiss().then();
-        }
-      });
-    });
-  }
-
-  async dismiss() {
-    this.isLoading = false;
-    return await this.loadingController.dismiss().then();
-  }
 }

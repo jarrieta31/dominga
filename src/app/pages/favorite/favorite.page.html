@@ -7,7 +7,13 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder=""></ion-searchbar>
+    <ion-searchbar placeholder="Buscar"></ion-searchbar>
+    <div class="sinFavoritos" *ngIf="favourite?.length == 0">
+        <ion-icon class="iconSinFav" name="sad-outline"></ion-icon>
+        <div>
+            Aún no ha agregado favoritos
+        </div>
+    </div>
     <ion-card *ngFor="let item of favourite">
         <ion-card-header color="circuits">
             {{ item.nombre }}
@@ -15,7 +21,6 @@
         <ion-card-content>
             <img width="auto" height="40%" src="{{ item.imagen }}" alt="{{ item.nombre }}">
             <div class="duracion">
-                
                 <div class="estrellas">
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>

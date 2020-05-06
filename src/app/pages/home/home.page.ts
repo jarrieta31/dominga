@@ -10,7 +10,7 @@ import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { LoadingController } from '@ionic/angular';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
     selector: 'app-home',
@@ -40,15 +40,13 @@ export class HomePage implements OnInit {
         direction: 'vertical'
     };
 
-    isLoading = false;
-
     constructor(
         private database: DatabaseService,
         private authService: AuthService,
         private router: Router,
         private geolocationService:GeolocationService,
         private screenOrientation: ScreenOrientation,
-        public loadingController: LoadingController
+        public loader: LoaderService
     ) {
         this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
@@ -82,10 +80,10 @@ export class HomePage implements OnInit {
     });
 
     ngOnInit() {
-        this.present();
+        this.loader.show('Por favor espere...');
         this.geolocationService.checkGPSPermission()
-        this.su; 
-        this.dismiss();
+        this.su;
+        this.loader.hide();
         this.posicion$ = this.geolocationService.getPosicionActual$();
         this.posicion$.subscribe(posicion => {
             // alert(posicion);
@@ -115,24 +113,4 @@ export class HomePage implements OnInit {
         this.su.unsubscribe();
         this.authService.signOut();
     }
-
-
- async present() {
-    this.isLoading = true;
-    return await this.loadingController.create({
-        message: 'Por favor espere...'
-      // duration: 5000,
-    }).then(a => {
-      a.present().then(() => {
-        if (!this.isLoading) {
-          a.dismiss().then();
-        }
-      });
-    });
-  }
-
-  async dismiss() {
-    this.isLoading = false;
-    return await this.loadingController.dismiss().then();
-  }
 }
