@@ -9,7 +9,7 @@ import { timer, Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
-import { tap, map, share} from 'rxjs/operators';
+import { tap, map, share, takeWhile} from 'rxjs/operators';
 
 
 @Injectable({
@@ -26,17 +26,13 @@ export class GeolocationService {
   isWatching:boolean;
   distancia:number;
   distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  posicionActual$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
+  posicionSource$: Observable<Point>;
   posicion: Point = {longitud: 0, latitud:0};
   latCenter:number = 0;
   longCenter:number = 0;
-  locationCoords: any;
+  
   timetest: any;
-  sourceClock: Observable<any> = timer(500, 36000).pipe(
-    tap((clock) => {      
-      console.log("clock: ", clock)      
-    }),share()
-  )
+  sourceClock$: Observable<any>;
   sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
   gps: boolean = false;
@@ -44,9 +40,23 @@ export class GeolocationService {
   constructor(private androidPermissions: AndroidPermissions, private platform: Platform,
               private geolocation: Geolocation, private locationAccuracy: LocationAccuracy) {
 
-    this.locationCoords = {latitude: "",longitude: "", accuracy: "", timestamp: "" };
-    this.timetest = Date.now();
-    
+    this.sourceClock$ = timer(5000, 36000).pipe(
+      takeWhile(val => this.gps = true),     
+      share()
+    )
+
+    //Subcribe a posicion al sourceClock
+    this.sourceClock$.subscribe(this.posicionSource$)
+
+    this.posicionSource$.
+  }
+
+  actualizarMarcador(){
+    if(this.myPositionMarker == null){
+      this.createMarker()
+    }          
+    this.myPositionMarker.remove();        
+    this.myPositionMarker.setLngLat([ this.posicion.longitud, this.posicion.latitud]).addTo(this.mapa);
   }
 
 
@@ -68,13 +78,7 @@ export class GeolocationService {
       center: [centro.longitud, centro.latitud],
       zoom: zoom
     });
-    //Si es un dispositivo movil y es android se agregan el marcador del usuario
-    if(this.platform.is('android') && this.platform.is('mobile')){
-      //Chequea los permisos y agrega el marcador del usuario
-      this.checkGPSPermission()
-    }
-    
-    
+        
   }
 
   createMarker(){         
@@ -90,8 +94,7 @@ export class GeolocationService {
       this.myPositionMarker = new Mapboxgl.Marker(el, {draggable: false})
         .setLngLat([this.posicion.longitud , this.posicion.latitud ])
         .addTo(this.mapa);
-      //Agrega la posición del usuario a la lista de puntos
-           
+      //Agrega la posición del usuario a la lista de puntos           
       this.points.push(this.posicion as Point);
       //Recalcula los puntos extremos
       let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
@@ -116,6 +119,7 @@ export class GeolocationService {
         } else { 
           //Si no tiene permiso pida permiso
           this.requestGPSPermission();
+          this.gps = false;
         }
       },
       err => {
@@ -139,6 +143,7 @@ export class GeolocationService {
             },
             error => {
               //Mostrar alerta si el usuario hace clic en "No, gracias"
+              this.gps = false;
               alert('requestPermission. Error al solicitar permisos de ubicación ' + error)
             }
           );
@@ -151,50 +156,29 @@ export class GeolocationService {
       () => {
         // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas     
         this.gps = true
-        this.invento()
       },
-      error => alert('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
+      error => {
+        this.gps = false
+        alert('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
+      }
     );
   }
 
   // Métodos para obtener coordenadas precisas del dispositivo utilizando el dispositivo GPS
-  // getLocationCoordinates() {
-  //   this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((resp) => {
-  //     this.locationCoords.latitude = resp.coords.latitude;
-  //     this.locationCoords.longitude = resp.coords.longitude;
-  //     this.locationCoords.accuracy = resp.coords.accuracy;
-  //     this.locationCoords.timestamp = resp.timestamp;
-  //     console.log('longitud: ' + this.locationCoords.longitude + 'latitud: ' + this.locationCoords.latitude)
-  //   }).catch((error) => {
-  //     alert('Error al obtener la ubicación' + error);
-  //   });
-  // }
-
-  invento(){
-    this.isWatching = true;
-    if(this.gps){
-      //Subjet que se subscribe al reloj y obtiene la posicion actual cambiando la posición del marcador
-      this.sourceGpsSubject$.subscribe(clock => {
-        this.geolocation.getCurrentPosition({ maximumAge: 0, timeout: 10000, enableHighAccuracy: true }).then(res =>{
-          let point: Point = {longitud: res.coords.longitude, latitud: res.coords.latitude};
-          this.actualizarPosicion$(point);
-          if(this.myPositionMarker == null){
-            this.createMarker()
-          }          
-          this.myPositionMarker.remove();        
-          this.myPositionMarker.setLngLat([ res.coords.longitude, res.coords.latitude]).addTo(this.mapa);
-          console.log('longitud: ' + res.coords.longitude + ', latitud: ' + res.coords.longitude ); 
-          return point             
-        }).catch( e => console.log('error = ',e))
-      })
-    }
-    //El subjet se subscribe al observable que genera los puntos
-    this.sourceClock.subscribe(this.sourceGpsSubject$)
-    //se desubscribe a los 120 minutos, luego corta la subscripsion
-    timer(1000 * 60 * 120).subscribe(() => this.sourceGpsSubject$.unsubscribe())
-
+  getLocationCoordinates(): Point {
+    var point: Point;
+    this.geolocation.getCurrentPosition({maximumAge: 0, timeout: 5000, enableHighAccuracy: true }).then((resp) => {
+      this.posicion.longitud = resp.coords.longitude;
+      this.posicion.latitud = resp.coords.latitude;
+      point = {longitud: resp.coords.longitude, latitud: resp.coords.latitude};      
+    }).catch((error) => {
+      this.gps = false
+      alert('Error al obtener la ubicación' + error);
+    });
+    return point
   }
 
+  
   // Recibe 2 Puntos y obtiene el centro retornando un Point
   getCenterPoints(Points: TwoPoints): Point {    
     let center : Point = {latitud:0, longitud:0}
@@ -273,12 +257,12 @@ export class GeolocationService {
   }
 
   getPosicionActual$(): Observable<Point> {
-    return this.posicionActual$.asObservable()
+    return this.posicionSource$.asObservable();
   }
 
   actualizarPosicion$(point: Point) {
     this.posicion = point;
-    this.posicionActual$.next(this.posicion);
+    this.posicionSource$.next(this.posicion);
   }
 
   

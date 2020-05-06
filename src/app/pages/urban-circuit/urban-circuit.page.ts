@@ -215,7 +215,7 @@ export class UrbanCircuitPage implements OnInit {
 
     ngOnInit() {
         this.su;
-        this.geolocationService.checkGPSPermission()
+        
     }
 
     ngOnDestroy() {

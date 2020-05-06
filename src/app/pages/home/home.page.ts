@@ -10,6 +10,8 @@ import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { Platform } from '@ionic/angular';
+import { platformBrowser } from '@angular/platform-browser';
 
 
 @Component({
@@ -45,9 +47,12 @@ export class HomePage implements OnInit {
         private authService: AuthService,
         private router: Router,
         private geolocationService:GeolocationService,
-        private screenOrientation: ScreenOrientation
+        private screenOrientation: ScreenOrientation,
+        private platform:Platform
     ) {
-        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+        if(this.platform.is('android')){
+            this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+        }       
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => { 
@@ -78,7 +83,9 @@ export class HomePage implements OnInit {
     });
 
     ngOnInit() {
-        this.geolocationService.checkGPSPermission()
+        if(this.platform.is('android')){
+            this.geolocationService.checkGPSPermission()
+        }
         this.su; 
         this.posicion$ = this.geolocationService.getPosicionActual$();
         this.posicion$.subscribe(posicion => {
@@ -95,8 +102,7 @@ export class HomePage implements OnInit {
                         dist = dist*1000 ;
                         distFormat = parseFloat(dist).toFixed(0); 
                         place.distancia = "Estás a "+ distFormat + " mts"
-                    }              
-                    
+                    }                   
                 })
                 // Actualiza el observable de lugares con toda la información
                 this.items$.next(this.items);
