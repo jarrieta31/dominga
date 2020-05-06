@@ -26,7 +26,7 @@ export class GeolocationService {
   isWatching:boolean;
   distancia:number;
   distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  posicionSource$: Observable<Point>;
+  private posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = {longitud: 0, latitud:0};
   latCenter:number = 0;
   longCenter:number = 0;
@@ -36,19 +36,27 @@ export class GeolocationService {
   sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
   gps: boolean = false;
+  observerClock:any;
   
   constructor(private androidPermissions: AndroidPermissions, private platform: Platform,
               private geolocation: Geolocation, private locationAccuracy: LocationAccuracy) {
 
-    this.sourceClock$ = timer(5000, 36000).pipe(
-      takeWhile(val => this.gps = true),     
-      share()
+    //Observable que obtiene los pulsos y obtiene la posicion
+    this.sourceClock$ = timer(5000, 36000).pipe( 
+      tap(clock => {
+        this.geolocation.getCurrentPosition({maximumAge: 0, timeout: 5000, enableHighAccuracy: true }).then((resp) => {
+          this.actualizarPosicion$({longitud: resp.coords.longitude, latitud: resp.coords.latitude})     
+        }).catch((error) => {
+          this.gps = false
+          alert('Error al obtener la ubicación' + error);
+        });
+      }),       
+      share()  
     )
 
-    //Subcribe a posicion al sourceClock
-    this.sourceClock$.subscribe(this.posicionSource$)
-
-    this.posicionSource$.
+    //Inicia el clock que genera los pulsos y obtiene la posicion
+    this.observerClock = this.sourceClock$.subscribe();   
+   
   }
 
   actualizarMarcador(){
@@ -257,12 +265,12 @@ export class GeolocationService {
   }
 
   getPosicionActual$(): Observable<Point> {
-    return this.posicionSource$.asObservable();
+    return this.posicion$.asObservable();
   }
 
   actualizarPosicion$(point: Point) {
     this.posicion = point;
-    this.posicionSource$.next(this.posicion);
+    this.posicion$.next(this.posicion);
   }
 
   

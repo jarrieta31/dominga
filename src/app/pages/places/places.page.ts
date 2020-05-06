@@ -19,6 +19,7 @@ import { GeolocationService } from '../../services/geolocation.service';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
+import { Platform } from '@ionic/angular';
 
 declare var jQuery: any;
 declare var $: any;
@@ -36,10 +37,10 @@ export class PlacesPage implements OnInit {
     sug: Place[] = [];
     sug_2: Place[] = [];
 
-    distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
+    private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
     obsDistancia$ = this.distancia$.asObservable();
     posicion$: Observable<Point>;
-
+    subscripcionPosition:any;
 
     distancia_cd: string;
     users: string;
@@ -76,13 +77,10 @@ export class PlacesPage implements OnInit {
         private database: DatabaseService,
         private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
-<<<<<<< Updated upstream
         private geolocationService:GeolocationService,
-        private router: Router
-=======
         private router: Router,
-        private geolocationService:GeolocationService
->>>>>>> Stashed changes
+        private platform:Platform
+
     ) {}
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
@@ -192,16 +190,11 @@ export class PlacesPage implements OnInit {
                     this.distancia_cd = "Desde C. Dominga "+ red_cd + " mts"
                 }         
             }
-<<<<<<< Updated upstream
+
             //Emite el valor de la distancias desde casa dominga por si no está activo el GPS
             this.distancia$.next(this.distancia_cd)
             
-=======
 
-            //this.distancia$.next(this.distancia_cd)
-            //Se subscribe a geolocationservice para obtener la posicion
-            this.posicion$ = this.geolocationService.getPosicionActual$();
->>>>>>> Stashed changes
 
             
         })
@@ -219,8 +212,29 @@ export class PlacesPage implements OnInit {
         this.user;
         this.subscription;
         this.su;
-        this.posicion$ = this.geolocationService.getPosicionActual$();
-        //this.actualizarDistancias()
+
+        if (this.platform.is('android')){
+
+            this.posicion$ = this.geolocationService.getPosicionActual$();
+    
+           this.subscripcionPosition = this.posicion$.subscribe(posicion => {
+                if(posicion != null){
+                    let options = { units: 'kilometers' }; 
+                    let dist = distance([this.longitud, this.latitud], [posicion.longitud , posicion.latitud], options);
+                    let distFormat, distancia;
+                    if(dist > 1){
+                        distFormat = parseFloat(dist).toFixed(3);
+                        distancia = "Estás a "+ distFormat + " Km";
+                    }else{
+                        dist = dist*1000 ;
+                        distFormat = parseFloat(dist).toFixed(0); 
+                        distancia = "Estás a "+ distFormat + " mts"
+                    }                   
+                    // Actualiza el observable de lugares con toda la información
+                    this.distancia$.next(distancia);
+                }
+            });
+        }
     }
 
     ngOnDestroy() {
@@ -228,7 +242,7 @@ export class PlacesPage implements OnInit {
         this.subscription.unsubscribe();
         this.su.unsubscribe();
         this.distancia$.unsubscribe()
-        
+        this.subscripcionPosition.unsubscribe();
     }
 
     async cambiarImagen() {
@@ -262,22 +276,6 @@ export class PlacesPage implements OnInit {
     }
 
     actualizarDistancias(){
-        this.posicion$.subscribe(posicion => {
-            if(posicion != null){
-                let options = { units: 'kilometers' }; 
-                let dist = distance([this.longitud, this.latitud], [posicion.longitud , posicion.latitud], options);
-                let distFormat, distancia;
-                if(dist > 1){
-                    distFormat = parseFloat(dist).toFixed(3);
-                    distancia = "Estás a "+ distFormat + " Km";
-                }else{
-                    dist = dist*1000 ;
-                    distFormat = parseFloat(dist).toFixed(0); 
-                    distancia = "Estás a "+ distFormat + " mts"
-                }                   
-                // Actualiza el observable de lugares con toda la información
-                this.distancia$.next(distancia);
-            }
-        });
+        
     }
 }

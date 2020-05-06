@@ -25,8 +25,9 @@ export class HomePage implements OnInit {
     items$: BehaviorSubject<Place[]> = new BehaviorSubject<Place[]>([]);
     obsItems$ = this.items$.asObservable();
     posicion$: Observable<Point>;
-    casaDominga =  {"longitud": "-56.7145", "latitud": "-34.340007"};
-    
+    casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
+    subscripcionPosition:any;
+
     slideOpts = {
         initialSlide: 0,
         speed: 400,
@@ -46,69 +47,78 @@ export class HomePage implements OnInit {
         private database: DatabaseService,
         private authService: AuthService,
         private router: Router,
-        private geolocationService:GeolocationService,
+        private geolocationService: GeolocationService,
         private screenOrientation: ScreenOrientation,
-        private platform:Platform
+        private platform: Platform
     ) {
-        if(this.platform.is('android')){
-            this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-        }       
+
     }
 
-    su = this.database.getPlaces().snapshotChanges().subscribe(data => { 
-      this.items = [];
-      data.forEach(item => {
-        let a = item.payload.toJSON(); 
-        a['$key'] = item.key;
-        this.items.push(a as Place);
-      })
-      // Agrega las distancias al array de lugares
-      this.items.forEach(place =>{       
-        let options = { units: 'kilometers' }; 
-        let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud ,this.casaDominga.latitud], options);
-        let distFormat;
-        if(dist > 1){
-            distFormat = parseFloat(dist).toFixed(3);
-            place.distancia = "Desde C. Dominga "+ distFormat + " Km";
-        }else{
-            dist = dist*1000 ;
-            distFormat = parseFloat(dist).toFixed(0); 
-            place.distancia = "Desde C. Dominga "+ distFormat + " mts"
-        }              
-      })
-      // Actualiza el observable de lugares con toda la información
-      this.items$.next(this.items);
+    su = this.database.getPlaces().snapshotChanges().subscribe(data => {
+        this.items = [];
+        data.forEach(item => {
+            let a = item.payload.toJSON();
+            a['$key'] = item.key;
+            this.items.push(a as Place);
+        })
+        // Agrega las distancias calculadas desde casa dominga al array de lugares
+        this.items.forEach(place => {
+            let options = { units: 'kilometers' };
+            let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud, this.casaDominga.latitud], options);
+            let distFormat;
+            if (dist > 1) {
+                distFormat = parseFloat(dist).toFixed(3);
+                place.distancia = "Desde C. Dominga " + distFormat + " Km";
+            } else {
+                dist = dist * 1000;
+                distFormat = parseFloat(dist).toFixed(0);
+                place.distancia = "Desde C. Dominga " + distFormat + " mts"
+            }
+        })
+        // Actualiza el observable de lugares con toda la información
+        this.items$.next(this.items);
 
-      //this.actualizarDistancias()
+        //this.actualizarDistancias()
     });
 
     ngOnInit() {
-        if(this.platform.is('android')){
+        if (this.platform.is('android')) {
             this.geolocationService.checkGPSPermission()
         }
-        this.su; 
-        this.posicion$ = this.geolocationService.getPosicionActual$();
-        this.posicion$.subscribe(posicion => {
-            if(posicion != null){
-                this.items.forEach(place =>{  
-                    console.log('posicion actual',posicion.latitud)     
-                    let options = { units: 'kilometers' }; 
-                    let dist = distance([place.longitud, place.latitud], [posicion.longitud , posicion.latitud], options);
-                    let distFormat;
-                    if(dist > 1){
-                        distFormat = parseFloat(dist).toFixed(3);
-                        place.distancia = "Estás a "+ distFormat + " Km";
-                    }else{
-                        dist = dist*1000 ;
-                        distFormat = parseFloat(dist).toFixed(0); 
-                        place.distancia = "Estás a "+ distFormat + " mts"
-                    }                   
-                })
-                // Actualiza el observable de lugares con toda la información
-                this.items$.next(this.items);
-            }
-        });
-        
+        this.su;
+
+        if (this.platform.is('android') ) {
+            this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+            this.subscripcionPosition = this.posicion$ = this.geolocationService.getPosicionActual$();
+            this.subscripcionPosition = this.posicion$.subscribe(posicion => {
+                if (posicion != null) {
+                    this.items.forEach(place => {
+                        console.log('posicion actual', posicion.latitud)
+                        let options = { units: 'kilometers' };
+                        let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+                        let distFormat;
+                        if (dist > 1) {
+                            distFormat = parseFloat(dist).toFixed(3);
+                            place.distancia = "Estás a " + distFormat + " Km";
+                        } else {
+                            dist = dist * 1000;
+                            distFormat = parseFloat(dist).toFixed(0);
+                            place.distancia = "Estás a " + distFormat + " mts"
+                        }
+                    })
+                    // Actualiza el observable de lugares con toda la información
+                    this.items$.next(this.items);
+                }
+            });
+        }
+
+
+    }
+
+    ngOnDestroy(): void {
+        //Called once, before the instance is destroyed.
+        //Add 'implements OnDestroy' to the class.
+        this.subscripcionPosition.unsubscribe();
     }
 
     cerrarSesion() {
@@ -116,7 +126,7 @@ export class HomePage implements OnInit {
         this.authService.signOut();
     }
 
-    
-    
+
+
 
 }
