@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../shared/user.class';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
-// import { AngularFireAuth } from '@angular/fire/auth';
+import { Platform } from '@ionic/angular';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 
 @Component({
@@ -15,58 +16,74 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
+  backButtonSubscription: any;
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-  isLoading = false;  
+  isLoading = false;
 
   // Creo el formulario con las validaciones
-  loginForm: FormGroup = new FormGroup ({
-      email: new FormControl('',Validators.compose([ 
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(50),
-        Validators.pattern(this.emailPattern)
-      ])),
-      password: new FormControl('',Validators.compose([
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(25)
-      ]))
+  loginForm: FormGroup = new FormGroup({
+    email: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(50),
+      Validators.pattern(this.emailPattern)
+    ])),
+    password: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(25)
+    ]))
   })
-  
-  constructor( 
+
+  constructor(
     public authService: AuthService,
     private router: Router,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    //public afAuth: AngularFireAuth
-    ) {}
+    private screenOrientation: ScreenOrientation,
+    private platform: Platform,
+    private alertController: AlertController
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.platform.is('android')) {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.backButtonSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.platform.backButton.subscribe();
+    this.backButtonSubscription = this.platform.backButton.subscribe(() => {
+      this.cerrarAppAlertConfirm()
+    });
+  }
 
   onResetForm() {
     this.loginForm.reset;
   }
 
   onSubmit() {
-    if(this.loginForm.valid){
+    if (this.loginForm.valid) {
       this.email = this.loginForm.get('email').value;
       this.password = this.loginForm.get('password').value;
       this.onLogin();
-      this.loginForm.reset;      
+      this.loginForm.reset;
       console.log("Form Login corrento:", this.loginForm.value.email);
-    }else{
+    } else {
       console.log("Formulario no valido");
     }
   }
 
   //Funcion que llama al método onLogin del servicio
-  async onLogin(){
+  async onLogin() {
     const user = await this.authService.signInWithEmail(this.email, this.password);
-    if(user){
-      console.log('Login correcto!!');
-      //this.savePassword(this.email, this.password);
+    if (user) {
       this.router.navigateByUrl('/home');
     }
   }
@@ -82,8 +99,8 @@ export class LoginPage implements OnInit {
   }
 
   async resetPasswordAlertPrompt() {
-    if(this.loginForm.get('email').value != ""){
-      this.email= this.loginForm.get('email').value;
+    if (this.loginForm.get('email').value != "") {
+      this.email = this.loginForm.get('email').value;
     }
     const input = await this.alertCtrl.create({
       header: 'Restablecer Contraseña',
@@ -116,14 +133,14 @@ export class LoginPage implements OnInit {
     });
     await input.present();
   }
-  
+
   loadingResetPassword() {
     this.isLoading = true;
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'Enviando solicitud...' })
       .then(loadingEl => {
-        loadingEl.present();      
-        let resetPassObs = of(this.authService.resetPassword(this.email));        
+        loadingEl.present();
+        let resetPassObs = of(this.authService.resetPassword(this.email));
         resetPassObs.subscribe(
           resData => {
             console.log(resData);
@@ -136,7 +153,7 @@ export class LoginPage implements OnInit {
             let message = '¡No se pudo enviar el reset!';
             if (code === 'EMAIL_NOT_FOUND') {
               message = 'No hay registro de usuario correspondiente a este email. El usuario puede haber sido eliminado.';
-            }else if( code === 'auth/user-not-found'){
+            } else if (code === 'auth/user-not-found') {
               message = 'mensaje user not found'
             }
             let title = 'Reset de contraseña fallida';
@@ -171,7 +188,7 @@ export class LoginPage implements OnInit {
   //   await alertSavePassword.present();
   // }
 
-  loginGoogle(){
+  loginGoogle() {
     this.authService.authWithGoogle();
   }
 
@@ -186,5 +203,29 @@ export class LoginPage implements OnInit {
   //  onLoginRedirect(): void {
   //   this.router.navigate(['/home']);
   // }
+
+  async cerrarAppAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Salir!',
+      message: '<strong>¿Seguro que quiere salir?</strong>!!!',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Cerrar',
+          handler: () => {
+            console.log('Confirm Okay');
+            navigator['app'].exitApp();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 }
