@@ -30,7 +30,7 @@ export class GeolocationService {
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
   longCenter: number = 0;
-
+  casaDominga = { "longitud": -56.7145, "latitud": -34.340007 };
   timetest: any;
   sourceClock$: Observable<any>;
   sourceGpsSubject$ = new BehaviorSubject(null);
@@ -51,7 +51,10 @@ export class GeolocationService {
           this.actualizarPosicion$({ longitud: resp.coords.longitude, latitud: resp.coords.latitude });
           this.actualizarMarcador()
         }).catch((error) => {
-          this.gps = false
+          this.posicion = this.casaDominga;
+          this.actualizarPosicion$(this.casaDominga);
+          if(this.myPositionMarker != null) this.myPositionMarker.remove();
+          this.gps = false;
           alert('Error al obtener la ubicación' + error);
         });
       }),
