@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { PipesModule } from './shared/pipes/pipes.module';
 
 // Imports para cliente http
 import { HttpClientModule } from '@angular/common/http';
@@ -61,6 +62,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
+    PipesModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,

@@ -80,10 +80,10 @@ export class HomePage implements OnInit {
     });
 
     ngOnInit() {
-        this.loader.show('Por favor espere...');
+        //this.loader.show('Por favor espere...');
         this.geolocationService.checkGPSPermission()
         this.su;
-        this.loader.hide();
+        //this.loader.hide();
         this.posicion$ = this.geolocationService.getPosicionActual$();
         this.posicion$.subscribe(posicion => {
             // alert(posicion);

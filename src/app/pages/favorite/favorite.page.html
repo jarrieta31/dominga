@@ -7,14 +7,14 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder="Buscar"></ion-searchbar>
+    <ion-searchbar placeholder="Buscar" (ionChange)="buscar($event)"></ion-searchbar>
     <div class="sinFavoritos" *ngIf="favourite?.length == 0">
         <ion-icon class="iconSinFav" name="sad-outline"></ion-icon>
         <div>
             Aún no ha agregado favoritos
         </div>
     </div>
-    <ion-card *ngFor="let item of favourite">
+    <ion-card *ngFor="let item of favourite | filtro: textoBuscar: 'nombre'">
         <ion-card-header color="circuits">
             {{ item.nombre }}
         </ion-card-header>

@@ -13,6 +13,7 @@ import { Favourite } from '../../shared/favourite';
 export class FavoritePage implements OnInit {
 
   favourite: Favourite[];
+  textoBuscar = '';
 
   users: string;
 
@@ -46,5 +47,9 @@ export class FavoritePage implements OnInit {
                 })
                 //console.log(this.favourite);
             });
+  }
+
+  buscar(event){
+    this.textoBuscar = event.detail.value;
   }
 }
