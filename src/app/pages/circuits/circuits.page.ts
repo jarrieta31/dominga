@@ -12,6 +12,7 @@ import { TipoCircuito } from '../../shared/tipo-circuito';
 export class CircuitsPage implements OnInit {
 
     tipoCircuito: TipoCircuito[];
+    textoBuscar = '';
 
     constructor(public database: DatabaseService) {}
 
@@ -32,4 +33,8 @@ export class CircuitsPage implements OnInit {
     ngOnDestroy(){
         this.su.unsubscribe();
     }
+
+    buscar(event){
+        this.textoBuscar = event.detail.value;
+  }
 }

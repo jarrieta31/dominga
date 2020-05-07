@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PipesModule } from '../../shared/pipes/pipes.module';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,6 +14,7 @@ import { WhereSleepPage } from './where-sleep.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     WhereSleepPageRoutingModule
   ],
   declarations: [WhereSleepPage]

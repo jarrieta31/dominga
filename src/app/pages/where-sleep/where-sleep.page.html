@@ -8,9 +8,9 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-	<ion-searchbar placeholder=""></ion-searchbar>
+	<ion-searchbar placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of sleep">
+        <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar slot="start">

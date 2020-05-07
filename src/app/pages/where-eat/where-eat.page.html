@@ -8,9 +8,9 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-	<ion-searchbar placeholder=""></ion-searchbar>
+	<ion-searchbar placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of eat">
+        <ion-item *ngFor="let item of eat | filtroDondeComer:textoBuscar">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar slot="start">
@@ -21,8 +21,8 @@
                     <ion-label>
                         <h2>{{ item.nombre }}</h2>
                         <div class="infoAbajo">
-                            <h3></h3>
-                            <p><span>Tel: </span></p>
+                            <h3>{{ item.direccion }}</h3>
+                            <p><span>Tel: </span>{{ item.telefono }}</p>
                         </div>
                     </ion-label>
                 </div>

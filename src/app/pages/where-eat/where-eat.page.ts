@@ -12,6 +12,7 @@ import { DatabaseService } from '../../services/database.service';
 export class WhereEatPage implements OnInit {
 
 	eat: DondeComer[];
+  textoBuscar = '';
 
   constructor(private database: DatabaseService) { }
 
@@ -32,4 +33,7 @@ export class WhereEatPage implements OnInit {
     this.su.unsubscribe();
   }
 
+  buscar(event){
+    this.textoBuscar = event.detail.value;
+  }
 }

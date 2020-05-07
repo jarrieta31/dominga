@@ -7,8 +7,8 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder="¡Elegí tu itinerario!"></ion-searchbar>
-    <ion-card *ngFor="let item of tipoCircuito" routerLink="/{{item.nombre}}">
+    <ion-searchbar placeholder="¡Elegí tu itinerario!" (ionChange)="buscar($event)"></ion-searchbar>
+    <ion-card *ngFor="let item of tipoCircuito | filtroTipoCircuito:textoBuscar" routerLink="/{{item.nombre}}">
         <ion-card-header color="circuits">
             {{ item.nombre }}
         </ion-card-header>

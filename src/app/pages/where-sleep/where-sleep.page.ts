@@ -12,6 +12,7 @@ import { DondeDormir } from '../../shared/donde-dormir';
 export class WhereSleepPage implements OnInit {
 
     sleep: DondeDormir[];
+    textoBuscar = '';
 
     constructor(private database: DatabaseService) {}
 
@@ -30,6 +31,10 @@ export class WhereSleepPage implements OnInit {
 
     ngOnDestroy(){
         this.su.unsubscribe();
+    }
+
+    buscar( event ){
+        this.textoBuscar = event.detail.value;
     }
 
 }
