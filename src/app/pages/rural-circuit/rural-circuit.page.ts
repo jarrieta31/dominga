@@ -24,7 +24,6 @@ export class RuralCircuitPage implements OnInit {
     point: Point;
     
     distancia: any;
-    posicion: Point = {longitud: 0, latitud:0};
     posicion$: Observable<Point>;
 
     //mapa: Mapboxgl.Map;
@@ -54,9 +53,6 @@ export class RuralCircuitPage implements OnInit {
                     }
                 })
 
-
-                //console.log(PromLat, PromLon);
-                //this.geolocationService.points = this.items;
                 this.geolocationService.crearMapa(this.points);
 
                 this.items.forEach(data => {
@@ -164,39 +160,22 @@ export class RuralCircuitPage implements OnInit {
                     });
                 });
                 
-
-
-                
-                //this.geolocationService.watchLocation()
-                //this.geolocationService.checkGPSPermission()
-                
                 
             })
 
     constructor(private database: DatabaseService,
                 private geolocationService: GeolocationService) {
-        //this.posicion = this.geolocationService.posicionActual.subscribe()
-        //this.geolocationService.checkGPSPermission()
+        
 
     }
 
     ngOnInit() {
         this.su;
-        this.geolocationService.checkGPSPermission()
-        this.posicion$ = this.geolocationService.getPosicionActual$()
-        //this.posicion$.subscribe(pos => this.posicion = pos);
         
-        //this.geolocationService.verificarPermiso();
     }
 
     ngOnDestroy(){
         this.su.unsubscribe();
-        if(this.geolocationService.isWatching){
-            this.geolocationService.isWatching = false;
-            //this.geolocationService.sourceGpsSubject$.unsubscribe(); 
-            this.geolocationService.myPositionMarker = null;
-            this.geolocationService.points = []
-            //this.geolocationService.stopLocationWatch()          
-        }
+        
     }
 }

@@ -11,7 +11,6 @@ import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Platform } from '@ionic/angular';
-import { platformBrowser } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,7 +25,7 @@ export class HomePage implements OnInit {
     obsItems$ = this.items$.asObservable();
     posicion$: Observable<Point>;
     casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
-    subscripcionPosition:any;
+    subscripcionPosition: any;
 
     slideOpts = {
         initialSlide: 0,
@@ -50,8 +49,8 @@ export class HomePage implements OnInit {
         private geolocationService: GeolocationService,
         private screenOrientation: ScreenOrientation,
         private platform: Platform
-    ) {
-
+    ) { 
+        
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
@@ -78,46 +77,44 @@ export class HomePage implements OnInit {
         // Actualiza el observable de lugares con toda la información
         this.items$.next(this.items);
 
-        //this.actualizarDistancias()
+   
     });
 
     ngOnInit() {
-        if (this.platform.is('android')) {
-            this.geolocationService.checkGPSPermission()
-        }
         this.su;
-
-        if (this.platform.is('android') ) {
+        if (this.platform.is('android')) {
             this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-            this.subscripcionPosition = this.posicion$ = this.geolocationService.getPosicionActual$();
-            this.subscripcionPosition = this.posicion$.subscribe(posicion => {
-                if (posicion != null) {
-                    this.items.forEach(place => {
-                        console.log('posicion actual', posicion.latitud)
-                        let options = { units: 'kilometers' };
-                        let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
-                        let distFormat;
-                        if (dist > 1) {
-                            distFormat = parseFloat(dist).toFixed(3);
-                            place.distancia = "Estás a " + distFormat + " Km";
-                        } else {
-                            dist = dist * 1000;
-                            distFormat = parseFloat(dist).toFixed(0);
-                            place.distancia = "Estás a " + distFormat + " mts"
-                        }
-                    })
-                    // Actualiza el observable de lugares con toda la información
-                    this.items$.next(this.items);
-                }
-            });
+            
+            // if (this.geolocationService.gps) {
+                this.posicion$ = this.geolocationService.getPosicionActual$();
+                this.subscripcionPosition = this.posicion$.subscribe(posicion => {
+                    if (posicion != null) {
+                       
+                        this.items.forEach(place => {
+                            console.log('posicion actual', posicion.latitud)
+                            let options = { units: 'kilometers' };
+                            let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+                            let distFormat;
+                            if (dist > 1) {
+                                distFormat = parseFloat(dist).toFixed(3);
+                                place.distancia = "Estás a " + distFormat + " Km";
+                            } else {
+                                dist = dist * 1000;
+                                distFormat = parseFloat(dist).toFixed(0);
+                                place.distancia = "Estás a " + distFormat + " mts"
+                            }
+                        })
+                        // Actualiza el observable de lugares con toda la información
+                        this.items$.next(this.items);
+                    }
+                });
+            //}
         }
 
 
     }
 
     ngOnDestroy(): void {
-        //Called once, before the instance is destroyed.
-        //Add 'implements OnDestroy' to the class.
         this.subscripcionPosition.unsubscribe();
     }
 
