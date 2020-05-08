@@ -1,6 +1,5 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        
         <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">
             Cerrar Sesión
         </ion-button>
@@ -50,7 +49,28 @@
         <div class="cards">
             <ion-slides scrollbar="false" pager="false" [options]="cards">
                 <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
-                    <ion-card>
+                    <div class="cpadre">
+                        <div class="chead">
+                            <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
+                            <div class="iconTitle">
+                                <ion-icon name="leaf-outline"></ion-icon>
+                            </div>
+                        </div>
+                        <div class="ccontent">
+                            <img class="foto" [src]="item.imagenPrincipal" [alt]="item.nombre" />
+                        </div>
+                        <div class="cfooter">
+                            <div class="distancia">{{item.distancia}}</div>
+                            <div class="valoracion">
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon class="estrella" name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <ion-card>
                         <ion-card-header color="options">
                             <ion-card-title class="cardTitle">
                                 <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span>
@@ -73,7 +93,7 @@
                                 </div>
                             </div>
                         </ion-card-content>
-                    </ion-card>
+                    </ion-card> -->
                 </ion-slide>
             </ion-slides>
         </div>

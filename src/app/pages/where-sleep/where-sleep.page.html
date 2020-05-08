@@ -8,7 +8,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-	<ion-searchbar placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+	<ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-list>
         <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
             <div class="padre">

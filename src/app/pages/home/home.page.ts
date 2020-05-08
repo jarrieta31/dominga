@@ -101,8 +101,6 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
                 this.items$.next(this.items);
             }
         });
-
-
     });
 
     ngOnInit() {
