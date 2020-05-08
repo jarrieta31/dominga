@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder="Buscar" (ionChange)="buscar($event)"></ion-searchbar>
+    <ion-searchbar cancelButtonText="Custom Cancel" placeholder="Buscar" (ionChange)="buscar($event)"></ion-searchbar>
     <div class="sinFavoritos" *ngIf="favourite?.length == 0">
         <ion-icon class="iconSinFav" name="sad-outline"></ion-icon>
         <div>
