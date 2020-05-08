@@ -54,7 +54,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         private platform: Platform,
         private alertController: AlertController
     ) {
-        this.posicion$ = this.geolocationService.getPosicionActual$();
+        this.geolocationService.iniciarClock();
+        this.posicion$ = this.geolocationService.getPosicionActual$();        
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
