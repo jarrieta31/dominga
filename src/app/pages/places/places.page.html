@@ -6,10 +6,10 @@
         <ion-title id="nombre">{{nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button *ngIf="fav?.length == 0" (click)=agregarFavorito()>
-                <ion-icon name="heart"></ion-icon>
+                <i id="fav" class="fas fa-heart"></i>
             </ion-button>
             <ion-button (click)=deleteFav()>
-                <ion-icon *ngIf="fav?.length != 0" name="heart-dislike-outline"></ion-icon>
+                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart-broken"></i>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -30,15 +30,15 @@
         <div class="divc">
             <div class="iconos">
                 <div class="iconAuto" *ngIf="auto == 1">
-                    <ion-icon name="car-outline"></ion-icon>
+                    <i class="fas fa-car"></i>
                 </div>
                 <div class="iconEstilos" *ngIf="bicicleta == 1">
-                    <ion-icon name="bicycle-outline"></ion-icon>
+                    <i class="fas fa-bicycle"></i>
                 </div>
                 <div class="iconEstilos" *ngIf="caminar == 1">
-                    <ion-icon name="walk-outline"></ion-icon>
+                    <i class="fas fa-running"></i>
                 </div>
-                 <div class="iconEstilos">
+                <div class="iconEstilos">
                     {{ obsDistancia$ | async }}
                 </div>
                 <div class="estrellas">

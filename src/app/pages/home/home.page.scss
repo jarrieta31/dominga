@@ -49,7 +49,7 @@ ion-label {
     margin-top: auto;
     margin-bottom: auto;
     padding-right: 5%;
-    font-size: 130%;
+    font-size: 110%;
     color: #fff;
 }
 
@@ -65,7 +65,7 @@ ion-label {
     margin-top: auto;
     margin-bottom: auto;
     padding-left: 5%;
-    font-size: 130%;
+    font-size: 110%;
     color: #fff;
     font-weight: bold;
 }
@@ -80,7 +80,7 @@ ion-label {
 }
 
 .menu {
-    margin: 1.5% 5% 4.5% 5%;
+    margin: 3% 7% 3% 7%;
     height: 10%;
     //border: 1px solid black;
 }
@@ -133,10 +133,10 @@ ion-card {
 }
 
 .cpadre {
-    height: 90%;
+    height: 98%;
     width: 100%;
-    margin-left: 8%;
-    margin-right: 8%;
+    margin-left: 10%;
+    margin-right: 10%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,7 +154,7 @@ ion-card {
 // }
 
 .chead {
-    height: 25%;
+    height: 20%;
     background-color: #10dda6;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -164,7 +164,7 @@ ion-card {
 }
 
 .ccontent {
-    height: 60%;
+    height: 65%;
 }
 
 .cfooter {

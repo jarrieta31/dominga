@@ -52,8 +52,11 @@
                     <div class="cpadre">
                         <div class="chead">
                             <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
-                            <div class="iconTitle">
-                                <ion-icon name="leaf-outline"></ion-icon>
+                            <div *ngIf="item.tipo == 'Rural'" class="iconTitle">
+                                <i class="fas fa-tractor"></i>
+                            </div>
+                            <div *ngIf="item.tipo == 'Urbano'" class="iconTitle">
+                                <i class="fas fa-city"></i>
                             </div>
                         </div>
                         <div class="ccontent">
