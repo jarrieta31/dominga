@@ -10,6 +10,8 @@ import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
 import { tap, map, share, takeWhile } from 'rxjs/operators';
+import { DatabaseService } from './database.service';
+import distance from '@turf/distance';
 
 
 @Injectable({
@@ -17,6 +19,10 @@ import { tap, map, share, takeWhile } from 'rxjs/operators';
 })
 
 export class GeolocationService {
+
+  items: Place[] = [];
+  sourceMatch$: Observable<any>
+  subscriptionMatch: any;
 
   mapa: Mapboxgl.Map;
   myPositionMarker: any = null;
@@ -26,7 +32,7 @@ export class GeolocationService {
   isWatching: boolean;
   distancia: number;
   distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
+  posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
   longCenter: number = 0;
@@ -36,10 +42,29 @@ export class GeolocationService {
   sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
   public gps: boolean = false;
-  observerClock: any;
+  subscriptionClock: any;
+
+  su = this.database.getPlaces().snapshotChanges().subscribe(data => {
+    this.items = [];
+    data.forEach(item => {
+      let a = item.payload.toJSON();
+      a['$key'] = item.key;
+      this.items.push(a as Place);
+    })
+
+    var largo = 0;
+
+    this.items.forEach(data => {
+      if (data.tipo == 'Urbano') {
+        largo = largo + 1;
+      }
+    })
+  })
+
 
   constructor(private androidPermissions: AndroidPermissions, private platform: Platform,
-    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy) {
+    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
+
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion
@@ -53,7 +78,7 @@ export class GeolocationService {
         }).catch((error) => {
           this.posicion = this.casaDominga;
           this.actualizarPosicion$(this.casaDominga);
-          if(this.myPositionMarker != null) this.myPositionMarker.remove();
+          if (this.myPositionMarker != null) this.myPositionMarker.remove();
           this.gps = false;
           alert('Error al obtener la ubicación' + error);
         });
@@ -61,9 +86,40 @@ export class GeolocationService {
       share()
     )
 
-    //Inicia el clock que genera los pulsos y obtiene la posicion
-    this.observerClock = this.sourceClock$.subscribe();
+    this.sourceMatch$ = timer(1000, 60000 * 2).pipe(
+      tap(clock => {
+        let posicion = this.posicion$.value;
+        let points: TwoPoints;
+        let dist: number;
+        let options = { units: 'meters' };
+        this.items.forEach(place => {
+          points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
+          dist = distance([place.longitud, place.latitud],[posicion.longitud, posicion.latitud], options);
+          if (dist <= 25) {
+            
+            alert("Estás cerca de " + place.nombre)
+          }
+        });
+      })
+      , share()
+    )
 
+  }
+
+  iniciarSubscriptionMatch() {
+    this.subscriptionMatch = this.sourceMatch$.subscribe();
+  }
+
+  pararSubscriptionMatch() {
+    this.subscriptionMatch.unsubscribe();
+  }
+
+  iniciarSubscriptionClock() {
+    this.subscriptionClock = this.sourceClock$.subscribe();
+  }
+
+  pararSubscriptionClock() {
+    this.subscriptionClock.unsubscribe()
   }
 
   actualizarMarcador() {
@@ -284,6 +340,5 @@ export class GeolocationService {
   }
 
 
+
 }
-
-

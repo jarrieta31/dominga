@@ -54,7 +54,9 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         private platform: Platform,
         private alertController: AlertController
     ) {
-        this.posicion$ = this.geolocationService.getPosicionActual$();
+        this.geolocationService.iniciarSubscriptionClock();
+        this.geolocationService.iniciarSubscriptionMatch();
+        this.posicion$ = this.geolocationService.getPosicionActual$();        
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
@@ -104,18 +106,21 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     });
 
     ngOnInit() {
-        this.su;        
+        this.su;    
     }
 
     ngOnDestroy(): void {
         this.subscripcionPosition.unsubscribe();
         this.backButtonSubscription.unsubscribe();
+        this.platform.backButton.unsubscribe()
     }
 
     ngAfterViewInit() {
         this.platform.backButton.subscribe();
         this.backButtonSubscription = this.platform.backButton.subscribe(() => {
-            this.cerrarAppAlertConfirm()
+            if(this.router.url.indexOf('/home') == 0 || this.router.url.indexOf('/login') == 0 ){
+                this.cerrarAppAlertConfirm()
+            }            
         });
     }
 

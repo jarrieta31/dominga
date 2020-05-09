@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-
+import { GeolocationService } from '../../services/geolocation.service';
 
 @Component({
   selector: 'app-login',
@@ -44,13 +44,20 @@ export class LoginPage implements OnInit {
     private alertCtrl: AlertController,
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private geolocationService: GeolocationService
   ) { }
 
   ngOnInit() {
     if (this.platform.is('android')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
+
+    if(this.geolocationService.posicion$.value != null){
+      this.geolocationService.pararSubscriptionMatch();
+      this.geolocationService.pararSubscriptionClock();
+    }
+    
   }
 
   ngOnDestroy(): void {
@@ -60,7 +67,10 @@ export class LoginPage implements OnInit {
   ngAfterViewInit() {
     this.platform.backButton.subscribe();
     this.backButtonSubscription = this.platform.backButton.subscribe(() => {
-      this.cerrarAppAlertConfirm()
+      let url = this.router.url
+      if(url === '/login' || url === '/home'){
+        this.cerrarAppAlertConfirm()
+      }     
     });
   }
 
