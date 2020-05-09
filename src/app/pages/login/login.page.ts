@@ -53,11 +53,11 @@ export class LoginPage implements OnInit {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
 
-    if(this.geolocationService.posicion$.value != null){
+    if (this.geolocationService.posicion$.value != null) {
       this.geolocationService.pararSubscriptionMatch();
       this.geolocationService.pararSubscriptionClock();
     }
-    
+
   }
 
   ngOnDestroy(): void {
@@ -67,10 +67,9 @@ export class LoginPage implements OnInit {
   ngAfterViewInit() {
     this.platform.backButton.subscribe();
     this.backButtonSubscription = this.platform.backButton.subscribe(() => {
-      let url = this.router.url
-      if(url === '/login' || url === '/home'){
+      if (this.router.url.indexOf('/home') == 0 || this.router.url.indexOf('/login') == 0) {
         this.cerrarAppAlertConfirm()
-      }     
+      }
     });
   }
 
