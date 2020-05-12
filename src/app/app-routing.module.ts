@@ -76,6 +76,11 @@ const routes: Routes = [
     path: 'Urbano',
     loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
   },
+  {
+    path: 'modal-rating',
+    loadChildren: () => import('./pages/modal-rating/modal-rating.module').then( m => m.ModalRatingPageModule)
+  },
+  
 
 
   

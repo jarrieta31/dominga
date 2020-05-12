@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Valorar Sitio</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content class="ion-padding">
+ 
+  <ion-grid>
+    
+    <ion-row>
+      <ion-col text-center>
+        <ion-title>¿Deseas valorar este lugar?</ion-title>
+        <ion-card>
+          <img src="{{ imagen }}" />
+          <ion-card-header>
+            <ion-card-subtitle>{{ tipo }}</ion-card-subtitle>
+            <ion-card-title>{{ nombre }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ descripcion }}
+          </ion-card-content>
+        </ion-card>
+        
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Valoración actual </ion-col>
+      <ion-col>
+        <ion-rating [rate]= 3
+        readonly= false
+        size="small" 
+        (rateChange)="onRateChange($event)">
+      </ion-rating>
+      </ion-col> 
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="closeModal()">Cancelar</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="valorarModal()">Valorar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+ 
+</ion-content>

@@ -12,6 +12,9 @@ import { Point } from '../shared/point';
 import { tap, map, share, takeWhile } from 'rxjs/operators';
 import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
+import { AuthService } from './auth.service';
+import { ModalController } from '@ionic/angular'
+import { Assessment } from '../shared/assessment';
 
 
 @Injectable({
@@ -22,8 +25,10 @@ export class GeolocationService {
 
   items: Place[] = [];
   sourceMatch$: Observable<any>
+  user: string
+  subscriptionUser: any;
   subscriptionMatch: any;
-
+  valuationsPlaces: Assessment[] = [];
   mapa: Mapboxgl.Map;
   myPositionMarker: any = null;
   points: Point[];
@@ -31,7 +36,7 @@ export class GeolocationService {
   watchLocationUpdates: any;
   isWatching: boolean;
   distancia: number;
-  distanciaActual$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
   posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
@@ -51,20 +56,24 @@ export class GeolocationService {
       a['$key'] = item.key;
       this.items.push(a as Place);
     })
-
-    var largo = 0;
-
-    this.items.forEach(data => {
-      if (data.tipo == 'Urbano') {
-        largo = largo + 1;
-      }
+    this.items.forEach(place => {
+      let respuestaValoracion: Assessment = {placeName: place.nombre, idUser: this.user, answer:false}
+      this.valuationsPlaces.push(respuestaValoracion)
+     // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
     })
   })
 
+  
 
-  constructor(private androidPermissions: AndroidPermissions, private platform: Platform,
-    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
 
+  constructor(private androidPermissions: AndroidPermissions, 
+    private platform: Platform, private authService: AuthService,
+    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, 
+    private modalController: ModalController, private database: DatabaseService) {
+
+      this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
+        this.user = authData.uid;    
+      });      
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion
@@ -80,13 +89,13 @@ export class GeolocationService {
           this.actualizarPosicion$(this.casaDominga);
           if (this.myPositionMarker != null) this.myPositionMarker.remove();
           this.gps = false;
-          alert('Error al obtener la ubicación' + error);
+          console.log('Error al obtener la ubicación' + error);
         });
       }),
       share()
     )
 
-    this.sourceMatch$ = timer(1000, 60000 * 2).pipe(
+    this.sourceMatch$ = timer(1000, 20000 ).pipe(
       tap(clock => {
         let posicion = this.posicion$.value;
         let points: TwoPoints;
@@ -94,16 +103,38 @@ export class GeolocationService {
         let options = { units: 'meters' };
         this.items.forEach(place => {
           points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
-          dist = distance([place.longitud, place.latitud],[posicion.longitud, posicion.latitud], options);
+          dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+          
+          //Verifica la distancia
           if (dist <= 25) {
-            
-            alert("Estás cerca de " + place.nombre)
+            //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
+            for (var key in place.valoracion) { 
+              //si el usuario no ha valorado
+              if(key != this.user){
+                //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
+
+                this.valuationsPlaces.forEach(assessment => {
+                  console.log(assessment.answer)
+                  if(assessment.placeName == place.nombre && assessment.idUser== this.user && assessment.answer == false){
+                    assessment.answer = true;
+                    this.lugarCercano$.next(place)
+                    console.log(assessment.answer)
+                  }
+  
+                }); 
+              }             
+            }
           }
         });
       })
       , share()
     )
 
+  }
+
+  //Retorna un observable con los datos para valorar un lugar
+  getLugarCercano(){
+    return this.lugarCercano$.asObservable();
   }
 
   iniciarSubscriptionMatch() {
@@ -214,7 +245,7 @@ export class GeolocationService {
         }
       },
       err => {
-        alert(err);
+        console.log("Error checkGPS: ", err);
       }
     );
   }
@@ -234,7 +265,7 @@ export class GeolocationService {
             },
             error => {
               //Mostrar alerta si el usuario hace clic en "No, gracias"
-              alert('requestPermission. Error al solicitar permisos de ubicación ' + error)
+              console.log('requestPermission. Error al solicitar permisos de ubicación ', error)
             }
           );
       }
@@ -248,7 +279,7 @@ export class GeolocationService {
         this.gps = true
       },
       error => {
-        alert('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
+        console.log('Error al solicitar permisos de ubicación ' + JSON.stringify(error))
       }
     );
   }

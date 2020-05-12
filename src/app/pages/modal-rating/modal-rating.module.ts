@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ModalInfoPageRoutingModule } from './modal-info-routing.module';
+import { ModalRatingPageRoutingModule } from './modal-rating-routing.module';
 
-import { ModalInfoPage } from './modal-info.page';
-// Import ionic-rating module
+import { ModalRatingPage } from './modal-rating.page';
 import { IonicRatingModule } from 'ionic-rating';
 
 @NgModule({
@@ -15,9 +14,9 @@ import { IonicRatingModule } from 'ionic-rating';
     CommonModule,
     FormsModule,
     IonicModule,
-    ModalInfoPageRoutingModule,
+    ModalRatingPageRoutingModule,
     IonicRatingModule
   ],
-  declarations: [ModalInfoPage]
+  declarations: [ModalRatingPage]
 })
-export class ModalInfoPageModule {}
+export class ModalRatingPageModule {}

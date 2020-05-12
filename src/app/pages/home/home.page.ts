@@ -10,10 +10,11 @@ import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, ModalController } from '@ionic/angular';
 import { LoaderService } from '../../services/loader.service';
-
 import { Platform } from '@ionic/angular';
+import { ModalRatingPage } from '../modal-rating/modal-rating.page';
+
 
 
 @Component({
@@ -30,7 +31,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
     subscripcionPosition: any;
     backButtonSubscription: any;
-
+    dataReturned: any;
     slideOpts = {
         initialSlide: 0,
         speed: 400,
@@ -46,13 +47,20 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         direction: 'vertical'
     };
 
+    lugarCercano$: Observable<Place>;
+    subscrictionLugarCercano: any;
+
+    subscrictionUser: any;
+    idUser: string;
+
     constructor(
         private database: DatabaseService,
         private authService: AuthService,
         private router: Router,
         private geolocationService: GeolocationService,
         private platform: Platform,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private modalController: ModalController
     ) {
         this.geolocationService.iniciarSubscriptionClock();
         this.geolocationService.iniciarSubscriptionMatch();
@@ -107,12 +115,24 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
         this.su;    
+        //obtiene el id del usuario actual
+        this.subscrictionUser = this.authService.currentUser.subscribe(authData => 
+            this.idUser = authData.uid
+        );
+        //obtiene 
+        this.lugarCercano$ = this.geolocationService.getLugarCercano();
+        this.subscrictionLugarCercano = this.lugarCercano$.subscribe(place => {
+            if(place){
+                this.openModal(place)
+            }            
+        });
     }
 
     ngOnDestroy(): void {
         this.subscripcionPosition.unsubscribe();
         this.backButtonSubscription.unsubscribe();
-        
+        this.subscrictionUser.unsubscribe();
+        this.subscrictionLugarCercano.unsubscribe();        
     }
 
     ngAfterViewInit() {
@@ -151,6 +171,27 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
             ]
         });
         await alert.present();
+    }
+
+    async openModal(place: Place) {
+        const modal = await this.modalController.create({
+          component: ModalRatingPage,
+          componentProps: {
+            "nombre": place.nombre,
+            "descripcion": place.descripcion,
+            "tipo": place.tipo,
+            "imagen": place.imagenPrincipal
+          }
+        });
+     
+        modal.onDidDismiss().then((dataReturned) => {
+          if (dataReturned !== null) {
+            this.dataReturned = dataReturned.data;
+            //alert('Modal Sent Data :'+ dataReturned);
+          }
+        });
+     
+        return await modal.present();
     }
 
 }

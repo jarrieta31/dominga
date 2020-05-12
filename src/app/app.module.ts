@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 import { AngularFireStorageModule } from '@angular/fire/storage';
 //Permisos
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -39,20 +40,7 @@ import { Platform } from '@ionic/angular';
 import { IonicRatingModule } from 'ionic-rating';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
-// import { AuthService } from './services/auth.service';
 
-// import { AngularFireAuth } from '@angular/fire/auth';
-
-
-// import { AngularFireModule } from '@angular/fire';
-
-// import { environment } from '../environments/environment';
-
-// import { AngularFirestore } from '@angular/fire/firestore';
-
-// import { AngularFireDatabaseModule } from '@angular/fire/database';
-
-//install firebase @angular/fire --save
 
 
 @NgModule({
@@ -69,7 +57,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
-    IonicRatingModule
+    IonicRatingModule,
+    
     //IonicStorageModule.forRoot()
     
   ],

@@ -7,13 +7,19 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
+import { ModalRatingPageModule } from '../modal-rating/modal-rating.module';
+
 
 @NgModule({
+  entryComponents:[
+    
+  ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    ModalRatingPageModule
   ],
   declarations: [HomePage]
 })
