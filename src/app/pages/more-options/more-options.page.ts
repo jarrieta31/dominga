@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 
 import { DondeComer } from '../../shared/donde-comer';
-import { DondeDomrir } from '../../shared/donde-dormir';
+import { DondeDormir } from '../../shared/donde-dormir';
 
 @Component({
   selector: 'app-more-options',
@@ -11,7 +11,7 @@ import { DondeDomrir } from '../../shared/donde-dormir';
 })
 export class MoreOptionsPage implements OnInit {
 
-	sleep:  DondeDomrir[];
+	sleep:  DondeDormir[];
 	eat: DondeComer[];
 
 	textoBuscar = '';
