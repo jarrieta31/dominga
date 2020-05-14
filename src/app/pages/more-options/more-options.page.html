@@ -6,8 +6,28 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder=""></ion-searchbar>
-    <ion-grid>
+    <ion-searchbar placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+    <ion-list *ngIf="textoBuscar.length > 0 ">
+        <ion-item *ngFor="let item of sleep | filtroMasOpciones:textoBuscar">
+            <div class="padre">
+                <div class="imagen">
+                    <ion-avatar slot="start">
+                        <img src="{{ item.imagen }}">
+                    </ion-avatar>
+                </div>
+                <div class="info">
+                    <ion-label>
+                        <h2>{{ item.nombre }}</h2>
+                        <div class="infoAbajo">
+                            <h3>{{ item.direccion }}</h3>
+                            <p><span>Tel: </span>{{ item.telefono }}</p>
+                        </div>
+                    </ion-label>
+                </div>
+            </div>
+        </ion-item>
+    </ion-list>
+    <ion-grid *ngIf="textoBuscar.length === 0">
         <a class="hrefIcon" routerLink="/where-sleep">
             <ion-row>
                 <ion-col size="2">

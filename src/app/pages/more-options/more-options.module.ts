@@ -8,11 +8,14 @@ import { MoreOptionsPageRoutingModule } from './more-options-routing.module';
 
 import { MoreOptionsPage } from './more-options.page';
 
+import { PipesModule } from '../../shared/pipes/pipes.module';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     MoreOptionsPageRoutingModule
   ],
   declarations: [MoreOptionsPage]
