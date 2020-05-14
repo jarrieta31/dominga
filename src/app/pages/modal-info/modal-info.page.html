@@ -9,8 +9,9 @@
 
 <ion-content>
 	<ion-text>
-		<div class="texto">
-			{{ descripcion }}
+		<div class="texto" *ngFor="let item of texto">
+			{{ item }}
+			<br/>
 		</div>
 		
 	</ion-text>
