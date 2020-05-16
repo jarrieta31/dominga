@@ -12,9 +12,12 @@ export class InformationPage implements OnInit {
 
 	automaticClose = false;
 
+  textoBuscar = '';
+
   constructor(private http: HttpClient) { 
   	this.http.get('../../../assets/information.json').subscribe(res => {
   		this.information = res['items'];
+      console.log(this.information);
   	});
   }
 
@@ -29,5 +32,9 @@ export class InformationPage implements OnInit {
   		.filter((item, itemIndex) => itemIndex != index)
   		.map(item => item.open = false);
   	}
+  }
+
+  buscar( event ){
+    this.textoBuscar = event.detail.value; 
   }
 }

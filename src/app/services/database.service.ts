@@ -13,9 +13,12 @@ export class DatabaseService {
     // Usamos el Servicio 'AngularFireList' de Angular Fire para listar los datos
     appsRef: AngularFireList < any > ;
     dbRef = this.db.database.ref('usuario_favoritos');
+    rating = this.db.database.ref('lugar');
 
     // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
-    constructor(private db: AngularFireDatabase) {}
+    constructor(private db: AngularFireDatabase) {
+        this.addRating("2", 2, "juan");
+    }
 
     // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
     // queremos usar, la colección que usaremos se llama 'tipo_circuito'
@@ -61,14 +64,9 @@ export class DatabaseService {
         this.dbRef.child(uid + '/' + id).remove();
     }
 
-    // getUsers(id: string){
-    //     return this.http.get('https://appdominga.firebaseio.com/users/');
-    // }
-
-    // addCircuits(circuits: CircuitsModel) {
-    //     var formulario = { nombre: circuits.nombre, descripcion: circuits.descripcion };
-    //     return this.http.post('https://appdominga.firebaseio.com/circuito.json', formulario);
-    // }
-
-
+    addRating(lugar: string, rate: number, uid: string) {
+        this.rating.child( lugar + '/valoracion/' + uid ).set({
+           uid : rate
+        });
+    }
 }

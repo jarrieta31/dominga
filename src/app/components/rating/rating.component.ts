@@ -18,7 +18,7 @@ export class RatingComponent implements OnInit {
 
   @Input() rating: number ;
 
-  @Output() ratingChange: EventEmitter<number> = new EventEmitter();;
+  @Output() ratingChange: EventEmitter<number> = new EventEmitter();
 
   constructor() {}
 
