@@ -63,9 +63,6 @@ export class GeolocationService {
     })
   })
 
-  
-
-
   constructor(private androidPermissions: AndroidPermissions, 
     private platform: Platform, private authService: AuthService,
     private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, 

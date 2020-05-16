@@ -1,9 +1,10 @@
-rating {
-    ion-icon {
-      color: gray;
-  
-      &.filled {
-        color: #ffb400;
-      }
-    }
-  }
+.ion-padding {
+    --padding-start: var(--ion-padding, 0px) !important;
+    --padding-end: var(--ion-padding, 0px) !important;
+    --padding-top: var(--ion-padding, 0px) !important;
+    --padding-bottom: var(--ion-padding, 0px) !important;
+}
+
+.valorar{
+	text-align: center;
+}

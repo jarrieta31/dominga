@@ -176,11 +176,12 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     async openModal(place: Place) {
         const modal = await this.modalController.create({
           component: ModalRatingPage,
+          cssClass: 'personalizar-modal',
           componentProps: {
             "nombre": place.nombre,
-            "descripcion": place.descripcion,
             "tipo": place.tipo,
-            "imagen": place.imagenPrincipal
+            "imagen": place.imagenPrincipal,
+            "key": place.$key
           }
         });
      

@@ -1,61 +1,58 @@
-
-import { Component, Input , Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-
-
-
-
+import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-modal-rating',
-  templateUrl: './modal-rating.page.html',
-  styleUrls: ['./modal-rating.page.scss'],
+    selector: 'app-modal-rating',
+    templateUrl: './modal-rating.page.html',
+    styleUrls: ['./modal-rating.page.scss'],
 })
 export class ModalRatingPage {
 
-  nombre: string;
-  descripcion: string;
-  imagen: string;
-  tipo: string;
-  rate: number;
+    nombre: string;
+    key: string;
+    imagen: string;
+    tipo: string;
+    rate: number;
+    users: string;
 
-  @Input() rating: number ;
-  //@Output() valoracion: EventEmitter<number> = new EventEmitter();
+    @Input() rating: number;
 
-  constructor(private modalController: ModalController,
-    private navParams: NavParams) { }
+    user = this.authSvc.currentUser.subscribe(authData => {
+        this.users = authData.uid;
+    });
 
-  ngOnInit() {
-    console.table(this.navParams);
-    this.nombre = this.navParams.data.nombre;
-    this.descripcion = this.navParams.data.descripcion;
-    this.tipo = this.navParams.data.tipo;
-    this.imagen = this.navParams.data.imagen;
-    this.rating = 4;
-  }
+    constructor(
+        private modalController: ModalController,
+        private navParams: NavParams,
+        private database: DatabaseService,
+        private authSvc: AuthService) {}
 
-  async closeModal() {
-    const onClosedData: string = "Wrapped Up!";
-    await this.modalController.dismiss(onClosedData);
-  }
+    ngOnInit() {
+        console.table(this.navParams);
+        this.nombre = this.navParams.data.nombre;
+        this.key = this.navParams.data.key;
+        this.tipo = this.navParams.data.tipo;
+        this.imagen = this.navParams.data.imagen;
+        this.user;
+    }
 
-  async valorarModal(){
-    
-    await this.modalController.dismiss();
-  }
+    ngOnDestroy(){
+      this.user.unsubscribe();
+    }
 
-  // onRateChange(event) {
-  //   this.rate = event.target.value
-  //   console.log(event.target.value)
-  //   console.log('valoracion: ', this.rate)
-  //   //this.valoracion.emit(this.rate)
-  // }
+    async closeModal() {
+        const onClosedData: string = "Wrapped Up!";
+        await this.modalController.dismiss(onClosedData);
+    }
 
-  puntuacion(rating){
-    this.rate = rating;
-    console.log(this.rate);
-  }
- 
+    async valorarModal() {
+        await this.modalController.dismiss();
+    }
 
-
+    puntuacion(rating) {
+        this.rate = rating;
+        this.database.addRating(this.key, this.rate, this.users)
+    }
 }
