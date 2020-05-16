@@ -21,7 +21,7 @@ export class FiltroInformacionPipe implements PipeTransform {
         //     for (let key in information) {
         //     		this.children.push(information[key].children)
         //   console.log(this.children[key][key].number);
-        //   //console.log(item.children[key].number);
+        //   console.log(item.children[key].number);
         // }
 
         return information.filter(item => {

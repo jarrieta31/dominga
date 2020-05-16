@@ -16,9 +16,7 @@ export class DatabaseService {
     rating = this.db.database.ref('lugar');
 
     // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
-    constructor(private db: AngularFireDatabase) {
-        this.addRating("2", 2, "juan");
-    }
+    constructor(private db: AngularFireDatabase) {}
 
     // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
     // queremos usar, la colección que usaremos se llama 'tipo_circuito'
@@ -65,8 +63,8 @@ export class DatabaseService {
     }
 
     addRating(lugar: string, rate: number, uid: string) {
-        this.rating.child( lugar + '/valoracion/' + uid ).set({
-           uid : rate
-        });
+        this.rating.child(lugar + '/valoracion/' + uid).set(
+            rate
+        );
     }
 }
