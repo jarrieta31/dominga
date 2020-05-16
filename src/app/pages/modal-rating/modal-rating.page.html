@@ -25,13 +25,9 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>Valoración actual </ion-col>
-      <ion-col>
-        <ion-rating [rate]= 3
-        readonly= false
-        size="small" 
-        (rateChange)="onRateChange($event)">
-      </ion-rating>
+      <ion-col> Valorar lugar: </ion-col>
+        <ion-col>            
+        <app-rating [(rating)]="rating" (click)="puntuacion(rating)"></app-rating>
       </ion-col> 
     </ion-row>
     <ion-row>

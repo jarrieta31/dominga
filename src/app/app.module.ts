@@ -37,10 +37,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 //Plataforma
 import { Platform } from '@ionic/angular';
 
-import { IonicRatingModule } from 'ionic-rating';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-
-
+import { ComponentsModule } from './components/components.module';
 
 
 @NgModule({
@@ -57,8 +55,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
-    IonicRatingModule,
-    
+    ComponentsModule
     //IonicStorageModule.forRoot()
     
   ],

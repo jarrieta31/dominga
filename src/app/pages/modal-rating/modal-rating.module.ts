@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ModalRatingPageRoutingModule } from './modal-rating-routing.module';
 
 import { ModalRatingPage } from './modal-rating.page';
-import { IonicRatingModule } from 'ionic-rating';
+import { ComponentsModule } from '../../components/components.module';
+
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import { IonicRatingModule } from 'ionic-rating';
     FormsModule,
     IonicModule,
     ModalRatingPageRoutingModule,
-    IonicRatingModule
+    ComponentsModule
   ],
   declarations: [ModalRatingPage]
 })

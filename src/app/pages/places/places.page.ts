@@ -9,8 +9,6 @@ import { Favourite } from '../../shared/favourite';
 
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { ModalInfoPage } from '../../pages/modal-info/modal-info.page';
-
 import * as Mapboxgl from 'mapbox-gl';
 
 import distance from '@turf/distance';
