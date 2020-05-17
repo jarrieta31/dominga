@@ -52,6 +52,7 @@ export class ModalRatingPage {
     }
 
     puntuacion(rating) {
+        this.database.removeRatingDefault(this.key);
         this.rate = rating;
         this.database.addRating(this.key, this.rate, this.users)
     }

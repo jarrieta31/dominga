@@ -14,10 +14,17 @@
             <ion-icon class="info-name" slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
             <ion-label class="info-name">{{ item.name}}</ion-label>
         </ion-item>
-        <div class="children-content" *ngIf="item.children && item.open">
-            <ion-list *ngFor="let child of item.children; let j = index" lines="none" class="child-list">
+        <div class="children-content" *ngIf="item.localidad && item.open">
+            <ion-list *ngFor="let child of item.localidad; let j = index" lines="none" class="child-list">
                 <ion-item class="item-children">
-                    <ion-label class="label-child"><b>{{ child.info }}</b> {{ child.number }}</ion-label>
+                    <ion-label class="label-child"><b>{{ child.nameLocalidad }}</b></ion-label>
+                    <ion-list *ngFor="let information of item.localidad.children; let j = index" lines="none" class="child-list">
+                        <ion-item class="item-children">
+                            <ion-label class="label-child">
+                                <b>{{ information.info }}</b> {{ information.number}}
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
                 </ion-item>
             </ion-list>
         </div>

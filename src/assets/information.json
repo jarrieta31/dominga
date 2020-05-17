@@ -1,44 +1,51 @@
 {
     "items": [
-    {
-        "name": "Números de Emergencia",
-        "children": [
-         {
-            "info": "Policía",
-            "number": 911
-        },
         {
-            "info": "Bomberos",
-            "number": 104
-        },
-        {
-            "info": "Emergencia Médica",
-            "number": 43423718
-        },
-        {
-            "info": "Ambulancias",
-            "number": 105
-        }]
-    },
-    {
-        "name": "¿Cómo moverse?",
-        "children": [
-        {
-            "info": "Taxi"
-        }]
-    },
-    {
-        "name": "Cambio",
-        "children": [
-        {
-            "info": "Cambio San José"
-        }]
-    },
-    {
-        "name": "Tarifado",
-        "children" : [
+            "name": "Números de Emergencia",
+            "localidad": [
             {
-                "info": "El tarifado tendrá 260 lugares para estacionamiento, en la zona comprendida por las calles Ciganda, Colón, Bengoa e Ituzaingó, incluyendo los 80 cupos de la plaza"
+                "nameLocalidad": "San José de Mayo",
+                "children": [
+                {
+                    "info": "Policia",
+                    "number": 911
+                },
+                {
+                    "info": "Bomberos",
+                    "number": "104 / 43422055"
+                },
+                {
+                    "info": "UDEMM",
+                    "number": 43423000
+                },
+                {
+                    "info": "UCOR",
+                    "number": 43424444
+                },
+                {
+                    "info": "Hospital (Emergencia)",
+                    "number": 43422175
+                },
+                {
+                    "info": "AMSJ",
+                    "number": 43423718
+                },
+                {
+                    "info": "Jefatura",
+                    "number": 4342141
+                }]
+            },
+            {
+                "nameLocalidad": "Libertad",
+                "children": [
+                {
+                    "info": "TAMED (Emergencia Móvil)",
+                    "number": "43452400 / 091651753"
+                },
+                {
+                    "info": "Hospital",
+                    "number": 43454070
+                }]
             }]
-    }]
-}
+        }
+    ]}
