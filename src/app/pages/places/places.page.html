@@ -38,11 +38,11 @@
                 <div class="iconEstilos" *ngIf="caminar == 1">
                     <i class="fas fa-running"></i>
                 </div>
-                <div class="iconEstilos">
-                    {{ obsDistancia$ | async }}
+                <div id="dist">
+                    <div>{{ obsDistancia$ | async }}</div>
                 </div>
                 <div class="estrellas">
-                    <app-rating [(rating)]="totalValoracion"></app-rating>
+                    <app-rating class="valoracion" [(rating)]="totalValoracion"></app-rating>
                     <!-- <ion-rating [rate]="totalValoracion" readonly="true" size="small">
                     </ion-rating> -->
                 </div>

@@ -126,6 +126,7 @@ export class PlacesPage implements OnInit {
                     })
 
                     this.totalValoracion = this.totalValoracion / this.cantidadVotos;
+                    this.totalValoracion = Math.round(this.totalValoracion);
                 }
 
                 this.items[num].url = mapped;
