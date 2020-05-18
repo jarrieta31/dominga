@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { PlacesPageRoutingModule } from './places-routing.module';
 
 import { PlacesPage } from './places.page';
-
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { PlacesPage } from './places.page';
     FormsModule,
     IonicModule,
     PlacesPageRoutingModule,
-  
+  	ComponentsModule
   ],
   declarations: [PlacesPage]
 })

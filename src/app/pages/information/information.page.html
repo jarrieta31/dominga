@@ -7,17 +7,24 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar placeholder=""></ion-searchbar>
-    <ion-list *ngFor="let item of information; let i = index" class="accordion-list" lines="none" detail="false" no-padding>
+    <ion-searchbar placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+    <ion-list *ngFor="let item of information | filtroInformacion:textoBuscar; let i = index" class="accordion-list" lines="none" detail="false" no-padding>
         <ion-item tappable (click)="toggleSection(i)" [ngClass]="{'section-active': item.open, 'section': !item.open}" class="item-accordion" color="acorddion">
             <ion-icon class="info-name" slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>
             <ion-icon class="info-name" slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
-            <ion-label class="info-name">{{ item.name }}</ion-label>
+            <ion-label class="info-name">{{ item.name}}</ion-label>
         </ion-item>
-        <div class="children-content" *ngIf="item.children && item.open">
-            <ion-list *ngFor="let child of item.children; let j = index" lines="none" class="child-list">
+        <div class="children-content" *ngIf="item.localidad && item.open">
+            <ion-list *ngFor="let child of item.localidad; let j = index" lines="none" class="child-list">
                 <ion-item class="item-children">
-                    <ion-label class="label-child"><b>{{ child.info }}</b> {{ child.number }}</ion-label>
+                    <ion-label class="label-child"><b>{{ child.nameLocalidad }}</b></ion-label>
+                    <ion-list *ngFor="let information of item.localidad.children; let j = index" lines="none" class="child-list">
+                        <ion-item class="item-children">
+                            <ion-label class="label-child">
+                                <b>{{ information.info }}</b> {{ information.number}}
+                            </ion-label>
+                        </ion-item>
+                    </ion-list>
                 </ion-item>
             </ion-list>
         </div>

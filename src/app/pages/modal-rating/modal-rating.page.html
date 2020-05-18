@@ -17,25 +17,25 @@
             <ion-card-subtitle>{{ tipo }}</ion-card-subtitle>
             <ion-card-title>{{ nombre }}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>
+          <!-- <ion-card-content>
             {{ descripcion }}
-          </ion-card-content>
+          </ion-card-content> -->
         </ion-card>
         
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row class="valorar">
       <ion-col> Valorar lugar: </ion-col>
         <ion-col>            
-        <app-rating [(rating)]="rating" (click)="puntuacion(rating)"></app-rating>
+        <app-rating [(rating)]="rating" ></app-rating>
       </ion-col> 
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button (click)="closeModal()">Cancelar</ion-button>
+        <ion-button (click)="closeModal()" expand="full">Cancelar</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button (click)="valorarModal()">Valorar</ion-button>
+        <ion-button (click)="puntuacion(rating)" expand="full">Valorar</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

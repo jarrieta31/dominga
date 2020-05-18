@@ -63,9 +63,6 @@ export class GeolocationService {
     })
   })
 
-  
-
-
   constructor(private androidPermissions: AndroidPermissions, 
     private platform: Platform, private authService: AuthService,
     private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, 
@@ -112,13 +109,11 @@ export class GeolocationService {
             console.log(place.valoracion)
             for (var key in place.valoracion) { 
               //si el usuario no ha valorado
-              console.log("Estas cerca de ", place.nombre)
-              console.log("Pulso de match", key)
               if(key != this.user){
                 //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
 
                 this.valuationsPlaces.forEach(assessment => {
-                  console.log(assessment.answer)
+                  
                   if(assessment.placeName == place.nombre && assessment.idUser== this.user && assessment.answer == false){
                     assessment.answer = true;
                     this.lugarCercano$.next(place)

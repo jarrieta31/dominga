@@ -13,9 +13,10 @@ export class DatabaseService {
     // Usamos el Servicio 'AngularFireList' de Angular Fire para listar los datos
     appsRef: AngularFireList < any > ;
     dbRef = this.db.database.ref('usuario_favoritos');
+    rating = this.db.database.ref('lugar');
 
     // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
-    constructor(private db: AngularFireDatabase) {}
+    constructor(private db: AngularFireDatabase) { }
 
     // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
     // queremos usar, la colección que usaremos se llama 'tipo_circuito'
@@ -61,14 +62,23 @@ export class DatabaseService {
         this.dbRef.child(uid + '/' + id).remove();
     }
 
-    // getUsers(id: string){
-    //     return this.http.get('https://appdominga.firebaseio.com/users/');
+    removeRatingDefault(idLugar: string) {
+        this.rating.child(idLugar + '/valoracion/user').remove();
+    }
+
+    addRating(lugar: string, rate: number, uid: string) {
+        this.rating.child(lugar + '/valoracion/' + uid).set(
+            rate
+        );   
+    }
+
+    //Función para agregar array valoracion a cada lugar con valor default que luego
+    //será eliminado cuando un usuario realice la primera valoración sobre el lugar
+    //this.addValorar(idLugar, 0);
+    
+    // addValorar(id: string, rate: number){
+    //         this.rating.child(id + '/valoracion/user').set(
+    //         rate
+    //     ); 
     // }
-
-    // addCircuits(circuits: CircuitsModel) {
-    //     var formulario = { nombre: circuits.nombre, descripcion: circuits.descripcion };
-    //     return this.http.post('https://appdominga.firebaseio.com/circuito.json', formulario);
-    // }
-
-
 }

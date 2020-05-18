@@ -103,7 +103,7 @@ export class PlacesPage implements OnInit {
                 this.items.push(a as Place);
 
                 this.items[num].descripcion = this.items[num].descripcion.substr(0, 140) + " ...";
-                this.items[num].descripcion = this.items[num].descripcion.replace('$', '');
+                this.items[num].descripcion = this.items[num].descripcion.replace(/<\/?[^>]+(>|$)/g, '');
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
 
@@ -126,6 +126,7 @@ export class PlacesPage implements OnInit {
                     })
 
                     this.totalValoracion = this.totalValoracion / this.cantidadVotos;
+                    this.totalValoracion = Math.round(this.totalValoracion);
                 }
 
                 this.items[num].url = mapped;

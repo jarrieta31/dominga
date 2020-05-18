@@ -46,7 +46,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     lugarCercano$: Observable<Place>;
     subscrictionLugarCercano: any;
-    subscrictionUser: any;
+    //subscrictionUser: any;
     idUser: string;
 
     constructor(
@@ -109,12 +109,14 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         });
     });
 
+    //obtiene el id del usuario actual
+    subscrictionUser = this.authService.currentUser.subscribe(authData => 
+        this.idUser = authData.uid
+    );
+    
     ngOnInit() {
         this.su;    
-        //obtiene el id del usuario actual
-        this.subscrictionUser = this.authService.currentUser.subscribe(authData => 
-            this.idUser = authData.uid
-        );
+        this.subscrictionUser;
         //obtiene 
         this.lugarCercano$ = this.geolocationService.getLugarCercano();
         this.subscrictionLugarCercano = this.lugarCercano$.subscribe(place => {
@@ -172,11 +174,12 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     async openModal(place: Place) {
         const modal = await this.modalController.create({
           component: ModalRatingPage,
+          cssClass: 'personalizar-modal',
           componentProps: {
             "nombre": place.nombre,
-            "descripcion": place.descripcion,
             "tipo": place.tipo,
-            "imagen": place.imagenPrincipal
+            "imagen": place.imagenPrincipal,
+            "key": place.$key
           }
         });
      

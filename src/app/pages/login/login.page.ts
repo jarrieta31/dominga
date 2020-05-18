@@ -49,6 +49,8 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.geolocationService.subscriptionUser.unsubscribe();
     if (this.platform.is('android')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }

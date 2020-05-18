@@ -77,7 +77,9 @@ ion-title {
 .iconos {
     display: flex;
     flex-direction: row;
-    margin: 1% 4% 0 4%;
+    margin: 1% 4% 2% 4%;
+    justify-content: center;
+    align-items: center;
 }
 
 .sugerencia {
@@ -103,11 +105,11 @@ ion-title {
 }
 
 .iconEstilos {
-    margin: 5% 2% 0 2%;
+    margin: 3% 1.5% 0 1.5%;
 }
 
 .iconAuto {
-    margin: 5% 2% 0 0;
+    margin: 3% 1.5% 0 0;
 }
 
 .sugNombre {
@@ -128,10 +130,27 @@ ion-title {
 
 .estrellas {
     margin-left: auto;
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
 }
 
-#fav{
+#fav {
     font-size: 150%;
+}
+
+#dist {
+    margin: 3% 2% 0 2%;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.valoracion {
+    font-size: 11px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -152,6 +171,36 @@ ion-title {
         font-weight: 600;
         color: #000000;
         font-size: 18px;
+    }
+
+    .estrellas {
+        margin-left: auto;
+        margin-top: 3%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #dist {
+        margin: 3% 2% 0 2%;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .valoracion {
+        font-size: 20px;
+    }
+
+    .iconEstilos {
+        margin: 3% 2% 0 2%;
+        font-size: 20px;
+    }
+
+    .iconAuto {
+        margin: 3% 2% 0 0;
+        font-size: 20px;
     }
 }
 
@@ -181,6 +230,36 @@ ion-title {
 
     .iconAuto {
         margin: 3% 2% 0 0;
+    }
+
+    .estrellas {
+        margin-left: auto;
+        margin-top: 3%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #dist {
+        margin: 3% 2% 0 2%;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .valoracion {
+        font-size: 20px;
+    }
+
+    .iconEstilos {
+        margin: 3% 2% 0 2%;
+        font-size: 25px;
+    }
+
+    .iconAuto {
+        margin: 3% 2% 0 0;
+        font-size: 25px;
     }
 }
 
