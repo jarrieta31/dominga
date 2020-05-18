@@ -14,8 +14,6 @@ export class ModalInfoPage implements OnInit {
   nombre: string;
   descripcion: string;
 
-  texto: any[] = [];
-
   constructor(
   	private database: DatabaseService,
   	private activatedRoute: ActivatedRoute,
@@ -46,8 +44,6 @@ export class ModalInfoPage implements OnInit {
                             this.descripcion = a['descripcion'];                     
                         }
                     })
-
-                    this.texto = this.descripcion.split("$");
                 }),
                 err => console.log(err)
         });

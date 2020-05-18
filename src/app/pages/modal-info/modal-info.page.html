@@ -1,18 +1,15 @@
 <ion-header>
-  <ion-toolbar color="primary">
-  	<ion-buttons slot="start">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
-    <ion-title>{{ nombre }}</ion-title>
-  </ion-toolbar>
+        <ion-title>{{ nombre }}</ion-title>
+    </ion-toolbar>
 </ion-header>
-
 <ion-content>
-	<ion-text>
-		<div class="texto" *ngFor="let item of texto">
-			{{ item }}
-			<br/>
-		</div>
-		
-	</ion-text>
+    <ion-text>
+        <div class="texto" [innerHTML]="descripcion">
+            
+        </div>
+    </ion-text>
 </ion-content>
