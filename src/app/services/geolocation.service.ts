@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import * as Mapboxgl from 'mapbox-gl';
 import { environment } from '../../environments/environment';
 import { Platform } from '@ionic/angular';
-import { timer, Subject, Observable, BehaviorSubject } from 'rxjs';
+import { timer, Observable, BehaviorSubject } from 'rxjs';
 import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
-import { tap, map, share, takeWhile } from 'rxjs/operators';
+import { tap, share } from 'rxjs/operators';
 import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
 import { AuthService } from './auth.service';
@@ -97,6 +97,7 @@ export class GeolocationService {
 
     this.sourceMatch$ = timer(1000, 20000 ).pipe(
       tap(clock => {
+        
         let posicion = this.posicion$.value;
         let points: TwoPoints;
         let dist: number;
@@ -108,8 +109,11 @@ export class GeolocationService {
           //Verifica la distancia
           if (dist <= 25) {
             //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
+            console.log(place.valoracion)
             for (var key in place.valoracion) { 
               //si el usuario no ha valorado
+              console.log("Estas cerca de ", place.nombre)
+              console.log("Pulso de match", key)
               if(key != this.user){
                 //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
 
@@ -118,7 +122,7 @@ export class GeolocationService {
                   if(assessment.placeName == place.nombre && assessment.idUser== this.user && assessment.answer == false){
                     assessment.answer = true;
                     this.lugarCercano$.next(place)
-                    console.log(assessment.answer)
+                    console.log('Modal',assessment.answer)
                   }
   
                 }); 

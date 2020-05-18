@@ -9,12 +9,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { LoadingController, AlertController, ModalController } from '@ionic/angular';
-import { LoaderService } from '../../services/loader.service';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { ModalRatingPage } from '../modal-rating/modal-rating.page';
-
 
 
 @Component({
@@ -49,7 +46,6 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     lugarCercano$: Observable<Place>;
     subscrictionLugarCercano: any;
-
     subscrictionUser: any;
     idUser: string;
 

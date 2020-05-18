@@ -39,7 +39,7 @@ import { Platform } from '@ionic/angular';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
-
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -67,6 +67,7 @@ import { ComponentsModule } from './components/components.module';
     Platform,
     AndroidPermissions,
     ScreenOrientation,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     // AuthService,
     // AngularFireAuth,

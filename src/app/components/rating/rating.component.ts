@@ -62,6 +62,10 @@ export class RatingComponent implements OnInit {
     return index > this.rating;
   }
 
+  getSize():number{
+    return 24;
+  }
+
 
 
   ngOnInit(){}

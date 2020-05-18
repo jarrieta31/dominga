@@ -1,9 +1,7 @@
 
 import { Component, Input , Output, EventEmitter} from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
-
-
-
+import { ModalController, NavParams, Platform } from '@ionic/angular';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 
 @Component({
@@ -20,10 +18,9 @@ export class ModalRatingPage {
   rate: number;
 
   @Input() rating: number ;
-  //@Output() valoracion: EventEmitter<number> = new EventEmitter();
-
-  constructor(private modalController: ModalController,
-    private navParams: NavParams) { }
+  
+  constructor(private modalController: ModalController, private platform: Platform,
+    private navParams: NavParams, private vibration: Vibration) { }
 
   ngOnInit() {
     console.table(this.navParams);
@@ -32,30 +29,27 @@ export class ModalRatingPage {
     this.tipo = this.navParams.data.tipo;
     this.imagen = this.navParams.data.imagen;
     this.rating = 4;
+
+    //Si es un dispositivo móvil vibra al lazar el modal
+    if(this.platform.is('android')){
+      this.vibration.vibrate([500,500,500]);
+    }
   }
 
+  //Cierra el modal enviando parametros al padre
   async closeModal() {
     const onClosedData: string = "Wrapped Up!";
     await this.modalController.dismiss(onClosedData);
   }
 
-  async valorarModal(){
-    
+  //Cierra el modal sin pasar parametros al padre
+  async valorarModal(){    
     await this.modalController.dismiss();
   }
 
-  // onRateChange(event) {
-  //   this.rate = event.target.value
-  //   console.log(event.target.value)
-  //   console.log('valoracion: ', this.rate)
-  //   //this.valoracion.emit(this.rate)
-  // }
-
+  //Captura el valor cuando cambian la valoracion
   puntuacion(rating){
     this.rate = rating;
     console.log(this.rate);
   }
- 
-
-
 }
