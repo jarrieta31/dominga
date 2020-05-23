@@ -16,14 +16,14 @@
         </ion-item>
         <div class="children-content" *ngIf="item.children && item.open">
             <ion-list *ngFor="let location of item.children; let j = index" lines="none" class="child-list">
-                <ion-item tappable (click)="toggleItem(i, j)" [ngClass]="{'location-active': location.open, 'location': !location.open}" class="item-accordion-children" color="acorddion">
+                <ion-item tappable (click)="toggleItem(i, j)" [ngClass]="{'location-active': location.open, 'location': !location.open}" class="item-accordion-children">
                     <ion-icon class="info-name" slot="start" name="add" *ngIf="!location.open"></ion-icon>
                     <ion-icon class="info-name" slot="start" name="close" *ngIf="location.open"></ion-icon>
                     <ion-label class="info-name">{{ location.nameLocalidad}}</ion-label>
                 </ion-item>
                 <ion-list *ngIf="location.nameLocalidad && location.open" class="info-list" lines="none">
-                    <ion-list *ngFor="let info of location.children">
-                        <ion-label>{{ info.info }}: {{ info.number }}</ion-label>
+                    <ion-list class="lugares" *ngFor="let info of location.children">
+                        <ion-label><i class="fas fa-caret-right"></i>&nbsp;&nbsp;{{ info.info }}&nbsp; {{ info.number }}</ion-label>
                     </ion-list>
                 </ion-list>
             </ion-list>
