@@ -17,6 +17,13 @@
     margin: 0 2% 0 2%;
 }
 
+.item-accordion-children {
+    background-color: grey !important;
+    border-radius: 8px;
+    margin: 0 2% 0 5%;
+    width: 80%;
+}
+
 .list-md {
     padding: 1% 0 1% 0 !important;
 }
@@ -30,11 +37,11 @@
     --box-shadow: none !important;
 }
 
-.child-list{
-	padding: 0 0 0 0 !important;
-	margin: 0 2% 0 2%;
-	height: 31px;
-}
+// .child-list{
+// 	padding: 0 0 0 0 !important;
+// 	margin: 0 2% 0 2%;
+// 	height: 31px;
+// }
 
 .label-child{
 	font-size: 80%;

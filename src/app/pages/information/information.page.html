@@ -12,21 +12,22 @@
         <ion-item tappable (click)="toggleSection(i)" [ngClass]="{'section-active': item.open, 'section': !item.open}" class="item-accordion" color="acorddion">
             <ion-icon class="info-name" slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>
             <ion-icon class="info-name" slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
-            <ion-label class="info-name">{{ item.name}}</ion-label>
+            <ion-label class="info-name">{{ item.name }}</ion-label>
         </ion-item>
-        <div class="children-content" *ngIf="item.localidad && item.open">
-            <ion-list *ngFor="let child of item.localidad; let j = index" lines="none" class="child-list">
-                <ion-item class="item-children">
-                    <ion-label class="label-child"><b>{{ child.nameLocalidad }}</b></ion-label>
-                    <ion-list *ngFor="let information of item.localidad.children; let j = index" lines="none" class="child-list">
-                        <ion-item class="item-children">
-                            <ion-label class="label-child">
-                                <b>{{ information.info }}</b> {{ information.number}}
-                            </ion-label>
-                        </ion-item>
-                    </ion-list>
+        <div class="children-content" *ngIf="item.children && item.open">
+            <ion-list *ngFor="let location of item.children; let j = index" lines="none" class="child-list">
+                <ion-item tappable (click)="toggleItem(i, j)" [ngClass]="{'location-active': location.open, 'location': !location.open}" class="item-accordion-children" color="acorddion">
+                    <ion-icon class="info-name" slot="start" name="add" *ngIf="!location.open"></ion-icon>
+                    <ion-icon class="info-name" slot="start" name="close" *ngIf="location.open"></ion-icon>
+                    <ion-label class="info-name">{{ location.nameLocalidad}}</ion-label>
                 </ion-item>
+                <ion-list *ngIf="location.nameLocalidad && location.open" class="info-list" lines="none">
+                    <ion-list *ngFor="let info of location.children">
+                        <ion-label>{{ info.info }}: {{ info.number }}</ion-label>
+                    </ion-list>
+                </ion-list>
             </ion-list>
         </div>
+        <p *ngIf="item.children.length == 0 && item.open" text-center>No existen números aquí</p>
     </ion-list>
 </ion-content>

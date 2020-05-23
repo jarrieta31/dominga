@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-information',
   templateUrl: './information.page.html',
@@ -17,8 +18,9 @@ export class InformationPage implements OnInit {
   constructor(private http: HttpClient) { 
   	this.http.get('../../../assets/information.json').subscribe(res => {
   		this.information = res['items'];
-      console.log(this.information);
   	});
+
+    //this.information[0].open = true;
   }
 
   ngOnInit() {
@@ -32,6 +34,10 @@ export class InformationPage implements OnInit {
   		.filter((item, itemIndex) => itemIndex != index)
   		.map(item => item.open = false);
   	}
+  }
+
+  toggleItem(index, childIndex){
+    this.information[index].children[childIndex].open = !this.information[index].children[childIndex].open;
   }
 
   buscar( event ){

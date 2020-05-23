@@ -2,7 +2,7 @@
     "items": [
         {
             "name": "Números de Emergencia",
-            "localidad": [
+            "children": [
             {
                 "nameLocalidad": "San José de Mayo",
                 "children": [
@@ -47,5 +47,19 @@
                     "number": 43454070
                 }]
             }]
+        },
+        {
+          "name": "Cambio",
+          "children": [{
+            "nameLocalidad": "San José de Mayo",
+            "children": [{
+              "info" : "Cambio San Jose",
+              "number": 43423656
+            },
+          {
+              "info" : "Iberia",
+              "number": 43423656
+            }]
+          }]
         }
     ]}
