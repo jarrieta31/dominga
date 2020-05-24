@@ -90,7 +90,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
             if (posicion != null) {
 
                 this.items.forEach(place => {
-                    console.log('posicion actual', posicion.latitud)
+                    //console.log('posicion actual', posicion.latitud)
                     let options = { units: 'kilometers' };
                     let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
                     let distFormat;
@@ -150,19 +150,19 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     async cerrarAppAlertConfirm() {
         const alert = await this.alertController.create({
             header: 'Salir!',
-            message: '<strong>¿Seguro que quiere salir?</strong>!!!',
+            message: '<strong>¿Seguro que quiere salir?</strong>',
             buttons: [
                 {
                     text: 'Cancelar',
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: (blah) => {
-                        console.log('Confirm Cancel: blah');
+                       // console.log('Confirm Cancel: blah');
                     }
                 }, {
                     text: 'Cerrar',
                     handler: () => {
-                        console.log('Confirm Okay');
+                       // console.log('Confirm Okay');
                         navigator['app'].exitApp();
                     }
                 }

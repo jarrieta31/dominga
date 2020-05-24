@@ -50,7 +50,7 @@ export class UrbanCircuitPage implements OnInit {
                 this.points.push(this.point);
             }
         })
-
+        console.log(this.points.length)
         this.geolocationService.crearMapa(this.points)
 
         this.items.forEach(data => {

@@ -85,9 +85,9 @@ export class LoginPage implements OnInit {
       this.password = this.loginForm.get('password').value;
       this.onLogin();
       this.loginForm.reset;
-      console.log("Form Login corrento:", this.loginForm.value.email);
+     // console.log("Form Login corrento:", this.loginForm.value.email);
     } else {
-      console.log("Formulario no valido");
+     // console.log("Formulario no valido");
     }
   }
 
@@ -130,12 +130,12 @@ export class LoginPage implements OnInit {
           role: 'cancel',
           cssClass: 'primary',
           handler: () => {
-            console.log('Boton cancelar reset contraseña');
+          //  console.log('Boton cancelar reset contraseña');
           }
         }, {
           text: 'Cambiar Contraseña',
           handler: (data) => {
-            console.log('Boton confirmar reset contraseña', data);
+          //  console.log('Boton confirmar reset contraseña', data);
             this.email = data.txtEmail;
             this.loadingResetPassword();
           }
@@ -218,19 +218,19 @@ export class LoginPage implements OnInit {
   async cerrarAppAlertConfirm() {
     const alert = await this.alertController.create({
       header: 'Salir!',
-      message: '<strong>¿Seguro que quiere salir?</strong>!!!',
+      message: '<strong>¿Seguro que quiere salir?</strong>',
       buttons: [
         {
           text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+           // console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Cerrar',
           handler: () => {
-            console.log('Confirm Okay');
+          //  console.log('Confirm Okay');
             navigator['app'].exitApp();
           }
         }

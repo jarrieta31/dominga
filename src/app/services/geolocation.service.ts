@@ -65,8 +65,7 @@ export class GeolocationService {
 
   constructor(private androidPermissions: AndroidPermissions, 
     private platform: Platform, private authService: AuthService,
-    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, 
-    private modalController: ModalController, private database: DatabaseService) {
+    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
 
       this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
         this.user = authData.uid;    
@@ -111,9 +110,7 @@ export class GeolocationService {
               //si el usuario no ha valorado
               if(key != this.user){
                 //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
-
-                this.valuationsPlaces.forEach(assessment => {
-                  
+                this.valuationsPlaces.forEach(assessment => {                  
                   if(assessment.placeName == place.nombre && assessment.idUser== this.user && assessment.answer == false){
                     assessment.answer = true;
                     this.lugarCercano$.next(place)
@@ -162,42 +159,48 @@ export class GeolocationService {
 
   crearMapa(points: Array<Point>) {
     // si el gps está activo crea el mapa con el marcador
-    if (this.gps) {
-      this.points = points;
-      //agrega la posicion actual a la lista de puntos
-      this.points.push(this.posicion)
-      let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
-      let centro: Point = this.getCenterPoints(maxmin);
-      this.distancia = this.calculateDistance(maxmin);
-      let zoom = this.calculateZoom(this.distancia);
+    let centro: Point;
+    let maxmin: TwoPoints ;
+    let zoom:number;
+    this.points = points;
+    if (this.gps) {      
+      if(this.points.length > 1){
+        //agrega la posicion actual a la lista de puntos
+        this.points.push(this.posicion)
+        maxmin = this.getMaxMinPoints(this.points);
+        centro  = this.getCenterPoints(maxmin);
+        this.distancia = this.calculateDistance(maxmin);
+        zoom = this.calculateZoom(this.distancia);
+      }
       Mapboxgl.accessToken = environment.mapBoxToken;
       this.mapa = new Mapboxgl.Map({
         container: 'mapaBox',
         style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
-        // pitch: 60,
-        // bearing: -17.6,
         antialias: true,
         center: [centro.longitud, centro.latitud],
         zoom: zoom
       });
       this.createMarker()
     } else {
-      this.points.push(this.posicion)
-      let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
-      let centro: Point = this.getCenterPoints(maxmin);
-      this.distancia = this.calculateDistance(maxmin);
-      let zoom = this.calculateZoom(this.distancia);
+      //this.points.push(this.posicion)
+      if(this.points.length > 1){
+        maxmin = this.getMaxMinPoints(this.points);
+        centro = this.getCenterPoints(maxmin);
+        this.distancia = this.calculateDistance(maxmin);
+        zoom = this.calculateZoom(this.distancia);
+      }
       Mapboxgl.accessToken = environment.mapBoxToken;
       this.mapa = new Mapboxgl.Map({
         container: 'mapaBox',
         style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
-        // pitch: 60,
-        // bearing: -17.6,
         antialias: true,
         center: [centro.longitud, centro.latitud],
         zoom: zoom
       });
     }
+    this.mapa.addControl(new Mapboxgl.NavigationControl());
+    this.mapa.addControl(new Mapboxgl.FullscreenControl());
+    
 
   }
 
@@ -224,9 +227,7 @@ export class GeolocationService {
     let zoom = this.calculateZoom(this.distancia);
     this.mapa.setCenter([centro.longitud, centro.latitud]);
     this.mapa.setZoom(zoom);
-    //alert('Zoom = ' + zoom);
-    //this.createMarkerCenter(centro);
-
+    
   }
 
   //Compruebe si la aplicación tiene permiso de acceso GPS 
@@ -347,7 +348,8 @@ export class GeolocationService {
 
   calculateZoom(distancia: number): number {
     let zoom: number = 1;
-    let rangos = [[5, 12.6], [10, 12.6], [15, 13], [20, 11], [40, 9.5], [60, 8], [80, 7.5], [100, 7], [120, 6.5], [150, 6], [180, 5.5], [200, 5]]
+    //El primer valor es la distancia y el segundo el zoom para ese rango de distancia
+    let rangos = [[5, 12.6], [10, 12.6], [15, 11.5], [20, 11], [40, 9.5], [60, 8], [80, 7.5], [100, 7], [120, 6.5], [150, 6], [180, 5.5], [200, 5]]
     for (let i = 0; i < rangos.length; i++) {
       for (let j = 0; j < rangos[i].length; j++) {
         console.log(rangos[i][0])

@@ -35,7 +35,7 @@ export class MoreOptionsPage implements OnInit {
 
                 this.sleep;
                 this.sleep = this.sleep.concat(this.eat);
-                console.log(this.sleep);
+                //console.log(this.sleep);
 	})
 
   constructor(private database: DatabaseService) { }

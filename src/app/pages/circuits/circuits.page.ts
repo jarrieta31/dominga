@@ -23,7 +23,7 @@ export class CircuitsPage implements OnInit {
                     a['$key'] = item.key;
                     this.tipoCircuito.push(a as TipoCircuito);
                 })
-                console.log(this.tipoCircuito);
+                //console.log(this.tipoCircuito);
             });
 
     ngOnInit() {
