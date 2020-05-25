@@ -40,6 +40,8 @@ import { Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { Network } from '@ionic-native/network/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,7 +57,8 @@ import { Vibration } from '@ionic-native/vibration/ngx';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
-    ComponentsModule
+    ComponentsModule,    
+
     //IonicStorageModule.forRoot()
     
   ],
@@ -68,10 +71,11 @@ import { Vibration } from '@ionic-native/vibration/ngx';
     AndroidPermissions,
     ScreenOrientation,
     Vibration,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     // AuthService,
     // AngularFireAuth,
     // AngularFirestore
+    Network
   ],
   bootstrap: [AppComponent]
 })

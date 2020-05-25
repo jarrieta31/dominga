@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import * as Mapboxgl from 'mapbox-gl';
@@ -13,8 +14,10 @@ import { tap, share } from 'rxjs/operators';
 import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
 import { AuthService } from './auth.service';
-import { ModalController } from '@ionic/angular'
 import { Assessment } from '../shared/assessment';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import { NetworkService } from './network.service';
+
 
 
 @Injectable({
@@ -23,6 +26,7 @@ import { Assessment } from '../shared/assessment';
 
 export class GeolocationService {
 
+  isConnected = false;  //verifica el estado de la conexion a internet
   items: Place[] = [];
   sourceMatch$: Observable<any>
   user: string
@@ -57,19 +61,28 @@ export class GeolocationService {
       this.items.push(a as Place);
     })
     this.items.forEach(place => {
-      let respuestaValoracion: Assessment = {placeName: place.nombre, idUser: this.user, answer:false}
+      let respuestaValoracion: Assessment = { placeName: place.nombre, idUser: this.user, answer: false }
       this.valuationsPlaces.push(respuestaValoracion)
-     // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
+      // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
     })
   })
 
-  constructor(private androidPermissions: AndroidPermissions, 
+  constructor(private androidPermissions: AndroidPermissions, private networkService: NetworkService,
     private platform: Platform, private authService: AuthService,
     private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
 
-      this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
-        this.user = authData.uid;    
-      });      
+    //Chequea el estado de la conexion a internet
+    this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+      this.isConnected = connected;
+      if (!this.isConnected) {
+        console.log('Por favor enciende tu conexión a Internet');
+      }
+    });
+
+    this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
+      this.user = authData.uid;
+    });
+
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion
@@ -91,9 +104,9 @@ export class GeolocationService {
       share()
     )
 
-    this.sourceMatch$ = timer(1000, 20000 ).pipe(
+    this.sourceMatch$ = timer(1000, 20000).pipe(
       tap(clock => {
-        
+
         let posicion = this.posicion$.value;
         let points: TwoPoints;
         let dist: number;
@@ -101,24 +114,24 @@ export class GeolocationService {
         this.items.forEach(place => {
           points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
           dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
-          
+
           //Verifica la distancia
           if (dist <= 25) {
             //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
             console.log(place.valoracion)
-            for (var key in place.valoracion) { 
+            for (var key in place.valoracion) {
               //si el usuario no ha valorado
-              if(key != this.user){
+              if (key != this.user) {
                 //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
-                this.valuationsPlaces.forEach(assessment => {                  
-                  if(assessment.placeName == place.nombre && assessment.idUser== this.user && assessment.answer == false){
+                this.valuationsPlaces.forEach(assessment => {
+                  if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
                     assessment.answer = true;
                     this.lugarCercano$.next(place)
-                    console.log('Modal',assessment.answer)
+                    console.log('Modal', assessment.answer)
                   }
-  
-                }); 
-              }             
+
+                });
+              }
             }
           }
         });
@@ -129,7 +142,7 @@ export class GeolocationService {
   }
 
   //Retorna un observable con los datos para valorar un lugar
-  getLugarCercano(){
+  getLugarCercano() {
     return this.lugarCercano$.asObservable();
   }
 
@@ -160,15 +173,15 @@ export class GeolocationService {
   crearMapa(points: Array<Point>) {
     // si el gps está activo crea el mapa con el marcador
     let centro: Point;
-    let maxmin: TwoPoints ;
-    let zoom:number;
+    let maxmin: TwoPoints;
+    let zoom: number;
     this.points = points;
-    if (this.gps) {      
-      if(this.points.length > 1){
+    if (this.gps) {
+      if (this.points.length > 1) {
         //agrega la posicion actual a la lista de puntos
         this.points.push(this.posicion)
         maxmin = this.getMaxMinPoints(this.points);
-        centro  = this.getCenterPoints(maxmin);
+        centro = this.getCenterPoints(maxmin);
         this.distancia = this.calculateDistance(maxmin);
         zoom = this.calculateZoom(this.distancia);
       }
@@ -183,7 +196,7 @@ export class GeolocationService {
       this.createMarker()
     } else {
       //this.points.push(this.posicion)
-      if(this.points.length > 1){
+      if (this.points.length > 1) {
         maxmin = this.getMaxMinPoints(this.points);
         centro = this.getCenterPoints(maxmin);
         this.distancia = this.calculateDistance(maxmin);
@@ -200,7 +213,39 @@ export class GeolocationService {
     }
     this.mapa.addControl(new Mapboxgl.NavigationControl());
     this.mapa.addControl(new Mapboxgl.FullscreenControl());
+    //Crea el objeto direction para agregarlo al mapa
+    var directions = new MapboxDirections({
+      accessToken: environment.mapBoxToken,
+      unit: 'metric',
+      profile: 'mapbox/walking',
+      interactive: false,
+      controls: {
+        inputs: false,
+        instructions: false,
+        profileSwitcher: true
+
+      }
+    });
+
+    this.mapa.on('load', () => {
+      directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
+      directions.setDestination([-56.713478, -34.340111]);
+      //directions.setProfile('driving-traffic');
+    });
+
+    this.mapa.addControl(directions);
+
+    directions.on("route", e => {
+      // routes is an array of route objects as documented here:
+      // https://docs.mapbox.com/api/navigation/#route-object
+      let routes = e.route
+
+      // Each route object has a distance property
+      console.log("Route lengths", routes.map(r => r.distance))
+    })
+
     
+
 
   }
 
@@ -227,7 +272,7 @@ export class GeolocationService {
     let zoom = this.calculateZoom(this.distancia);
     this.mapa.setCenter([centro.longitud, centro.latitud]);
     this.mapa.setZoom(zoom);
-    
+
   }
 
   //Compruebe si la aplicación tiene permiso de acceso GPS 

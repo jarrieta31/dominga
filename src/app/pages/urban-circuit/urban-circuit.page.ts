@@ -200,7 +200,7 @@ export class UrbanCircuitPage implements OnInit {
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': '#3880ff',
+                    'line-color': '#fb0108',
                     'line-width': 5
                 }
             });

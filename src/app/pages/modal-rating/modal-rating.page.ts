@@ -36,7 +36,7 @@ export class ModalRatingPage {
         private authSvc: AuthService) {}
 
     ngOnInit() {
-        console.table(this.navParams);
+        //console.table(this.navParams);
         this.nombre = this.navParams.data.nombre;
         this.key = this.navParams.data.key;
         this.tipo = this.navParams.data.tipo;
