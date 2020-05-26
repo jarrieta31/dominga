@@ -16,7 +16,6 @@ import distance from '@turf/distance';
 import { AuthService } from './auth.service';
 import { Assessment } from '../shared/assessment';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { NetworkService } from './network.service';
 
 
 
@@ -26,7 +25,6 @@ import { NetworkService } from './network.service';
 
 export class GeolocationService {
 
-  isConnected = false;  //verifica el estado de la conexion a internet
   items: Place[] = [];
   sourceMatch$: Observable<any>
   user: string
@@ -67,22 +65,13 @@ export class GeolocationService {
     })
   })
 
-  constructor(private androidPermissions: AndroidPermissions, private networkService: NetworkService,
-    private platform: Platform, private authService: AuthService,
+  constructor(private androidPermissions: AndroidPermissions, private authService: AuthService,
     private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
 
-    //Chequea el estado de la conexion a internet
-    this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-      this.isConnected = connected;
-      if (!this.isConnected) {
-        console.log('Por favor enciende tu conexión a Internet');
-      }
-    });
-
+    //Subscripcion para tener el id de usuario actual
     this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
       this.user = authData.uid;
     });
-
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion

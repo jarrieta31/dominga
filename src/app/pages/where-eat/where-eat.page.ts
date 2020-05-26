@@ -14,19 +14,23 @@ export class WhereEatPage implements OnInit {
 	eat: DondeComer[];
   textoBuscar = '';
 
-  constructor(private database: DatabaseService) { }
-
   su = this.database.getEat().snapshotChanges().subscribe(data => {
-                this.eat = [];
-                data.forEach(item => {
-                    let a = item.payload.toJSON();
-                    a['$key'] = item.key;
-                    this.eat.push(a as DondeComer);
-                })            
-            });
+    this.eat = [];
+    data.forEach(item => {
+        let a = item.payload.toJSON();
+        a['$key'] = item.key;
+        this.eat.push(a as DondeComer);
+    })            
+});
+
+  constructor(private database: DatabaseService) { 
+    this.su;
+  }
+
+  
 
   ngOnInit() {
-  	this.su;
+  	
   }
 
   ngOnDestroy(){

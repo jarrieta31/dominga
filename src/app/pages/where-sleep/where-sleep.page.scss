@@ -3,10 +3,9 @@
     padding: 0px !important;
 }
 
-ion-avatar,
-ion-avatar>img {
+ion-avatar, ion-avatar>img {
     border-radius: 15% !important;
-    height: 100%;
+    height: 95%;
     width: 100%;
 }
 
@@ -63,4 +62,15 @@ span {
 .info {
     width: 75%;
     margin-left: 5%;
+    padding: 3% 2% 2% 5%;
+}
+
+.img-elem{
+    width: 100%;
+    border-radius: 15%;
+    margin: 0px;
+}
+
+.lista{
+    height: 100%;
 }

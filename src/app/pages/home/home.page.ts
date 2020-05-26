@@ -12,6 +12,8 @@ import distance from '@turf/distance';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { ModalRatingPage } from '../modal-rating/modal-rating.page';
+import { NetworkService } from '../../services/network.service';
+
 
 
 @Component({
@@ -21,6 +23,8 @@ import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 })
 export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
+    subsciptionNetwork: any; //Subscripcion para ver el estado de la conexión a internet
+    isConnected = false;  //verifica el estado de la conexion a internet
     items: Place[];
     items$: BehaviorSubject<Place[]> = new BehaviorSubject<Place[]>([]);
     obsItems$ = this.items$.asObservable();
@@ -58,7 +62,9 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         private geolocationService: GeolocationService,
         private platform: Platform,
         private alertController: AlertController,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private networkService: NetworkService,
+    
     ) {
         this.geolocationService.iniciarSubscriptionClock();
         this.geolocationService.iniciarSubscriptionMatch();
@@ -117,6 +123,15 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     );
     
     ngOnInit() {
+    
+        //Chequea el estado de la conexion a internet
+        this.subsciptionNetwork = this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.isConnected = connected;
+            if (!this.isConnected) {
+            alert('Por favor enciende tu conexión a Internet');
+            }
+        });
+
         this.su;    
         this.subscrictionUser;
         //obtiene 
@@ -129,6 +144,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy(): void {
+        this.subsciptionNetwork.unsubscribe();
         this.subscripcionPosition.unsubscribe();
         this.backButtonSubscription.unsubscribe();
         this.subscrictionUser.unsubscribe();

@@ -13,20 +13,27 @@ export class WhereSleepPage implements OnInit {
 
     sleep: DondeDormir[];
     textoBuscar = '';
-
-    constructor(private database: DatabaseService) {}
+    items: any[] = [];
 
     su = this.database.getSleep().snapshotChanges().subscribe(data => {
-                this.sleep = [];
-                data.forEach(item => {
-                    let a = item.payload.toJSON();
-                    a['$key'] = item.key;
-                    this.sleep.push(a as DondeDormir);
-                })
-            });
+        this.sleep = [];
+        data.forEach(item => {
+            let a = item.payload.toJSON();
+            a['$key'] = item.key;
+            this.sleep.push(a as DondeDormir);
+        })
+    });
+
+    constructor(private database: DatabaseService) {
+        this.su;
+        
+    }
+
+    
 
     ngOnInit() {
-        this.su;
+        
+    
     }
 
     ngOnDestroy(){
@@ -36,5 +43,7 @@ export class WhereSleepPage implements OnInit {
     buscar( event ){
         this.textoBuscar = event.detail.value;
     }
+
+    
 
 }

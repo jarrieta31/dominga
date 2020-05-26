@@ -17,7 +17,7 @@ export class NetworkService {
     private platform: Platform,
     private http: HttpClient) {
 
-    if (this.platform.is('cordova')) {
+    if (this.platform.is('android')) {
       // on Device
       this.network.onConnect().subscribe(() => {
         console.log('network was connected :-)');
@@ -40,8 +40,8 @@ export class NetworkService {
       this.online.subscribe((isOnline) => {
         if (isOnline) {
           this.hasConnection.next(true);
-          console.log('network was connected :-)');
-          alert("Se restauró la conexión a internet!!")
+          console.log('Se restauró la conexión a internet!! :-)');
+
         } else {
           console.log('No hay conexión a internet :-(');
           this.hasConnection.next(false);

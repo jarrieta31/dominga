@@ -9,7 +9,7 @@
 </ion-header>
 <ion-content>
 	<ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <ion-list>
+    <!-- <ion-list>
         <ion-item *ngFor="let item of eat | filtroDondeComer:textoBuscar">
             <div class="padre">
                 <div class="imagen">
@@ -28,5 +28,25 @@
                 </div>
             </div>
         </ion-item>
-    </ion-list>
+    </ion-list> -->
+    <ion-virtual-scroll [items]="eat | filtroDondeComer:textoBuscar" approxItemHeight="115px" class="lista">
+        <ion-item *virtualItem="let item ; let itemBounds = bounds;" class="item">
+            <div class="padre">
+                <div class="imagen">
+                    <ion-avatar item-start>
+                        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
+                    </ion-avatar>
+                </div>
+                <div class="info">
+                    <ion-label>
+                        <h2>{{ item.nombre }}</h2>
+                        <div class="infoAbajo">
+                            <h3>{{ item.direccion }}</h3>
+                            <p><span>Tel: </span>{{ item.telefono }}</p>
+                        </div>
+                    </ion-label>
+                </div>
+            </div>
+        </ion-item>
+    </ion-virtual-scroll>
 </ion-content>
