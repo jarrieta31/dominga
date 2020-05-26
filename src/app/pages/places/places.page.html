@@ -6,10 +6,10 @@
         <ion-title id="nombre">{{nombre}}</ion-title>
         <ion-buttons slot="primary">
             <ion-button *ngIf="fav?.length == 0" (click)=agregarFavorito()>
-                <i id="fav" class="fas fa-heart"></i>
+                <i id="fav" class="far fa-heart"></i>
             </ion-button>
             <ion-button (click)=deleteFav()>
-                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart-broken"></i>
+                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart"></i>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

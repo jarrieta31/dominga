@@ -33,7 +33,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         initialSlide: 0,
         speed: 400,
         slidesPerView: 1,
-        spaceBetween: 1
+        spaceBetween: 1,
+        autoplay:true
     };
 
     cards = {
@@ -41,7 +42,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         speed: 100,
         slidesPerView: 1,
         spaceBetween: 20,
-        direction: 'vertical'
+        direction: 'vertical',
+        autoplay:true
     };
 
     lugarCercano$: Observable<Place>;

@@ -3,17 +3,9 @@
     margin: 0;
 }
 
-// .cabezera {
-//     background-color: #00dea5;
-// }
-
 .estrella {
     color: #ffb134;
 }
-
-// .icono {
-//     border: 1px solid green;
-// }
 
 .contenedor-iconos {
     display: flex;
@@ -99,20 +91,6 @@ ion-label {
     //border: 1px solid black;
 }
 
-ion-card {
-    height: 100%;
-    margin: 0 8% 0 8%;
-}
-
-ion-card {
-    img {
-        height: 20vh !important;
-        width: 100% !important;
-        max-width: 100%;
-        align-items: center;
-    }
-}
-
 .distancia {
     float: left;
     margin-left: 3%;
@@ -133,7 +111,7 @@ ion-card {
 }
 
 .cpadre {
-    height: 98%;
+    height: 100%;
     width: 100%;
     margin-left: 10%;
     margin-right: 10%;
@@ -149,26 +127,21 @@ ion-card {
     box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
 }
 
-// .chead, .ccontent, .cfooter{
-//     border: 1px solid black;
-// }
-
 .chead {
-    height: 20%;
+    height: 17%;
     background-color: #10dda6;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    //padding: 8%;
     display: flex;
     flex-direction: row;
 }
 
 .ccontent {
-    height: 65%;
+    height: 77%;
 }
 
 .cfooter {
-    height: 15%;
+    height: 12%;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     display: flex;

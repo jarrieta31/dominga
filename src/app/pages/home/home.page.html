@@ -8,7 +8,7 @@
 <ion-content>
     <div class="padre">
         <div class="slider">
-            <ion-slides class="sliderPrimero" scrollbar="true" pager="true" [options]="slideOpts">
+            <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
                 <ion-slide class="sliderHijo">
                     <a href="https://wa.me/59895030529?text=Hola,%20quería%20consultar%20sobre%20el%20servicio%20de%20bicicletas.">
                         <img class="imgSlider" src="/assets/img/slider1.jpeg" />
@@ -73,30 +73,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <ion-card>
-                        <ion-card-header color="options">
-                            <ion-card-title class="cardTitle">
-                                <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span>
-                                    <ion-icon class="iconTitle" name="leaf-outline"></ion-icon>
-                                </div>
-                            </ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <img class="foto" [src]="item.imagenPrincipal" [alt]="item.nombre" />
-                            <div>
-                                <div class="distancia">
-                                    <ion-label slot="start">{{item.distancia}}</ion-label>
-                                </div>
-                                <div class="valoracion">
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon class="estrella" name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                </div>
-                            </div>
-                        </ion-card-content>
-                    </ion-card> -->
                 </ion-slide>
             </ion-slides>
         </div>
