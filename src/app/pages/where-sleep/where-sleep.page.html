@@ -1,41 +1,20 @@
 <ion-header>
     <ion-toolbar color="circuits">
-    	<ion-buttons slot="start">
+        <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
-    	<ion-img slot="start" src="/assets/icon/dormir.png"></ion-img>
+        <ion-img slot="start" src="/assets/icon/dormir.png"></ion-img>
         <ion-title>¿Dónde Dormir?</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
-	<ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <!-- <ion-list>
-        <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
-            <div class="padre">
-                <div class="imagen">
-                    <ion-avatar slot="start">
-                        <img src="{{ item.imagen }}">
-                    </ion-avatar>
-                </div>
-                <div class="info">
-                    <ion-label>
-                        <h2>{{ item.nombre }}</h2>
-                        <div class="infoAbajo">
-                            <h3>{{ item.direccion }}</h3>
-                            <p><span>Tel: </span>{{ item.telefono }}</p>
-                        </div>
-                    </ion-label>
-                </div>
-            </div>
-        </ion-item>        
-    </ion-list> -->
-
+    <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-virtual-scroll [items]="sleep | filtroDondeDormir:textoBuscar" approxItemHeight="125px" class="lista">
         <ion-item *virtualItem="let item; let itemBounds = bounds;">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar item-start>
-                        <ion-img [src]="item.imagen"  class="img-elem"></ion-img>
+                        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
                     </ion-avatar>
                 </div>
                 <div class="info">

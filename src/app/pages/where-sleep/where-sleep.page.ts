@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 
 import { DondeDormir } from '../../shared/donde-dormir';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
     selector: 'app-where-sleep',
@@ -15,6 +16,8 @@ export class WhereSleepPage implements OnInit {
     textoBuscar = '';
     items: any[] = [];
 
+    loading: any;
+
     su = this.database.getSleep().snapshotChanges().subscribe(data => {
         this.sleep = [];
         data.forEach(item => {
@@ -24,20 +27,30 @@ export class WhereSleepPage implements OnInit {
         })
     });
 
-    constructor(private database: DatabaseService) {
-        this.su;
-        
-    }
+    constructor(private database: DatabaseService,
+                private loadingCtrl: LoadingController) { }
 
     
 
     ngOnInit() {
-        
-    
+        this.show("Cargando lugares...");
     }
 
     ngOnDestroy(){
         this.su.unsubscribe();
+    }
+
+    async show(message: string) {
+
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner: 'bubbles'
+      });
+        
+     this.loading.present().then(() => {
+         this.su;
+         this.loading.dismiss();
+     });
     }
 
     buscar( event ){

@@ -1,34 +1,14 @@
 <ion-header>
     <ion-toolbar color="eat">
-    	<ion-buttons slot="start">
+        <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back"></ion-back-button>
         </ion-buttons>
-    	<ion-img slot="start" src="/assets/icon/comida.png"></ion-img>
+        <ion-img slot="start" src="/assets/icon/comida.png"></ion-img>
         <ion-title>¿Dónde Comer?</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
-	<ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <!-- <ion-list>
-        <ion-item *ngFor="let item of eat | filtroDondeComer:textoBuscar">
-            <div class="padre">
-                <div class="imagen">
-                    <ion-avatar slot="start">
-                        <img src="{{ item.imagen }}">
-                    </ion-avatar>
-                </div>
-                <div class="info">
-                    <ion-label>
-                        <h2>{{ item.nombre }}</h2>
-                        <div class="infoAbajo">
-                            <h3>{{ item.direccion }}</h3>
-                            <p><span>Tel: </span>{{ item.telefono }}</p>
-                        </div>
-                    </ion-label>
-                </div>
-            </div>
-        </ion-item>
-    </ion-list> -->
+    <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-virtual-scroll [items]="eat | filtroDondeComer:textoBuscar" approxItemHeight="115px" class="lista">
         <ion-item *virtualItem="let item ; let itemBounds = bounds;" class="item">
             <div class="padre">

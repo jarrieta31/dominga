@@ -13,8 +13,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 import { NetworkService } from '../../services/network.service';
-
-
+import { LoadingController } from '@ionic/angular';
 
 @Component({
     selector: 'app-home',
@@ -46,14 +45,15 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         speed: 100,
         slidesPerView: 1,
         spaceBetween: 20,
-        direction: 'vertical',
-        autoplay:true
+        direction: 'vertical'
     };
 
     lugarCercano$: Observable<Place>;
     subscrictionLugarCercano: any;
     //subscrictionUser: any;
     idUser: string;
+
+    loading: any;
 
     constructor(
         private database: DatabaseService,
@@ -64,6 +64,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         private alertController: AlertController,
         private modalController: ModalController,
         private networkService: NetworkService,
+        private loadingCtrl: LoadingController
     
     ) {
         this.geolocationService.iniciarSubscriptionClock();
@@ -132,8 +133,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.su;    
-        this.subscrictionUser;
+        this.show("Cargando datos...");
         //obtiene 
         this.lugarCercano$ = this.geolocationService.getLugarCercano();
         this.subscrictionLugarCercano = this.lugarCercano$.subscribe(place => {
@@ -209,6 +209,20 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         });
      
         return await modal.present();
+    }
+
+    async show(message: string) {
+
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner: 'bubbles'
+      });
+        
+     this.loading.present().then(() => {
+         this.su;    
+         this.subscrictionUser;
+         this.loading.dismiss();
+     });
     }
 
 }
