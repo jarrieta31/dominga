@@ -21,7 +21,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/places/places.module').then( m => m.PlacesPageModule)
   },
   {
-    path: 'map',
+    path: 'map/:longitud/:latitud',
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
   },
   {

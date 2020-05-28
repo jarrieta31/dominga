@@ -19,6 +19,7 @@ import { LoaderService } from '../../services/loader.service';
 import 'rxjs';
 import { Point } from '../../shared/point';
 import { Platform } from '@ionic/angular';
+import * as mapboxgl from 'mapbox-gl';
 
 
 
@@ -166,6 +167,16 @@ export class PlacesPage implements OnInit {
 
                 this.mapa.on('load', () => {
                     this.mapa.resize();
+                });
+
+                //Abre una nueva pagina con el mapa
+                this.mapa.on('click', () => { 
+                    var ll = new mapboxgl.LngLat(this.mapa.getCenter());                       
+                    //ll = this.mapa.getCenter(); //Son las coordenadas del marcador
+                    let longitud = ll.lng;
+                    let latitud = ll.lat;
+                    console.log("Latitud :", latitud);          
+                    this.router.navigate(['/map', longitud, latitud]);                        
                 });
             }
 

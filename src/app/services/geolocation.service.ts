@@ -95,34 +95,33 @@ export class GeolocationService {
 
     this.sourceMatch$ = timer(1000, 20000).pipe(
       tap(clock => {
-
         let posicion = this.posicion$.value;
         let points: TwoPoints;
         let dist: number;
         let options = { units: 'meters' };
         this.items.forEach(place => {
-          points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
-          dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
-
-          //Verifica la distancia
-          if (dist <= 25) {
-            //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
-            console.log(place.valoracion)
-            for (var key in place.valoracion) {
-              //si el usuario no ha valorado
-              if (key != this.user) {
-                //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
-                this.valuationsPlaces.forEach(assessment => {
-                  if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
-                    assessment.answer = true;
-                    this.lugarCercano$.next(place)
-                    console.log('Modal', assessment.answer)
-                  }
-
-                });
+          if (posicion != null) {
+            points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
+            dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+            //Verifica la distancia
+            if (dist <= 25) {
+              //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
+              console.log(place.valoracion)
+              for (var key in place.valoracion) {
+                //si el usuario no ha valorado
+                if (key != this.user) {
+                  //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
+                  this.valuationsPlaces.forEach(assessment => {
+                    if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
+                      assessment.answer = true;
+                      this.lugarCercano$.next(place)
+                    }
+                  });
+                }
               }
             }
           }
+
         });
       })
       , share()
@@ -233,7 +232,7 @@ export class GeolocationService {
       console.log("Route lengths", routes.map(r => r.distance))
     })
 
-    
+
 
 
   }

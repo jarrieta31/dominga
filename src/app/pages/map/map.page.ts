@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Place } from '../../shared/place';
+import * as mapboxgl from 'mapbox-gl';
+
 
 @Component({
   selector: 'app-map',
@@ -7,12 +11,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MapPage implements OnInit {
 
-	
-  	constructor() { }
+  argumentos = null;
+  place: Place;
 
-  	ngOnInit() {
+  constructor(private activatedRoute: ActivatedRoute) { }
 
-  		
+  ngOnInit() {
+    var ll = new mapboxgl.LngLat();    
+    this.argumentos = this.activatedRoute.snapshot.paramMap.get('latitud');
+    let datos = JSON.parse(this.argumentos);
+    alert(datos.latitude);
+
   }
 }
 
