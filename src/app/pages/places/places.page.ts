@@ -14,7 +14,7 @@ import * as Mapboxgl from 'mapbox-gl';
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
-import { LoaderService } from '../../services/loader.service';
+import { LoadingController } from '@ionic/angular';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
@@ -76,15 +76,16 @@ export class PlacesPage implements OnInit {
     mapa: Mapboxgl.Map;
     par: string;
 
+    loading: any;
+
     constructor(
         private database: DatabaseService,
         private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
-        public loader: LoaderService,
         private geolocationService: GeolocationService,
         private router: Router,
-        private platform: Platform
-
+        private platform: Platform,
+        private loadingCtrl: LoadingController
     ) { }
 
 
@@ -211,13 +212,8 @@ export class PlacesPage implements OnInit {
 
             //Emite el valor de la distancias desde casa dominga por si no está activo el GPS
             this.distancia$.next(this.distancia_cd)
-
-
-
-
-
         })
-        console.log(this.sugerencias);
+
         this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];
         this.sug_2[1] = this.sugerencias[2];
@@ -229,12 +225,10 @@ export class PlacesPage implements OnInit {
     });
 
     ngOnInit() {
-        this.loader.show('Cargando lugar...');
-        this.user;
-        this.subscription;
-        this.su;
+        
+        this.show("Cargando lugares...");
 
-        this.loader.hide();
+        
 
         if (this.platform.is('android') && this.geolocationService.gps) {
 
@@ -269,6 +263,21 @@ export class PlacesPage implements OnInit {
         if(this.platform.is('android') && this.geolocationService.gps ){
             this.subscripcionPosition.unsubscribe();
         }
+    }
+
+    async show(message: string) {
+
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner: 'bubbles'
+      });
+        
+     this.loading.present().then(() => {
+         this.user;
+         this.subscription;
+         this.su;
+         this.loading.dismiss();
+     });
     }
 
     async cambiarImagen() {

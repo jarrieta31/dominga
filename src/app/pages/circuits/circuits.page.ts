@@ -4,6 +4,8 @@ import { DatabaseService } from '../../services/database.service';
 
 import { TipoCircuito } from '../../shared/tipo-circuito';
 
+import { LoadingController } from '@ionic/angular';
+
 @Component({
     selector: 'app-circuits',
     templateUrl: './circuits.page.html',
@@ -14,7 +16,10 @@ export class CircuitsPage implements OnInit {
     tipoCircuito: TipoCircuito[];
     textoBuscar = '';
 
-    constructor(public database: DatabaseService) {}
+    loading: any;
+
+    constructor(private database: DatabaseService,
+                private loadingCtrl: LoadingController) {}
 
     su = this.database.getTypeCircuits().snapshotChanges().subscribe(data => {
                 this.tipoCircuito = [];
@@ -27,7 +32,7 @@ export class CircuitsPage implements OnInit {
             });
 
     ngOnInit() {
-        this.su;
+        this.show("Cargando circuitos...");
     } 
 
     ngOnDestroy(){
@@ -37,4 +42,17 @@ export class CircuitsPage implements OnInit {
     buscar(event){
         this.textoBuscar = event.detail.value;
   }
+
+  async show(message: string) {
+
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner: 'bubbles'
+      });
+        
+     this.loading.present().then(() => {
+         this.su;
+         this.loading.dismiss();
+     });
+    }
 }

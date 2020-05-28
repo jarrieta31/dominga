@@ -4,6 +4,7 @@ import { DatabaseService } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
 
 import { Favourite } from '../../shared/favourite';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-favorite',
@@ -17,6 +18,8 @@ export class FavoritePage implements OnInit {
 
   users: string;
 
+  loading: any;
+
   su = this.authSvc.currentUser.subscribe( authData =>{
             //console.log(authData);
             this.users = authData.uid;
@@ -25,17 +28,31 @@ export class FavoritePage implements OnInit {
         });
 
   constructor(
-    public database: DatabaseService,
-    public authSvc: AuthService
+    private database: DatabaseService,
+    private authSvc: AuthService,
+    private loadingCtrl: LoadingController
     ) { }
 
   ngOnInit() {
-    this.su;
+    this.show("Cargando favoritos...");
   }
 
   ngOnDestroy(){
     this.su.unsubscribe();
   }
+
+  async show(message: string) {
+
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner: 'bubbles'
+      });
+        
+     this.loading.present().then(() => {
+         this.su;
+         this.loading.dismiss();
+     });
+    }
 
   getFavUser(){
     this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
