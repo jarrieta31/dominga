@@ -129,7 +129,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         this.subsciptionNetwork = this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
             if (!this.isConnected) {
-            alert('Por favor enciende tu conexión a Internet');
+            //alert('Por favor enciende tu conexión a Internet');
             }
         });
 
