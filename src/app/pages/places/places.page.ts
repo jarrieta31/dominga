@@ -7,19 +7,19 @@ import { AuthService } from '../../services/auth.service';
 import { Place } from '../../shared/place';
 import { Favourite } from '../../shared/favourite';
 
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 
 import * as Mapboxgl from 'mapbox-gl';
 
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavParams, NavController } from '@ionic/angular';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
 import { Platform } from '@ionic/angular';
-import * as mapboxgl from 'mapbox-gl';
+
 
 
 
@@ -163,7 +163,8 @@ export class PlacesPage implements OnInit {
                 });
 
                 const marker = new Mapboxgl.Marker({
-                    draggable: false
+                    draggable: false,
+                    color: "#ea4335"
                 }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
 
                 this.mapa.on('load', () => {
@@ -172,12 +173,8 @@ export class PlacesPage implements OnInit {
 
                 //Abre una nueva pagina con el mapa
                 this.mapa.on('click', () => { 
-                    var ll = new mapboxgl.LngLat(this.mapa.getCenter());                       
-                    //ll = this.mapa.getCenter(); //Son las coordenadas del marcador
-                    let longitud = ll.lng;
-                    let latitud = ll.lat;
-                    console.log("Latitud :", latitud);          
-                    this.router.navigate(['/map', longitud, latitud]);                        
+                    //console.log('longitud: '+ this.longitud + ' latitude' + this.latitud);      
+                    this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key}]);                        
                 });
             }
 

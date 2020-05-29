@@ -1,15 +1,18 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-            <ion-back-button ></ion-back-button>
+            <ion-back-button [routerLink]="['/places', id]"></ion-back-button>
     </ion-buttons>
-    <ion-title>Mapa</ion-title>
+    <ion-title>Ir a {{ nombre }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <p>{{argumentos}}</p>
-  <div class="divd">
-    <div id="mapaBox"></div>
-  </div>
+<ion-content> 
+    
+    <div id="contenedor">
+      
+      <div id="mapaBox"></div>
+
+    </div>
 </ion-content>
+

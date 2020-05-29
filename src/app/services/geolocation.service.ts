@@ -160,11 +160,16 @@ export class GeolocationService {
 
   crearMapa(points: Array<Point>) {
     // si el gps está activo crea el mapa con el marcador
-    let centro: Point;
-    let maxmin: TwoPoints;
-    let zoom: number;
+    var centro: Point;
+    var maxmin: TwoPoints;
+    var zoom: number;
     this.points = points;
     if (this.gps) {
+      // Si viene un solo punto y el gps está activo
+      if (this.points.length == 1) {
+        centro = { longitud: this.points[0].longitud, latitud: this.points[0].latitud }
+        zoom = 16
+      }
       if (this.points.length > 1) {
         //agrega la posicion actual a la lista de puntos
         this.points.push(this.posicion)
@@ -181,14 +186,20 @@ export class GeolocationService {
         center: [centro.longitud, centro.latitud],
         zoom: zoom
       });
+
       this.createMarker()
     } else {
-      //this.points.push(this.posicion)
+      // Si el gps está desactivado
       if (this.points.length > 1) {
         maxmin = this.getMaxMinPoints(this.points);
         centro = this.getCenterPoints(maxmin);
         this.distancia = this.calculateDistance(maxmin);
         zoom = this.calculateZoom(this.distancia);
+      }
+      // Si viene un solo punto y el gps está desactivado
+      if (this.points.length == 1) {
+        centro = { longitud: this.points[0].longitud, latitud: this.points[0].latitud }
+        zoom = 16
       }
       Mapboxgl.accessToken = environment.mapBoxToken;
       this.mapa = new Mapboxgl.Map({
@@ -199,39 +210,16 @@ export class GeolocationService {
         zoom: zoom
       });
     }
+    if (this.points.length == 1) {
+      // Crea marcador para un solo lugar
+      const marker = new Mapboxgl.Marker({
+        draggable: false,
+        color: "#ea4335"
+      }).setLngLat([this.points[0].longitud, this.points[0].latitud]).addTo(this.mapa);
+
+      
+    }
     this.mapa.addControl(new Mapboxgl.NavigationControl());
-    this.mapa.addControl(new Mapboxgl.FullscreenControl());
-    //Crea el objeto direction para agregarlo al mapa
-    var directions = new MapboxDirections({
-      accessToken: environment.mapBoxToken,
-      unit: 'metric',
-      profile: 'mapbox/walking',
-      interactive: false,
-      controls: {
-        inputs: false,
-        instructions: false,
-        profileSwitcher: true
-
-      }
-    });
-
-    this.mapa.on('load', () => {
-      directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
-      directions.setDestination([-56.713478, -34.340111]);
-      //directions.setProfile('driving-traffic');
-    });
-
-    this.mapa.addControl(directions);
-
-    directions.on("route", e => {
-      // routes is an array of route objects as documented here:
-      // https://docs.mapbox.com/api/navigation/#route-object
-      let routes = e.route
-
-      // Each route object has a distance property
-      console.log("Route lengths", routes.map(r => r.distance))
-    })
-
 
 
 
@@ -402,6 +390,12 @@ export class GeolocationService {
   actualizarPosicion$(point: Point) {
     this.posicion = point;
     this.posicion$.next(this.posicion);
+  }
+
+  clearDatosMapa(){
+    this.points = [];
+    
+    this.mapa.clearSorage();
   }
 
 
