@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { DatabaseService } from '../../services/database.service';
 
 import { Place } from '../../shared/place';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
 import distance from '@turf/distance';
@@ -29,7 +29,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     obsItems$ = this.items$.asObservable();
     posicion$: Observable<Point>;
     casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
-    subscripcionPosition: any;
+    subscripcionPosition: Subscription;
     backButtonSubscription: any;
     dataReturned: any;
     slideOpts = {
@@ -49,7 +49,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     };
 
     lugarCercano$: Observable<Place>;
-    subscrictionLugarCercano: any;
+    subscrictionLugarCercano: Subscription;
     //subscrictionUser: any;
     idUser: string;
 

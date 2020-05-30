@@ -5,7 +5,7 @@ import { Point } from '../../shared/point';
 import { environment } from '../../../environments/environment';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { GeolocationService } from '../../services/geolocation.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TwoPoints } from 'src/app/shared/two-points';
 import * as Mapboxgl from 'mapbox-gl';
 import { tap } from 'rxjs/operators';
@@ -18,71 +18,115 @@ import { tap } from 'rxjs/operators';
 })
 export class MapPage implements OnInit {
   posicion$: Observable<Point>;
-  subscripcionPosition: any;
+  subscripcionPosition: Subscription;
   distancia: number = 0;
   longitud: number = null;
   latitud: number = null;
   nombre: string = null;
   place: Place;
   points: Point[] = [];
-
+  myPositionMarker: Mapboxgl.Marker = null;
   id: number;
+  mapa: Mapboxgl.Map; //Mapa para mostrar
+  directions: MapboxDirections = null; //Buscador de direcciones para indicar recorrido
+  
 
   constructor(private activatedRoute: ActivatedRoute, private geolocationService: GeolocationService,
     private router: Router) {
     // this.geolocationService.iniciarSubscriptionClock();
     // this.posicion$ = this.geolocationService.getPosicionActual$();
+    //Obtiene el observable con la posicion del usuario
+    //this.posicion$ = this.geolocationService.getPosicionActual$();
   }
 
   regresar() {
+
     this.router.navigate(['/places', this.id])
   }
 
   ngOnInit() {
 
-
-
+    //Obtiene el observable con la posicion del usuario
+    this.posicion$ = this.geolocationService.getPosicionActual$();
+    Mapboxgl.accessToken = environment.mapBoxToken;
     this.nombre = this.activatedRoute.snapshot.paramMap.get('nombre');
     this.longitud = Number(this.activatedRoute.snapshot.paramMap.get('longitud'));
     this.latitud = Number(this.activatedRoute.snapshot.paramMap.get('latitud'));
     this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
     let lugar: Point = { longitud: this.longitud, latitud: this.latitud };
     this.points.push(lugar);
-    this.geolocationService.crearMapa(this.points);
-
-    // const marker = new Mapboxgl.Marker({
-    //   draggable: false,
-    //   color: "#ea4335"
-    // }).setLngLat([this.points[0].longitud, this.points[0].latitud])
-    // .addTo(this.geolocationService.mapa);
-
-    // var popup = new Mapboxgl.Popup({ offset: 25 }).setHTML(
-    //   `<a href="http://localhost/places/${data.$key}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
-    // );
-
-    this.geolocationService.mapa.on('load', () => {
-      this.geolocationService.mapa.resize();
+    //Crea un mapa para indicar el camino al usuario
+    this.mapa = new Mapboxgl.Map({
+      container: 'mapaIndicador',
+      style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
+      antialias: true,
+      center: [this.longitud, this.latitud],
+      zoom: 12
     });
 
-    // //Crea el objeto direction para agregarlo al mapa
-    // var directions = new MapboxDirections({
-    //   accessToken: environment.mapBoxToken,
-    //   unit: 'metric',
-    //   profile: 'mapbox/walking',
-    //   interactive: false,
-    //   controls: {
-    //     inputs: false,
-    //     instructions: false,
-    //     profileSwitcher: true
+    // Agrega el control de navegación
+    this.mapa.addControl(new Mapboxgl.NavigationControl());
+    
 
-    //   }
-    // });
-    // console.log('***********', this.geolocationService.posicion.longitud)
-    // this.geolocationService.mapa.on('load', () => {
-    //   directions.setOrigin([this.geolocationService.posicion.longitud, this.geolocationService.posicion.latitud]);
-    //   directions.setDestination([this.longitud, this.latitud]);
-    //   //directions.setProfile('driving-traffic');
-    // });
+    //Crea el objeto direction para agregarlo al mapa
+    this.directions = new MapboxDirections({
+      accessToken: environment.mapBoxToken,
+      unit: 'metric',
+      profile: 'mapbox/walking',
+      interactive: false,
+      controls: {
+        inputs: false,
+        instructions: false,
+        profileSwitcher: true        
+      },
+      placeholderOrigin: "Tu",
+      placeholderDestination: this.nombre
+    });
+
+    this.mapa.addControl(new MapboxDirections({ accessToken: Mapboxgl.accessToken }), 'top-left');
+
+    //Crea e marcador del lugar
+    const marker = new Mapboxgl.Marker({
+      draggable: false,
+      color: "#ea4335"
+    }).setLngLat([this.longitud, this.latitud])
+      .addTo(this.mapa);
+
+
+    this.subscripcionPosition = this.posicion$.pipe(
+      tap(posicionUser => {
+        if (this.myPositionMarker == null && posicionUser != null) {
+          this.createMarker(posicionUser.longitud, posicionUser.latitud);
+        }
+        if (posicionUser != null) {
+          this.actualizarMarcador(posicionUser.longitud, posicionUser.latitud);
+          
+        }
+        if (this.directions != null && posicionUser != null) {
+          
+          this.mapa.on('load', () => {
+            this.directions.setOrigin([posicionUser.longitud, posicionUser.latitud]);
+            this.directions.setDestination([this.longitud, this.latitud]);
+            //directions.setProfile('driving-traffic');
+          });
+        }
+        console.log(posicionUser)
+      })
+    ).subscribe()
+
+    //Subscripcion para ver la ruta
+    this.directions.on("route", e => {
+      let routes = e.route
+      this.distancia = routes.map(r => r.distance);
+    })
+
+    this.mapa.on('load', () => {
+      this.mapa.resize();
+    });
+
+
+
+
 
     // this.geolocationService.mapa.addControl(directions);
 
@@ -99,9 +143,44 @@ export class MapPage implements OnInit {
   }
 
   OnDestroy() {
-    // this.subscripcionPosition.unsubscribe();
-    this.geolocationService.clearDatosMapa();
+    this.subscripcionPosition.unsubscribe(); //Dessubscripcion a la posicion del usuario    
   }
+
+  actualizarMarcador(longitud: number, latitud: number) {
+    if (this.myPositionMarker != null) {
+      this.myPositionMarker.remove();
+      this.myPositionMarker.setLngLat([longitud, latitud]).addTo(this.mapa);
+    }
+  }
+
+  createMarker(longitud: number, latitud: number) {
+    //Crea html para el marcador
+    var el = document.createElement("div");
+    el.className = "marker";
+    el.style.backgroundImage = 'url("/assets/icon/marcador_celeste.svg")';
+    el.style.width = '30px';
+    el.style.height = '30px';
+    el.style.borderRadius = '50%';
+    el.style.boxShadow = '1px 1px 40px #81bdda';
+    //Agrega el marcador al mapa
+    this.myPositionMarker = new Mapboxgl.Marker(el, { draggable: false })
+      .setLngLat([longitud, latitud])
+      .addTo(this.mapa);
+    //Agrega la posición del usuario a la lista de puntos           
+    //this.points.push(this.posicion as Point);
+    //Recalcula los puntos extremos
+    //let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
+    //Recalcula el centro del mapa
+    // let centro: Point = this.getCenterPoints(maxmin);
+    // this.distancia = this.calculateDistance(maxmin);
+    // let zoom = this.calculateZoom(this.distancia);
+    // this.mapa.setCenter([centro.longitud, centro.latitud]);
+    // this.mapa.setZoom(zoom);
+
+  }
+
 }
+
+
 
 

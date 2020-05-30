@@ -12,7 +12,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import * as Mapboxgl from 'mapbox-gl';
 
 import distance from '@turf/distance';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
 import { LoadingController, NavParams, NavController } from '@ionic/angular';
 
@@ -42,7 +42,7 @@ export class PlacesPage implements OnInit {
     private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
     obsDistancia$ = this.distancia$.asObservable();
     posicion$: Observable<Point>;
-    subscripcionPosition: any;
+    subscripcionPosition: Subscription;
 
     distancia_cd: string;
     users: string;
@@ -256,7 +256,7 @@ export class PlacesPage implements OnInit {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
-        this.distancia$.unsubscribe()
+        this.distancia$.unsubscribe();
         if(this.platform.is('android') && this.geolocationService.gps ){
             this.subscripcionPosition.unsubscribe();
         }

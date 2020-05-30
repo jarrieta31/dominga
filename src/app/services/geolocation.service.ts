@@ -6,7 +6,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import * as Mapboxgl from 'mapbox-gl';
 import { environment } from '../../environments/environment';
 import { Platform } from '@ionic/angular';
-import { timer, Observable, BehaviorSubject } from 'rxjs';
+import { timer, Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
@@ -28,7 +28,7 @@ export class GeolocationService {
   items: Place[] = [];
   sourceMatch$: Observable<any>
   user: string
-  subscriptionUser: any;
+  subscriptionUser: Subscription;
   subscriptionMatch: any;
   valuationsPlaces: Assessment[] = [];
   mapa: Mapboxgl.Map;
@@ -164,12 +164,9 @@ export class GeolocationService {
     var maxmin: TwoPoints;
     var zoom: number;
     this.points = points;
+    Mapboxgl.accessToken = environment.mapBoxToken;
     if (this.gps) {
-      // Si viene un solo punto y el gps está activo
-      if (this.points.length == 1) {
-        centro = { longitud: this.points[0].longitud, latitud: this.points[0].latitud }
-        zoom = 16
-      }
+      
       if (this.points.length > 1) {
         //agrega la posicion actual a la lista de puntos
         this.points.push(this.posicion)
@@ -178,7 +175,7 @@ export class GeolocationService {
         this.distancia = this.calculateDistance(maxmin);
         zoom = this.calculateZoom(this.distancia);
       }
-      Mapboxgl.accessToken = environment.mapBoxToken;
+      
       this.mapa = new Mapboxgl.Map({
         container: 'mapaBox',
         style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
@@ -196,12 +193,14 @@ export class GeolocationService {
         this.distancia = this.calculateDistance(maxmin);
         zoom = this.calculateZoom(this.distancia);
       }
-      // Si viene un solo punto y el gps está desactivado
-      if (this.points.length == 1) {
-        centro = { longitud: this.points[0].longitud, latitud: this.points[0].latitud }
-        zoom = 16
+
+      if (this.points.length == 1) {        
+        centro = {longitud: this.points[0].longitud, latitud:this.points[0].latitud};
+        zoom = 12;
+        console.log(centro.longitud);
       }
-      Mapboxgl.accessToken = environment.mapBoxToken;
+      
+     
       this.mapa = new Mapboxgl.Map({
         container: 'mapaBox',
         style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
@@ -210,19 +209,8 @@ export class GeolocationService {
         zoom: zoom
       });
     }
-    if (this.points.length == 1) {
-      // Crea marcador para un solo lugar
-      const marker = new Mapboxgl.Marker({
-        draggable: false,
-        color: "#ea4335"
-      }).setLngLat([this.points[0].longitud, this.points[0].latitud]).addTo(this.mapa);
-
-      
-    }
+    
     this.mapa.addControl(new Mapboxgl.NavigationControl());
-
-
-
   }
 
   createMarker() {
