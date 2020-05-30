@@ -249,9 +249,9 @@ export class PlacesPage implements OnInit {
         this.subscription.unsubscribe();
         this.su.unsubscribe();
         this.distancia$.unsubscribe()
-        if(this.platform.is('android') && this.geolocationService.gps ){
-            this.subscripcionPosition.unsubscribe();
-        }
+        // if(this.platform.is('android') && this.geolocationService.gps ){
+        //     this.subscripcionPosition.unsubscribe();
+        // }
     }
 
     async show(message: string) {
