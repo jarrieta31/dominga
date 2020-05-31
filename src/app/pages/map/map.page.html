@@ -8,11 +8,34 @@
 </ion-header>
 
 <ion-content> 
-    <p>{{distancia}}</p>
+    <!-- Boton fab -->
+  <ion-fab vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button>      
+      <ion-icon name="car-sport" *ngIf="profile == 'mapbox/driving-traffic'"></ion-icon>
+      <ion-icon name="walk" *ngIf="profile == 'mapbox/walking'"></ion-icon>
+      <ion-icon name="bicycle-outline" *ngIf="profile == 'mapbox/driving'"></ion-icon>      
+    </ion-fab-button>
+
+    <!-- Lista de botones de fab
+    <ion-fab-list side="top">
+        <ion-fab-button (click)="auto()">
+          
+        </ion-fab-button>
+        <ion-fab-button (click)="caminando()">
+          
+        </ion-fab-button>
+        
+    </ion-fab-list> -->
+
+  </ion-fab>
     <div id="contenedor">
       
       <div id="mapaIndicador"></div>
 
     </div>
 </ion-content>
+
+<ion-footer>
+  <ion-title>{{distancia}}</ion-title>
+</ion-footer>
 

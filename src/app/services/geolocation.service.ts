@@ -15,8 +15,6 @@ import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
 import { AuthService } from './auth.service';
 import { Assessment } from '../shared/assessment';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-
 
 
 @Injectable({
@@ -39,11 +37,11 @@ export class GeolocationService {
   isWatching: boolean;
   distancia: number;
   lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
-  posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
+  casaDominga = { "longitud": -56.7145, "latitud": -34.340007 };
+  posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(this.casaDominga);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
-  longCenter: number = 0;
-  casaDominga = { "longitud": -56.7145, "latitud": -34.340007 };
+  longCenter: number = 0;  
   timetest: any;
   sourceClock$: Observable<any>;
   sourceGpsSubject$ = new BehaviorSubject(null);

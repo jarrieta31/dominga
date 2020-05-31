@@ -154,6 +154,16 @@ ion-title {
     font-size: 11px;
 }
 
+/* DOES NOT WORK - not specific enough */
+.action-sheet-group {
+    background: #7b89d8;
+  }
+  
+  /* Works - pass "my-custom-class" in cssClass to increase specificity */
+  .my-custom-class .action-sheet-group {
+    background: #e5e5e5;
+  }
+
 @media only screen and (min-width: 768px) {
     .interes {
         margin: 2% 0 2% 0;

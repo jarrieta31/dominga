@@ -9,6 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TwoPoints } from 'src/app/shared/two-points';
 import * as Mapboxgl from 'mapbox-gl';
 import { tap } from 'rxjs/operators';
+import { ActionSheetController } from '@ionic/angular';
 
 
 @Component({
@@ -29,14 +30,22 @@ export class MapPage implements OnInit {
   id: number;
   mapa: Mapboxgl.Map; //Mapa para mostrar
   directions: MapboxDirections = null; //Buscador de direcciones para indicar recorrido
-  
+  profile: string = "mapbox/walking";
+  posicion: Point;
+  casaDominga: Point = { "longitud": -56.7145, "latitud": -34.340007 };
 
   constructor(private activatedRoute: ActivatedRoute, private geolocationService: GeolocationService,
-    private router: Router) {
+    private router: Router, public actionSheetController: ActionSheetController) {
     // this.geolocationService.iniciarSubscriptionClock();
     // this.posicion$ = this.geolocationService.getPosicionActual$();
     //Obtiene el observable con la posicion del usuario
     //this.posicion$ = this.geolocationService.getPosicionActual$();
+    if(this.geolocationService.posicion$.getValue() != null){
+      this.posicion = this.geolocationService.posicion$.getValue();
+    }else{
+      this.posicion = this.casaDominga;
+    }
+    
   }
 
   regresar() {
@@ -49,10 +58,14 @@ export class MapPage implements OnInit {
     //Obtiene el observable con la posicion del usuario
     this.posicion$ = this.geolocationService.getPosicionActual$();
     Mapboxgl.accessToken = environment.mapBoxToken;
+
+    //Datos recibidos desde places
     this.nombre = this.activatedRoute.snapshot.paramMap.get('nombre');
     this.longitud = Number(this.activatedRoute.snapshot.paramMap.get('longitud'));
     this.latitud = Number(this.activatedRoute.snapshot.paramMap.get('latitud'));
     this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
+    this.profile = this.activatedRoute.snapshot.paramMap.get('profile');
+
     let lugar: Point = { longitud: this.longitud, latitud: this.latitud };
     this.points.push(lugar);
     //Crea un mapa para indicar el camino al usuario
@@ -61,26 +74,29 @@ export class MapPage implements OnInit {
       style: 'mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz',
       antialias: true,
       center: [this.longitud, this.latitud],
-      zoom: 12
+      zoom: 13
     });
 
     // Agrega el control de navegación
     this.mapa.addControl(new Mapboxgl.NavigationControl());
-    
 
     //Crea el objeto direction para agregarlo al mapa
     this.directions = new MapboxDirections({
       accessToken: environment.mapBoxToken,
       unit: 'metric',
-      profile: 'mapbox/walking',
+      profile: this.profile,
       interactive: false,
       controls: {
         inputs: false,
-        instructions: false,
-        profileSwitcher: true        
+        instructions: false
       },
       placeholderOrigin: "Tu",
       placeholderDestination: this.nombre
+    });
+
+    this.mapa.on('load', () => {
+      this.directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
+      this.directions.setDestination([this.longitud, this.latitud]);
     });
 
     this.mapa.addControl(new MapboxDirections({ accessToken: Mapboxgl.accessToken }), 'top-left');
@@ -95,24 +111,30 @@ export class MapPage implements OnInit {
 
     this.subscripcionPosition = this.posicion$.pipe(
       tap(posicionUser => {
+        this.posicion = posicionUser;
         if (this.myPositionMarker == null && posicionUser != null) {
           this.createMarker(posicionUser.longitud, posicionUser.latitud);
         }
-        if (posicionUser != null) {
+        if (posicionUser != null && this.directions != null) {
           this.actualizarMarcador(posicionUser.longitud, posicionUser.latitud);
-          
+          this.actualizarRuta(posicionUser.longitud, posicionUser.latitud)
         }
-        if (this.directions != null && posicionUser != null) {
-          
-          this.mapa.on('load', () => {
-            this.directions.setOrigin([posicionUser.longitud, posicionUser.latitud]);
-            this.directions.setDestination([this.longitud, this.latitud]);
-            //directions.setProfile('driving-traffic');
-          });
-        }
+
+        // if (this.directions != null && posicionUser != null) {
+        //   this.mapa.on('load', () => {
+        //     this.directions.setOrigin([posicionUser.longitud, posicionUser.latitud]);
+        //     this.directions.setDestination([this.longitud, this.latitud]);
+
+        //     //directions.setProfile('driving-traffic');
+        //   });
+        // }
         console.log(posicionUser)
       })
     ).subscribe()
+
+    this.mapa.on('load', () => {
+      this.mapa.resize();
+    });
 
     //Subscripcion para ver la ruta
     this.directions.on("route", e => {
@@ -120,25 +142,7 @@ export class MapPage implements OnInit {
       this.distancia = routes.map(r => r.distance);
     })
 
-    this.mapa.on('load', () => {
-      this.mapa.resize();
-    });
-
-
-
-
-
-    // this.geolocationService.mapa.addControl(directions);
-
-    // directions.on("route", e => {
-    //   // routes is an array of route objects as documented here:
-    //   // https://docs.mapbox.com/api/navigation/#route-object
-    //   let routes = e.route
-
-    //   // Each route object has a distance property
-    //   console.log("Route lengths", routes.map(r => r.distance))
-    // })
-
+    
 
   }
 
@@ -178,6 +182,22 @@ export class MapPage implements OnInit {
     // this.mapa.setZoom(zoom);
 
   }
+
+  actualizarRuta(longUser: number, latUser: number) {
+    if (this.directions.getOrigin() == null) {
+      this.mapa.on('load', () => {
+        this.directions.setOrigin([longUser, latUser]);
+        this.directions.setDestination([this.longitud, this.latitud]);
+      });
+    }
+    if (this.directions.getOrigin != null) {
+      this.directions.removeRoutes();
+      this.directions.setOrigin([longUser, latUser]);
+      this.directions.setDestination([this.longitud, this.latitud]);
+    }
+  }
+
+  
 
 }
 

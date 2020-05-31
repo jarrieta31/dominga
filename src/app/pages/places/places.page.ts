@@ -14,7 +14,7 @@ import * as Mapboxgl from 'mapbox-gl';
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
-import { LoadingController, NavParams, NavController } from '@ionic/angular';
+import { LoadingController, NavParams, NavController, ActionSheetController } from '@ionic/angular';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
@@ -85,7 +85,8 @@ export class PlacesPage implements OnInit {
         private geolocationService: GeolocationService,
         private router: Router,
         private platform: Platform,
-        private loadingCtrl: LoadingController
+        private loadingCtrl: LoadingController,
+        private actionSheetController: ActionSheetController
     ) { }
 
 
@@ -173,8 +174,8 @@ export class PlacesPage implements OnInit {
 
                 //Abre una nueva pagina con el mapa
                 this.mapa.on('click', () => { 
-                    //console.log('longitud: '+ this.longitud + ' latitude' + this.latitud);      
-                    this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key}]);                        
+                    //console.log('longitud: '+ this.longitud + ' latitude' + this.latitud);  
+                    this.abrirMapaActionSheet();                                                
                 });
             }
 
@@ -223,9 +224,7 @@ export class PlacesPage implements OnInit {
 
     ngOnInit() {
         
-        this.show("Cargando lugares...");
-
-        
+        this.show("Cargando lugares...");        
 
         if (this.platform.is('android') && this.geolocationService.gps) {
 
@@ -256,10 +255,13 @@ export class PlacesPage implements OnInit {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
+
         this.distancia$.unsubscribe();
         if(this.platform.is('android') && this.geolocationService.gps ){
             this.subscripcionPosition.unsubscribe();
         }
+
+
     }
 
     async show(message: string) {
@@ -309,4 +311,42 @@ export class PlacesPage implements OnInit {
     actualizarDistancias() {
 
     }
+
+    async abrirMapaActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+          header: 'Abrir Mapa',
+          cssClass: 'my-custom-class',
+          buttons: [
+           {
+            text: 'Ir en auto',
+            icon: 'car-sport',
+            handler: () => {
+                //Abre el mapa en modo auto
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/driving-traffic"}]);
+            }
+          }, {
+            text: 'Ir caminando',
+            icon: 'walk',
+            handler: () => {
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/walking"}]);
+              console.log('Ir caminando');
+            }
+          }, {
+            text: 'Ir en bicicleta',
+            icon: 'bicycle-outline',
+            handler: () => {
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/driving"}]);
+              console.log('Ir en Bicicleta');
+            }
+          }, {
+            text: 'Cancelar',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }]
+        });
+        await actionSheet.present();
+      }
 }
