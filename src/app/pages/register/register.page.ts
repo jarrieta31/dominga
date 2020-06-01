@@ -13,8 +13,7 @@ import { User } from '../../shared/user.class';
 })
 export class RegisterPage implements OnInit, OnDestroy {
   
-  ngOnDestroy(): void {
-    throw new Error("Method not implemented.");
+  ngOnDestroy(){
   }
 
   user: User = new User();
