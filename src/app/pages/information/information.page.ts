@@ -9,8 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class InformationPage implements OnInit, OnDestroy {
   
-  ngOnDestroy(): void {
-    throw new Error("Method not implemented.");
+  ngOnDestroy() {
   }
 
 	information: any[];

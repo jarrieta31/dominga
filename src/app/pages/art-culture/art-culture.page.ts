@@ -6,8 +6,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./art-culture.page.scss'],
 })
 export class ArtCulturePage implements OnInit, OnDestroy {
-  ngOnDestroy(): void {
-    throw new Error("Method not implemented.");
+  ngOnDestroy() {
   }
 
   constructor() { }
