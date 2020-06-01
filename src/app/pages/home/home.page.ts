@@ -81,16 +81,16 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         })
         // Agrega las distancias calculadas desde casa dominga al array de lugares
         this.items.forEach(place => {
-            let options = { units: 'kilometers' };
+            let options = { units: 'meters' };
             let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud, this.casaDominga.latitud], options);
             let distFormat;
             if (dist > 1) {
                 distFormat = parseFloat(dist).toFixed(3);
-                place.distancia = "Desde C. Dominga " + distFormat + " Km";
+                place.distancia = "Desde C. Dominga " + distFormat;
             } else {
                 dist = dist * 1000;
                 distFormat = parseFloat(dist).toFixed(0);
-                place.distancia = "Desde C. Dominga " + distFormat + " mts"
+                place.distancia = "Desde C. Dominga " + distFormat;
             }
         })
         // Actualiza el observable de lugares con toda la información
@@ -100,16 +100,16 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
                 this.items.forEach(place => {
                     //console.log('posicion actual', posicion.latitud)
-                    let options = { units: 'kilometers' };
+                    let options = { units: 'meters' };
                     let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
                     let distFormat;
                     if (dist > 1) {
                         distFormat = parseFloat(dist).toFixed(3);
-                        place.distancia = "Estás a " + distFormat + " Km";
+                        place.distancia = "Estás a " + distFormat;
                     } else {
                         dist = dist * 1000;
                         distFormat = parseFloat(dist).toFixed(0);
-                        place.distancia = "Estás a " + distFormat + " mts"
+                        place.distancia = "Estás a " + distFormat;
                     }
                 })
                 // Actualiza el observable de lugares con toda la información

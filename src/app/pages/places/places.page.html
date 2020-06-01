@@ -58,7 +58,7 @@
                 <img class="sug" src="{{ s.imagenPrincipal }}" alt="">
                 <div class="infoSug">
                     <div class="sugNombre">{{ s.nombre }}</div>
-                    <div class="sugDistancia">{{ s.distancia }} km desde {{ nombre }}</div>
+                    <div class="sugDistancia">{{ s.distancia | formatDistancia }} desde {{ nombre }}</div>
                 </div>
             </div>
         </div>

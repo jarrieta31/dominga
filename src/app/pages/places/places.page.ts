@@ -185,7 +185,7 @@ export class PlacesPage implements OnInit {
         })
 
         this.sugerencias.forEach(sug => {
-            let options = { units: 'kilometers' };
+            let options = { units: 'meters' };
             let dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
             let red = parseFloat(dist).toFixed(2);
             this.index;
@@ -232,7 +232,7 @@ export class PlacesPage implements OnInit {
 
             this.subscripcionPosition = this.posicion$.subscribe(posicion => {
                 if (posicion != null) {
-                    let options = { units: 'kilometers' };
+                    let options = { units: 'kilometres' };
                     let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
                     let distFormat, distancia;
                     if (dist > 1) {

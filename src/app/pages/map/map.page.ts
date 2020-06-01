@@ -9,7 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TwoPoints } from 'src/app/shared/two-points';
 import * as Mapboxgl from 'mapbox-gl';
 import { tap } from 'rxjs/operators';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { ActionSheetController } from '@ionic/angular';
 export class MapPage implements OnInit {
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
-  distancia: number = 0;
+  distancia: string;;
   longitud: number = null;
   latitud: number = null;
   nombre: string = null;
@@ -33,9 +33,11 @@ export class MapPage implements OnInit {
   profile: string = "mapbox/walking";
   posicion: Point;
   casaDominga: Point = { "longitud": -56.7145, "latitud": -34.340007 };
+  icon:string;
 
   constructor(private activatedRoute: ActivatedRoute, private geolocationService: GeolocationService,
-    private router: Router, public actionSheetController: ActionSheetController) {
+    private router: Router, private loadingController: LoadingController,
+    public actionSheetController: ActionSheetController) {
     // this.geolocationService.iniciarSubscriptionClock();
     // this.posicion$ = this.geolocationService.getPosicionActual$();
     //Obtiene el observable con la posicion del usuario
@@ -48,8 +50,19 @@ export class MapPage implements OnInit {
     
   }
 
-  regresar() {
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Actualizando ...',
+      duration: 2000
+    });
+    await loading.present();
 
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
+  }
+
+  regresar() {
     this.router.navigate(['/places', this.id])
   }
 
@@ -65,6 +78,20 @@ export class MapPage implements OnInit {
     this.latitud = Number(this.activatedRoute.snapshot.paramMap.get('latitud'));
     this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
     this.profile = this.activatedRoute.snapshot.paramMap.get('profile');
+
+    switch (this.profile) {
+      case 'mapbox/driving-traffic':
+        this.icon = "car-sport";
+        break;
+      case 'mapbox/walking':
+        this.icon = "walk";
+        break;
+      case 'mapbox/driving':
+        this.icon = "bicycle";
+        break;
+      default:
+        this.icon = "walk";
+    }
 
     let lugar: Point = { longitud: this.longitud, latitud: this.latitud };
     this.points.push(lugar);
@@ -97,6 +124,7 @@ export class MapPage implements OnInit {
     this.mapa.on('load', () => {
       this.directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
       this.directions.setDestination([this.longitud, this.latitud]);
+      this.presentLoading()
     });
 
     this.mapa.addControl(new MapboxDirections({ accessToken: Mapboxgl.accessToken }), 'top-left');
@@ -116,6 +144,7 @@ export class MapPage implements OnInit {
           this.createMarker(posicionUser.longitud, posicionUser.latitud);
         }
         if (posicionUser != null && this.directions != null) {
+          this.presentLoading();
           this.actualizarMarcador(posicionUser.longitud, posicionUser.latitud);
           this.actualizarRuta(posicionUser.longitud, posicionUser.latitud)
         }
@@ -139,7 +168,7 @@ export class MapPage implements OnInit {
     //Subscripcion para ver la ruta
     this.directions.on("route", e => {
       let routes = e.route
-      this.distancia = routes.map(r => r.distance);
+      this.distancia = String(routes.map(r => r.distance));
     })
 
     

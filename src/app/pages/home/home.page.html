@@ -63,7 +63,7 @@
                             <img class="foto" [src]="item.imagenPrincipal" [alt]="item.nombre" />
                         </div>
                         <div class="cfooter">
-                            <div class="distancia">{{item.distancia}}</div>
+                            <div class="distancia">{{item.distancia | formatDistancia }}</div>
                             <div class="valoracion">
                                 <ion-icon class="estrella" name="star"></ion-icon>
                                 <ion-icon class="estrella" name="star"></ion-icon>

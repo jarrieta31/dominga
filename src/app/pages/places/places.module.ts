@@ -8,6 +8,7 @@ import { PlacesPageRoutingModule } from './places-routing.module';
 
 import { PlacesPage } from './places.page';
 import { ComponentsModule } from '../../components/components.module';
+import { PipesModule } from '../../shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ComponentsModule } from '../../components/components.module';
     FormsModule,
     IonicModule,
     PlacesPageRoutingModule,
-  	ComponentsModule
+    ComponentsModule,
+    PipesModule
   ],
   declarations: [PlacesPage]
 })
