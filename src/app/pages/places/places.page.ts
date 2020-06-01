@@ -14,11 +14,12 @@ import * as Mapboxgl from 'mapbox-gl';
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
-import { LoadingController, NavParams, NavController, ActionSheetController } from '@ionic/angular';
+import { LoadingController, ActionSheetController } from '@ionic/angular';
 
 import 'rxjs';
 import { Point } from '../../shared/point';
 import { Platform } from '@ionic/angular';
+import { tap } from 'rxjs/operators';
 
 
 
@@ -31,7 +32,7 @@ declare var $: any;
     templateUrl: './places.page.html',
     styleUrls: ['./places.page.scss'],
 })
-export class PlacesPage implements OnInit {
+export class PlacesPage implements OnInit, OnDestroy {
 
     items: Place[];
     fav: Favourite[];
@@ -230,23 +231,25 @@ export class PlacesPage implements OnInit {
 
             this.posicion$ = this.geolocationService.getPosicionActual$();
 
-            this.subscripcionPosition = this.posicion$.subscribe(posicion => {
-                if (posicion != null) {
-                    let options = { units: 'kilometres' };
-                    let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
-                    let distFormat, distancia;
-                    if (dist > 1) {
-                        distFormat = parseFloat(dist).toFixed(3);
-                        distancia = "Estás a " + distFormat + " Km";
-                    } else {
-                        dist = dist * 1000;
-                        distFormat = parseFloat(dist).toFixed(0);
-                        distancia = "Estás a " + distFormat + " mts"
+            this.subscripcionPosition = this.posicion$.pipe(
+                tap(posicion => {
+                    if (posicion != null) {
+                        let options = { units: 'metres' };
+                        let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
+                        let distFormat, distancia;
+                        if (dist > 1) {
+                            distFormat = parseFloat(dist).toFixed(3);
+                            distancia = "Estás a " + distFormat + " Km";
+                        } else {
+                            dist = dist * 1000;
+                            distFormat = parseFloat(dist).toFixed(0);
+                            distancia = "Estás a " + distFormat + " mts"
+                        }
+                        // Actualiza el observable de lugares con toda la información
+                        this.distancia$.next(distancia);
                     }
-                    // Actualiza el observable de lugares con toda la información
-                    this.distancia$.next(distancia);
-                }
-            });
+                })
+            ).subscribe();
         }
     }
 
@@ -256,10 +259,12 @@ export class PlacesPage implements OnInit {
         this.subscription.unsubscribe();
         this.su.unsubscribe();
 
-        this.distancia$.unsubscribe();
+        
         if(this.platform.is('android') && this.geolocationService.gps ){
             this.subscripcionPosition.unsubscribe();
         }
+
+        this.distancia$.unsubscribe();
 
 
     }

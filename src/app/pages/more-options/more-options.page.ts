@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 
 import { DondeComer } from '../../shared/donde-comer';
@@ -9,7 +9,7 @@ import { DondeDormir } from '../../shared/donde-dormir';
   templateUrl: './more-options.page.html',
   styleUrls: ['./more-options.page.scss'],
 })
-export class MoreOptionsPage implements OnInit {
+export class MoreOptionsPage implements OnInit, OnDestroy {
 
 	sleep:  DondeDormir[];
 	eat: DondeComer[];

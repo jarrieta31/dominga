@@ -1,6 +1,6 @@
 
 
-import { Component, Input , Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, NavParams, Platform } from '@ionic/angular';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { DatabaseService } from '../../services/database.service';
@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
     templateUrl: './modal-rating.page.html',
     styleUrls: ['./modal-rating.page.scss'],
 })
-export class ModalRatingPage {
+export class ModalRatingPage implements OnInit, OnDestroy {
 
     nombre: string;
     key: string;
@@ -36,7 +36,7 @@ export class ModalRatingPage {
         private authSvc: AuthService) {}
 
     ngOnInit() {
-        //console.table(this.navParams);
+        
         this.nombre = this.navParams.data.nombre;
         this.key = this.navParams.data.key;
         this.tipo = this.navParams.data.tipo;

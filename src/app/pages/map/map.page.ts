@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Observable, Subscription } from 'rxjs';
-import { TwoPoints } from 'src/app/shared/two-points';
 import * as Mapboxgl from 'mapbox-gl';
 import { tap } from 'rxjs/operators';
 import { ActionSheetController, LoadingController } from '@ionic/angular';
@@ -17,7 +16,7 @@ import { ActionSheetController, LoadingController } from '@ionic/angular';
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
 })
-export class MapPage implements OnInit {
+export class MapPage implements OnInit, OnDestroy {
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
   distancia: string;;
@@ -139,6 +138,7 @@ export class MapPage implements OnInit {
 
     this.subscripcionPosition = this.posicion$.pipe(
       tap(posicionUser => {
+        console.log("************************** hola   ++++")
         this.posicion = posicionUser;
         if (this.myPositionMarker == null && posicionUser != null) {
           this.createMarker(posicionUser.longitud, posicionUser.latitud);
@@ -148,16 +148,6 @@ export class MapPage implements OnInit {
           this.actualizarMarcador(posicionUser.longitud, posicionUser.latitud);
           this.actualizarRuta(posicionUser.longitud, posicionUser.latitud)
         }
-
-        // if (this.directions != null && posicionUser != null) {
-        //   this.mapa.on('load', () => {
-        //     this.directions.setOrigin([posicionUser.longitud, posicionUser.latitud]);
-        //     this.directions.setDestination([this.longitud, this.latitud]);
-
-        //     //directions.setProfile('driving-traffic');
-        //   });
-        // }
-        console.log(posicionUser)
       })
     ).subscribe()
 
@@ -175,7 +165,7 @@ export class MapPage implements OnInit {
 
   }
 
-  OnDestroy() {
+  ngOnDestroy() {
     this.subscripcionPosition.unsubscribe(); //Dessubscripcion a la posicion del usuario    
   }
 

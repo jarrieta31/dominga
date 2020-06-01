@@ -11,7 +11,7 @@ import { LoadingController } from '@ionic/angular';
     templateUrl: './circuits.page.html',
     styleUrls: ['./circuits.page.scss'],
 })
-export class CircuitsPage implements OnInit {
+export class CircuitsPage implements OnInit, OnDestroy {
 
     tipoCircuito: TipoCircuito[];
     textoBuscar = '';

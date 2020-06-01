@@ -10,7 +10,7 @@ import { LoadingController } from '@ionic/angular';
     templateUrl: './where-sleep.page.html',
     styleUrls: ['./where-sleep.page.scss'],
 })
-export class WhereSleepPage implements OnInit {
+export class WhereSleepPage implements OnInit, OnDestroy {
 
     sleep: DondeDormir[];
     textoBuscar = '';

@@ -14,7 +14,7 @@ import { GeolocationService } from '../../services/geolocation.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription: any;
   email: string;

@@ -14,6 +14,8 @@ import { Platform } from '@ionic/angular';
 import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 import { NetworkService } from '../../services/network.service';
 import { LoadingController } from '@ionic/angular';
+import { tap } from 'rxjs/operators';
+
 
 @Component({
     selector: 'app-home',
@@ -95,27 +97,29 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         })
         // Actualiza el observable de lugares con toda la información
         this.items$.next(this.items);
-        this.subscripcionPosition = this.posicion$.subscribe(posicion => {
-            if (posicion != null) {
-
-                this.items.forEach(place => {
-                    //console.log('posicion actual', posicion.latitud)
-                    let options = { units: 'meters' };
-                    let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
-                    let distFormat;
-                    if (dist > 1) {
-                        distFormat = parseFloat(dist).toFixed(3);
-                        place.distancia = "Estás a " + distFormat;
-                    } else {
-                        dist = dist * 1000;
-                        distFormat = parseFloat(dist).toFixed(0);
-                        place.distancia = "Estás a " + distFormat;
-                    }
-                })
-                // Actualiza el observable de lugares con toda la información
-                this.items$.next(this.items);
-            }
-        });
+        this.subscripcionPosition = this.posicion$.pipe(
+            tap(posicion => {
+                if (posicion != null) {
+    
+                    this.items.forEach(place => {
+                        //console.log('posicion actual', posicion.latitud)
+                        let options = { units: 'meters' };
+                        let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+                        let distFormat;
+                        if (dist > 1) {
+                            distFormat = parseFloat(dist).toFixed(3);
+                            place.distancia = "Estás a " + distFormat;
+                        } else {
+                            dist = dist * 1000;
+                            distFormat = parseFloat(dist).toFixed(0);
+                            place.distancia = "Estás a " + distFormat;
+                        }
+                    })
+                    // Actualiza el observable de lugares con toda la información
+                    this.items$.next(this.items);
+                }
+            })
+        ).subscribe();
     });
 
     //obtiene el id del usuario actual
@@ -163,6 +167,11 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     cerrarSesion() {
         this.su.unsubscribe();
         this.authService.signOut();
+        this.subsciptionNetwork.unsubscribe();
+        this.subscripcionPosition.unsubscribe();
+        this.backButtonSubscription.unsubscribe();
+        this.subscrictionUser.unsubscribe();
+        this.subscrictionLugarCercano.unsubscribe(); 
     }
 
     async cerrarAppAlertConfirm() {

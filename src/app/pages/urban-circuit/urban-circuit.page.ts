@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 
@@ -16,7 +16,7 @@ import { Point } from '../../shared/point';
     templateUrl: './urban-circuit.page.html',
     styleUrls: ['./urban-circuit.page.scss'],
 })
-export class UrbanCircuitPage implements OnInit {
+export class UrbanCircuitPage implements OnInit, OnDestroy {
 
     items: Place[];
     points: Point[] = [];
@@ -59,7 +59,8 @@ export class UrbanCircuitPage implements OnInit {
                     `<a href="http://localhost/places/${data.$key}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
                 );
                 const marker = new Mapboxgl.Marker({
-                        draggable: false
+                        draggable: false,
+                        color: "#ea4335"
                     }).setLngLat([data.longitud, data.latitud])
                     .setPopup(popup)
                     .addTo(this.geolocationService.mapa);
@@ -200,7 +201,7 @@ export class UrbanCircuitPage implements OnInit {
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': '#fb0108',
+                    'line-color': '#1d77b4',
                     'line-width': 5
                 }
             });

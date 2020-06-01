@@ -10,7 +10,7 @@ import { LoadingController } from '@ionic/angular';
   templateUrl: './where-eat.page.html',
   styleUrls: ['./where-eat.page.scss'],
 })
-export class WhereEatPage implements OnInit {
+export class WhereEatPage implements OnInit, OnDestroy {
 
 	eat: DondeComer[];
   textoBuscar = '';

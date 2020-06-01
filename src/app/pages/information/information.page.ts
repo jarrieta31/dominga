@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -7,7 +7,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './information.page.html',
   styleUrls: ['./information.page.scss'],
 })
-export class InformationPage implements OnInit {
+export class InformationPage implements OnInit, OnDestroy {
+  
+  ngOnDestroy(): void {
+    throw new Error("Method not implemented.");
+  }
 
 	information: any[];
 

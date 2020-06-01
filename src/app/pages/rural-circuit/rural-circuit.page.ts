@@ -17,7 +17,7 @@ import { Observable } from 'rxjs';
     templateUrl: './rural-circuit.page.html',
     styleUrls: ['./rural-circuit.page.scss'],
 })
-export class RuralCircuitPage implements OnInit {
+export class RuralCircuitPage implements OnInit, OnDestroy {
 
     items: Place[];
     points: Point[]=[];
@@ -62,7 +62,8 @@ export class RuralCircuitPage implements OnInit {
                             
                         );
                         const marker = new Mapboxgl.Marker({
-                                draggable: false
+                                draggable: false,
+                                color: "#ea4335"
                             }).setLngLat([data.longitud, data.latitud])
                             .setPopup(popup)
                             .addTo(this.geolocationService.mapa);
