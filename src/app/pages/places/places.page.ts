@@ -199,7 +199,6 @@ export class PlacesPage implements OnInit, OnDestroy {
                 }
             }
 
-
             //Emite el valor de la distancias desde casa dominga por si no está activo el GPS
             this.distancia$.next(this.distancia_cd)
         })

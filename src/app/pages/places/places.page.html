@@ -55,7 +55,9 @@
         <h6 class="interes">Te puede interesar</h6>
         <div class="divf">
             <div class="sugerencia" *ngFor="let s of sug_2">
-                <img class="sug" src="{{ s.imagenPrincipal }}" alt="">
+                <a href="http://localhost/places/{{s.$key}}" class="sug">
+                    <img  src="{{ s.imagenPrincipal }}" alt="">
+                </a>
                 <div class="infoSug">
                     <div class="sugNombre">{{ s.nombre }}</div>
                     <div class="sugDistancia">{{ s.distancia | formatDistancia }} desde {{ nombre }}</div>
