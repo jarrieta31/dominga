@@ -39,7 +39,7 @@
                     <i class="fas fa-running"></i>
                 </div>
                 <div id="dist">
-                    <div>{{ obsDistancia$ | async }}</div>
+                    <div>{{ distancia | formatDistancia }}</div>
                 </div>
                 <div class="estrellas">
                     <app-rating class="valoracion" [(rating)]="totalValoracion"></app-rating>

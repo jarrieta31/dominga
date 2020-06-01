@@ -1,27 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
-
 import { DatabaseService } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
-
 import { Place } from '../../shared/place';
 import { Favourite } from '../../shared/favourite';
-
 import { Router, ActivatedRoute} from '@angular/router';
-
 import * as Mapboxgl from 'mapbox-gl';
-
 import distance from '@turf/distance';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { GeolocationService } from '../../services/geolocation.service';
 import { LoadingController, ActionSheetController } from '@ionic/angular';
-
-import 'rxjs';
 import { Point } from '../../shared/point';
 import { Platform } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
-
-
 
 
 declare var jQuery: any;
@@ -41,10 +32,11 @@ export class PlacesPage implements OnInit, OnDestroy {
     sug_2: Place[] = [];
 
     private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
-    obsDistancia$ = this.distancia$.asObservable();
+    // obsDistancia$ = this.distancia$.asObservable();
+    distancia:string;
     posicion$: Observable<Point>;
     subscripcionPosition: Subscription;
-
+    subscripcionDistancia: Subscription;
     distancia_cd: string;
     users: string;
 
@@ -92,7 +84,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
 
     subscription = this.activatedRoute.paramMap.subscribe(params => {
-
         this.par = params.get("id");
     });
 
@@ -200,11 +191,11 @@ export class PlacesPage implements OnInit, OnDestroy {
                 this.distancia_cd;
                 if (dist_cd > 1) {
                     red_cd = parseFloat(dist_cd).toFixed(3);
-                    this.distancia_cd = "Desde C. Dominga " + red_cd + " Km";
+                    this.distancia_cd = "Desde C. Dominga " + red_cd;;
                 } else {
                     dist_cd = dist_cd * 1000;
                     red_cd = parseFloat(dist_cd).toFixed(0);
-                    this.distancia_cd = "Desde C. Dominga " + red_cd + " mts"
+                    this.distancia_cd = "Desde C. Dominga " + red_cd;
                 }
             }
 
@@ -224,33 +215,36 @@ export class PlacesPage implements OnInit, OnDestroy {
     });
 
     ngOnInit() {
-        
+        this.subscripcionDistancia = this.distancia$.pipe(
+            tap(distancia => this.distancia = distancia)
+        ).subscribe();
+
         this.show("Cargando lugares...");        
 
-        if (this.platform.is('android') && this.geolocationService.gps) {
+    //    if (this.platform.is('android') && this.geolocationService.gps) {
 
             this.posicion$ = this.geolocationService.getPosicionActual$();
 
             this.subscripcionPosition = this.posicion$.pipe(
                 tap(posicion => {
                     if (posicion != null) {
-                        let options = { units: 'metres' };
+                        let options = { units: 'meters' };
                         let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
                         let distFormat, distancia;
                         if (dist > 1) {
                             distFormat = parseFloat(dist).toFixed(3);
-                            distancia = "Estás a " + distFormat + " Km";
+                            distancia = "Estás a " + distFormat;
                         } else {
                             dist = dist * 1000;
                             distFormat = parseFloat(dist).toFixed(0);
-                            distancia = "Estás a " + distFormat + " mts"
+                            distancia = "Estás a " + distFormat;
                         }
                         // Actualiza el observable de lugares con toda la información
                         this.distancia$.next(distancia);
                     }
                 })
             ).subscribe();
-        }
+       // }
     }
 
 
@@ -258,11 +252,11 @@ export class PlacesPage implements OnInit, OnDestroy {
         this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
-
+        this.subscripcionDistancia.unsubscribe();
         
-        if(this.platform.is('android') && this.geolocationService.gps ){
+    //    if(this.platform.is('android') && this.geolocationService.gps ){
             this.subscripcionPosition.unsubscribe();
-        }
+    //    }
 
         this.distancia$.unsubscribe();
 

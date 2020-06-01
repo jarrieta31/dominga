@@ -38,7 +38,7 @@ export class GeolocationService {
   distancia: number;
   lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
   casaDominga = { "longitud": -56.7145, "latitud": -34.340007 };
-  posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(this.casaDominga);
+  posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
   longCenter: number = 0;  
