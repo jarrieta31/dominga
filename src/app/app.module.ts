@@ -41,7 +41,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { Network } from '@ionic-native/network/ngx';
-
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -75,7 +75,8 @@ import { Network } from '@ionic-native/network/ngx';
     // AuthService,
     // AngularFireAuth,
     // AngularFirestore
-    Network
+    Network,
+    Keyboard
   ],
   bootstrap: [AppComponent]
 })

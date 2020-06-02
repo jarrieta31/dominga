@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { GeolocationService } from '../../services/geolocation.service';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-login',
@@ -45,12 +46,15 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
     private alertController: AlertController,
-    private geolocationService: GeolocationService
-  ) { }
+    private geolocationService: GeolocationService,
+    private keyboard: Keyboard
+  ) { 
+    this.geolocationService.subscriptionUser.unsubscribe();
+  }
 
   ngOnInit() {
 
-    this.geolocationService.subscriptionUser.unsubscribe();
+    
     if (this.platform.is('android')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
@@ -93,6 +97,8 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
 
   //Funcion que llama al método onLogin del servicio
   async onLogin() {
+    this.email = this.email.trim();
+    this.password = this.password.trim();
     const user = await this.authService.signInWithEmail(this.email, this.password);
     if (user) {
       this.router.navigateByUrl('/home');
@@ -174,46 +180,13 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  // async savePassword(email:string, password:string){
-  //   const alertSavePassword = await this.alertCtrl.create({
-  //     header: 'Alerta de seguridad',
-  //     subHeader: '¿Deséa guardar su contraseña?',
-  //     message:  '<strong>Talvez desee guardar sus datos para ingresar</strong>',
-  //     buttons: [
-  //       {
-  //         text: 'No',
-  //         role: 'cancel',
-  //         cssClass: 'primary',
-  //         handler: () => {
-  //           console.log('No guardo sus datos contraseña');
-  //         }
-  //       }, {
-  //         text: 'Si',
-  //         handler: (data) => {
-  //           console.log('Guardando su contraseña', data);
-  //           this.authService.storeAuthData(email,password);
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   await alertSavePassword.present();
-  // }
-
   loginGoogle() {
     this.authService.authWithGoogle();
   }
 
-
-  // onLoginFacebook(): void {
-  //   this.authService.loginFacebookUser()
-  //     .then((res) => {
-  //       this.onLoginRedirect();
-  //     }).catch(err => console.log('err', err.message));
-  // }
-
-  //  onLoginRedirect(): void {
-  //   this.router.navigate(['/home']);
-  // }
+  handleLogin(){
+    this.keyboard.hide();
+  }
 
   async cerrarAppAlertConfirm() {
     const alert = await this.alertController.create({

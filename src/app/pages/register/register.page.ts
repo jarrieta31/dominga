@@ -56,6 +56,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     if(this.registerForm.valid){
       this.email = this.registerForm.get('email').value;
       this.password = this.registerForm.get('password').value;
+      this.email = this.email.trim();
+      this.password = this.password.trim();
       this.onRegister();
       this.onResetForm();
       
@@ -64,35 +66,6 @@ export class RegisterPage implements OnInit, OnDestroy {
       console.log("Formulario registro no valido");
     }
   }
-
-  // register(email: string, password: string) {
-  //   this.isLoading = true;
-  //   this.loadingCtrl
-  //     .create({ keyboardClose: true, message: 'Logging in...' })
-  //     .then(loadingEl => {
-  //       loadingEl.present();
-  //       let authObs: Observable<AuthResponseData>;        
-  //       authObs = this.authService.signup(email, password);
-        
-  //       authObs.subscribe(
-  //         resData => {
-  //           console.log(resData);
-  //           this.isLoading = false;
-  //           loadingEl.dismiss();
-  //           this.router.navigateByUrl('/home');
-  //         },
-  //         errRes => {
-  //           loadingEl.dismiss();
-  //           const code = errRes.error.error.message;
-  //           let message = 'No se pudo registrar, intente nuevamente.';
-  //           if (code === 'EMAIL_EXISTS') {
-  //             message = '¡La dirección de correo electrónico ya existe!';
-  //           }
-  //           this.showAlert(message);
-  //         }
-  //       );
-  //     });
-  // }
 
   private showAlert(message: string) {
     this.alertCtrl

@@ -24,6 +24,7 @@
     "@ionic-native/android-permissions": "^5.24.0",
     "@ionic-native/core": "^5.21.6",
     "@ionic-native/geolocation": "^5.24.0",
+    "@ionic-native/keyboard": "^5.26.0",
     "@ionic-native/location-accuracy": "^5.24.0",
     "@ionic-native/native-geocoder": "^5.26.0",
     "@ionic-native/network": "^5.26.0",

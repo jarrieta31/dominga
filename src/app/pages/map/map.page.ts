@@ -106,6 +106,10 @@ export class MapPage implements OnInit, OnDestroy {
     // Agrega el control de navegación
     this.mapa.addControl(new Mapboxgl.NavigationControl());
 
+    this.mapa.on('load', () => {
+      this.mapa.resize();
+    });
+
     //Crea el objeto direction para agregarlo al mapa
     this.directions = new MapboxDirections({
       accessToken: environment.mapBoxToken,
@@ -138,8 +142,11 @@ export class MapPage implements OnInit, OnDestroy {
 
     this.subscripcionPosition = this.posicion$.pipe(
       tap(posicionUser => {
-        console.log("************************** hola   ++++")
-        this.posicion = posicionUser;
+        if(posicionUser != null){
+          this.centrarMapa(posicionUser.longitud, posicionUser.latitud);
+          this.posicion = posicionUser;
+        }
+        
         if (this.myPositionMarker == null && posicionUser != null) {
           this.createMarker(posicionUser.longitud, posicionUser.latitud);
         }
@@ -151,9 +158,7 @@ export class MapPage implements OnInit, OnDestroy {
       })
     ).subscribe()
 
-    this.mapa.on('load', () => {
-      this.mapa.resize();
-    });
+    
 
     //Subscripcion para ver la ruta
     this.directions.on("route", e => {
@@ -200,6 +205,10 @@ export class MapPage implements OnInit, OnDestroy {
     // this.mapa.setCenter([centro.longitud, centro.latitud]);
     // this.mapa.setZoom(zoom);
 
+  }
+
+  centrarMapa(longitud:number, latitud:number){
+    this.mapa.setCenter(longitud, latitud);
   }
 
   actualizarRuta(longUser: number, latUser: number) {
