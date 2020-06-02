@@ -10,15 +10,29 @@
         <div class="slider">
             <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
                 <ion-slide class="sliderHijo">
-                    <a href="https://wa.me/59895030529?text=Hola,%20quería%20consultar%20sobre%20el%20servicio%20de%20bicicletas.">
-                        <img class="imgSlider" src="/assets/img/slider1.jpeg" />
+                    <a class="bannerLink" href="https://wa.me/59895030529?text=Hola,%20quería%20consultar%20sobre%20el%20servicio%20de%20bicicletas.">
+                        <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
+                    </a>
+                </ion-slide>
+                <ion-slide class="sliderHijo">
+                    <a class="bannerLink" href="https://casadominga.com.uy/">
+                        <img class="imgSlider" src="/assets/img/casaDominga.jpeg"/>
                     </a>
                 </ion-slide>
                 <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <img class="imgSlider" src="/assets/img/slider2.png" />
+                    <div class="banner">
+                        <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
+                    </div>
                 </ion-slide>
                 <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <img class="imgSlider" src="/assets/img/slider3.png" />
+                    <div class="banner">
+                         <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
+                    </div>
+                </ion-slide>
+                <ion-slide class="sliderHijo" [routerLink]="['/']">
+                    <div class="banner">
+                      <img class="imgSlider" src="/assets/img/tour.jpeg" />  
+                    </div>
                 </ion-slide>
             </ion-slides>
         </div>
