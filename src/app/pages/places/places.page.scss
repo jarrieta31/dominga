@@ -86,12 +86,18 @@ ion-title {
     width: 50%;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
 }
 
 .sug {
-    border-radius: 8px;
-    width: 45%;
-    height: 75%;
+    border-radius: 3px;
+    width: 46%;    
+}
+
+.sug_img {
+    border-radius: 3px;
+    width: 100%;    
 }
 
 .interes {
@@ -102,8 +108,9 @@ ion-title {
 }
 
 .infoSug {
-    margin: 0 0 0 5%;
-    padding: 5%;
+    margin: 0 0 0 2%;
+    padding: 2%;
+    width: 50%;
 }
 
 .iconEstilos {
