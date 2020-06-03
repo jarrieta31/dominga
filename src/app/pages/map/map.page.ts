@@ -106,10 +106,6 @@ export class MapPage implements OnInit, OnDestroy {
     // Agrega el control de navegación
     this.mapa.addControl(new Mapboxgl.NavigationControl());
 
-    this.mapa.on('load', () => {
-      this.mapa.resize();
-    });
-
     //Crea el objeto direction para agregarlo al mapa
     this.directions = new MapboxDirections({
       accessToken: environment.mapBoxToken,
@@ -120,14 +116,18 @@ export class MapPage implements OnInit, OnDestroy {
         inputs: false,
         instructions: false
       },
+      zoom: 16,
+      flyTo: false,
       placeholderOrigin: "Tu",
       placeholderDestination: this.nombre
     });
 
+    
     this.mapa.on('load', () => {
       this.directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
       this.directions.setDestination([this.longitud, this.latitud]);
-      this.presentLoading()
+      this.presentLoading();
+      this.mapa.resize();
     });
 
     this.mapa.addControl(new MapboxDirections({ accessToken: Mapboxgl.accessToken }), 'top-left');
@@ -143,7 +143,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.subscripcionPosition = this.posicion$.pipe(
       tap(posicionUser => {
         if(posicionUser != null){
-          this.centrarMapa(posicionUser.longitud, posicionUser.latitud);
+          
           this.posicion = posicionUser;
         }
         
@@ -153,7 +153,8 @@ export class MapPage implements OnInit, OnDestroy {
         if (posicionUser != null && this.directions != null) {
           this.presentLoading();
           this.actualizarMarcador(posicionUser.longitud, posicionUser.latitud);
-          this.actualizarRuta(posicionUser.longitud, posicionUser.latitud)
+          this.actualizarRuta(posicionUser.longitud, posicionUser.latitud);
+          this.centrarMapa(posicionUser.longitud, posicionUser.latitud);
         }
       })
     ).subscribe()
@@ -208,7 +209,7 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   centrarMapa(longitud:number, latitud:number){
-    this.mapa.setCenter(longitud, latitud);
+    this.mapa.setCenter([longitud, latitud]);
   }
 
   actualizarRuta(longUser: number, latUser: number) {

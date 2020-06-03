@@ -21,7 +21,7 @@
       </ion-item>
 
       <ion-item>                
-        <ion-input class="password" name="password" type="password" placeholder="Contraseña" formControlName="password"></ion-input>
+        <ion-input class="password" name="password" type="password" placeholder="Contraseña" (keyup.enter)="handleRegister()" formControlName="password"></ion-input>
       </ion-item>
 
     </ion-list>

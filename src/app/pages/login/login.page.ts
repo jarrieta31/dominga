@@ -18,43 +18,44 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
 
   backButtonSubscription: any;
-  email: string;
-  password: string;
+  //email: string;
+  //password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
   isLoading = false;
 
-  // Creo el formulario con las validaciones
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl('', Validators.compose([
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(50),
-      Validators.pattern(this.emailPattern)
-    ])),
-    password: new FormControl('', Validators.compose([
-      Validators.required,
-      Validators.minLength(6),
-      Validators.maxLength(25)
-    ]))
-  })
+  loginForm: FormGroup;
 
   constructor(
     public authService: AuthService,
     private router: Router,
-    private loadingCtrl: LoadingController,
+    private loadingController: LoadingController,
     private alertCtrl: AlertController,
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
     private alertController: AlertController,
     private geolocationService: GeolocationService,
     private keyboard: Keyboard
-  ) { 
+  ) {
+
+    // Creo el formulario con las validaciones
+    this.loginForm = new FormGroup({
+      email: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(60),
+        Validators.pattern(this.emailPattern)
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(20)
+      ]))
+    })
     this.geolocationService.subscriptionUser.unsubscribe();
   }
 
   ngOnInit() {
 
-    
     if (this.platform.is('android')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
@@ -80,28 +81,35 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onResetForm() {
-    this.loginForm.reset;
+    this.loginForm.reset();
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.email = this.loginForm.get('email').value;
-      this.password = this.loginForm.get('password').value;
-      this.onLogin();
-      this.loginForm.reset;
-     // console.log("Form Login corrento:", this.loginForm.value.email);
+      let email = this.loginForm.get('email').value;
+      let password = this.loginForm.get('password').value;
+      this.onLogin(email, password);
+      this.onResetForm();
+      // console.log("Form Login corrento:", this.loginForm.value.email);
     } else {
-     // console.log("Formulario no valido");
+      // console.log("Formulario no valido");
     }
   }
 
   //Funcion que llama al método onLogin del servicio
-  async onLogin() {
-    this.email = this.email.trim();
-    this.password = this.password.trim();
-    const user = await this.authService.signInWithEmail(this.email, this.password);
-    if (user) {
-      this.router.navigateByUrl('/home');
+  async onLogin(email: string, password: string) {
+    email = email.trim();
+    password = password.trim();
+    try {      
+      this.presentLoginLoading();
+      const user = await this.authService.signInWithEmail(email, password);
+      if (user) {        
+        this.router.navigateByUrl('/home');
+      }
+    } catch (error) {
+      let title = "Mensaje";
+      let menssage = "Su inicio de sesión no tuvo éxito!!";
+      this.showAlert(menssage, title);
     }
   }
 
@@ -117,7 +125,7 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
 
   async resetPasswordAlertPrompt() {
     if (this.loginForm.get('email').value != "") {
-      this.email = this.loginForm.get('email').value;
+      var email = this.loginForm.get('email').value;
     }
     const input = await this.alertCtrl.create({
       header: 'Restablecer Contraseña',
@@ -127,7 +135,7 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
           name: 'txtEmail',
           type: 'email',
           placeholder: 'Ingrese su email',
-          value: this.email
+          value: email
         }
       ],
       buttons: [
@@ -136,14 +144,14 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
           role: 'cancel',
           cssClass: 'primary',
           handler: () => {
-          //  console.log('Boton cancelar reset contraseña');
+            //  console.log('Boton cancelar reset contraseña');
           }
         }, {
           text: 'Cambiar Contraseña',
           handler: (data) => {
-          //  console.log('Boton confirmar reset contraseña', data);
-            this.email = data.txtEmail;
-            this.loadingResetPassword();
+            //  console.log('Boton confirmar reset contraseña', data);
+            email = data.txtEmail;
+            this.loadingResetPassword(email);
           }
         }
       ]
@@ -151,13 +159,13 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
     await input.present();
   }
 
-  loadingResetPassword() {
+  loadingResetPassword(email: string) {
     this.isLoading = true;
-    this.loadingCtrl
+    this.loadingController
       .create({ keyboardClose: true, message: 'Enviando solicitud...' })
       .then(loadingEl => {
         loadingEl.present();
-        let resetPassObs = of(this.authService.resetPassword(this.email));
+        let resetPassObs = of(this.authService.resetPassword(email));
         resetPassObs.subscribe(
           resData => {
             console.log(resData);
@@ -184,7 +192,7 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
     this.authService.authWithGoogle();
   }
 
-  handleLogin(){
+  handleLogin() {
     this.keyboard.hide();
   }
 
@@ -198,12 +206,12 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-           // console.log('Confirm Cancel: blah');
+            // console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Cerrar',
           handler: () => {
-          //  console.log('Confirm Okay');
+            //  console.log('Confirm Okay');
             navigator['app'].exitApp();
           }
         }
@@ -211,5 +219,20 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
     });
     await alert.present();
   }
+
+  async presentLoginLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Enviando ...',
+      duration: 1000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
+  }
+
+  get email() { return this.loginForm.get('email'); }
+  get password() { return this.loginForm.get('password'); }
 
 }

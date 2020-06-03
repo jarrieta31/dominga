@@ -11,11 +11,25 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item class="itemName">
-                <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email"></ion-input>
+                <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email" ></ion-input>
             </ion-item>
+            
+            <ion-item *ngIf="!email.valid && email.dirty">
+                <p class="container-error-message" color="danger" *ngIf="email.errors.required">El correo es requerido.</p>
+                <p class="container-error-message" *ngIf="email.errors.minlength">El correo debe tener un mínimo de 10 caracteres.</p>
+                <p class="container-error-message" *ngIf="email.errors.maxlength">El correo tener un máximo de 60 caracteres.</p>               
+                <p class="container-error-message" *ngIf="email.errors.pattern && !email.errors.minlength && !email.errors.maxlength">El formato del correo no es válido.</p>
+            </ion-item>
+            
 
             <ion-item>                
                 <ion-input class="password" name="password" type="password" (keyup.enter)="handleLogin()" placeholder="Contraseña" formControlName="password"></ion-input>
+            </ion-item>
+
+            <ion-item class="alert-danger" *ngIf="!password.valid && password.dirty">
+                <p class="container-error-message" *ngIf="password.errors.required">La contraseña es requerida</p>
+                <p class="container-error-message" *ngIf="password.errors.minlength">La contraseña debe tener un mínimo de 6 caracteres.</p>
+                <p class="container-error-message" *ngIf="password.errors.maxlength && !password.errors.minlength">La contraseña debe tener un máximo de 20 caracteres.<p>
             </ion-item>
 
             <ion-item>

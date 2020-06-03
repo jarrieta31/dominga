@@ -5,6 +5,7 @@ import { LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../../shared/user.class';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-register',
@@ -13,15 +14,20 @@ import { User } from '../../shared/user.class';
 })
 export class RegisterPage implements OnInit, OnDestroy {
   
-  ngOnDestroy(){
-  }
-
   user: User = new User();
   email: string;
   password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
   isLoading = false;
   isLogin = true;
+
+  constructor( 
+    public authService: AuthService,
+    private router: Router,
+    private loadingController: LoadingController,
+    private alertCtrl: AlertController,
+    private keyboard: Keyboard) {    
+  }
 
   // Creo el formulario de registro
   registerForm: FormGroup = new FormGroup ({
@@ -37,19 +43,16 @@ export class RegisterPage implements OnInit, OnDestroy {
         Validators.maxLength(25)
       ]))
   })
-  
-  constructor( 
-    public authService: AuthService,
-    private router: Router,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) {    
-  }
-  
+    
   ngOnInit() {
   }
 
   onResetForm() {
     this.registerForm.reset;
+  }
+
+  handleRegister(){
+    this.keyboard.hide();
   }
 
   onSubmit() {
@@ -63,7 +66,8 @@ export class RegisterPage implements OnInit, OnDestroy {
       
       //console.log("Registro enviado");
     }else{
-      console.log("Formulario registro no valido");
+      //let mensaje = "Formulario registro no válido";
+      //this.showAlert(mensaje);
     }
   }
 
@@ -80,9 +84,24 @@ export class RegisterPage implements OnInit, OnDestroy {
   async onRegister(){
     const user = await this.authService.signUpWithEmail(this.email, this.password);
     if(user){
-      console.log('Se creó el usuario');
+      this.presentLoading();
       this.router.navigateByUrl('/home')
     }
+  }
+
+  ngOnDestroy(){
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Enviando registro ...',
+      duration: 1000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
   }
 
 }
