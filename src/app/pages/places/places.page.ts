@@ -48,11 +48,13 @@ export class PlacesPage implements OnInit, OnDestroy {
     caminar: boolean;
     imagenes = new Array();
     valoracion = new Array();
+    video = new Array();
     latitud: string;
     longitud: string;
     imagenPrincipal: string;
 
     cont = 0;
+    contVideo = 0;
     val = 0;
     index = 0;
     totalValoracion = 0;
@@ -102,7 +104,7 @@ export class PlacesPage implements OnInit, OnDestroy {
                 this.items[num].descripcion = this.items[num].descripcion.replace(/<\/?[^>]+(>|$)/g, '');
 
                 let mapped = Object.keys(this.items[num].url).map(key => ({ url: this.items[num].url[key] }));
-
+                
                 if (this.items[num].valoracion != undefined) {
                     this.val = 0;
                     this.totalValoracion = 0;
@@ -144,6 +146,21 @@ export class PlacesPage implements OnInit, OnDestroy {
                     this.imagenes[this.cont] = data.url;
                     this.cont++;
                 })
+
+                if(this.nombre == "Boliche de Campaña"){
+                    this.contVideo = 0;
+
+                    let vid = Object.keys(this.items[num].video).map(key => ({ video: this.items[num].video[key] }));
+
+                    vid.forEach(data => {
+                        this.contVideo;
+                        this.video[this.contVideo] = data.video;
+                        this.contVideo++;
+                    })
+                }
+
+                console.log(this.video);
+                
                 this.latitud = this.items[num].latitud;
                 this.longitud = this.items[num].longitud;
 
