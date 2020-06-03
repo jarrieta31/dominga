@@ -34,10 +34,10 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     dataReturned: any;
     slideOpts = {
         initialSlide: 0,
-        speed: 400,
+        speed: 600,
         slidesPerView: 1,
         spaceBetween: 1,
-        autoplay:true
+        autoplay:true,
     };
 
     cards = {

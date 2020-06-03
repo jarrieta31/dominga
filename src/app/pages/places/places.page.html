@@ -18,7 +18,7 @@
 <ion-content>
       <!-- fab placed to the top end -->
   <ion-fab vertical="top" horizontal="start" slot="fixed">
-    <ion-fab-button routerLink="/video" color="danger">
+    <ion-fab-button (click)="verVideo()" color="danger">
         <ion-icon name="logo-youtube"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -31,13 +31,6 @@
             <ion-slides class="slidePadre" pager="false" [options]="slideOpts">
                 <ion-slide class="slideHijo" *ngFor="let img of imagenes">
                     <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ img.url }}" /></div>
-                </ion-slide>
-                    <ion-slide class="slideHijo" *ngFor="let vid of video">
-                    <a href="{{vid.video}}">
-                      <div id="imagenMini">
-                          <img src="../../../assets/img/VIDEO.jpg"/>
-                      </div>  
-                    </a>
                 </ion-slide>
             </ion-slides>
         </div>

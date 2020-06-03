@@ -80,15 +80,6 @@ const routes: Routes = [
     path: 'modal-rating',
     loadChildren: () => import('./pages/modal-rating/modal-rating.module').then( m => m.ModalRatingPageModule)
   },
-  {
-    path: 'video',
-    loadChildren: () => import('./pages/video/video.module').then( m => m.VideoPageModule)
-  },
-  
-
-
-  
-
 ];
 
 @NgModule({

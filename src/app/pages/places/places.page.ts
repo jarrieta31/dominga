@@ -13,6 +13,8 @@ import { LoadingController, ActionSheetController } from '@ionic/angular';
 import { Point } from '../../shared/point';
 import { Platform } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
+import { ModalController } from '@ionic/angular';
+import { VideoPage } from '../../pages/video/video.page';
 
 
 declare var jQuery: any;
@@ -81,7 +83,8 @@ export class PlacesPage implements OnInit, OnDestroy {
         private router: Router,
         private platform: Platform,
         private loadingCtrl: LoadingController,
-        private actionSheetController: ActionSheetController
+        private actionSheetController: ActionSheetController,
+        private modalCtrl: ModalController
     ) { }
 
 
@@ -159,7 +162,7 @@ export class PlacesPage implements OnInit, OnDestroy {
                     })
                 }
 
-                console.log(this.video);
+                //console.log(this.video);
                 
                 this.latitud = this.items[num].latitud;
                 this.longitud = this.items[num].longitud;
@@ -363,5 +366,16 @@ export class PlacesPage implements OnInit, OnDestroy {
           }]
         });
         await actionSheet.present();
+      }
+
+      async verVideo(){
+          const video = await this.modalCtrl.create({
+              component: VideoPage,
+              cssClass: 'modal-video',
+              backdropDismiss: false,
+              showBackdrop: true
+          });
+
+          await video.present();
       }
 }
