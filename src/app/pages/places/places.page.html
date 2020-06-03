@@ -25,6 +25,13 @@
                 <ion-slide class="slideHijo" *ngFor="let img of imagenes">
                     <div id="imagenMini"><img (click)=cambiarImagen() class="imgGaleria" src="{{ img.url }}" /></div>
                 </ion-slide>
+                    <ion-slide class="slideHijo" *ngFor="let vid of video">
+                    <a href="{{vid.video}}">
+                      <div id="imagenMini">
+                          <img src="../../../assets/img/VIDEO.jpg"/>
+                      </div>  
+                    </a>
+                </ion-slide>
             </ion-slides>
         </div>
         <div class="divc">
