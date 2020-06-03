@@ -17,7 +17,7 @@ export class VideoPage implements OnInit {
 
   ngOnInit() {
     this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl
-      ("https://www.youtube.com/watch?v=ZhIsAZO5gl0&list=RDwCCfc2vAuDU&index=6");
+      ("https://www.youtube.com/embed?v=CciXZiGZ_lI&list=RDCciXZiGZ_lI&start_radio=1");
   }
 
 }
