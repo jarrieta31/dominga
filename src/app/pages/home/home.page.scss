@@ -99,10 +99,20 @@ ion-label {
 
 .sliderPrimero,
 .sliderHijo,
+.bannerLink,
 .imgSlider {
     height: 100%;
     width: 100%;
 }
+
+.sliderPrimero,
+.sliderHijo,
+.banner,
+.imgSlider {
+    height: 100%;
+    width: 100%;
+}
+
 
 .cpadre {
     height: 100%;
@@ -160,3 +170,4 @@ ion-label {
     margin-top: auto;
     margin-bottom: auto;
 }
+
