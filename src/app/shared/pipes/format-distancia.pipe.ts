@@ -38,13 +38,7 @@ export class FormatDistancia implements PipeTransform {
                 }
             }
         }
-
-
-
         return txtSalida;
-
     }
-
-
 
 }

@@ -88,8 +88,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
                 distFormat = parseFloat(dist).toFixed(3);
                 place.distancia = "Desde C. Dominga " + distFormat;
             } else {
-                dist = dist * 1000;
-                distFormat = parseFloat(dist).toFixed(0);
+                distFormat = parseFloat(dist).toFixed(2);
                 place.distancia = "Desde C. Dominga " + distFormat;
             }
         })
@@ -108,8 +107,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
                             distFormat = parseFloat(dist).toFixed(3);
                             place.distancia = "Estás a " + distFormat;
                         } else {
-                            dist = dist * 1000;
-                            distFormat = parseFloat(dist).toFixed(0);
+                            distFormat = parseFloat(dist).toFixed(2);
                             place.distancia = "Estás a " + distFormat;
                         }
                     })

@@ -219,12 +219,11 @@ export class PlacesPage implements OnInit, OnDestroy {
                 let dist_cd = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
                 let red_cd;
                 this.distancia_cd;
-                if (dist_cd > 1) {
+                if (dist_cd >= 1) {
                     red_cd = parseFloat(dist_cd).toFixed(3);
-                    this.distancia_cd = "Desde C. Dominga " + red_cd;;
+                    this.distancia_cd = "Desde C. Dominga " + red_cd;
                 } else {
-                    dist_cd = dist_cd * 1000;
-                    red_cd = parseFloat(dist_cd).toFixed(0);
+                    red_cd = parseFloat(dist_cd).toFixed(2);
                     this.distancia_cd = "Desde C. Dominga " + red_cd;
                 }
             }
