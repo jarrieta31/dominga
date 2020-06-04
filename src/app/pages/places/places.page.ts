@@ -232,7 +232,12 @@ export class PlacesPage implements OnInit, OnDestroy {
             this.distancia$.next(this.distancia_cd)
         })
 
-        this.sugerencias.sort((a, b) => a.distancia > b.distancia ? 1 : b.distancia > a.distancia ? -1 : 0);
+        this.sugerencias.forEach( res => {
+            var dist_num = parseFloat(res.distancia);
+            res.distanciaNumber = dist_num;
+        })
+
+        this.sugerencias.sort((a, b) => a.distanciaNumber > b.distanciaNumber ? 1 : b.distanciaNumber > a.distanciaNumber ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];
         this.sug_2[1] = this.sugerencias[2];
     });
