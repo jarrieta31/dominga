@@ -75,7 +75,11 @@ const routes: Routes = [
   {
     path: 'modal-rating',
     loadChildren: () => import('./pages/modal-rating/modal-rating.module').then( m => m.ModalRatingPageModule)
+  },  {
+    path: 'party-house',
+    loadChildren: () => import('./pages/party-house/party-house.module').then( m => m.PartyHousePageModule)
   },
+
 ];
 
 @NgModule({

@@ -40,6 +40,11 @@ export class DatabaseService {
         return this.appsRef;
     }
 
+    getParty() {
+        this.appsRef = this.db.list('casa_de_fiesta');
+        return this.appsRef;
+    }
+
     getTypeCircuits() {
         this.appsRef = this.db.list('tipo_circuito');
         return this.appsRef;

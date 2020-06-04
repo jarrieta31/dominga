@@ -13,8 +13,18 @@ export class MoreOptionsPage implements OnInit, OnDestroy {
 
 	sleep:  DondeDormir[];
 	eat: DondeComer[];
+  party: DondeComer[];
 
 	textoBuscar = '';
+
+  fiesta = this.database.getParty().snapshotChanges().subscribe( res => {
+    this.party = [];
+                res.forEach(item => {
+                    let a = item.payload.toJSON();
+                    a['$key'] = item.key;
+                    this.party.push(a as DondeComer);
+                })
+  })
 
 	dormir = this.database.getSleep().snapshotChanges().subscribe( res => {
 		this.sleep = [];
@@ -34,7 +44,7 @@ export class MoreOptionsPage implements OnInit, OnDestroy {
                 })
 
                 this.sleep;
-                this.sleep = this.sleep.concat(this.eat);
+                this.sleep = this.sleep.concat(this.eat, this.party);
                 //console.log(this.sleep);
 	})
 
