@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 
 import { TipoCircuito } from '../../shared/tipo-circuito';
+import { Place } from '../../shared/place';
 
 import { LoadingController } from '@ionic/angular';
 
@@ -13,7 +14,8 @@ import { LoadingController } from '@ionic/angular';
 })
 export class CircuitsPage implements OnInit, OnDestroy {
 
-    tipoCircuito: TipoCircuito[];
+    tipoCircuito: Place[] = [];
+    lugaresRurales: Place[] = [];
     textoBuscar = '';
 
     loading: any;
@@ -22,21 +24,32 @@ export class CircuitsPage implements OnInit, OnDestroy {
                 private loadingCtrl: LoadingController) {}
 
     su = this.database.getTypeCircuits().snapshotChanges().subscribe(data => {
-                this.tipoCircuito = [];
+                this.tipoCircuito.length = 0;
                 data.forEach(item => {
                     let a = item.payload.toJSON();
                     a['$key'] = item.key;
-                    this.tipoCircuito.push(a as TipoCircuito);
+                    this.tipoCircuito.push(a as Place);
                 })
-                //console.log(this.tipoCircuito);
             });
+
+    rural = this.database.getPlaces().snapshotChanges().subscribe( data => {
+      this.lugaresRurales.length = 0;
+      data.forEach(item => {
+                    let a = item.payload.toJSON();
+                    a['$key'] = item.key;
+                    if(a['tipo'] == 'Rural'){
+                      this.lugaresRurales.push(a as Place);
+                    }
+                })
+    })
 
     ngOnInit() {
         this.show("Cargando circuitos...");
     } 
 
     ngOnDestroy(){
-        this.su.unsubscribe();
+      this.su.unsubscribe();
+      this.rural.unsubscribe();
     }
 
     buscar(event){
@@ -52,6 +65,7 @@ export class CircuitsPage implements OnInit, OnDestroy {
         
      this.loading.present().then(() => {
          this.su;
+         this.rural;
          this.loading.dismiss();
      });
     }

@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TipoCircuito } from '../../shared/tipo-circuito';
+import { Place } from '../../shared/place';
 
 @Pipe({
   name: 'filtroTipoCircuito'
 })
 export class FiltroTipoCircuitoPipe implements PipeTransform {
 
-  transform(tipoCircuito: TipoCircuito[], texto: string): TipoCircuito[] {
+  transform(tipoCircuito: Place[], texto: string): Place[] {
     
     if( texto.length === 0){
     	return tipoCircuito;
@@ -16,7 +16,6 @@ export class FiltroTipoCircuitoPipe implements PipeTransform {
 
     return tipoCircuito.filter( item => {
     	return item.nombre.toLowerCase().includes( texto) 
-    	|| item.duracion.toLowerCase().includes( texto );
     })
   }
 

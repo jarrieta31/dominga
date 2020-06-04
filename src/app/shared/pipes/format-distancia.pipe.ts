@@ -17,16 +17,15 @@ export class FormatDistancia implements PipeTransform {
             arrayTexto.pop();
     
             var numDistancia = Number(txtDistancia);
-            if (numDistancia >= 1000) {
-                numDistancia = numDistancia / 1000;
-                numDistancia = Math.round(numDistancia * 1000) / 1000;
+            if (numDistancia <= 1) {
+                numDistancia = numDistancia * 1000;
+                txtDistancia = String(numDistancia);
+                txtDistancia = txtDistancia.replace(".", ",");
+                txtDistancia = txtDistancia + " m";
+            } else {               
                 txtDistancia = String(numDistancia);
                 txtDistancia = txtDistancia.replace(".", ",");
                 txtDistancia = txtDistancia + " km";
-            } else {
-                numDistancia = Math.round(numDistancia);
-                txtDistancia = String(numDistancia);
-                txtDistancia = txtDistancia + " m";
             }
     
             arrayTexto.push(txtDistancia);

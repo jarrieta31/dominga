@@ -54,6 +54,7 @@ export class PlacesPage implements OnInit, OnDestroy {
     latitud: string;
     longitud: string;
     imagenPrincipal: string;
+    tipo: string;
 
     cont = 0;
     contVideo = 0;
@@ -139,6 +140,7 @@ export class PlacesPage implements OnInit, OnDestroy {
                 this.bicicleta = this.items[num].bicicleta;
                 this.caminar = this.items[num].caminar;
                 this.imagenPrincipal = this.items[num].imagenPrincipal;
+                this.tipo = this.items[num].tipo;
 
                 this.imagenes.length = 0;
                 this.valoracion.length = 0;
@@ -180,6 +182,14 @@ export class PlacesPage implements OnInit, OnDestroy {
                     color: "#ea4335"
                 }).setLngLat([this.longitud, this.latitud]).addTo(this.mapa);
 
+                if(this.tipo == 'Rural' && this.nombre != 'Mal Abrigo'){
+                    const markerMalAbrigo = new Mapboxgl.Marker({
+                    draggable: false,
+                    color: "#006400"
+                }).setLngLat([-56.952087, -34.147616]).addTo(this.mapa);
+                }
+                
+
                 this.mapa.on('load', () => {
                     this.mapa.resize();
                 });
@@ -197,7 +207,7 @@ export class PlacesPage implements OnInit, OnDestroy {
         })
 
         this.sugerencias.forEach(sug => {
-            let options = { units: 'meters' };
+            let options = { units: 'kilometers' };
             let dist = distance([this.longitud, this.latitud], [sug.longitud, sug.latitud], options);
             let red = parseFloat(dist).toFixed(2);
             this.index;
@@ -247,7 +257,7 @@ export class PlacesPage implements OnInit, OnDestroy {
             this.subscripcionPosition = this.posicion$.pipe(
                 tap(posicion => {
                     if (posicion != null) {
-                        let options = { units: 'meters' };
+                        let options = { units: 'kilometers' };
                         let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
                         let distFormat, distancia;
                         if (dist > 1) {
@@ -340,20 +350,20 @@ export class PlacesPage implements OnInit, OnDestroy {
             icon: 'car-sport',
             handler: () => {
                 //Abre el mapa en modo auto
-                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/driving-traffic"}]);
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, tipo: this.tipo, id: this.key, profile:"mapbox/driving-traffic"}]);
             }
           }, {
             text: 'Ir caminando',
             icon: 'walk',
             handler: () => {
-                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/walking"}]);
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, tipo: this.tipo, id: this.key, profile:"mapbox/walking"}]);
               console.log('Ir caminando');
             }
           }, {
             text: 'Ir en bicicleta',
             icon: 'bicycle-outline',
             handler: () => {
-                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, id: this.key, profile:"mapbox/driving"}]);
+                this.router.navigate(['/map', this.nombre, {longitud: this.longitud, latitud: this.latitud, tipo: this.tipo, id: this.key, profile:"mapbox/driving"}]);
               console.log('Ir en Bicicleta');
             }
           }, {

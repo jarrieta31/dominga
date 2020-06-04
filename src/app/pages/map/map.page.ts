@@ -23,6 +23,7 @@ export class MapPage implements OnInit, OnDestroy {
   longitud: number = null;
   latitud: number = null;
   nombre: string = null;
+  tipo: string = null;
   place: Place;
   points: Point[] = [];
   myPositionMarker: Mapboxgl.Marker = null;
@@ -77,6 +78,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.latitud = Number(this.activatedRoute.snapshot.paramMap.get('latitud'));
     this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
     this.profile = this.activatedRoute.snapshot.paramMap.get('profile');
+    this.tipo = this.activatedRoute.snapshot.paramMap.get('tipo');
 
     switch (this.profile) {
       case 'mapbox/driving-traffic':
@@ -138,6 +140,13 @@ export class MapPage implements OnInit, OnDestroy {
       color: "#ea4335"
     }).setLngLat([this.longitud, this.latitud])
       .addTo(this.mapa);
+console.log(this.nombre);
+      if(this.tipo == 'Rural' && this.nombre != 'Mal Abrigo'){
+                    const markerMalAbrigo = new Mapboxgl.Marker({
+                    draggable: false,
+                    color: "#006400"
+                }).setLngLat([-56.952087, -34.147616]).addTo(this.mapa);
+                }
 
 
     this.subscripcionPosition = this.posicion$.pipe(

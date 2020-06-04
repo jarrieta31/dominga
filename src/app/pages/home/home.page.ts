@@ -36,7 +36,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         initialSlide: 0,
         speed: 600,
         slidesPerView: 1,
-        spaceBetween: 1,
+        spaceBetween: 0,
         autoplay:true,
     };
 
@@ -81,7 +81,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         })
         // Agrega las distancias calculadas desde casa dominga al array de lugares
         this.items.forEach(place => {
-            let options = { units: 'meters' };
+            let options = { units: 'kilometers' };
             let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud, this.casaDominga.latitud], options);
             let distFormat;
             if (dist > 1) {
@@ -101,7 +101,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     
                     this.items.forEach(place => {
                         //console.log('posicion actual', posicion.latitud)
-                        let options = { units: 'meters' };
+                        let options = { units: 'kilometers' };
                         let dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
                         let distFormat;
                         if (dist > 1) {

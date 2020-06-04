@@ -9,13 +9,31 @@
 <ion-content>
     <ion-searchbar cancelButtonText="Custom Cancel" placeholder="¡Elegí tu itinerario!" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-card *ngFor="let item of tipoCircuito | filtroTipoCircuito:textoBuscar" routerLink="/{{item.nombre}}">
-        <ion-card-header color="circuits">
+        <ion-card-header color="information">
             {{ item.nombre }}
         </ion-card-header>
         <ion-card-content>
-            <img width="auto" height="40%" src="{{ item.imagen }}" alt="{{ item.nombre }}">
+            <img width="auto" height="40%" src="{{ item.imagenPrincipal }}" alt="{{ item.nombre }}">
             <div class="duracion">
-                Duración: {{ item.duracion }}
+                Recorre la ciudad
+                <div class="estrellas">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <ion-card *ngFor="let item of lugaresRurales | filtroTipoCircuito:textoBuscar" [routerLink]="['/places', item.$key]">
+        <ion-card-header color="options">
+            Rural &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; {{ item.nombre }}
+        </ion-card-header>
+        <ion-card-content>
+            <img width="auto" height="40%" src="{{ item.imagenPrincipal }}" alt="{{ item.nombre }}">
+            <div class="duracion">
+                <b>+ Mal Abrigo</b>
                 <div class="estrellas">
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
