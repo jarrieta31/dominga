@@ -1,246 +1,220 @@
 {
     "items": [
-      {
-        "name": "Tarifado",
-        "children" : [
-            {
-                "nameLocalidad" : "San José de Mayo",
-                "children": [{
-                   "info": "El tarifado tendrá 260 lugares para estacionamiento, en la zona comprendida por las calles Ciganda, Colón, Bengoa e Ituzaingó, incluyendo los 80 cupos de la plaza"
-                }]
-  
-            }]
-    },
     {
         "name": "Números de Emergencia",
         "children": [
-          {
+        {
             "nameLocalidad": "San José de Mayo",
-            "children" : [{
-              "info": "Policia",
-              "number": 911
+            "children": [
+            {
+                "info": "Policia",
+                "number": 911
             },
             {
-              "info" : "Bomberos",
-              "number": "104 / 43422055"
+                "info": "Bomberos",
+                "number": "104 / 43422055"
             },
             {
-              "info": "UDEMM",
-              "number": 43423000
+                "info": "UDEMM",
+                "number": 43423000
             },
             {
-              "info": "UCOR",
-              "number": 43424444
+                "info": "UCOR",
+                "number": 43424444
             },
             {
-              "info": "Hospital (Emergencia)",
-              "number": 43422175
+                "info": "Hospital (Emergencia)",
+                "number": 43422175
             },
             {
-              "info": "AMSJ",
-              "number": 43423718
+                "info": "AMSJ",
+                "number": 43423718
             },
             {
-              "info": "Jefatura",
-              "number": 4342141
+                "info": "Jefatura",
+                "number": 4342141
             }]
-          },
-          {
+        },
+        {
             "nameLocalidad": "Libertad",
-            "children" : [{
-              "info" : "TAMED (Emergencia Móvil)",
-              "number": "43452400"
+            "children": [
+            {
+                "info": "TAMED (Emergencia Móvil)",
+                "number": "43452400"
             },
             {
-              "info" : "TAMED (Emergencia Móvil)",
-              "number": "091651753"
+                "info": "TAMED (Emergencia Móvil)",
+                "number": "091651753"
             },
             {
-              "info": "Hospital",
-              "number": 43454070
+                "info": "Hospital",
+                "number": 43454070
             }]
-          },
-          {
+        },
+        {
             "nameLocalidad": "Ecilda Paullier",
-            "children": [{
-              "info": "ISAPRE (Evangelico)",
-              "number": 43492165
+            "children": [
+            {
+                "info": "ISAPRE (Evangelico)",
+                "number": 43492165
             }]
-          },
-          {
+        },
+        {
             "nameLocalidad": "Villa Rodríguez",
             "children": []
-          },
-          {
+        },
+        {
             "nameLocalidad": "Ciudad del Plata",
             "children": []
-          },
-          {
+        },
+        {
             "nameLocalidad": "Mal Abrigo",
             "children": []
-          }
-         ]
+        }]
+    },
+    {
+        "name": "Tarifado",
+        "children": [
+        {
+            "nameLocalidad": "San José de Mayo",
+            "children": [
+            {
+                "info": "El tarifado tendrá 260 lugares para estacionamiento, en la zona comprendida por las calles Ciganda, Colón, Bengoa e Ituzaingó, incluyendo los 80 cupos de la plaza"
+            }]
+
+        }]
     },
     {
         "name": "Casa de Cambio",
         "children": [
         {
-            "nameLocalidad" : "San José de Mayo",
-            "children": [{
-              "info": "Abitab Asamblea",
-              "number": 43428413
+            "nameLocalidad": "San José de Mayo",
+            "children": [
+            {
+                "info": "Abitab Asamblea",
+                "number": 43428413
             },
             {
-              "info": "Abitab Herrera",
-              "number": 43423117
+                "info": "Abitab Herrera",
+                "number": 43423117
             },
             {
-              "info": "Abitab Molino",
-              "number": 43430001
+                "info": "Abitab Molino",
+                "number": 43430001
             },
             {
-              "info": "Abitab Rincon",
-              "number": 43425409
+                "info": "Abitab Rincon",
+                "number": 43425409
             },
             {
-              "info": "Cambio Iberia",
-              "number": 43440826
+                "info": "Cambio Iberia",
+                "number": 43440826
             },
             {
-              "info": "Cambio San José",
-              "number": 43425159
+                "info": "Cambio San José",
+                "number": 43425159
             }]
         },
         {
-          "nameLocalidad": "Libertad",
-          "children": [{
-            "info": "Abitab",
-            "number": 43454338
-          },
-          {
-            "info" : "Abitab",
-            "number": 43454970
-          }]
+            "nameLocalidad": "Libertad",
+            "children": [
+            {
+                "info": "Abitab",
+                "number": 43454338
+            },
+            {
+                "info": "Abitab",
+                "number": 43454970
+            }]
         },
         {
-          "nameLocalidad": "Ecilda Paullier",
-          "children": [{
-            "info": "Abitab",
-            "number": 43492013
-          }]
+            "nameLocalidad": "Ecilda Paullier",
+            "children": [
+            {
+                "info": "Abitab",
+                "number": 43492013
+            }]
         },
         {
-          "nameLocalidad": "Villa Rodríguez",
-          "children": [{
-            "info": "Abitab",
-            "number": 43482109
-          }]
+            "nameLocalidad": "Villa Rodríguez",
+            "children": [
+            {
+                "info": "Abitab",
+                "number": 43482109
+            }]
         },
         {
-          "nameLocalidad": "Ciudad del Plata",
-          "children": [{
-            "info": "Abitab",
-            "number": 23475166
-          },
-          {
-            "info": "Abitab",
-            "number": 23471544
-          },
-          {
-            "info": "Abitab",
-            "number": 23473320
-          }]
+            "nameLocalidad": "Ciudad del Plata",
+            "children": [
+            {
+                "info": "Abitab",
+                "number": 23475166
+            },
+            {
+                "info": "Abitab",
+                "number": 23471544
+            },
+            {
+                "info": "Abitab",
+                "number": 23473320
+            }]
+        }]
+    },
+    
+    {
+        "name": "Estaciones de Servicio",
+        "children": [
+        {
+            "nameLocalidad": "San José de Mayo",
+            "children": [
+            {
+                "info": "Ancap TresOnce",
+                "number": 43423776
+            },
+            {
+                "info": "Petrobras",
+                "number": 43423909
+            },
+            {
+                "info": "Petrobras",
+                "number": 43423326
+            }]
+        },
+        {
+            "nameLocalidad": "Libertad",
+            "children": [
+            {
+                "info": "Axion",
+                "number": 43455088
+            },
+            {
+                "info": "Petrobras",
+                "number": 43452221
+            }]
+        },
+        {
+            "nameLocalidad": "Ecilda Paullier",
+            "children": [
+            {
+                "info": "Axion",
+                "number": 43492013
+            },
+            {
+                "info": "Petrobras",
+                "number": 43492203
+            }]
         }]
     },
     {
-      "name" : "Casa de Fiesta",
-      "children": [{
-        "nameLocalidad": "San José de Mayo",
-        "children": [{
-          "info": "Complejo Acacia",
-          "number": "099680279 - 43431615"
-        },
+        "name": "Parking",
+        "children": [
         {
-          "info": "Chacra de la Asociacion Medica",
-          "number": 43422215
-        },
-        {
-          "info": "El Mirador",
-          "number": "099356844"
-        },
-        {
-          "info": "Moras y Mentas",
-          "number": "099171069"
+            "nameLocalidad": "San José de Mayo",
+            "children": [
+            {
+                "info": "Parking San Jose",
+                "number": 43424290
+            }]
         }]
-      },
-      {
-        "nameLocalidad" : "Libertad",
-        "children" : [{
-          "info": "Club El Asador",
-          "number": 43452128
-        },
-        {
-          "info": "Los Tilos",
-          "number": "099366991"
-        }]
-      },
-      {
-        "nameLocalidad": "Ecilda Paullier",
-        "children" : [{
-          "info": "Club de Jubilados y Pensionistas",
-          "number": 43492149
-        }]
-      }]
-    },
-    {
-      "name": "Estaciones de Servicio",
-      "children": [{
-        "nameLocalidad": "San José de Mayo",
-        "children": [{
-          "info": "Ancap TresOnce",
-          "number": 43423776
-        },
-        {
-          "info": "Petrobras",
-          "number": 43423909
-        },
-        {
-          "info": "Petrobras",
-          "number": 43423326
-        }]
-      },
-      {
-        "nameLocalidad": "Libertad",
-        "children": [{
-          "info": "Axion",
-          "number" : 43455088
-        },
-        {
-          "info": "Petrobras",
-          "number": 43452221
-        }]
-      },
-      {
-        "nameLocalidad": "Ecilda Paullier",
-        "children": [{
-          "info": "Axion",
-          "number": 43492013
-        },
-        {
-          "info": "Petrobras",
-          "number": 43492203
-        }]
-      }]
-    },
-    {
-      "name": "Parking",
-      "children": [{
-        "nameLocalidad": "San José de Mayo",
-        "children": [{
-          "info": "Parking San Jose",
-          "number": 43424290
-        }]
-      }]
-    }
-    ]
+    }]
 }
