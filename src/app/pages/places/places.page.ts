@@ -16,7 +16,6 @@ import { tap } from 'rxjs/operators';
 import { ModalController } from '@ionic/angular';
 import { VideoPage } from '../../pages/video/video.page';
 
-
 declare var jQuery: any;
 declare var $: any;
 
