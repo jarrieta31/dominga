@@ -55,7 +55,7 @@ export class PlacesPage implements OnInit, OnDestroy {
     longitud: string;
     imagenPrincipal: string;
     tipo: string;
-
+ 
     cont = 0;
     contVideo = 0;
     val = 0;
@@ -152,7 +152,7 @@ export class PlacesPage implements OnInit, OnDestroy {
                     this.cont++;
                 })
 
-                if(this.nombre == "Boliche de Campaña"){
+                if(this.items[num].video != undefined){
                     this.contVideo = 0;
 
                     let vid = Object.keys(this.items[num].video).map(key => ({ video: this.items[num].video[key] }));
@@ -164,8 +164,6 @@ export class PlacesPage implements OnInit, OnDestroy {
                     })
                 }
 
-                //console.log(this.video);
-                
                 this.latitud = this.items[num].latitud;
                 this.longitud = this.items[num].longitud;
 
@@ -382,12 +380,16 @@ export class PlacesPage implements OnInit, OnDestroy {
         await actionSheet.present();
       }
 
-      async verVideo(){
+      async verVideo(url: string){
+
           const video = await this.modalCtrl.create({
               component: VideoPage,
               cssClass: 'modal-video',
               backdropDismiss: false,
-              showBackdrop: true
+              showBackdrop: true,
+              componentProps: {
+                 url: url
+              }
           });
 
           await video.present();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl} from '@angular/platform-browser'
 import { by } from 'protractor';
 import { ModalController } from '@ionic/angular';
@@ -12,6 +12,8 @@ export class VideoPage implements OnInit {
 
   videoUrl: SafeResourceUrl;
 
+  @Input() url;
+
   constructor(
     private domSanitizer: DomSanitizer,
     private modalCtrl: ModalController   
@@ -19,7 +21,7 @@ export class VideoPage implements OnInit {
 
   ngOnInit() {
     this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl
-      ("https://www.youtube.com/embed?v=CciXZiGZ_lI&list=RDCciXZiGZ_lI&start_radio=1");
+      (this.url);
   }
 
   salir(){

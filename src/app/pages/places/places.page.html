@@ -1,5 +1,4 @@
 <ion-header>
-  
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
@@ -16,12 +15,17 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-      <!-- fab placed to the top end -->
-  <ion-fab vertical="top" horizontal="start" slot="fixed">
-    <ion-fab-button (click)="verVideo()" color="danger">
-        <ion-icon name="logo-youtube"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+    <!-- fab placed to the top end -->
+    <ion-fab *ngIf="video?.length > 0" vertical="top" horizontal="start" slot="fixed">
+        <ion-fab-button color="danger">
+            <ion-icon name="logo-youtube"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="end">
+            <ion-fab-button *ngFor="let videos of video">
+                <i (click)="verVideo(videos.video)" class="fas fa-play"></i>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
     <div id="key">{{ key }}</div>
     <div class="padre">
         <div class="diva">
