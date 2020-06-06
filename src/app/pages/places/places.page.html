@@ -21,8 +21,8 @@
             <ion-icon name="logo-youtube"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="end" class="lista_videos">
-            <ion-fab-button color="danger" class="btn_video" *ngFor="let videos of video">
-                <i color="danger" (click)="verVideo(videos.video)" class="fas fa-play"></i>
+            <ion-fab-button class="btn_video" *ngFor="let videos of video">
+                <i (click)="verVideo(videos.video)" class="fas fa-video"></i>
             </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
