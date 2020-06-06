@@ -172,7 +172,7 @@ console.log(this.nombre);
     //Subscripcion para ver la ruta
     this.directions.on("route", e => {
       let routes = e.route
-      this.distancia = String(routes.map(r => r.distance));
+      this.distancia = String(routes.map(r => (r.distance)/1000));
     })
   }
 

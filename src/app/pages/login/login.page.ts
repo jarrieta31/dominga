@@ -100,10 +100,10 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
   async onLogin(email: string, password: string) {
     email = email.trim();
     password = password.trim();
-    try {      
+    try {
       this.presentLoginLoading();
       const user = await this.authService.signInWithEmail(email, password);
-      if (user) {        
+      if (user) {
         this.router.navigateByUrl('/home');
       }
     } catch (error) {

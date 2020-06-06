@@ -15,8 +15,8 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 export class RegisterPage implements OnInit, OnDestroy {
   
   user: User = new User();
-  email: string;
-  password: string;
+  //email: string;
+  //password: string;
   emailPattern: any = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
   isLoading = false;
   isLogin = true;
@@ -57,11 +57,11 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   onSubmit() {
     if(this.registerForm.valid){
-      this.email = this.registerForm.get('email').value;
-      this.password = this.registerForm.get('password').value;
-      this.email = this.email.trim();
-      this.password = this.password.trim();
-      this.onRegister();
+      let email = this.registerForm.get('email').value;
+      let password = this.registerForm.get('password').value;
+      email = email.trim();
+      password = password.trim();
+      this.onRegister(email, password);
       this.onResetForm();
       
       //console.log("Registro enviado");
@@ -81,18 +81,24 @@ export class RegisterPage implements OnInit, OnDestroy {
       .then(alertEl => alertEl.present());
   }
 
-  async onRegister(){
-    const user = await this.authService.signUpWithEmail(this.email, this.password);
-    if(user){
-      this.presentLoading();
-      this.router.navigateByUrl('/home')
+  async onRegister(email: string, password:string ){
+    try {
+      this.presentRegisterLoading();
+      const user = await this.authService.signUpWithEmail(email, password);
+      if(user){
+        this.presentRegisterLoading();
+        this.router.navigateByUrl('/home')
+      }      
+    } catch (error) {
+      let mensaje = "El registro no se realizó !!!." + error;
+      this.showAlert(mensaje);
     }
   }
 
   ngOnDestroy(){
   }
 
-  async presentLoading() {
+  async presentRegisterLoading() {
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
       message: 'Enviando registro ...',
@@ -103,5 +109,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     const { role, data } = await loading.onDidDismiss();
     console.log('Loading dismissed!');
   }
+
+  get email() { return this.registerForm.get('email'); }
+  get password() { return this.registerForm.get('password'); }
 
 }

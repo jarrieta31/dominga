@@ -20,8 +20,35 @@
         <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email"></ion-input>
       </ion-item>
 
+      <ion-item *ngIf="!email.valid && email.dirty">
+        <ion-text color="danger">
+          <p  color="danger" *ngIf="email.errors.required">El correo es requerido.</p>
+        </ion-text>
+        <ion-text color="danger">
+          <p  *ngIf="email.errors.minlength">El correo debe tener un mínimo de 10 caracteres.</p>          
+        </ion-text>
+        <ion-text color="danger">
+          <p  *ngIf="email.errors.maxlength">El correo tener un máximo de 60 caracteres.</p>
+        </ion-text>
+        <ion-text color="danger">
+          <p  *ngIf="email.errors.pattern && !email.errors.minlength && !email.errors.maxlength">El formato del correo no es válido.</p>
+        </ion-text>
+      </ion-item>
+
       <ion-item>                
         <ion-input class="password" name="password" type="password" placeholder="Contraseña" (keyup.enter)="handleRegister()" formControlName="password"></ion-input>
+      </ion-item>
+
+      <ion-item class="alert-danger" *ngIf="!password.valid && password.dirty">
+        <ion-text color="danger">
+          <p  *ngIf="password.errors.required">La contraseña es requerida</p>
+        </ion-text>
+        <ion-text color="danger">
+          <p  *ngIf="password.errors.minlength">La contraseña debe tener un mínimo de 6 caracteres.</p>
+        </ion-text>
+        <ion-text color="danger">
+          <p  *ngIf="password.errors.maxlength && !password.errors.minlength">La contraseña debe tener un máximo de 20 caracteres.<p>
+        </ion-text>
       </ion-item>
 
     </ion-list>

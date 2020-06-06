@@ -15,10 +15,18 @@
             </ion-item>
             
             <ion-item *ngIf="!email.valid && email.dirty">
-                <p class="container-error-message" color="danger" *ngIf="email.errors.required">El correo es requerido.</p>
-                <p class="container-error-message" *ngIf="email.errors.minlength">El correo debe tener un mínimo de 10 caracteres.</p>
-                <p class="container-error-message" *ngIf="email.errors.maxlength">El correo tener un máximo de 60 caracteres.</p>               
-                <p class="container-error-message" *ngIf="email.errors.pattern && !email.errors.minlength && !email.errors.maxlength">El formato del correo no es válido.</p>
+                <ion-text color="danger">
+                    <p *ngIf="email.errors.required">El correo es requerido.</p>
+                </ion-text>
+                <ion-text color="danger">
+                    <p *ngIf="email.errors.minlength">El correo debe tener un mínimo de 10 caracteres.</p>
+                </ion-text>
+                <ion-text color="danger">
+                    <p *ngIf="email.errors.maxlength">El correo tener un máximo de 60 caracteres.</p>
+                </ion-text>
+                <ion-text color="danger">
+                    <p *ngIf="email.errors.pattern && !email.errors.minlength && !email.errors.maxlength">El formato del correo no es válido.</p>
+                </ion-text>
             </ion-item>
             
 
@@ -27,9 +35,15 @@
             </ion-item>
 
             <ion-item class="alert-danger" *ngIf="!password.valid && password.dirty">
-                <p class="container-error-message" *ngIf="password.errors.required">La contraseña es requerida</p>
-                <p class="container-error-message" *ngIf="password.errors.minlength">La contraseña debe tener un mínimo de 6 caracteres.</p>
-                <p class="container-error-message" *ngIf="password.errors.maxlength && !password.errors.minlength">La contraseña debe tener un máximo de 20 caracteres.<p>
+                <ion-text color="danger">
+                    <p *ngIf="password.errors.required">La contraseña es requerida</p>
+                </ion-text>
+                <ion-text color="danger">
+                    <p *ngIf="password.errors.minlength">La contraseña debe tener un mínimo de 6 caracteres.</p>
+                </ion-text>
+                <ion-text color="danger">
+                    <p *ngIf="password.errors.maxlength && !password.errors.minlength">La contraseña debe tener un máximo de 20 caracteres.<p>
+                </ion-text>
             </ion-item>
 
             <ion-item>

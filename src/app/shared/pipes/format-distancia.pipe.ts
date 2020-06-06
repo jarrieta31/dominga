@@ -19,11 +19,11 @@ export class FormatDistancia implements PipeTransform {
             var numDistancia = Number(txtDistancia);
             if (numDistancia <= 1) {
                 numDistancia = numDistancia * 1000;
-                txtDistancia = String(numDistancia);
+                txtDistancia = String(Math.round(numDistancia * 1)/1);
                 txtDistancia = txtDistancia.replace(".", ",");
                 txtDistancia = txtDistancia + " m";
             } else {      
-                txtDistancia = String(numDistancia);
+                txtDistancia = String(Math.round(numDistancia * 1000)/1000);
                 txtDistancia = txtDistancia.replace(".", ",");
                 txtDistancia = txtDistancia + " km";
             }
