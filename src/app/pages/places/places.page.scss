@@ -21,7 +21,7 @@ ion-title {
 
 .divc {
     width: 100%;
-    background-color: #F0F0F0;
+    background-color: var(--ion-color-light);
 }
 
 .divd {
@@ -130,7 +130,7 @@ ion-title {
 
 .sugDistancia {
     font-weight: 600;
-    color: #000000;
+    color: var(--ion-color-dark);
     font-size: 10px;
 }
 
@@ -199,7 +199,7 @@ ion-title {
 
     .sugDistancia {
         font-weight: 600;
-        color: #000000;
+        color: var(--ion-color-dark);
         font-size: 18px;
     }
 
@@ -250,7 +250,7 @@ ion-title {
 
     .sugDistancia {
         font-weight: 600;
-        color: #000000;
+        color: var(--ion-color-dark);
         font-size: 18px;
     }
 
@@ -368,7 +368,7 @@ ion-title {
 
     .sugDistancia {
         font-weight: 600;
-        color: #000000;
+        color: var(--ion-color-dark);
         font-size: 8px;
     }
 

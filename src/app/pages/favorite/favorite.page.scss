@@ -49,10 +49,10 @@ ion-card {
     font-weight: bold;
     font-family: 'Barlow';
     font-size: 140%;
-    color: #c706ff;
+    color: var(--ion-color-favorite);
 }
 
 .iconSinFav{
     font-size: 60px;
-    color: #c706ff;
+    color: var(--ion-color-favorite);
 }

@@ -9,7 +9,7 @@
 </ion-header>
 <ion-content>
     <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <ion-virtual-scroll [items]="eat | filtroDondeComer:textoBuscar" approxItemHeight="115px" class="lista">
+    <ion-virtual-scroll [items]="eat | filtroDondeComer:textoBuscar" approxItemHeight="125px" class="lista">
         <ion-item *virtualItem="let item ; let itemBounds = bounds;" class="item">
             <div class="padre">
                 <div class="imagen">

@@ -1,5 +1,12 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
+        <ion-list>
+            <ion-item>
+                <ion-icon name="moon" slot="start"></ion-icon>
+                <ion-toggle style="margin-left: 12px" slot="start" [ngModel]="darkMode"
+                (ionChange)="changeTheme()"></ion-toggle>
+            </ion-item>
+        </ion-list>
         <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">
             Cerrar Sesión
         </ion-button>

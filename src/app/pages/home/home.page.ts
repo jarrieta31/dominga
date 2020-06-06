@@ -54,6 +54,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     idUser: string;
 
     loading: any;
+    darkMode: boolean = true;
 
     constructor(
         private database: DatabaseService,
@@ -69,7 +70,9 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.geolocationService.iniciarSubscriptionClock();
         this.geolocationService.iniciarSubscriptionMatch();
-        this.posicion$ = this.geolocationService.getPosicionActual$();        
+        this.posicion$ = this.geolocationService.getPosicionActual$(); 
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        this.darkMode = prefersDark.matches;       
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
@@ -228,6 +231,12 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
          this.subscrictionUser;
          this.loading.dismiss();
      });
+    }
+
+    changeTheme(){
+        //const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        this.darkMode = !this.darkMode;
+        document.body.classList.toggle('dark');
     }
 
 }
