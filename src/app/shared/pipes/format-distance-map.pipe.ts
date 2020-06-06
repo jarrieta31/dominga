@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'formatDistancia'
+  name: 'formatDistanceMap'
 })
-export class FormatDistancia implements PipeTransform {
+export class FormatDistanceMapPipe implements PipeTransform {
 
-    transform(texto: string) {
+  transform(texto: string) {
         let espacio = " ";
         var txtSalida = "";
 
@@ -17,15 +17,15 @@ export class FormatDistancia implements PipeTransform {
             arrayTexto.pop();
     
             var numDistancia = Number(txtDistancia);
-            if (numDistancia <= 1) {
-                numDistancia = numDistancia * 1000;
-                txtDistancia = String(numDistancia);
-                txtDistancia = txtDistancia.replace(".", ",");
-                txtDistancia = txtDistancia + " m";
-            } else {      
+            if (numDistancia >= 1000) {
+                numDistancia = numDistancia / 1000;
                 txtDistancia = String(numDistancia);
                 txtDistancia = txtDistancia.replace(".", ",");
                 txtDistancia = txtDistancia + " km";
+            } else {              
+                txtDistancia = String(numDistancia);
+                txtDistancia = txtDistancia.replace(".", ",");
+                txtDistancia = txtDistancia + " m";
             }
     
             arrayTexto.push(txtDistancia);

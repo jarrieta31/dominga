@@ -19,7 +19,7 @@ import { ActionSheetController, LoadingController } from '@ionic/angular';
 export class MapPage implements OnInit, OnDestroy {
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
-  distancia: string;;
+  distancia: string;
   longitud: number = null;
   latitud: number = null;
   nombre: string = null;
@@ -124,7 +124,6 @@ export class MapPage implements OnInit, OnDestroy {
       placeholderDestination: this.nombre
     });
 
-    
     this.mapa.on('load', () => {
       this.directions.setOrigin([this.posicion.longitud, this.posicion.latitud]);
       this.directions.setDestination([this.longitud, this.latitud]);
@@ -175,9 +174,6 @@ console.log(this.nombre);
       let routes = e.route
       this.distancia = String(routes.map(r => r.distance));
     })
-
-    
-
   }
 
   ngOnDestroy() {
