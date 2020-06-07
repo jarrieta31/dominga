@@ -14,6 +14,7 @@ export class DatabaseService {
     appsRef: AngularFireList < any > ;
     dbRef = this.db.database.ref('usuario_favoritos');
     rating = this.db.database.ref('lugar');
+    //darkMode = this.db.database.ref('usuario_modo');
 
     // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
     constructor(private db: AngularFireDatabase) { }
@@ -85,5 +86,20 @@ export class DatabaseService {
     //         this.rating.child(id + '/valoracion/user').set(
     //         rate
     //     ); 
+    // }
+
+    // changeMode(id: string, dark: boolean){
+    //     if(dark){
+    //          this.darkMode.child('/' + id).set(
+    //         'dark'
+    //         ); 
+    //     } else {
+    //         this.darkMode.child('/' + id).remove();
+    //     } 
+    // }
+
+    // checkMode(id: string){
+    //     this.appsRef = this.db.list('usuario_modo');
+    //     return this.appsRef;
     // }
 }

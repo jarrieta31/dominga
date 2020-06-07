@@ -55,6 +55,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     loading: any;
     darkMode: boolean = true;
+    //mode = new Array();
 
     constructor(
         private database: DatabaseService,
@@ -122,12 +123,12 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     });
 
     //obtiene el id del usuario actual
-    subscrictionUser = this.authService.currentUser.subscribe(authData => 
+    subscrictionUser = this.authService.currentUser.subscribe(authData =>
         this.idUser = authData.uid
     );
-    
+
     ngOnInit() {
-    
+        
         //Chequea el estado de la conexion a internet
         this.subsciptionNetwork = this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
@@ -171,6 +172,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         this.backButtonSubscription.unsubscribe();
         this.subscrictionUser.unsubscribe();
         this.subscrictionLugarCercano.unsubscribe(); 
+        this.geolocationService.subscriptionUser.unsubscribe();
     }
 
     async cerrarAppAlertConfirm() {
@@ -227,8 +229,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
       });
         
      this.loading.present().then(() => {
-         this.su;    
-         this.subscrictionUser;
+         this.su;
+         this.subscrictionUser;   
          this.loading.dismiss();
      });
     }
@@ -236,6 +238,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     changeTheme(){
         //const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         this.darkMode = !this.darkMode;
+        //this.database.changeMode(this.idUser, this.darkMode);
         document.body.classList.toggle('dark');
     }
 

@@ -11,7 +11,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item class="itemName">
-                <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email" ></ion-input>
+                <ion-input class="email" name="email" type="email" placeholder="E-mail" formControlName="email"></ion-input>
             </ion-item>
             
             <ion-item *ngIf="!email.valid && email.dirty">
@@ -22,7 +22,7 @@
                     <p *ngIf="email.errors.minlength">El correo debe tener un mínimo de 10 caracteres.</p>
                 </ion-text>
                 <ion-text color="danger">
-                    <p *ngIf="email.errors.maxlength">El correo tener un máximo de 60 caracteres.</p>
+                    <p *ngIf="email.errors.maxlength">El correo debe tener un máximo de 60 caracteres.</p>
                 </ion-text>
                 <ion-text color="danger">
                     <p *ngIf="email.errors.pattern && !email.errors.minlength && !email.errors.maxlength">El formato del correo no es válido.</p>
