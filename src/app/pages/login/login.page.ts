@@ -107,8 +107,8 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigateByUrl('/home');
       }
     } catch (error) {
-      let title = "Mensaje";
-      let menssage = "Su inicio de sesión no tuvo éxito!!";
+      let title = "Mensaje inicio de sesión";
+      let menssage = "Su inicio de sesión no tuvo éxito!!. Verifique los datos ingresados.";
       this.showAlert(menssage, title);
     }
   }
@@ -116,6 +116,7 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
   private showAlert(message: string, title: string) {
     this.alertCtrl
       .create({
+        cssClass: 'custom-alert',
         header: title,
         message: message,
         buttons: ['Cerrar']
@@ -165,26 +166,39 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
       .create({ keyboardClose: true, message: 'Enviando solicitud...' })
       .then(loadingEl => {
         loadingEl.present();
-        let resetPassObs = of(this.authService.resetPassword(email));
-        resetPassObs.subscribe(
-          resData => {
-            console.log(resData);
+        var message;
+        var title;
+        try {
+          this.authService.resetPassword(email).then(res =>{
+            message = '¡Revise su correo';
+            title = `Se ha enviado una nueva contraseña a ${email}`;
             loadingEl.dismiss();
-            //this.router.navigateByUrl('/home');
-          },
-          errRes => {
-            loadingEl.dismiss();
-            const code = errRes.error.error.message;
-            let message = '¡No se pudo enviar el reset!';
-            if (code === 'EMAIL_NOT_FOUND') {
-              message = 'No hay registro de usuario correspondiente a este email. El usuario puede haber sido eliminado.';
-            } else if (code === 'auth/user-not-found') {
-              message = 'mensaje user not found'
-            }
-            let title = 'Reset de contraseña fallida';
             this.showAlert(message, title);
-          }
-        );
+
+          }).catch(error => {
+            console.log(error.code);            
+            title = 'Restauración de contraseña fallida';
+            loadingEl.dismiss();
+
+            switch (error.code) {
+              case "auth/user-not-found":
+                message = `El correo ${email} no existe en nuestros registros!!`;
+                break;            
+              default:
+                message = '¡La restauración de contraseña fallado.';
+                break;
+            }
+            this.showAlert(message, title);
+          })
+          
+        } catch (error) {
+          //console.log(error.code);
+          let message = '¡No se pudo enviar el reset!';
+          let title = 'Restauración de contraseña ha fallado. Verifique sus datos y la conexión a internet';
+          loadingEl.dismiss();
+          this.showAlert(message, title);
+        }
+              
       });
   }
 
