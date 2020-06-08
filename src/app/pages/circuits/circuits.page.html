@@ -10,7 +10,7 @@
     <ion-searchbar cancelButtonText="Custom Cancel" placeholder="¡Elegí tu itinerario!" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-card *ngFor="let item of tipoCircuito | filtroTipoCircuito:textoBuscar" routerLink="/{{item.nombre}}">
         <ion-card-header color="information">
-            {{ item.nombre }}
+            {{ item.nombre }} <span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span> {{item.ciudad}}
         </ion-card-header>
         <ion-card-content>
             <img width="auto" height="40%" src="{{ item.imagenPrincipal }}" alt="{{ item.nombre }}">

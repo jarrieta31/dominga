@@ -3,4 +3,5 @@ export interface TipoCircuito {
 	duracion: string;
 	imagen: string;
 	nombre: string;
+	ciudad: string;
 }
