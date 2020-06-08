@@ -56,8 +56,9 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
 
-    if (this.platform.is('android')) {
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    if (this.platform.is('android')) {            
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT)
+        .catch(error => console.log("error al bloquear la pantalla"))
     }
 
     if (this.geolocationService.posicion$.value != null) {
@@ -107,9 +108,17 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigateByUrl('/home');
       }
     } catch (error) {
-      let title = "Mensaje inicio de sesión";
-      let menssage = "Su inicio de sesión no tuvo éxito!!. Verifique los datos ingresados.";
-      this.showAlert(menssage, title);
+      var message;
+      switch (error.code) {        
+        case "auth/network-request-failed":
+          message = "No se pudo establecer la conxión a internet.";
+          break;      
+        default:
+          message = "Su inicio de sesión no tuvo éxito!!. Verifique los datos ingresados.";
+          break;
+      }
+      let title = "Mensaje inicio de sesión";      
+      this.showAlert(message, title);
     }
   }
 
@@ -183,6 +192,9 @@ export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
             switch (error.code) {
               case "auth/user-not-found":
                 message = `El correo ${email} no existe en nuestros registros!!`;
+                break;
+                case "auth/network-request-failed":
+                message = "No se pudo establecer la conxión a internet.";
                 break;            
               default:
                 message = '¡La restauración de contraseña fallado.';

@@ -6,11 +6,6 @@ import { Observable, from } from 'rxjs';
 import { tap, map, first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-// import { AngularFireAuth } from '@angular/fire/auth';
-// import { auth } from 'firebase/app';
-// import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -51,7 +46,11 @@ export class AuthService {
   
   // Obtener el observador del usuario actual
   get currentUser(){
-    return this.user;
+    try {
+      return this.user;
+    } catch (error) {
+      console.log("error al obtener el usuario actual");
+    }
   }
 
   // Finalizar sesión
@@ -83,67 +82,5 @@ export class AuthService {
       console.log('Error en autenticación con google: ', error);
     }  
   }
-
-  // Auto login
-  // autoLogin(){     
-  //   return from(this.storage.get('authData')).pipe(
-  //     map(storedData => {
-  //       if(storedData == '' || storedData == null){
-  //         return null
-  //       }          
-  //       //Convierte los datos de string a un objeto json
-  //       const parsedData = JSON.parse(storedData) as {email: string; password: string}
-  //       return parsedData
-  //     }),
-  //     tap(datos => {
-  //       console.log(`Datos almacenados: email: ${datos.email}, password: ${datos.password}`);
-  //       this.signInWithEmail(datos.email, datos.password).then((res) => {
-  //         if(res === null){
-  //           return false
-  //         }else{
-  //           return true
-  //         }
-  //       });
-  //     }),
-  //     map(res => {
-  //       if(res){
-  //         return true
-  //       }else{
-  //         return false
-  //       }
-  //     }),
-  //     tap(res => {
-  //       console.log('respuesta de autologin:', res)
-  //     })
-  //   )    
-  // }
-
-  // Es necesario instalar "Ionic Storage" con los siguientes comandos:
-  // ionic cordova plugin add cordova-sqlite-storage
-  // npm install --save @ionic/storage
-  // public storeAuthData(email: string, password: string) {  
-  //   const data = JSON.stringify({email: email, password: password});
-  //   // set a key/value
-  //   this.storage.set('authData', data);
-  //   console.log("estoy en storeAuthData");
-  //   // Or to get a key/value pair
-  //   this.storage.get('authData').then((val) => {
-  //     console.log('La informacion almacenada es: ', val);
-  //   });    
-   
-
-  // private updateUserData(user) {
-  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-  //   const data: User = {
-  //     id: user.uid,
-  //     email: user.email
-  //   }
-  //   return userRef.set(data, { merge: true })
-  // }
-
-  //  loginFacebookUser() {
-  //   return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
-  //     .then(credential => this.updateUserData(credential.user))
-  // }
 
 }

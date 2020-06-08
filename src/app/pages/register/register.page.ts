@@ -90,7 +90,20 @@ export class RegisterPage implements OnInit, OnDestroy {
         this.router.navigateByUrl('/home')
       }      
     } catch (error) {
-      let mensaje = "El registro no se realizó !!!." + error;
+      console.error(error.code)
+      var mensaje;
+      switch (error.code) {
+        case "auth/network-request-failed":
+          mensaje = "No se pudo establecer la conxión a internet.";
+          break;
+        case "auth/email-already-in-use":
+          mensaje = `El correo ${email} ya está es uso.`;
+          break;
+        default:
+          mensaje = "El registro no se realizo !!!.";
+          break;
+      }
+       
       this.showAlert(mensaje);
     }
   }
