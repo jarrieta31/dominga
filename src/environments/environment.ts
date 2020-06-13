@@ -15,7 +15,9 @@ export const environment = {
     measurementId: "G-BPNTCZ1PC9"
   },
   firebaseAPIKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
-  mapBoxToken: "pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+  mapBoxToken: "pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA",
+  casaDominga: { "longitud": -56.7145, "latitud": -34.340007 }
+  //casaDominga: { "longitud": -56.7145, "latitud": -34.340007 }
 };
 
 /*

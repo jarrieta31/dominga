@@ -11,6 +11,7 @@ import { tap } from 'rxjs/operators';
 import { ActionSheetController, LoadingController } from '@ionic/angular';
 
 
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -32,7 +33,7 @@ export class MapPage implements OnInit, OnDestroy {
   directions: MapboxDirections = null; //Buscador de direcciones para indicar recorrido
   profile: string = "mapbox/walking";
   posicion: Point;
-  casaDominga: Point = { "longitud": -56.7145, "latitud": -34.340007 };
+  //casaDominga: Point = environment.casaDominga;
   icon:string;
 
   constructor(private activatedRoute: ActivatedRoute, private geolocationService: GeolocationService,
@@ -45,7 +46,7 @@ export class MapPage implements OnInit, OnDestroy {
     if(this.geolocationService.posicion$.getValue() != null){
       this.posicion = this.geolocationService.posicion$.getValue();
     }else{
-      this.posicion = this.casaDominga;
+      this.posicion = environment.casaDominga;
     }
     
   }

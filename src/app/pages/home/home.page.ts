@@ -13,6 +13,7 @@ import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 import { NetworkService } from '../../services/network.service';
 import { LoadingController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     items$: BehaviorSubject<Place[]> = new BehaviorSubject<Place[]>([]);
     obsItems$ = this.items$.asObservable();
     posicion$: Observable<Point>;
-    casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
+    //casaDominga = { "longitud": "-56.7145", "latitud": "-34.340007" };
     subscripcionPosition: Subscription;
     backButtonSubscription: any;
     dataReturned: any;
@@ -86,7 +87,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         // Agrega las distancias calculadas desde casa dominga al array de lugares
         this.items.forEach(place => {
             let options = { units: 'kilometers' };
-            let dist = distance([place.longitud, place.latitud], [this.casaDominga.longitud, this.casaDominga.latitud], options);
+            let dist = distance([place.longitud, place.latitud], [environment.casaDominga.longitud, environment.casaDominga.latitud], options);
             let distFormat;
             if (dist > 1) {
                 distFormat = parseFloat(dist).toFixed(3);

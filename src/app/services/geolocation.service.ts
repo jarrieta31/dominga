@@ -37,7 +37,6 @@ export class GeolocationService {
   isWatching: boolean;
   distancia: number;
   lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
-  casaDominga = { "longitud": -56.7145, "latitud": -34.340007 };
   posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
@@ -81,8 +80,8 @@ export class GeolocationService {
           this.actualizarPosicion$({ longitud: resp.coords.longitude, latitud: resp.coords.latitude });
           this.actualizarMarcador()
         }).catch((error) => {
-          this.posicion = this.casaDominga;
-          this.actualizarPosicion$(this.casaDominga);
+          //this.posicion = environment.casaDominga;
+          this.actualizarPosicion$(null);
           if (this.myPositionMarker != null) this.myPositionMarker.remove();
           this.gps = false;
           console.log('Error al obtener la ubicación' + error);
