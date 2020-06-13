@@ -1,14 +1,28 @@
 <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar *ngIf="tipo == 'Urbano'" color="information">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
-        <ion-title id="nombre">{{nombre}}</ion-title>
+        <ion-title color="back" id="nombre">{{nombre}}</ion-title>
         <ion-buttons slot="primary">
-            <ion-button *ngIf="fav?.length == 0" (click)=agregarFavorito()>
+            <ion-button color="back" *ngIf="fav?.length == 0" (click)=agregarFavorito()>
                 <i id="fav" class="far fa-heart"></i>
             </ion-button>
-            <ion-button (click)=deleteFav()>
+            <ion-button color="back" (click)=deleteFav()>
+                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart"></i>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="tipo == 'Rural'" color="options">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
+        </ion-buttons>
+        <ion-title color="back" id="nombre">{{nombre}}</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button color="back" *ngIf="fav?.length == 0" (click)=agregarFavorito()>
+                <i id="fav" class="far fa-heart"></i>
+            </ion-button>
+            <ion-button color="back" (click)=deleteFav()>
                 <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart"></i>
             </ion-button>
         </ion-buttons>
@@ -75,5 +89,6 @@
                 </div>
             </div>
         </div>
+       
     </div>
 </ion-content>

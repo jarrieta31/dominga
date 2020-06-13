@@ -2,13 +2,13 @@
     <ion-toolbar>
         <ion-list>
             <ion-item>
-                <ion-icon name="moon" slot="start"></ion-icon>
-                <ion-toggle style="margin-left: 12px" slot="start" [ngModel]="darkMode"
-                (ionChange)="changeTheme()"></ion-toggle>
+                <i slot="start" class="fas fa-sun" style="font-size: 150%"></i>
+                <i style="margin-left: 10px; font-size: 130%" class="fas fa-moon"></i>
+                <ion-toggle style="margin-left: 12px;" slot="start" [ngModel]="darkMode" (ionChange)="changeTheme()"></ion-toggle>
             </ion-item>
         </ion-list>
         <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">
-            Cerrar Sesión
+            <i style="font-size: 180%; color: var(--ion-color-dark)" class="fas fa-sign-out-alt"></i>
         </ion-button>
     </ion-toolbar>
 </ion-header>
@@ -76,12 +76,16 @@
             <ion-slides scrollbar="false" pager="false" [options]="cards">
                 <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
                     <div class="cpadre">
-                        <div class="chead">
+                        <div class="chead_Rural" *ngIf="item.tipo == 'Rural'">
                             <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
-                            <div *ngIf="item.tipo == 'Rural'" class="iconTitle">
+                            <div class="iconTitle">
                                 <i class="fas fa-tractor"></i>
                             </div>
-                            <div *ngIf="item.tipo == 'Urbano'" class="iconTitle">
+                           
+                        </div>
+                        <div class="chead_Urbano" *ngIf="item.tipo == 'Urbano'">
+                            <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
+                            <div class="iconTitle">
                                 <i class="fas fa-city"></i>
                             </div>
                         </div>

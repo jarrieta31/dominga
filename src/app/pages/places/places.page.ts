@@ -31,6 +31,7 @@ export class PlacesPage implements OnInit, OnDestroy {
     sugerencias: Place[] = [];
     sug: Place[] = [];
     sug_2: Place[] = [];
+    sug_3: Place[] = [];
 
     private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>("vacio");
     // obsDistancia$ = this.distancia$.asObservable();
@@ -237,6 +238,8 @@ export class PlacesPage implements OnInit, OnDestroy {
         this.sugerencias.sort((a, b) => a.distanciaNumber > b.distanciaNumber ? 1 : b.distanciaNumber > a.distanciaNumber ? -1 : 0);
         this.sug_2[0] = this.sugerencias[1];
         this.sug_2[1] = this.sugerencias[2];
+        this.sug_2[2] = this.sugerencias[3];
+        this.sug_2[3] = this.sugerencias[4];
     });
 
     user = this.authSvc.currentUser.subscribe(authData => {
@@ -254,7 +257,6 @@ export class PlacesPage implements OnInit, OnDestroy {
     //    if (this.platform.is('android') && this.geolocationService.gps) {
 
             this.posicion$ = this.geolocationService.getPosicionActual$();
-
             this.subscripcionPosition = this.posicion$.pipe(
                 tap(posicion => {
                     if (posicion != null) {

@@ -32,9 +32,10 @@ ion-title {
 
 .divf {
     width: 100%;
-    height: 4em;
+    height: auto;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 
