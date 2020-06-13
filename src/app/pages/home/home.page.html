@@ -4,7 +4,7 @@
             <ion-item>
                 <i slot="start" class="fas fa-sun" style="font-size: 150%"></i>
                 <i style="margin-left: 10px; font-size: 130%" class="fas fa-moon"></i>
-                <ion-toggle style="margin-left: 12px;" slot="start" [ngModel]="darkMode" (ionChange)="changeTheme()"></ion-toggle>
+                <ion-toggle style="margin-left: 12px;" slot="start" [ngModel]="darkMode" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
             </ion-item>
         </ion-list>
         <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="ccontent">
-                            <img class="foto" [src]="item.imagenPrincipal" [alt]="item.nombre" />
+                            <img class="foto" [src]="item.imagenHome" [alt]="item.nombre" />
                         </div>
                         <div class="cfooter">
                             <div class="distancia">{{item.distancia | formatDistancia }}</div>

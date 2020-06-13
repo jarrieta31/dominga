@@ -13,4 +13,5 @@ export interface Place {
     imagenPrincipal: string;
     distancia?: string;
     distanciaNumber?: number;
+    imagenHome?: string;
 }
