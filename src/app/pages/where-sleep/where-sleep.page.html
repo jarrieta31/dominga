@@ -9,8 +9,8 @@
 </ion-header>
 <ion-content>
     <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <ion-virtual-scroll [items]="sleep | filtroDondeDormir:textoBuscar" approxItemHeight="125px" class="lista">
-        <ion-item *virtualItem="let item; let itemBounds = bounds;">
+    <ion-list>
+        <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar item-start>
@@ -28,5 +28,5 @@
                 </div>
             </div>
         </ion-item>
-    </ion-virtual-scroll>
+    </ion-list>
 </ion-content>
