@@ -84,7 +84,8 @@ ion-label {
 }
 
 .cards {
-    height: 42%;
+    height: 45em;
+   // background-color: crimson;
     //border: 1px solid black;
 }
 
@@ -137,7 +138,7 @@ ion-label {
 }
 
 .chead {
-    height: 17%;
+    height: 2.5em;
     background-color: #10dda6;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -150,7 +151,7 @@ ion-label {
 }
 
 .cfooter {
-    height: 12%;
+    height: 2.5em;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     display: flex;

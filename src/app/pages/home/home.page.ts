@@ -44,7 +44,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     cards = {
         initialSlide: 0,
         speed: 100,
-        slidesPerView: 1,
+        slidesPerView: 2,
         spaceBetween: 20,
         direction: 'vertical'
     };
