@@ -58,6 +58,7 @@ ion-label {
 
 .padre {
     height: 100%;
+    overflow-y: hidden;
 }
 
 .slider {
@@ -84,8 +85,10 @@ ion-label {
 }
 
 .cards {
-    height: 45em;
-   // background-color: crimson;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    // background-color: crimson;
     //border: 1px solid black;
 }
 
@@ -118,74 +121,108 @@ ion-label {
 }
 
 
-.cpadre {
-    height: 100%;
-    width: 100%;
-    //margin-left: 8%;
-    //margin-right: 8%;
-    margin-left: 1.5%;
-    margin-right: 1.5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    -webkit-box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
-    -moz-box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
-    box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
-}
+// .cpadre {
+//     height: 100%;
+//     width: 100%;
+//     //margin-left: 8%;
+//     //margin-right: 8%;
+//     margin-left: 1.5%;
+//     margin-right: 1.5%;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     border-bottom-right-radius: 5px;
+//     border-bottom-left-radius: 5px;
+//     border-top-right-radius: 5px;
+//     border-top-left-radius: 5px;
+//     -webkit-box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
+//     -moz-box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
+//     box-shadow: 0px 8px 6px -1px rgba(0, 0, 0, 0.12);
+// }
 
-.chead_Rural {
-    height: 2.5em;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    background-color: var(--ion-color-options);
-}
+// .chead_Rural {
+//     height: 2.5em;
+//     border-top-right-radius: 5px;
+//     border-top-left-radius: 5px;
+//     display: flex;
+//     flex-direction: row;
+//     background-color: var(--ion-color-options);
+// }
 
-.chead_Urbano{
-    height: 2.5em;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    background-color: var(--ion-color-information);
-}
+// .chead_Urbano{
+//     height: 2.5em;
+//     border-top-right-radius: 5px;
+//     border-top-left-radius: 5px;
+//     display: flex;
+//     flex-direction: row;
+//     background-color: var(--ion-color-information);
+// }
 
-.ccontent {
-    height: 77%;
-}
+// .ccontent {
+//     height: 77%;
+// }
 
-.cfooter {
-    height: 2.5em;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    display: flex;
-    flex-direction: row;
-}
+// .cfooter {
+//     height: 2.5em;
+//     border-bottom-right-radius: 5px;
+//     border-bottom-left-radius: 5px;
+//     display: flex;
+//     flex-direction: row;
+// }
 
-.ccontent {
-    .foto {
-        width: 100%;
-    }
-}
+// .ccontent {
+//     .foto {
+//         width: 100%;
+//     }
+// }
 
-.valoracion {
-    margin-left: auto;
-    font-size: 80%;
-    margin-top: auto;
-    margin-bottom: auto;
-}
+// .valoracion {
+//     margin-left: auto;
+//     font-size: 80%;
+//     margin-top: auto;
+//     margin-bottom: auto;
+// }
 
-.distancia {
-    font-size: 80%;
-    margin-top: auto;
-    margin-bottom: auto;
-}
+// .distancia {
+//     font-size: 80%;
+//     margin-top: auto;
+//     margin-bottom: auto;
+// }
 
 .logoWhatsapp{
     color: #fff;
+}
+
+ion-card{
+    margin: 0 5% 5% 5%;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 15px !important;
+}
+
+ion-card-header{
+    padding: 4% !important;
+    font-family: Barlow;
+    font-weight: 600;
+    font-size: 120%;
+    color: #ffffff;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+}
+
+ion-card {
+    img {
+        height: auto;
+        width: 100% !important;
+        max-width: 100%;
+        align-items: center;
+    }
+
+    ion-card-content {
+        padding: 0 !important;
+    }
+}
+
+.estrellas{
+    float: right;
 }

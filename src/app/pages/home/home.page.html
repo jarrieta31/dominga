@@ -73,9 +73,30 @@
             </div>
         </div>
         <div class="cards">
-            <ion-slides scrollbar="false" pager="false" [options]="cards">
-                <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
-                    <div class="cpadre">
+            <!-- <ion-slides scrollbar="false" pager="false" [options]="cards">
+                <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]"> -->
+                    <ion-card *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
+                        <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
+                            {{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-tractor"></i>
+                        </ion-card-header>
+                        <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information">
+                            {{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-city"></i>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <img src="{{ item.imagenPrincipal }}" alt="{{ item.nombre }}">
+                            <div class="duracion">
+                                <b>{{item.distancia | formatDistancia }}</b>
+                                <div class="estrellas">
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                </div>
+                            </div>
+                        </ion-card-content>
+                    </ion-card>
+                    <!-- <div class="cpadre">
                         <div class="chead_Rural" *ngIf="item.tipo == 'Rural'">
                             <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
                             <div class="iconTitle">
@@ -102,9 +123,9 @@
                                 <ion-icon name="star"></ion-icon>
                             </div>
                         </div>
-                    </div>
-                </ion-slide>
-            </ion-slides>
+                    </div> -->
+               <!--  </ion-slide>
+            </ion-slides> -->
         </div>
     </div>
 </ion-content>

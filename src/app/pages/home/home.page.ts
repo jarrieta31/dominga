@@ -41,13 +41,13 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         autoplay:true,
     };
 
-    cards = {
-        initialSlide: 0,
-        speed: 100,
-        slidesPerView: 2,
-        spaceBetween: 20,
-        direction: 'vertical'
-    };
+    // cards = {
+    //     initialSlide: 0,
+    //     speed: 100,
+    //     slidesPerView: 1,
+    //     spaceBetween: 20,
+    //     direction: 'vertical'
+    // };
 
     lugarCercano$: Observable<Place>;
     subscrictionLugarCercano: Subscription;
