@@ -55,6 +55,7 @@ export class PlacesPage implements OnInit, OnDestroy {
     longitud: string;
     imagenPrincipal: string;
     tipo: string;
+    imagenHome: string;
  
     cont = 0;
     contVideo = 0;
@@ -141,6 +142,7 @@ export class PlacesPage implements OnInit, OnDestroy {
                 this.caminar = this.items[num].caminar;
                 this.imagenPrincipal = this.items[num].imagenPrincipal;
                 this.tipo = this.items[num].tipo;
+                this.imagenHome = this.items[num].imagenHome;
 
                 this.imagenes.length = 0;
                 this.valoracion.length = 0;
@@ -318,7 +320,7 @@ export class PlacesPage implements OnInit, OnDestroy {
     }
 
     async agregarFavorito() {
-        this.database.addFavourite(this.nombre, this.key, this.users, this.imagenPrincipal);
+        this.database.addFavourite(this.nombre, this.key, this.users, this.imagenHome, this.tipo);
     }
 
     async checkFav() {

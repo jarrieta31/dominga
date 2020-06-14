@@ -57,10 +57,11 @@ export class DatabaseService {
     }
 
     addFavourite(nombreLugar: string, id: string, uid: string,
-        imagenLugar: string) {
+        imagenLugar: string, tipo: string) {
         this.dbRef.child(uid + '/' + id).set({
             nombre: nombreLugar,
-            imagen: imagenLugar
+            imagen: imagenLugar,
+            tipo: tipo
         });
     }
 

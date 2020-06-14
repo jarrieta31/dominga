@@ -15,11 +15,14 @@
         </div>
     </div>
     <ion-card *ngFor="let item of favourite | filtro: textoBuscar: 'nombre'">
-        <ion-card-header color="circuits">
+        <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
+            {{ item.nombre }}
+        </ion-card-header>
+        <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information">
             {{ item.nombre }}
         </ion-card-header>
         <ion-card-content>
-            <img width="auto" height="40%" src="{{ item.imagen }}" alt="{{ item.nombre }}">
+            <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
             <div class="duracion">
                 <div class="estrellas">
                     <ion-icon name="star"></ion-icon>
