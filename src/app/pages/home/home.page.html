@@ -14,7 +14,7 @@
 </ion-header>
 <ion-content>
     <div class="padre">
-        <div class="slider">
+        <div id="alto" class="slider">
             <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
                 <ion-slide class="sliderHijo">
                     <a class="banner" href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas.">
@@ -73,59 +73,27 @@
             </div>
         </div>
         <div class="cards">
-            <!-- <ion-slides scrollbar="false" pager="false" [options]="cards">
-                <ion-slide *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]"> -->
-                    <ion-card *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
-                        <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
-                            {{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-tractor"></i>
-                        </ion-card-header>
-                        <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information">
-                            {{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-city"></i>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <img src="{{ item.imagenPrincipal }}" alt="{{ item.nombre }}">
-                            <div class="duracion">
-                                <b>{{item.distancia | formatDistancia }}</b>
-                                <div class="estrellas">
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                    <ion-icon name="star"></ion-icon>
-                                </div>
-                            </div>
-                        </ion-card-content>
-                    </ion-card>
-                    <!-- <div class="cpadre">
-                        <div class="chead_Rural" *ngIf="item.tipo == 'Rural'">
-                            <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
-                            <div class="iconTitle">
-                                <i class="fas fa-tractor"></i>
-                            </div>
-                           
+            <ion-card *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
+                <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
+                    {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-tractor"></i>
+                </ion-card-header>
+                <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information">
+                    {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-city"></i>
+                </ion-card-header>
+                <ion-card-content>
+                    <img class="imgCard" src="{{ item.imagenHome }}" alt="{{ item.nombre }}">
+                    <div class="duracion">
+                        <b class="distancia">{{item.distancia | formatDistancia }}</b>
+                        <div class="estrellas">
+                            <ion-icon name="star"></ion-icon>
+                            <ion-icon name="star"></ion-icon>
+                            <ion-icon name="star"></ion-icon>
+                            <ion-icon name="star"></ion-icon>
+                            <ion-icon name="star"></ion-icon>
                         </div>
-                        <div class="chead_Urbano" *ngIf="item.tipo == 'Urbano'">
-                            <div class="nomb">{{ item.nombre }}<span class="categoria">&nbsp;({{item.tipo}})</span></div>
-                            <div class="iconTitle">
-                                <i class="fas fa-city"></i>
-                            </div>
-                        </div>
-                        <div class="ccontent">
-                            <img class="foto" [src]="item.imagenHome" [alt]="item.nombre" />
-                        </div>
-                        <div class="cfooter">
-                            <div class="distancia">{{item.distancia | formatDistancia }}</div>
-                            <div class="valoracion">
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon class="estrella" name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                            </div>
-                        </div>
-                    </div> -->
-               <!--  </ion-slide>
-            </ion-slides> -->
+                    </div>
+                </ion-card-content>
+            </ion-card>
         </div>
     </div>
 </ion-content>

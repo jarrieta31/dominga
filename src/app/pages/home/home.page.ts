@@ -14,13 +14,15 @@ import { NetworkService } from '../../services/network.service';
 import { LoadingController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-
+declare var jQuery: any;
+declare var $: any; 
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.page.html',
     styleUrls: ['./home.page.scss'],
 })
+
 export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     subsciptionNetwork: any; //Subscripcion para ver el estado de la conexión a internet
@@ -129,7 +131,18 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     );
 
     ngOnInit() {
-        
+        $(document).ready(function(){
+            var total = $(window).height();
+            var height = document.getElementById("alto");
+            var menu = $('.menu').outerHeight(true);
+            
+            var altoSlider = height.clientWidth;
+            altoSlider = ((altoSlider / 1.7) + 5 + 56);
+            total = total - altoSlider - menu;
+            
+            $('.cards').height(total)
+        });
+
         //Chequea el estado de la conexion a internet
         this.subsciptionNetwork = this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
