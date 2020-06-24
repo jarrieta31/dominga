@@ -14,7 +14,8 @@
             Aún no ha agregado favoritos
         </div>
     </div>
-    <ion-card *ngFor="let item of favourite | filtro: textoBuscar: 'nombre'">
+    <ion-card *ngFor="let item of favourite | filtro: textoBuscar: 'nombre'"
+    [routerLink]="['/places', item.$key]">
         <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
             {{ item.nombre }}
         </ion-card-header>
