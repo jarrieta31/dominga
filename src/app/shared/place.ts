@@ -13,5 +13,9 @@ export interface Place {
     imagenPrincipal: string;
     distancia?: string;
     distanciaNumber?: number;
-    imagenHome?: string;
+    imagenHome: string;
+    web?: string;
+    facebook?: string;
+    instagram?: string;
+    whatsapp?: string;
 }

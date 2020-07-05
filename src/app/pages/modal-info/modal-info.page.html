@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="home" color="back"></ion-back-button>
+            <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
         </ion-buttons>
         <ion-title>{{ nombre }}</ion-title>
     </ion-toolbar>
@@ -9,7 +9,38 @@
 <ion-content>
     <ion-text>
         <div class="texto" [innerHTML]="descripcion">
-            
         </div>
     </ion-text>
+    <ion-grid>
+        <ion-row>
+            <ion-col id="web">
+                <div class="ion-text-center">
+                    <div class="circulo_red" *ngIf="web?.length > 0">
+                        <a href="{{ web }}"><i class="fas fa-globe"></i></a>
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col id="facebook">
+                <div class="ion-text-center">
+                    <div class="circulo_red" *ngIf="facebook?.length > 0">
+                        <a href="{{ facebook }}"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col id="instagram">
+                <div class="ion-text-center">
+                    <div class="circulo_red" *ngIf="instagram?.length > 0">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col id="whatsapp">
+                <div class="ion-text-center" *ngIf="whatsapp?.length > 0">
+                    <div class="circulo_red_wpp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
