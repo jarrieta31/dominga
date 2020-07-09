@@ -40,6 +40,7 @@
     "@turf/distance": "^6.0.1",
     "angularfire": "^2.3.0",
     "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
@@ -107,11 +108,14 @@
       },
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-nativegeocoder": {},
+      "cordova-plugin-nativegeocoder": {
+        "LOCATION_WHEN_IN_USE_DESCRIPTION": "Use geocoder service"
+      },
       "cordova-plugin-network-information": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
