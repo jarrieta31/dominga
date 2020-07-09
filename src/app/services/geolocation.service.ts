@@ -103,8 +103,11 @@ export class GeolocationService {
             //Verifica la distancia
             if (dist <= 25) {
               //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
-              console.log(place.valoracion)
               for (var key in place.valoracion) {
+                //si el usuario ya valoró se termina el forech                
+                if(this.user == key){
+                  break
+                }
                 //si el usuario no ha valorado
                 if (key != this.user) {
                   //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
