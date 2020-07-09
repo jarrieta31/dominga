@@ -56,7 +56,7 @@ export class UrbanCircuitPage implements OnInit, OnDestroy {
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
                 var popup = new Mapboxgl.Popup({ offset: 25 }).setHTML(
-                    `<a href="http://localhost/places/${data.$key}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
+                    `<a javascript:void(0) href="places/${data.$key}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
                 );
                 const marker = new Mapboxgl.Marker({
                         draggable: false,

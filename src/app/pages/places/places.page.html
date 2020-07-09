@@ -36,7 +36,7 @@
         </ion-fab-button>
         <ion-fab-list side="bottom" class="lista_videos">
             <ion-fab-button class="btn_video" *ngFor="let videos of video">
-                <i (click)="verVideo(videos.video)" class="fas fa-video" style="font-size: 230%;"></i>
+                <i (click)="verVideo(videos.video)" class="fas fa-video" style="font-size: 180%;"></i>
             </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
@@ -105,7 +105,7 @@
         <h6 class="interes">Te puede interesar</h6>
         <div class="divf">
             <div class="sugerencia" *ngFor="let s of sug_2">
-                <a href="http://localhost/places/{{s.$key}}" class="sug">
+                <a [routerLink]="['/places', s.$key]" class="sug">
                     <img class="sug_img" src="{{ s.imagenPrincipal }}" alt="">
                 </a>
                 <div class="infoSug">
