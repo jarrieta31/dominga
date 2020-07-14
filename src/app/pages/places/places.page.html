@@ -105,7 +105,7 @@
         <h6 class="interes">Te puede interesar</h6>
         <div class="divf">
             <div class="sugerencia" *ngFor="let s of sug_2">
-                <a [routerLink]="['/places', s.$key]" class="sug">
+                <a href="places/{{s.$key}}" class="sug">
                     <img class="sug_img" src="{{ s.imagenPrincipal }}" alt="">
                 </a>
                 <div class="infoSug">
