@@ -18,4 +18,5 @@ export interface Place {
     facebook?: string;
     instagram?: string;
     whatsapp?: string;
+    phone?: string;
 }

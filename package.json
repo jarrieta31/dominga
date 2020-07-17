@@ -22,6 +22,7 @@
     "@angular/router": "~8.2.14",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@ionic-native/android-permissions": "^5.24.0",
+    "@ionic-native/call-number": "^5.27.0",
     "@ionic-native/core": "^5.21.6",
     "@ionic-native/geolocation": "^5.24.0",
     "@ionic-native/keyboard": "^5.26.0",
@@ -39,6 +40,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "@turf/distance": "^6.0.1",
     "angularfire": "^2.3.0",
+    "call-number": "^1.0.1",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
@@ -111,7 +113,8 @@
       "cordova-plugin-nativegeocoder": {
         "LOCATION_WHEN_IN_USE_DESCRIPTION": "Use geocoder service"
       },
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "mx.ferreyra.callnumber": {}
     },
     "platforms": [
       "android",

@@ -4,6 +4,8 @@ import { DatabaseService } from '../../services/database.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { CallNumber } from '@ionic-native/call-number/ngx';
+
 @Component({
     selector: 'app-modal-info',
     templateUrl: './modal-info.page.html',
@@ -13,16 +15,19 @@ export class ModalInfoPage implements OnInit {
 
     nombre: string;
     descripcion: string;
+    tipo: string;
     web: string;
     facebook: string;
     instagram: string;
     whatsapp: string;
+    phone: string;
     id: string;
 
     constructor(
         private database: DatabaseService,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private callNumber: CallNumber
     ) {}
 
     ngOnInit() {
@@ -48,6 +53,7 @@ export class ModalInfoPage implements OnInit {
                             a['$key'] = item.key;
                             this.nombre = a['nombre'];
                             this.descripcion = a['descripcion'];
+                            this.tipo = a['tipo'];
 
                             if (a['web'] != undefined && a['web'] != null) {
                                 this.web = a['web'];
@@ -63,6 +69,10 @@ export class ModalInfoPage implements OnInit {
 
                             if (a['whatsapp'] != undefined && a['whatsapp'] != null) {
                                 this.whatsapp = a['whatsapp'];
+                            }
+
+                            if (a['phone'] != undefined && a['phone'] != null) {
+                                this.phone = a['phone'];
                             }
                         }
                     })
@@ -86,9 +96,20 @@ export class ModalInfoPage implements OnInit {
                         let elem: HTMLElement = document.getElementById('whatsapp');
                         elem.setAttribute("style", "display:none");
                     }
+
+                    if (this.phone == undefined) {
+                        let elem: HTMLElement = document.getElementById('phone');
+                        elem.setAttribute("style", "display:none");
+                    }
                 }),
                 err => console.log(err)
         });
+    }
+
+    callPhone(){
+        this.callNumber.callNumber(this.phone, true)
+          .then(res => console.log('Llamando!', res))
+          .catch(err => console.log('Error en llamada', err));
     }
 
 }

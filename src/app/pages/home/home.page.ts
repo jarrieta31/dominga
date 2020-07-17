@@ -57,7 +57,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     idUser: string;
 
     loading: any;
-    darkMode: boolean = true;
+    darkMode: string;
+    modoOscuro: string = localStorage.getItem("modoOscuro");
     //mode = new Array();
 
     constructor(
@@ -75,8 +76,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         this.geolocationService.iniciarSubscriptionClock();
         this.geolocationService.iniciarSubscriptionMatch();
         this.posicion$ = this.geolocationService.getPosicionActual$(); 
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        this.darkMode = prefersDark.matches;       
+        // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        // this.darkMode = prefersDark.matches;       
     }
 
     su = this.database.getPlaces().snapshotChanges().subscribe(data => {
@@ -250,10 +251,17 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     }
 
     changeTheme(){
-        //const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        this.darkMode = !this.darkMode;
-        //this.database.changeMode(this.idUser, this.darkMode);
-        document.body.classList.toggle('dark');
+        this.darkMode = localStorage.getItem("modoOscuro");
+
+        if(this.darkMode == 'true'){
+            localStorage.removeItem("modoOscuro")            
+            document.body.classList.toggle('dark');
+            this.modoOscuro = localStorage.getItem("modoOscuro");  
+        }
+        else {
+            localStorage.setItem("modoOscuro", JSON.stringify(true))
+            document.body.classList.toggle('dark');
+        }   
     }
 
 }

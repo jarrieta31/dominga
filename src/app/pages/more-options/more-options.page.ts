@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
+import { ToastController } from '@ionic/angular';
 
 import { DondeComer } from '../../shared/donde-comer';
 import { DondeDormir } from '../../shared/donde-dormir';
@@ -48,7 +49,8 @@ export class MoreOptionsPage implements OnInit, OnDestroy {
                 //console.log(this.sleep);
 	})
 
-  constructor(private database: DatabaseService) { }
+  constructor(private database: DatabaseService,
+              private toastCtrl: ToastController) { }
 
   ngOnInit() {
   	this.comer;
@@ -61,5 +63,13 @@ export class MoreOptionsPage implements OnInit, OnDestroy {
   buscar( event ){
         this.textoBuscar = event.detail.value;
     }
+
+     async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Página en desarrollo, próximamente disponible!',
+      duration: 2000
+    });
+    toast.present();
+  }
 
 }

@@ -1,9 +1,15 @@
 <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar *ngIf="tipo == 'Rural'" color="options">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
         </ion-buttons>
-        <ion-title>{{ nombre }}</ion-title>
+        <ion-title color="light">{{ nombre }}</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="tipo == 'Urbano'" color="information">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
+        </ion-buttons>
+        <ion-title color="light">{{ nombre }}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -38,6 +44,13 @@
                 <div class="ion-text-center" *ngIf="whatsapp?.length > 0">
                     <div class="circulo_red_wpp">
                         <i class="fab fa-whatsapp"></i>
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col id="phone">
+                <div class="ion-text-center" *ngIf="phone?.length > 0">
+                    <div class="circulo_red" (click)="callPhone()">
+                        <i class="fas fa-phone-alt"></i>
                     </div>
                 </div>
             </ion-col>

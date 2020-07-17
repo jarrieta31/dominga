@@ -4,7 +4,8 @@
             <ion-item>
                 <i slot="start" class="fas fa-sun" style="font-size: 150%"></i>
                 <i style="margin-left: 10px; font-size: 130%" class="fas fa-moon"></i>
-                <ion-toggle style="margin-left: 12px;" slot="start" [ngModel]="darkMode" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+                <ion-toggle *ngIf="modoOscuro == 'true'" style="margin-left: 12px;" slot="start" checked (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+                <ion-toggle *ngIf="modoOscuro == null" style="margin-left: 12px;" slot="start" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
             </ion-item>
         </ion-list>
         <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">

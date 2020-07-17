@@ -42,6 +42,7 @@ import { ComponentsModule } from './components/components.module';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -76,7 +77,8 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
     // AngularFireAuth,
     // AngularFirestore
     Network,
-    Keyboard
+    Keyboard,
+    CallNumber
   ],
   bootstrap: [AppComponent]
 })
