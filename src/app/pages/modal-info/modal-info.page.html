@@ -36,14 +36,14 @@
             <ion-col id="instagram">
                 <div class="ion-text-center">
                     <div class="circulo_red" *ngIf="instagram?.length > 0">
-                        <i class="fab fa-instagram"></i>
+                        <a href="{{ instagram }}"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </ion-col>
             <ion-col id="whatsapp">
                 <div class="ion-text-center" *ngIf="whatsapp?.length > 0">
                     <div class="circulo_red_wpp">
-                        <i class="fab fa-whatsapp"></i>
+                        <a href="{{ whatsapp }}"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </ion-col>
