@@ -43,6 +43,7 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -78,7 +79,8 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
     // AngularFirestore
     Network,
     Keyboard,
-    CallNumber
+    CallNumber,
+    InAppBrowser
   ],
   bootstrap: [AppComponent]
 })

@@ -25,6 +25,7 @@
     "@ionic-native/call-number": "^5.27.0",
     "@ionic-native/core": "^5.21.6",
     "@ionic-native/geolocation": "^5.24.0",
+    "@ionic-native/in-app-browser": "^5.27.0",
     "@ionic-native/keyboard": "^5.26.0",
     "@ionic-native/location-accuracy": "^5.24.0",
     "@ionic-native/native-geocoder": "^5.26.0",
@@ -46,6 +47,7 @@
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-inappbrowser": "^4.0.0",
     "cordova-plugin-nativegeocoder": "^3.4.1",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
@@ -114,7 +116,9 @@
         "LOCATION_WHEN_IN_USE_DESCRIPTION": "Use geocoder service"
       },
       "cordova-plugin-network-information": {},
-      "mx.ferreyra.callnumber": {}
+      "mx.ferreyra.callnumber": {},
+      "call-number": {},
+      "cordova-plugin-inappbrowser": {}
     },
     "platforms": [
       "android",

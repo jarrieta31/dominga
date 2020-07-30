@@ -6,6 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { CallNumber } from '@ionic-native/call-number/ngx';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
+
+
 @Component({
     selector: 'app-modal-info',
     templateUrl: './modal-info.page.html',
@@ -27,7 +31,8 @@ export class ModalInfoPage implements OnInit {
         private database: DatabaseService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private callNumber: CallNumber
+        private callNumber: CallNumber,
+        private browser: InAppBrowser
     ) {}
 
     ngOnInit() {
@@ -110,6 +115,10 @@ export class ModalInfoPage implements OnInit {
         this.callNumber.callNumber(this.phone, true)
           .then(res => console.log('Llamando!', res))
           .catch(err => console.log('Error en llamada', err));
+    }
+
+    openWeb(){
+        this.browser.create(this.web, "_system")
     }
 
 }

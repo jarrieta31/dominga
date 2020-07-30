@@ -22,7 +22,7 @@
             <ion-col id="web">
                 <div class="ion-text-center">
                     <div class="circulo_red" *ngIf="web?.length > 0">
-                        <a href="{{ web }}"><i class="fas fa-globe"></i></a>
+                        <div (click)="openWeb()"><i class="fas fa-globe"></i></div>
                     </div>
                 </div>
             </ion-col>
