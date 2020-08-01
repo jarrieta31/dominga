@@ -12,6 +12,7 @@ import { Platform } from '@ionic/angular';
 import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 import { NetworkService } from '../../services/network.service';
 import { LoadingController } from '@ionic/angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 declare var jQuery: any;
@@ -70,7 +71,8 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         private alertController: AlertController,
         private modalController: ModalController,
         private networkService: NetworkService,
-        private loadingCtrl: LoadingController
+        private loadingCtrl: LoadingController,
+        private browser: InAppBrowser
     
     ) {
         this.geolocationService.iniciarSubscriptionClock();
@@ -262,6 +264,10 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
             localStorage.setItem("modoOscuro", JSON.stringify(true))
             document.body.classList.toggle('dark');
         }   
+    }
+
+    pageDominga(){
+        this.browser.create("https://casadominga.com.uy", "_system")
     }
 
 }
