@@ -29,7 +29,7 @@
             <ion-col id="facebook">
                 <div class="ion-text-center">
                     <div class="circulo_red" *ngIf="facebook?.length > 0">
-                        <a href="{{ facebook }}"><i class="fab fa-facebook"></i></a>
+                        <div (click)="openFacebook()"><i class="fab fa-facebook"></i></div>
                     </div>
                 </div>
             </ion-col>

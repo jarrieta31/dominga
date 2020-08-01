@@ -121,4 +121,8 @@ export class ModalInfoPage implements OnInit {
         this.browser.create(this.web, "_system")
     }
 
+    openFacebook(){
+        this.browser.create(this.facebook, "_system")
+    }
+
 }
