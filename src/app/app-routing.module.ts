@@ -3,15 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  {
-    path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
-  },
-  {
-    path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
-  },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
@@ -23,10 +15,6 @@ const routes: Routes = [
   {
     path: 'map/:nombre',
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
-  },
-  {
-    path: 'favorite',
-    loadChildren: () => import('./pages/favorite/favorite.module').then( m => m.FavoritePageModule)
   },
   {
     path: 'information',
@@ -73,9 +61,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
   },
   {
-    path: 'modal-rating',
-    loadChildren: () => import('./pages/modal-rating/modal-rating.module').then( m => m.ModalRatingPageModule)
-  },  {
     path: 'party-house',
     loadChildren: () => import('./pages/party-house/party-house.module').then( m => m.PartyHousePageModule)
   },

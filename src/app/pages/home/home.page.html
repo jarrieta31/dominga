@@ -8,9 +8,6 @@
                 <ion-toggle *ngIf="modoOscuro == null" style="margin-left: 12px;" slot="start" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
             </ion-item>
         </ion-list>
-        <ion-button slot="end" (click)="cerrarSesion()" expand="block" fill="clear" shape="round">
-            <i style="font-size: 180%; color: var(--ion-color-dark)" class="fas fa-sign-out-alt"></i>
-        </ion-button>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -57,13 +54,13 @@
                     </a>
                 </div>
                 <div class="icono">
-                    <a class="iconMenu" routerLink="/favorite">
-                        <ion-img src="/assets/icon/favorito.png"></ion-img>
+                    <a class="iconMenu" routerLink="/information">
+                        <ion-img src="/assets/icon/info.png"></ion-img>
                     </a>
                 </div>
                 <div class="icono">
-                    <a class="iconMenu" routerLink="/information">
-                        <ion-img src="/assets/icon/info.png"></ion-img>
+                    <a class="iconMenu" routerLink="/where-sleep">
+                        <ion-img src="/assets/icon/dormir.png"></ion-img>
                     </a>
                 </div>
                 <div class="icono">
@@ -85,13 +82,6 @@
                     <img class="imgCard" src="{{ item.imagenHome }}" alt="{{ item.nombre }}">
                     <div class="duracion">
                         <b class="distancia">{{item.distancia | formatDistancia }}</b>
-                        <div class="estrellas">
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                        </div>
                     </div>
                 </ion-card-content>
             </ion-card>

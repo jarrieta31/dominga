@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { ModalRatingPageModule } from '../modal-rating/modal-rating.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 
@@ -20,7 +19,6 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ModalRatingPageModule,
     PipesModule
   ],
   declarations: [HomePage]

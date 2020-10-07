@@ -4,28 +4,12 @@
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
         <ion-title color="back" id="nombre">{{nombre}} <!-- <span>&nbsp;&nbsp;<i class="fas fa-globe"></i></span> --></ion-title>
-        <ion-buttons slot="primary">
-            <ion-button color="back" *ngIf="fav?.length == 0" (click)=agregarFavorito()>
-                <i id="fav" class="far fa-heart"></i>
-            </ion-button>
-            <ion-button color="back" (click)=deleteFav()>
-                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart"></i>
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
     <ion-toolbar *ngIf="tipo == 'Rural'" color="options">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
         <ion-title color="back" id="nombre">{{nombre}}</ion-title>
-        <ion-buttons slot="primary">
-            <ion-button color="back" *ngIf="fav?.length == 0" (click)=agregarFavorito()>
-                <i id="fav" class="far fa-heart"></i>
-            </ion-button>
-            <ion-button color="back" (click)=deleteFav()>
-                <i id="fav" *ngIf="fav?.length != 0" class="fas fa-heart"></i>
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -91,11 +75,6 @@
                <!--  <div class="iconEstilos">
                     <i class="fas fa-globe"></i>
                 </div> -->
-                <div class="estrellas">
-                    <app-rating class="valoracion" [(rating)]="totalValoracion"></app-rating>
-                    <!-- <ion-rating [rate]="totalValoracion" readonly="true" size="small">
-                    </ion-rating> -->
-                </div>
             </div>
             <p class="text">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
         </div>

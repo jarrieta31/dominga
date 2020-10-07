@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../../services/database.service';
 import { Place } from '../../shared/place';
@@ -9,7 +8,6 @@ import { Point } from '../../shared/point';
 import distance from '@turf/distance';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
-import { ModalRatingPage } from '../modal-rating/modal-rating.page';
 import { NetworkService } from '../../services/network.service';
 import { LoadingController } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -24,7 +22,7 @@ declare var $: any;
     styleUrls: ['./home.page.scss'],
 })
 
-export class HomePage implements OnInit, OnDestroy, AfterViewInit {
+export class HomePage implements OnInit, OnDestroy {
 
     subsciptionNetwork: any; //Subscripcion para ver el estado de la conexión a internet
     isConnected = false;  //verifica el estado de la conexion a internet
@@ -64,7 +62,6 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private database: DatabaseService,
-        private authService: AuthService,
         private router: Router,
         private geolocationService: GeolocationService,
         private platform: Platform,
@@ -128,11 +125,6 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         ).subscribe();
     });
 
-    //obtiene el id del usuario actual
-    subscrictionUser = this.authService.currentUser.subscribe(authData =>
-        this.idUser = authData.uid
-    );
-
     ngOnInit() {
         $(document).ready(function(){
             var total = $(window).height();
@@ -157,85 +149,13 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
         this.show("Cargando datos...");
         //obtiene 
         this.lugarCercano$ = this.geolocationService.getLugarCercano();
-        this.subscrictionLugarCercano = this.lugarCercano$.subscribe(place => {
-            if(place){
-                this.openModal(place)
-            }            
-        });
     }
 
     ngOnDestroy(): void {
         this.subsciptionNetwork.unsubscribe();
         this.subscripcionPosition.unsubscribe();
-        this.backButtonSubscription.unsubscribe();
-        this.subscrictionUser.unsubscribe();
+        this.backButtonSubscription.unsubscribe();       
         this.subscrictionLugarCercano.unsubscribe();        
-    }
-
-    ngAfterViewInit() {
-        this.platform.backButton.subscribe();
-        this.backButtonSubscription = this.platform.backButton.subscribe(() => {
-            if(this.router.url.indexOf('/home') == 0 || this.router.url.indexOf('/login') == 0 ){
-                this.cerrarAppAlertConfirm()
-            }            
-        });
-    }
-
-    cerrarSesion() {
-        this.su.unsubscribe();
-        this.authService.signOut();
-        this.subsciptionNetwork.unsubscribe();
-        this.subscripcionPosition.unsubscribe();
-        this.backButtonSubscription.unsubscribe();
-        this.subscrictionUser.unsubscribe();
-        this.subscrictionLugarCercano.unsubscribe(); 
-        this.geolocationService.subscriptionUser.unsubscribe();
-    }
-
-    async cerrarAppAlertConfirm() {
-        const alert = await this.alertController.create({
-            header: 'Salir!',
-            message: '<strong>¿Seguro que quiere salir?</strong>',
-            buttons: [
-                {
-                    text: 'Cancelar',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: (blah) => {
-                       // console.log('Confirm Cancel: blah');
-                    }
-                }, {
-                    text: 'Cerrar',
-                    handler: () => {
-                       // console.log('Confirm Okay');
-                        navigator['app'].exitApp();
-                    }
-                }
-            ]
-        });
-        await alert.present();
-    }
-
-    async openModal(place: Place) {
-        const modal = await this.modalController.create({
-          component: ModalRatingPage,
-          cssClass: 'personalizar-modal',
-          componentProps: {
-            "nombre": place.nombre,
-            "tipo": place.tipo,
-            "imagen": place.imagenPrincipal,
-            "key": place.$key
-          }
-        });
-     
-        modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.dataReturned = dataReturned.data;
-            //alert('Modal Sent Data :'+ dataReturned);
-          }
-        });
-     
-        return await modal.present();
     }
 
     async show(message: string) {
@@ -246,8 +166,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
       });
         
      this.loading.present().then(() => {
-         this.su;
-         this.subscrictionUser;   
+         this.su; 
          this.loading.dismiss();
      });
     }

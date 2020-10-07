@@ -13,7 +13,6 @@ import { Point } from '../shared/point';
 import { tap, share } from 'rxjs/operators';
 import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
-import { AuthService } from './auth.service';
 import { Assessment } from '../shared/assessment';
 
 
@@ -62,13 +61,8 @@ export class GeolocationService {
     })
   })
 
-  constructor(private androidPermissions: AndroidPermissions, private authService: AuthService,
+  constructor(private androidPermissions: AndroidPermissions,
     private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
-
-    //Subscripcion para tener el id de usuario actual
-    this.subscriptionUser = this.authService.currentUser.subscribe(authData => {
-      this.user = authData.uid;
-    });
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion

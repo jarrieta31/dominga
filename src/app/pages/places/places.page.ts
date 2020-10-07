@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { DatabaseService } from '../../services/database.service';
-import { AuthService } from '../../services/auth.service';
 import { Place } from '../../shared/place';
 import { Favourite } from '../../shared/favourite';
 import { Router, ActivatedRoute} from '@angular/router';
@@ -40,7 +39,6 @@ export class PlacesPage implements OnInit, OnDestroy {
     subscripcionPosition: Subscription;
     subscripcionDistancia: Subscription;
     distancia_cd: string;
-    users: string;
 
     nombre: string;
     descripcion: string;
@@ -79,7 +77,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     constructor(
         private database: DatabaseService,
-        private authSvc: AuthService,
         private activatedRoute: ActivatedRoute,
         private geolocationService: GeolocationService,
         private router: Router,
@@ -244,11 +241,6 @@ export class PlacesPage implements OnInit, OnDestroy {
         this.sug_2[3] = this.sugerencias[4];
     });
 
-    user = this.authSvc.currentUser.subscribe(authData => {
-        this.users = authData.uid;
-        this.checkFav();
-    });
-
     ngOnInit() {
         this.subscripcionDistancia = this.distancia$.pipe(
             tap(distancia => this.distancia = distancia)
@@ -283,7 +275,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
-        this.user.unsubscribe();
         this.subscription.unsubscribe();
         this.su.unsubscribe();
         this.subscripcionDistancia.unsubscribe();
@@ -305,7 +296,6 @@ export class PlacesPage implements OnInit, OnDestroy {
       });
         
      this.loading.present().then(() => {
-         this.user;
          this.subscription;
          this.su;
          this.loading.dismiss();
@@ -318,33 +308,7 @@ export class PlacesPage implements OnInit, OnDestroy {
             $("#foto").attr("src", src);
         });
     }
-
-    async agregarFavorito() {
-        this.database.addFavourite(this.nombre, this.key, this.users, this.imagenHome, this.tipo);
-    }
-
-    async checkFav() {
-        this.database.getFavouriteUser(this.users).snapshotChanges().subscribe(data => {
-            this.fav = [];
-
-            data.forEach(item => {
-                if (this.par == item.key) {
-                    let a = item.payload.toJSON();
-                    a['$key'] = item.key;
-                    this.fav.push(a as Favourite);
-                }
-            })
-        });
-    }
-
-    async deleteFav() {
-        this.database.removeFavourite(this.users, this.key);
-    }
-
-    actualizarDistancias() {
-
-    }
-
+    
     async abrirMapaActionSheet() {
         const actionSheet = await this.actionSheetController.create({
           header: 'Abrir Mapa',
