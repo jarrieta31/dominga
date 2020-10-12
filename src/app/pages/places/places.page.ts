@@ -244,7 +244,7 @@ export class PlacesPage implements OnInit, OnDestroy {
             tap(distancia => this.distancia = distancia)
         ).subscribe();
 
-        this.show("Cargando lugares...");        
+        this.show("Cargando datos...");        
 
     //    if (this.platform.is('android') && this.geolocationService.gps) {
 
