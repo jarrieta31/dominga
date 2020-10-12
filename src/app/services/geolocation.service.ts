@@ -203,8 +203,6 @@ export class GeolocationService {
         zoom: zoom
       });
     }
-
-    this.mapa.resize();
     
     this.mapa.addControl(new Mapboxgl.NavigationControl());
   }

@@ -9,6 +9,7 @@ import { DatabaseService } from '../../services/database.service';
 import * as Mapboxgl from 'mapbox-gl';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Point } from '../../shared/point';
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -229,13 +230,16 @@ export class UrbanCircuitPage implements OnInit, OnDestroy {
                     'line-width': 5
                 }
             });
+            this.presentLoading();
+            this.geolocationService.mapa.resize();
         });
 
     })
 
     constructor(
     	private database: DatabaseService,
-    	private geolocationService: GeolocationService
+    	private geolocationService: GeolocationService,
+      private loadingCtrl: LoadingController
     	) {}
 
     ngOnInit() {
@@ -253,5 +257,17 @@ export class UrbanCircuitPage implements OnInit, OnDestroy {
             //this.geolocationService.stopLocationWatch()          
         }
     }
+
+    async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      cssClass: 'my-custom-class',
+      message: 'Cargando marcadores ...',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
+  }
 
 }
