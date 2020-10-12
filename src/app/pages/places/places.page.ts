@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { DatabaseService } from '../../services/database.service';
 import { Place } from '../../shared/place';
-import { Favourite } from '../../shared/favourite';
 import { Router, ActivatedRoute} from '@angular/router';
 import * as Mapboxgl from 'mapbox-gl';
 import distance from '@turf/distance';
@@ -26,7 +25,6 @@ declare var $: any;
 export class PlacesPage implements OnInit, OnDestroy {
 
     items: Place[];
-    fav: Favourite[];
     sugerencias: Place[] = [];
     sug: Place[] = [];
     sug_2: Place[] = [];

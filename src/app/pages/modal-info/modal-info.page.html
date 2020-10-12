@@ -3,13 +3,13 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
         </ion-buttons>
-        <ion-title color="light">{{ nombre }}</ion-title>
+        <ion-title color="back">{{ nombre }}</ion-title>
     </ion-toolbar>
     <ion-toolbar *ngIf="tipo == 'Urbano'" color="information">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
         </ion-buttons>
-        <ion-title color="light">{{ nombre }}</ion-title>
+        <ion-title color="back">{{ nombre }}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
