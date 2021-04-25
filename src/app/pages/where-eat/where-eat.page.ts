@@ -4,6 +4,7 @@ import { DondeComer } from '../../shared/donde-comer';
 
 import { DatabaseService } from '../../services/database.service';
 import { LoadingController } from '@ionic/angular';
+import { InfoSlider } from '../../shared/info-slider';
 
 @Component({
   selector: 'app-where-eat',
@@ -13,6 +14,7 @@ import { LoadingController } from '@ionic/angular';
 export class WhereEatPage implements OnInit, OnDestroy {
 
 	eat: DondeComer[];
+  sliderDondeComer: InfoSlider[];
   textoBuscar = '';
 
   loading: any;
@@ -23,11 +25,21 @@ export class WhereEatPage implements OnInit, OnDestroy {
         let a = item.payload.toJSON();
         a['$key'] = item.key;
         this.eat.push(a as DondeComer);
-    })            
+    })
+});
+
+
+slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data => {
+  this.sliderDondeComer = [];
+  data.forEach(item => {
+      let a = item.payload.toJSON();
+      a['$key'] = item.key;
+      this.sliderDondeComer.push(a as InfoSlider);
+  })
 });
 
   constructor(private database: DatabaseService,
-              private loadingCtrl: LoadingController) { 
+              private loadingCtrl: LoadingController) {
     
   }
 
@@ -37,6 +49,7 @@ export class WhereEatPage implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.su.unsubscribe();
+    this.slider.unsubscribe();
   }
 
    async show(message: string) {
@@ -48,6 +61,7 @@ export class WhereEatPage implements OnInit, OnDestroy {
         
      this.loading.present().then(() => {
          this.su;
+         this.slider;
          this.loading.dismiss();
      });
     }
