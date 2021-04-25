@@ -19,6 +19,14 @@ export class WhereEatPage implements OnInit, OnDestroy {
 
   loading: any;
 
+  slideOpts = {
+        initialSlide: 0,
+        speed: 600,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        autoplay:true,
+    };
+
   su = this.database.getEat().snapshotChanges().subscribe(data => {
     this.eat = [];
     data.forEach(item => {

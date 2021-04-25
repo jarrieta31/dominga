@@ -24,6 +24,14 @@ export class InformationPage implements OnInit, OnDestroy {
 
   textoBuscar = '';
 
+  slideOpts = {
+        initialSlide: 0,
+        speed: 600,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        autoplay:true,
+    };
+
   su = this.db.getSliderInfo().snapshotChanges().subscribe(data => {
     this.imagesSliderInfo = [];
     data.forEach(item => {
