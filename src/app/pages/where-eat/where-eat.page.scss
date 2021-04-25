@@ -70,3 +70,12 @@ span {
     border-radius: 15%;
     margin: 0px;
 }
+
+.slider {
+    width: 100%;
+    position: -webkit-sticky;  // required for Safari
+    position: sticky;   
+    top: 0; // required as well.
+    z-index: 1;
+    margin-bottom: 20px;
+}

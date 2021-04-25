@@ -8,7 +8,15 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+    <div id="alto" class="slider">
+        <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
+            <ion-slide class="sliderHijo"> 
+                <img class="imgSlider" src="/assets/img/fachadaAmsj.jpg" />                
+            </ion-slide>            
+        </ion-slides>
+        <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+    </div>
+   
     <ion-list class="lista">
         <ion-item *ngFor="let item of eat | filtroDondeComer:textoBuscar">
             <div class="padre">
