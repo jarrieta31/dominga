@@ -50,6 +50,11 @@ export class DatabaseService {
         return this.appsRef;
     }
 
+    getSliderInfo(){
+        this.appsRef = this.db.list('slider_info');
+        return this.appsRef;
+    }
+
     //Función para agregar array valoracion a cada lugar con valor default que luego
     //será eliminado cuando un usuario realice la primera valoración sobre el lugar
     //this.addValorar(idLugar, 0);

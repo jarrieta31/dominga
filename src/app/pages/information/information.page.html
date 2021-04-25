@@ -9,9 +9,9 @@
 <ion-content>
     <div class="padre">
         <div id="alto" class="slider">
-            <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
+            <ion-slides *ngFor="let imagen of imagesSliderInfo" class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
                 <ion-slide class="sliderHijo"> 
-                    <img class="imgSlider" src="/assets/img/fachadaAmsj.jpg" />                
+                    <img class="imgSlider" src="{{imagen.imagen}}" />                
                 </ion-slide>            
             </ion-slides>
         </div>

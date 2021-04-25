@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DatabaseService } from '../../services/database.service';
+import { InfoSlider } from '../../shared/info-slider';
+
 
 
 @Component({
@@ -10,15 +13,28 @@ import { HttpClient } from '@angular/common/http';
 export class InformationPage implements OnInit, OnDestroy {
   
   ngOnDestroy() {
+    this.su.unsubscribe();
   }
 
 	information: any[];
+
+  imagesSliderInfo: InfoSlider[];
 
 	automaticClose = false;
 
   textoBuscar = '';
 
-  constructor(private http: HttpClient) { 
+  su = this.db.getSliderInfo().snapshotChanges().subscribe(data => {
+    this.imagesSliderInfo = [];
+    data.forEach(item => {
+      let a = item.payload.toJSON();
+            a['$key'] = item.key;
+            this.imagesSliderInfo.push(a as InfoSlider);
+    })
+    
+  })
+
+  constructor(private http: HttpClient, private db: DatabaseService) { 
   	this.http.get('../../../assets/information.json').subscribe(res => {
   		this.information = res['items'];
   	});
@@ -27,6 +43,7 @@ export class InformationPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.su;
   }
 
   toggleSection(index){
