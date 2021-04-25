@@ -78,3 +78,7 @@ span {
     top: 0; // required as well.
     z-index: 1;
 }
+
+*{
+    z-index: 0;
+}
