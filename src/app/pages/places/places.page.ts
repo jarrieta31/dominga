@@ -255,14 +255,14 @@ export class PlacesPage implements OnInit, OnDestroy {
                         let options = { units: 'kilometers' };
                         let dist = distance([this.longitud, this.latitud], [posicion.longitud, posicion.latitud], options);
                         let distFormat, distancia;
-                        if (dist > 1) {
+                        if (dist >= 1) {
                             distFormat = parseFloat(dist).toFixed(3);
                             distancia = "Estás a " + distFormat;
                         } else {
-                            dist = dist * 1000;
-                            distFormat = parseFloat(dist).toFixed(0);
+                            distFormat = parseFloat(dist).toFixed(2);
                             distancia = "Estás a " + distFormat;
                         }
+
                         // Actualiza el observable de lugares con toda la información
                         this.distancia$.next(distancia);
                     }

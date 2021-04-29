@@ -10,7 +10,6 @@ export class FormatDistancia implements PipeTransform {
         var txtSalida = "";
 
         if( texto != null){
-            //console.log(texto)
             var arrayTexto = texto.split(espacio);
     
             var txtDistancia = arrayTexto[arrayTexto.length - 1];
