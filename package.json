@@ -112,7 +112,7 @@
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-vibration": {},
       "cordova-plugin-nativegeocoder": {
-        "LOCATION_WHEN_IN_USE_DESCRIPTION": "Use geocoder service"
+        "LOCATION_WHEN_IN_USE_DESCRIPTION": "Acceder a su ubicación para determinar su distancia a los lugares"
       },
       "cordova-plugin-network-information": {},
       "mx.ferreyra.callnumber": {},
