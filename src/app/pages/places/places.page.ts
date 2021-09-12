@@ -13,6 +13,7 @@ import { Platform } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { ModalController } from '@ionic/angular';
 import { VideoPage } from '../../pages/video/video.page';
+import { AccessibilityPage } from '../accessibility/accessibility.page';
 
 declare var jQuery: any;
 declare var $: any;
@@ -358,5 +359,20 @@ export class PlacesPage implements OnInit, OnDestroy {
           });
 
           await video.present();
+      }
+
+      async openModal() {
+          const modal = await this.modalCtrl.create({ 
+              component: AccessibilityPage,
+              cssClass: 'modal-accessibility',
+              backdropDismiss: false,
+              showBackdrop: true,
+              componentProps: {
+                  rampa: 'Si tiene',
+                  baños: 'Públicos'
+              }
+          });
+
+          await modal.present();
       }
 }

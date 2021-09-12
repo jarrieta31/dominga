@@ -64,7 +64,6 @@ const routes: Routes = [
     path: 'party-house',
     loadChildren: () => import('./pages/party-house/party-house.module').then( m => m.PartyHousePageModule)
   },
-
 ];
 
 @NgModule({

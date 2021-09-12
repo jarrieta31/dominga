@@ -3,13 +3,13 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
-        <ion-title color="back" id="nombre">{{nombre}} <!-- <span>&nbsp;&nbsp;<i class="fas fa-globe"></i></span> --></ion-title>
+        <ion-title color="back" id="nombre">{{nombre}}<i class="fas fa-info-circle access" (click)="openModal()"></i></ion-title>
     </ion-toolbar>
     <ion-toolbar *ngIf="tipo == 'Rural'" color="options">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="home" color="back" text=""></ion-back-button>
         </ion-buttons>
-        <ion-title color="back" id="nombre">{{nombre}}</ion-title>
+        <ion-title color="back" id="nombre">{{nombre}}<i class="fas fa-info-circle access" (click)="openModal()"></i></ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>

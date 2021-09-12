@@ -11,10 +11,13 @@ import { ComponentsModule } from '../../components/components.module';
 import { PipesModule } from '../../shared/pipes/pipes.module';
 import { VideoPage } from '../../pages/video/video.page';
 import { VideoPageModule } from '../../pages/video/video.module';
+import { AccessibilityPage } from '../accessibility/accessibility.page';
+import { AccessibilityPageModule } from '../accessibility/accessibility.module';
 
 @NgModule({
 	entryComponents: [
-	VideoPage
+	VideoPage,
+  AccessibilityPage
 	],
   imports: [
     CommonModule,
@@ -23,7 +26,8 @@ import { VideoPageModule } from '../../pages/video/video.module';
     PlacesPageRoutingModule,
     ComponentsModule,
     PipesModule,
-    VideoPageModule
+    VideoPageModule,
+    AccessibilityPageModule
   ],
   declarations: [PlacesPage]
 })
