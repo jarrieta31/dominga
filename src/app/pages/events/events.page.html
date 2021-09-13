@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="information">
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="/" color="back"></ion-back-button>
+    </ion-buttons>
+    <ion-img slot="start" src="/assets/icon/eventos.png"></ion-img>
+    <ion-title>Eventos</ion-title>
+</ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="location">
+    <i class="fas fa-map-marker-alt"></i> <select>
+      <option value="San José">San José</option>
+      <option value="Colonia">Colonia</option>
+    </select>
+  </div>
+  <ion-searchbar></ion-searchbar>
+  <div class="filter">
+    <ion-chip>
+      <ion-label><i class="fas fa-sliders-h"></i> Filtros</ion-label>
+    </ion-chip>
+    <ion-chip color="primary">
+      <ion-label><i class="fas fa-sliders-h"></i> Esta semana</ion-label>
+    </ion-chip>
+    <ion-chip color="primary">
+      <ion-label><i class="fas fa-sliders-h"></i> Este mes</ion-label>
+    </ion-chip>
+  </div>
+
+  <div class="events">
+    <div class="event">
+      <div class="image-event">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTywzs2Ti8Vw_sqRF1PhObYUTz5Xbv9NOAyTQ&usqp=CAU" alt="">
+      </div>
+      <div class="info-event">
+        <div>Lun, Set 13</div>
+        <div>Evento 1</div>
+        <div>Descripción...</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="image-event">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTywzs2Ti8Vw_sqRF1PhObYUTz5Xbv9NOAyTQ&usqp=CAU" alt="">
+      </div>
+      <div class="info-event">
+        <div>Lun, Set 13</div>
+        <div>Evento 1</div>
+        <div>Descripción...</div>
+      </div>
+    </div>
+  </div>
+  
+  
+</ion-content>
