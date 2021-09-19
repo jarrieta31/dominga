@@ -53,23 +53,45 @@ select {
 .events {
     display: flex;
     flex-direction: column;
+    margin: 15px 0;
 }
 
 .event {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     margin: 10px 3%;
 }
 
 .image-event {
-    width: 120px;
+    width: 42%;
     height: auto;
+    //border: 1px solid black;
 }
 
 .info-event {
-    margin-left: 6px;
+    width: 55%;
+    margin-left: 3%;
+    //border: 1px solid black;
 }
 
 .info-event > div {
-    margin-bottom: 6px;
+    margin: 0 0 2% 5%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.fecha {
+    font-weight: bold;
+    color: #e76c2e;
+    font-size: 0.9em;
+}
+
+.titulo {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.descripcion {
+
 }
