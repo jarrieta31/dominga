@@ -9,136 +9,47 @@
 </ion-header>
 
 <ion-content>
-  <div class="location">
-    <i class="fas fa-map-marker-alt"></i>
-    <select>
-      <option value="San José">San José</option>
-      <option value="Colonia">Colonia</option>
-    </select>
-  </div>
-  <ion-searchbar></ion-searchbar>
-  <div class="filter">
-    <ion-chip>
-      <ion-label><i class="fas fa-sliders-h"></i> Filtros</ion-label>
-    </ion-chip>
-    <ion-chip color="primary">
-      <ion-label><i class="fas fa-sliders-h"></i> Esta semana</ion-label>
-    </ion-chip>
-    <ion-chip color="primary">
-      <ion-label><i class="fas fa-sliders-h"></i> Este mes</ion-label>
-    </ion-chip>
-  </div>
-
-  <div class="events">
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009840/Banner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Sáb, Set 18</div>
-        <div class="titulo">Cuatro Pesos de Propina</div>
-        <div class="descripcion">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque
-          necessitatibus ducimus eius. Tenetur, illum possimus nam, cum corporis
-          aperiam ad sint natus commodi unde, iusto placeat dolor culpa iure
-          quaerat?
-        </div>
-      </div>
+  <div class="container">
+    <div class="location">
+      <!-- <i class="fas fa-map-marker-alt"></i> -->
+      <ion-select placeholder="Ubicación"  [interfaceOptions]="selectCustom" okText="Ok" cancelText="Cancelar">
+      <ion-select-option value="San José">San José</ion-select-option>
+      <ion-select-option value="Colonia">Colonia</ion-select-option>
+    </ion-select>
     </div>
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009958/Banner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Dom, Oct 31</div>
-        <div class="titulo">Copla Alta</div>
-        <div class="descripcion">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
-          delectus, ratione eum fuga fugiat tempore doloribus vero inventore
-          error. Libero nisi facere assumenda deleniti expedita possimus rem id
-          atque distinctio!
-        </div>
-      </div>
-    </div>
-
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009769/TickantelBanner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Mié, Nov 10</div>
-        <div class="titulo">Facundo Arana - En el Aire</div>
-        <div class="descripcion">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque
-          necessitatibus ducimus eius. Tenetur, illum possimus nam, cum corporis
-          aperiam ad sint natus commodi unde, iusto placeat dolor culpa iure
-          quaerat?
-        </div>
-      </div>
-    </div>
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009960/Banner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Jue, Oct 28</div>
-        <div class="titulo">Marcel Keoroglian</div>
-        <div class="descripcion">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque
-          necessitatibus ducimus eius. Tenetur, illum possimus nam, cum corporis
-          aperiam ad sint natus commodi unde, iusto placeat dolor culpa iure
-          quaerat?
-        </div>
-      </div>
-    </div>
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009958/Banner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Dom, Oct 31</div>
-        <div class="titulo">Copla Alta</div>
-        <div class="descripcion">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
-          delectus, ratione eum fuga fugiat tempore doloribus vero inventore
-          error. Libero nisi facere assumenda deleniti expedita possimus rem id
-          atque distinctio!
-        </div>
-      </div>
-    </div>
-
-    <div class="event">
-      <div class="image-event">
-        <img
-          src="https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009769/TickantelBanner.png"
-          alt=""
-        />
-      </div>
-      <div class="info-event">
-        <div class="fecha">Mié, Nov 10</div>
-        <div class="titulo">Facundo Arana - En el Aire</div>
-        <div class="descripcion">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque
-          necessitatibus ducimus eius. Tenetur, illum possimus nam, cum corporis
-          aperiam ad sint natus commodi unde, iusto placeat dolor culpa iure
-          quaerat?
-        </div>
-      </div>
+    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
+    <div class="filter">
+      <ion-chip>
+        <ion-label><i class="fas fa-sliders-h"></i>&nbsp; Filtros</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label><i class="fas fa-calendar-day"></i>&nbsp; Hoy</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label><i class="fas fa-calendar-week"></i>&nbsp; Esta semana</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label><i class="fas fa-calendar-alt"></i>&nbsp; Este mes</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label><i class="fas fa-music"></i>&nbsp; Música</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label><i class="fas fa-paint-brush"></i>&nbsp; Cultura</ion-label>
+      </ion-chip>
     </div>
   </div>
+
+  <ion-list>
+    <ion-item class="event" *ngFor="let item of eventos">
+      <ion-avatar item-start class="image-event">
+        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
+      </ion-avatar>
+      <div class="info-event">
+        <div class="fecha">{{item.fecha}}</div>
+        <div class="titulo">{{item.titulo}}</div>
+        <div class="descripcion">{{item.descripcion}}</div>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

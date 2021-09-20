@@ -2,30 +2,15 @@
     --box-shadow: none !important;
     padding: 0px !important;
     border-bottom: 1px solid grey !important;
-    width: 95%;
-    margin: auto;
 }
 
-ion-avatar, ion-avatar>img {
-    border-radius: 15% !important;
-    height: 95%;
-    width: 100%;
-}
-
-ion-avatar{
-    -webkit-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
-    -moz-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
-    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
-    margin-left: 4px;
-}
-
-ion-item {
-    margin-top: 4%;
+::-webkit-scrollbar {
+    display: none;
 }
 
 ion-img {
     width: 12%;
-    margin-left: 8%;
+    margin-left: 4px;
 }
 
 ion-title {
@@ -33,45 +18,57 @@ ion-title {
     font-weight: 700;
 }
 
-select {
-    margin: 15px 0 1% 4%;
-    border: none;
-}
+ion-select, ion-searchbar {
+    /* Applies to the value and placeholder color */
+    color: #000000;
+  
+    /* Set a different placeholder color */
+    --placeholder-color: #585454bb;
+  
+    /* Set full opacity on the placeholder */
+    --placeholder-opacity: 1;
+  }
 
-.location, .filter {
-    margin-left: 7%; 
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 5%;
+    justify-content: center;
 }
 
 .location {
-    margin-bottom: 10px;
+    margin: 10px 0;
+    width: 100%;
 }
 
 .filter {
     margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar; 
 }
 
-.events {
-    display: flex;
-    flex-direction: column;
-    margin: 15px 0;
+ion-chip {
+    flex: 0 0 auto; 
+    margin-left: 0px !important;
 }
 
 .event {
     display: flex;
     flex-direction: row;
-    margin: 10px 3%;
+    margin: 0;
 }
 
 .image-event {
     width: 42%;
     height: auto;
-    //border: 1px solid black;
 }
 
 .info-event {
     width: 55%;
     margin-left: 3%;
-    //border: 1px solid black;
 }
 
 .info-event > div {
@@ -93,5 +90,20 @@ select {
 }
 
 .descripcion {
+    font-size: 0.8em;
+}
 
+.img-elem{
+    width: 100%;
+    height: auto;
+    border-radius: 5%;
+    margin: 0px;
+    -webkit-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+    -moz-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+}
+
+.event > .info-event {
+    align-self: flex-start;
+    margin-top: 8px;
 }
