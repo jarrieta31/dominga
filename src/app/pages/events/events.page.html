@@ -9,27 +9,62 @@
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <div class="location">
-      <!-- <i class="fas fa-map-marker-alt"></i> -->
-      <ion-select placeholder="Ubicación"  [interfaceOptions]="selectCustom" okText="Ok" cancelText="Cancelar">
-      <ion-select-option value="San José">San José</ion-select-option>
-      <ion-select-option value="Colonia">Colonia</ion-select-option>
-    </ion-select>
-    </div>
-    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
+  <div id="alto" class="slider">
+    <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
+        <ion-slide class="sliderHijo"> 
+            <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
+        </ion-slide>    
+        <ion-slide class="sliderHijo"> 
+          <img class="imgSlider" src="https://www.casaboletas.org/wp-content/uploads/20210722_102541-2-1-scaled-850x500.jpg"/>                
+      </ion-slide>     
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
+    </ion-slide>    
+    <ion-slide class="sliderHijo"> 
+      <img class="imgSlider" src="https://www.casaboletas.org/wp-content/uploads/20210722_102541-2-1-scaled-850x500.jpg"/>                
+  </ion-slide>        
+  <ion-slide class="sliderHijo"> 
+    <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
+</ion-slide>    
+<ion-slide class="sliderHijo"> 
+  <img class="imgSlider" src="https://www.casaboletas.org/wp-content/uploads/20210722_102541-2-1-scaled-850x500.jpg"/>                
+</ion-slide>    
+    </ion-slides>
     <div class="filter">
       <ion-chip>
-        <ion-label><i class="fas fa-sliders-h"></i>&nbsp; Filtros</ion-label>
+        <ion-label><i class="fas fa-sliders-h"></i>&nbsp; Filtrar eventos</ion-label>
       </ion-chip>
+    </div>
+</div>
+  <!-- <div class="container"> 
+    <div class="location">
+      <i class="fas fa-map-marker-alt"></i> 
+      <ion-select
+        placeholder="Ubicación"
+        [interfaceOptions]="selectCustom"
+        okText="Ok"
+        cancelText="Cancelar"
+      >
+        <ion-select-option value="San José">San José</ion-select-option>
+        <ion-select-option value="Colonia">Colonia</ion-select-option>
+      </ion-select>
+    </div>
+    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
+    <div class="filter">-->
+      
+       <!--
       <ion-chip color="primary">
         <ion-label><i class="fas fa-calendar-day"></i>&nbsp; Hoy</ion-label>
       </ion-chip>
       <ion-chip color="primary">
-        <ion-label><i class="fas fa-calendar-week"></i>&nbsp; Esta semana</ion-label>
+        <ion-label
+          ><i class="fas fa-calendar-week"></i>&nbsp; Esta semana</ion-label
+        >
       </ion-chip>
       <ion-chip color="primary">
-        <ion-label><i class="fas fa-calendar-alt"></i>&nbsp; Este mes</ion-label>
+        <ion-label
+          ><i class="fas fa-calendar-alt"></i>&nbsp; Este mes</ion-label
+        >
       </ion-chip>
       <ion-chip color="primary">
         <ion-label><i class="fas fa-music"></i>&nbsp; Música</ion-label>
@@ -38,10 +73,14 @@
         <ion-label><i class="fas fa-paint-brush"></i>&nbsp; Cultura</ion-label>
       </ion-chip>
     </div>
-  </div>
+  </div> -->
 
   <ion-list>
-    <ion-item class="event" *ngFor="let item of eventos">
+    <ion-item
+    *ngFor="let item of eventos"
+      class="event"
+      (click)="openModalDetailEvent(item.id, item.dia, item.fecha, item.hora, item.titulo, item.descripcion, item.imagen)"
+    >
       <ion-avatar item-start class="image-event">
         <ion-img [src]="item.imagen" class="img-elem"></ion-img>
       </ion-avatar>

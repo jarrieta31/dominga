@@ -15,6 +15,7 @@ export class AppComponent {
 
     showSplash = true;
     modo: boolean;
+    dyslexic: boolean;
 
     constructor(
         private platform: Platform,
@@ -34,6 +35,7 @@ export class AppComponent {
 
             timer(3000).subscribe(() => this.showSplash = false);
             this.checkDarkMode();
+            this.modeDyslexic();
         });
     }
 
@@ -48,7 +50,15 @@ export class AppComponent {
         }
     }
 
-
+    modeDyslexic() {
+        if (localStorage.getItem("dyslexic") == "true") {
+            try {
+                document.body.classList.toggle('dyslexic')
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
 
     // if (localStorage.getItem("modoOscuro"))

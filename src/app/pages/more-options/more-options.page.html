@@ -17,17 +17,17 @@
                 </div>
                 <div class="info">
                     <ion-label>
-                        <h2>{{ item.nombre }}</h2>
+                        <h2 id="more-options-all">{{ item.nombre }}</h2>
                         <div class="infoAbajo">
-                            <h3>{{ item.direccion }}</h3>
-                            <p><span>Tel: </span>{{ item.telefono }}</p>
+                            <h3 id="more-options-all">{{ item.direccion }}</h3>
+                            <p id="more-options-all"><span id="more-options-all">Tel: </span>{{ item.telefono }}</p>
                         </div>
                     </ion-label>
                 </div>
             </div>
         </ion-item>
     </ion-list>
-    <ion-grid *ngIf="textoBuscar.length === 0">
+    <ion-grid *ngIf="textoBuscar.length === 0" id="more-options-container">
         <a class="hrefIcon" routerLink="/where-sleep">
             <ion-row>
                 <ion-col size="2">

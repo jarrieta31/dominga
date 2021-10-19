@@ -52,10 +52,18 @@ export class CircuitsPage implements OnInit, OnDestroy {
       this.rural.unsubscribe();
     }
 
+    /**
+     * Filtro de circuitos
+     * @param event 
+     */
     buscar(event){
         this.textoBuscar = event.detail.value;
   }
 
+  /**
+   * Spinner de carga
+   * @param message - mensage de spinner
+   */
   async show(message: string) {
 
       this.loading = await this.loadingCtrl.create({

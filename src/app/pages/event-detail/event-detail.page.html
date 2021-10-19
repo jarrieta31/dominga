@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="information">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="events"
+        (click)="salir()"
+        color="back"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back" id="nombre">{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="padre" id="event-detail-container">
+    <div class="foto"><img src="{{imagen}}" alt="" /></div>
+    <section>
+      <div class="cuenta-regresiva">
+          <div class="time">
+              <ul class="time-list">
+                  <li class="count-bg-one radius"><span id="days">{{day}}</span>Dias</li>
+                  <li class="count-bg-two radius"><span id="hours">{{hours}}</span>Horas</li>
+                  <li class="count-bg-three radius"><span id="minutes">{{minutes}}</span>Minutos</li>
+                  <li class="count-bg-four radius"><span id="seconds">{{seconds}}</span>Segundos</li>
+              </ul>
+          </div>
+      </div>
+  </section>
+    <div class="ubicacion">
+      <div class="div-ubicacion">Teatro Macció</div>
+      <div class="dir">
+        <i class="fas fa-map-marker-alt mark-info"></i>529, 18 de Julio, San
+        José de Mayo
+      </div>
+    </div>
+    <div class="fecha-hora">
+      <div class="fecha">
+        <div class="div-fecha">Fecha</div>
+        <div class="fecha-hora_div">
+          <i class="fas fa-calendar-alt mark-info"></i>{{fecha}}
+        </div>
+      </div>
+      <div class="hora">
+        <div class="div-hora">Hora</div>
+        <div class="fecha-hora_div">
+          <i class="fas fa-clock mark-info"></i>{{hora}}
+        </div>
+      </div>
+    </div>
+    <div class="descripcion" id="description-event">
+      {{descripcion}}&nbsp;<a *ngIf="descripcion.length > 250">Ver más</a>
+    </div>
+  </div>
+  <div class="ticket">
+    <div class="entradas">
+      <div class="entradas_div">Ticket por persona</div>
+      <div class="precios_div">$ 200</div>
+    </div>
+    <div class="precio">
+      <div><i class="fas fa-ticket-alt mark-info"></i></div>
+      <div class="puntos-venta">Ver puntos de venta</div>
+    </div>
+  </div>
+</ion-content>

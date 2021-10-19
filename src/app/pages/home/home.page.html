@@ -1,11 +1,15 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-list>
+        <ion-list class="toggle-item">
             <ion-item>
                 <i slot="start" class="fas fa-sun" style="font-size: 150%"></i>
                 <i style="margin-left: 10px; font-size: 130%" class="fas fa-moon"></i>
                 <ion-toggle *ngIf="modoOscuro == 'true'" style="margin-left: 12px;" slot="start" checked (ionChange)="changeTheme()" mode="ios"></ion-toggle>
                 <ion-toggle *ngIf="modoOscuro == null" style="margin-left: 12px;" slot="start" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+            </ion-item>
+            <ion-item>
+                <ion-toggle *ngIf="dyslexic == 'true'" style="margin-left: 12px;" slot="start" checked (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
+                <ion-toggle *ngIf="dyslexic == null" style="margin-left: 12px;" slot="start" (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
             </ion-item>
         </ion-list>
     </ion-toolbar>
@@ -72,10 +76,10 @@
         </div>
         <div class="cards">
             <ion-card *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
-                <ion-card-header *ngIf="item.tipo == 'Rural'" color="options">
+                <ion-card-header *ngIf="item.tipo == 'Rural'" color="options" id="place-title">
                     {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-tractor"></i>
                 </ion-card-header>
-                <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information">
+                <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information" id="place-title">
                     {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-city"></i>
                 </ion-card-header>
                 <ion-card-content>

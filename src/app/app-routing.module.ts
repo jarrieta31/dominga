@@ -63,11 +63,11 @@ const routes: Routes = [
   {
     path: 'party-house',
     loadChildren: () => import('./pages/party-house/party-house.module').then( m => m.PartyHousePageModule)
-  },  {
+  },
+  {
     path: 'events',
     loadChildren: () => import('./pages/events/events.module').then( m => m.EventsPageModule)
   },
-
 ];
 
 @NgModule({

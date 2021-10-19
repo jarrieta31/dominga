@@ -54,6 +54,10 @@ export class InformationPage implements OnInit, OnDestroy {
     this.su;
   }
 
+  /**
+   * 
+   * @param index 
+   */
   toggleSection(index){
   	this.information[index].open = !this.information[index].open;
 
@@ -64,10 +68,19 @@ export class InformationPage implements OnInit, OnDestroy {
   	}
   }
 
+  /**
+   * 
+   * @param index 
+   * @param childIndex 
+   */
   toggleItem(index, childIndex){
     this.information[index].children[childIndex].open = !this.information[index].children[childIndex].open;
   }
 
+  /**
+   * Filtro de búsqueda
+   * @param event
+   */
   buscar( event ){
     this.textoBuscar = event.detail.value; 
   }

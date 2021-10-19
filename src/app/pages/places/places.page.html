@@ -47,7 +47,7 @@
 
 
     <div id="key">{{ key }}</div>
-    <div class="padre">
+    <div class="padre" id="place-container">
         <div class="diva">
             <img class="imgPrincipal" id="foto" src="{{ imagenPrincipal }}" />
         </div>
@@ -76,7 +76,7 @@
                     <i class="fas fa-globe"></i>
                 </div> -->
             </div>
-            <p class="text">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
+            <p class="text" id="place-description">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
         </div>
         <div class="divd">
             <div id="mapaBox"></div>

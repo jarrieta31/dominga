@@ -19,12 +19,12 @@
                 </div>
                 <div class="info">
                     <ion-label>
-                        <h2 *ngIf="item.nombre.length < 25">{{ item.nombre }}</h2>
-                        <h2 class="tamaño_25" *ngIf="item.nombre.length >= 25">{{ item.nombre }}</h2>
+                        <h2 *ngIf="item.nombre.length < 25" id="party-info">{{ item.nombre }}</h2>
+                        <h2 class="tamaño_25" *ngIf="item.nombre.length >= 25" id="party-info">{{ item.nombre }}</h2>
                         <div class="infoAbajo">
-                            <h3 class="tamaño_30" *ngIf="item.direccion.length >= 30">{{ item.direccion }}</h3>
-                            <h3 *ngIf="item.direccion.length < 30">{{ item.direccion }}</h3>
-                            <p><span>Tel: </span>{{ item.telefono }}</p>
+                            <h3 class="tamaño_30" *ngIf="item.direccion.length >= 30" id="party-info">{{ item.direccion }}</h3>
+                            <h3 *ngIf="item.direccion.length < 30" id="party-info">{{ item.direccion }}</h3>
+                            <p id="party-info"><span id="party-info">Tel: </span>{{ item.telefono }}</p>
                         </div>
                     </ion-label>
                 </div>

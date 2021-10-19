@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AngularFireStorageModule } from '@angular/fire/storage';
 //Permisos
@@ -58,6 +59,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFirestoreModule,
     ReactiveFormsModule,
     ComponentsModule,    
 

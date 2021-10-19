@@ -57,7 +57,9 @@ export class HomePage implements OnInit, OnDestroy {
 
     loading: any;
     darkMode: string;
+    dyslexicMode: string;
     modoOscuro: string = localStorage.getItem("modoOscuro");
+    dyslexic: string = localStorage.getItem("dyslexic");
     //mode = new Array();
 
     constructor(
@@ -158,6 +160,10 @@ export class HomePage implements OnInit, OnDestroy {
         this.subscrictionLugarCercano.unsubscribe();        
     }
 
+    /**
+     * Spinner de carga
+     * @param message - mensaje de spinner
+     */
     async show(message: string) {
 
       this.loading = await this.loadingCtrl.create({
@@ -171,6 +177,9 @@ export class HomePage implements OnInit, OnDestroy {
      });
     }
 
+    /**
+     * Cambiar de modo (clásico/oscuro)
+     */
     changeTheme(){
         this.darkMode = localStorage.getItem("modoOscuro");
 
@@ -185,6 +194,23 @@ export class HomePage implements OnInit, OnDestroy {
         }   
     }
 
+    dyslexicFont(){
+        this.dyslexicMode = localStorage.getItem("dyslexic");
+
+        if(this.dyslexicMode == 'true'){
+            localStorage.removeItem("dyslexic")            
+            document.body.classList.toggle('dyslexic');
+            this.modoOscuro = localStorage.getItem("dyslexic");  
+        }
+        else {
+            localStorage.setItem("dyslexic", JSON.stringify(true))
+            document.body.classList.toggle('dyslexic');
+        }   
+    }
+
+    /**
+     * Redirreción desde la imagen de Casa Dominga del home a la información del lugar
+     */
     pageDominga(){
         this.browser.create("https://casadominga.com.uy", "_system")
     }

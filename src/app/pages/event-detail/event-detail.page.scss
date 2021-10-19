@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.padre {
+  width: 100%;
+  height: auto;
+  padding: 3% 3% 60px 3%;
+
+}
+
+.foto > img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px 5px 0 0;
+}
+
+.fecha-hora {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ubicacion {
+  display: flex;
+  border-radius: 5px;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 15px;
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  color: #000;
+  background-color: var(--ion-color-light);
+}
+
+.div-ubicacion,
+.div-fecha,
+.div-hora {
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+
+.fecha,
+.hora {
+  width: 49%;
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0);
+  color: #000;
+  border-radius: 5px;
+  padding: 15px;
+  background-color: var(--ion-color-light);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.mark-info {
+  margin-right: 15px !important;
+  color: rgb(5, 153, 49);
+  font-size: 1.2em;
+}
+
+.dir,
+.fecha-hora_div {
+  font-size: 0.8em;
+}
+
+.descripcion {
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  margin-top: 5px;
+  background-color: var(--ion-color-light);
+  border-radius: 5px;
+  padding: 7px 15px;
+  font-family: Barlow;
+  font-size: 12px;
+  line-height : 17px;
+}
+
+.ticket {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--ion-color-light);
+  border-top: 10px solid #fff;
+}
+
+.entradas {
+  width: 35%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.precio {
+  width: 63%;
+  margin: 4px;
+  background-color: #0fe921;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.entradas_div {
+  font-size: 0.6em;
+  margin-top: 2px;
+}
+
+.precios_div {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.puntos-venta {
+  color: #fff;
+  font-weight: 700;
+}
+
+a {
+  text-decoration: underline;
+}
+
+// Cuenta regresiva
+
+section {
+  margin: 6px 0 8px 0;
+}
+
+.time-list {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  text-align: center;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  width: 23%;
+  border-radius: 10px;
+}
+
+.count-bg-one {
+  background: #468dbc;
+  font-size: 0.5em;
+  font-weight: 400;
+  color: white;
+}
+
+.count-bg-two {
+  background: #ef9024;
+  font-size: 0.5em;
+  font-weight: 400;
+  color: white;
+}
+
+.count-bg-three {
+  background: #ee337f;
+  font-size: 0.5em;
+  font-weight: 400;
+  color: white;
+}
+
+.count-bg-four {
+  background: #1fb1f4;
+  font-size: 0.5em;
+  font-weight: 400;
+  color: white;
+}
+
+#days, #hours, #minutes, #seconds {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #fff;
+}

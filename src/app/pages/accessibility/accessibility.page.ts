@@ -15,6 +15,9 @@ export class AccessibilityPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Cerrar modal de accesibilidad
+   */
   salir(){
     this.modalCtrl.dismiss();
   }
