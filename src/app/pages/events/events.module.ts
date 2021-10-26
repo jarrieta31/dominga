@@ -9,6 +9,9 @@ import { EventsPageRoutingModule } from './events-routing.module';
 import { EventsPage } from './events.page';
 import { EventDetailPage } from '../event-detail/event-detail.page';
 import { EventDetailPageModule } from '../event-detail/event-detail.module';
+import { FilterEventPageModule } from '../filter-event/filter-event.module';
+import { FilterEventPage } from '../filter-event/filter-event.page';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -16,11 +19,14 @@ import { EventDetailPageModule } from '../event-detail/event-detail.module';
     FormsModule,
     IonicModule,
     EventsPageRoutingModule,
-    EventDetailPageModule
+    EventDetailPageModule,
+    FilterEventPageModule,
+    PipesModule
   ],
   declarations: [EventsPage],
   entryComponents: [
-    EventDetailPage
+    EventDetailPage,
+    FilterEventPage
   ]
 })
 export class EventsPageModule {}

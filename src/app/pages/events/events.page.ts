@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
+import { FilterEventPage } from "../filter-event/filter-event.page";
+import { async } from "@angular/core/testing";
 
 @Component({
   selector: "app-events",
@@ -10,10 +12,12 @@ import { EventDetailPage } from "../event-detail/event-detail.page";
 })
 export class EventsPage implements OnInit {
   now = new Date();
+  textoBuscar = '';
 
   eventos: Eventos[] = [
     {
       id: 1,
+      departamento: "San Jose",
       dia: "10/23/2021 3:00",
       fecha: "Sáb, Set 18",
       hora: "15:00 hs",
@@ -25,6 +29,7 @@ export class EventsPage implements OnInit {
     },
     {
       id: 2,
+      departamento: "San Jose",
       dia: "10/30/2021 15:00",
       fecha: "Dom, Oct 31",
       hora: "15:00 hs",
@@ -36,16 +41,18 @@ export class EventsPage implements OnInit {
     },
     {
       id: 3,
+      departamento: "Colonia",
       dia: "10/30/2021 15:00",
       fecha: "Mié, Nov 10",
       hora: "15:00 hs",
       titulo: "El Cuarteto de Nos",
-      descripcion: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
+      descripcion: "Lorem colonis ipsum dolor, sit amet consectetur adipisicing elit.",
       imagen:
         "https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009899/Cuarteto_2021_Tickantel_Grilla_700x390.png",
     },
     {
       id: 4,
+      departamento: "Colonia",
       dia: "10/30/2021 15:00",
       fecha: "Jue, Oct 28",
       hora: "15:00 hs",
@@ -56,6 +63,7 @@ export class EventsPage implements OnInit {
     },
     {
       id: 5,
+      departamento: "San Jose",
       dia: "10/30/2021 15:00",
       fecha: "Sáb, Set 18",
       hora: "15:00 hs",
@@ -69,13 +77,6 @@ export class EventsPage implements OnInit {
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
-
-  /**
-   * Personalización del select de ubicación
-   */
-  selectCustom: any = {
-    header: "Departamento",
-  };
 
   /**
    * Slide
@@ -124,10 +125,30 @@ export class EventsPage implements OnInit {
         hora: hora,
         titulo: titulo,
         descripcion: desc,
+        descripcion_completa: descripcion,
         imagen: imagen,
       },
     });
 
     await modal.present();
   }
+
+  async filterEvents() {
+    const modalFilter = await this.modalCtrl.create({
+      component: FilterEventPage,
+      cssClass: "filterModal",
+      backdropDismiss: false,
+      showBackdrop: true,
+      keyboardClose: true
+    });
+
+    await modalFilter.present();
+
+    const { data } = await modalFilter.onDidDismiss();
+
+    // console.log('Retorno de hijo ', data)
+
+    this.textoBuscar = data;
+  }
+
 }

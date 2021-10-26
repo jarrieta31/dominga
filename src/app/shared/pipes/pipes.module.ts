@@ -6,6 +6,7 @@ import { FiltroDondeComerPipe } from './filtro-donde-comer.pipe';
 import { FiltroInformacionPipe } from './filtro-informacion.pipe';
 import { FiltroMasOpcionesPipe } from './filtro-mas-opciones.pipe';
 import { FormatDistancia } from './format-distancia.pipe';
+import { FilterEventsPipe } from './filter-events.pipe';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { FormatDistancia } from './format-distancia.pipe';
     FiltroInformacionPipe, 
     FiltroMasOpcionesPipe,
     FormatDistancia,
+    FilterEventsPipe,
   ],
   exports: [
     FiltroPipe, 
@@ -25,6 +27,7 @@ import { FormatDistancia } from './format-distancia.pipe';
     FiltroInformacionPipe, 
     FiltroMasOpcionesPipe,
     FormatDistancia,
+    FilterEventsPipe
   ]
 })
 

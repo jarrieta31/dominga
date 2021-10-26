@@ -31,53 +31,14 @@
 </ion-slide>    
     </ion-slides>
     <div class="filter">
-      <ion-chip>
+      <ion-chip color="primary" (click)="filterEvents()">
         <ion-label><i class="fas fa-sliders-h"></i>&nbsp; Filtrar eventos</ion-label>
       </ion-chip>
     </div>
 </div>
-  <!-- <div class="container"> 
-    <div class="location">
-      <i class="fas fa-map-marker-alt"></i> 
-      <ion-select
-        placeholder="Ubicación"
-        [interfaceOptions]="selectCustom"
-        okText="Ok"
-        cancelText="Cancelar"
-      >
-        <ion-select-option value="San José">San José</ion-select-option>
-        <ion-select-option value="Colonia">Colonia</ion-select-option>
-      </ion-select>
-    </div>
-    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
-    <div class="filter">-->
-      
-       <!--
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-calendar-day"></i>&nbsp; Hoy</ion-label>
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label
-          ><i class="fas fa-calendar-week"></i>&nbsp; Esta semana</ion-label
-        >
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label
-          ><i class="fas fa-calendar-alt"></i>&nbsp; Este mes</ion-label
-        >
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-music"></i>&nbsp; Música</ion-label>
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-paint-brush"></i>&nbsp; Cultura</ion-label>
-      </ion-chip>
-    </div>
-  </div> -->
-
   <ion-list>
     <ion-item
-    *ngFor="let item of eventos"
+    *ngFor="let item of eventos | filterEvents:textoBuscar"
       class="event"
       (click)="openModalDetailEvent(item.id, item.dia, item.fecha, item.hora, item.titulo, item.descripcion, item.imagen)"
     >

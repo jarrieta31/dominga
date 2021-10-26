@@ -198,9 +198,9 @@ export class HomePage implements OnInit, OnDestroy {
         this.dyslexicMode = localStorage.getItem("dyslexic");
 
         if(this.dyslexicMode == 'true'){
-            localStorage.removeItem("dyslexic")            
+            localStorage.removeItem("dyslexic");         
             document.body.classList.toggle('dyslexic');
-            this.modoOscuro = localStorage.getItem("dyslexic");  
+            this.dyslexic = localStorage.getItem("dyslexic");  
         }
         else {
             localStorage.setItem("dyslexic", JSON.stringify(true))
