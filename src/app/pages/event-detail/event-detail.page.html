@@ -37,13 +37,13 @@
       <div class="fecha">
         <div class="div-fecha">Fecha</div>
         <div class="fecha-hora_div">
-          <i class="fas fa-calendar-alt mark-info"></i>{{fecha}}
+          <i class="fas fa-calendar-alt mark-info"></i>{{fecha | date: 'dd.MM.yyyy'}}
         </div>
       </div>
       <div class="hora">
         <div class="div-hora">Hora</div>
         <div class="fecha-hora_div">
-          <i class="fas fa-clock mark-info"></i>{{hora}}
+          <i class="fas fa-clock mark-info"></i>{{fecha | date:'HH:mm'}}
         </div>
       </div>
     </div>

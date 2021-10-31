@@ -8,7 +8,15 @@ import {
   AngularFireList,
   AngularFireObject,
 } from "@angular/fire/database";
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/firestore";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument,
+} from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
+type Collection<T> = string | AngularFirestoreCollection;
 
 @Injectable({
   providedIn: "root",
@@ -16,36 +24,60 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 export class DatabaseService {
   // Usamos el Servicio 'AngularFireList' de Angular Fire para listar los datos
   appsRef: AngularFireList<any>;
-  appsCol: AngularFirestoreCollection<any>;
-  appsDoc: AngularFirestoreDocument<any>;
   rating = this.db.database.ref("lugar");
-  col = this.dbCloud.collection("evento");
+
   //darkMode = this.db.database.ref('usuario_modo');
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
-  constructor(
-      private db: AngularFireDatabase,
-      private dbCloud: AngularFirestore
-      ) {
-          this.listCollection();
-      }
+  constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
+    // this.addEvent();
+  }
 
-    dataEvento: any = {
-        nombre: "Evento 1",
-        fecha: "27/09/2021",
-        hora: "19:00 hs",
-        descripcion: "Lorem ipsum dolor sit amet, consectetur adipisicing",
-        departamento: "San José",
-        imagen: "https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009677/bannner_web1.jpg"
-    }
+  // dataEvento: any = {
+  //   nombre:'Evento 8',
+  //   fecha: "07/11/2021",
+  //   hora: "13:00 hs",
+  //   dia: "11/07/2021 13:00",
+  //   descripcion: "Lorem ipsum dolor sit amet, consectetur adipisicing",
+  //   departamento: "San José",
+  //   localidad: "Libertad",
+  //   imagen:
+  //     "https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009677/bannner_web1.jpg",
+  // };
 
-    listCollection() {
-        this.appsCol = this.col;
-        console.log(this.appsCol);
-        //return this.appsCol
-        //return this.appsCol.add(this.data);
-        //return this.appsCol.doc(this.dataEvento.nombre).set(this.dataEvento);
-    }
+  // public generaCadenaAleatoria(n: number): string {
+  //   let result = '';
+  //   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  //   for (let i = 0; i < n; i++){
+  //     result += chars.charAt(Math.floor(Math.random() * chars.length));
+  //   }
+  //   return result;
+  // }
+
+  private col<T>(ref: Collection<T>, queryFn?): AngularFirestoreCollection {
+    return typeof ref === "string" ? this.afs.collection(ref, queryFn) : ref;
+  }
+
+  getCollection<T>(ref: Collection<T>, queryFn?): Observable<any[]> {
+    return this.col(ref, queryFn)
+      .snapshotChanges()
+      .pipe(
+        map((docs) => {
+          return docs.map((d) => {
+            const data = d.payload.doc.data();
+            const id = d.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  // async addEvent(){
+  //   const newEvent = this.afs.collection('evento').doc(this.generaCadenaAleatoria(15));
+  //   await newEvent.set(this.dataEvento);
+
+  // }
+
   // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
   // queremos usar, la colección que usaremos se llama 'tipo_circuito'
   listarDatos() {

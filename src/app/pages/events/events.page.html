@@ -40,14 +40,14 @@
     <ion-item
     *ngFor="let item of eventos | filterEvents:textoBuscar"
       class="event"
-      (click)="openModalDetailEvent(item.id, item.dia, item.fecha, item.hora, item.titulo, item.descripcion, item.imagen)"
+      (click)="openModalDetailEvent(item.id, item.fecha, item.nombre, item.descripcion, item.imagen)"
     >
       <ion-avatar item-start class="image-event">
         <ion-img [src]="item.imagen" class="img-elem"></ion-img>
       </ion-avatar>
       <div class="info-event">
-        <div class="fecha">{{item.fecha}}</div>
-        <div class="titulo">{{item.titulo}}</div>
+        <div class="fecha">{{item.fecha | date:'dd.MM.yyyy - HH:mm'}} hs</div>
+        <div class="titulo">{{item.nombre}}</div>
         <div class="descripcion">{{item.descripcion}}</div>
       </div>
     </ion-item>

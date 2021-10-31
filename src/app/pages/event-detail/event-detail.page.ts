@@ -9,9 +9,7 @@ import { timer } from "rxjs";
 })
 export class EventDetailPage implements OnInit {
   @Input() id: number;
-  @Input() dia: string;
   @Input() fecha: string;
-  @Input() hora: string;
   @Input() titulo: string;
   @Input() descripcion: string;
   @Input() imagen: string;
@@ -34,7 +32,7 @@ export class EventDetailPage implements OnInit {
   ngOnInit() {
     this.clock = this.source.subscribe((t) => {
       this.now = new Date();
-      this.end = new Date(this.dia);
+      this.end = new Date(this.fecha);
       this.showDate();
     });
   }

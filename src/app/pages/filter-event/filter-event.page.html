@@ -1,64 +1,46 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Filtrar eventos</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <!-- <div class="container">
-    <div class="location">
-      <i class="fas fa-map-marker-alt"></i>
-      <ion-select
-        placeholder="Ubicación"
-        [interfaceOptions]="selectCustom"
-        okText="Ok"
-        cancelText="Cancelar"
-      >
-        <ion-select-option value="San José">San José</ion-select-option>
-        <ion-select-option value="Colonia">Colonia</ion-select-option>
-      </ion-select>
-    </div>
-    <ion-searchbar placeholder="Buscar..."></ion-searchbar>
-    <div class="filter">
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-calendar-day"></i>&nbsp; Hoy</ion-label>
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label
-          ><i class="fas fa-calendar-week"></i>&nbsp; Esta semana</ion-label
-        >
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label
-          ><i class="fas fa-calendar-alt"></i>&nbsp; Este mes</ion-label
-        >
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-music"></i>&nbsp; Música</ion-label>
-      </ion-chip>
-      <ion-chip color="primary">
-        <ion-label><i class="fas fa-paint-brush"></i>&nbsp; Cultura</ion-label>
-      </ion-chip>
-    </div>
-  </div> -->
-  <form [formGroup] ="filterForm" (ngSubmit)="salir()">
+  <h3>Filtrar Eventos</h3>
+  <form [formGroup]="filterForm" (ngSubmit)="salir()">
     <div>
       <ion-select
         placeholder="Departamento"
         [interfaceOptions]="selectCustom"
-        okText="Ok"
+        okText="Seleccionar"
         cancelText="Cancelar"
         formControlName="departamento"
       >
-        <ion-select-option value="San Jose"> San José </ion-select-option>
-        <ion-select-option value="Colonia"> Colonia </ion-select-option>
+        <ion-select-option
+          *ngFor="let item of departamentosActivos"
+          value="{{item.nombre}}"
+        >
+          {{item.nombre}}
+        </ion-select-option>
       </ion-select>
-      <ion-searchbar placeholder="Buscar..." formControlName="general"></ion-searchbar>
+      <ion-select
+        *ngIf="filterForm.value.departamento != undefined && filterForm.value.departamento != ''"
+        placeholder="Localidad"
+        [interfaceOptions]="selectCustomLocation"
+        okText="Seleccionar"
+        cancelText="Cancelar"
+        formControlName="localidad"
+        (click)="getLocalidadesActivas(filterForm.value.departamento)"
+      >
+        <ion-select-option
+          *ngFor="let item of localidadesUnicas"
+          value="{{item}}"
+        >
+          {{ item }}
+        </ion-select-option>
+      </ion-select>
+      <ion-searchbar
+        placeholder="Buscar..."
+        formControlName="general"
+      ></ion-searchbar>
     </div>
     <ion-button type="submit">Filtrar</ion-button>
   </form>
-  
-  <h3>Formulario</h3>
-  <pre>Valid: {{ filterForm.valid }}</pre> 
-  <pre>Valid: {{ filterForm.value | json }}</pre> 
+
+  <!-- <h3>Formulario</h3>
+  <pre>Valid: {{ filterForm.valid }}</pre>
+  <pre>Valid: {{ filterForm.value | json }}</pre> -->
 </ion-content>
