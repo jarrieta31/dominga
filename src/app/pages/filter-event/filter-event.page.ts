@@ -21,10 +21,13 @@ export class FilterEventPage implements OnInit {
     departamento: ["", Validators.required],
     general: ["", Validators.required],
     localidad: ["", Validators.required],
-    fecha: ["", Validators.required],
+    fecha_desde: ["", Validators.required],
+    fecha_hasta: ["", Validators.required]
   });
 
   eventos: Eventos[] = [];
+
+  today:Date = new Date();
 
   constructor(
     private modalCtrl: ModalController,
@@ -34,6 +37,7 @@ export class FilterEventPage implements OnInit {
 
   ngOnInit() {
     this.getAll();
+    this.customDatePicker();
   }
 
   /**
@@ -65,11 +69,11 @@ export class FilterEventPage implements OnInit {
    * Obtengo todos los departamentos activos de la base (departamentos activos son aquellos que habilitados para tener eventos)
    */
   getDepartamentosActivos() {
-    this.dbService.getCollection("departamento", (ref) =>
-      ref.where("status", "==", true)
-    ).subscribe((response) => {
-      this.departamentosActivos = response
-    });
+    this.dbService
+      .getCollection("departamento", (ref) => ref.where("status", "==", true))
+      .subscribe((response) => {
+        this.departamentosActivos = response;
+      });
   }
 
   /**
@@ -83,7 +87,7 @@ export class FilterEventPage implements OnInit {
         this.localidadesActivas.push(res.localidad);
     });
 
-    this.localidadesUnicas = [... new Set(this.localidadesActivas)];
+    this.localidadesUnicas = [...new Set(this.localidadesActivas)];
   }
 
   /**
@@ -100,8 +104,48 @@ export class FilterEventPage implements OnInit {
   /**
    * Se obtienen los departamentos activos y las localidades activas por evento
    */
-  getAll(){
+  getAll() {
     this.getDepartamentosActivos();
     this.getEventos();
+  }
+
+  /**
+   * Si se cancela la acción de filtrar se devuelven todos los campos vacios
+   */
+  cancel() {
+    this.modalCtrl.dismiss({
+      formulario: {
+        departamento: "",
+        localidad: "",
+        general: "",
+        fecha_desde: "",
+        fecha_hasta: "",
+      },
+    });
+  }
+
+  anioActual: number = 0;
+  customYearValues = [];
+  customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  month: number = 0;
+  day: number = 0;
+  fullDay: string = ""
+
+  /**
+   * Se completa el date picker con el año actual más los 10 siguientes y se genera la variables para el 
+   * día límite del date picker
+   */
+  customDatePicker() {
+    this.anioActual = new Date().getFullYear();
+
+    this.month = this.today.getMonth()+1;
+    this.day = this.today.getDate();
+
+    this.fullDay = (this.anioActual + '-' + this.month + '-' + this.day).toString();
+
+    for (let i = 0; i < 10; i++) {
+      this.customYearValues.push(this.anioActual);
+      this.anioActual = this.anioActual + 1;
+    }
   }
 }

@@ -8,6 +8,7 @@
         okText="Seleccionar"
         cancelText="Cancelar"
         formControlName="departamento"
+        class="departamento"
       >
         <ion-select-option
           *ngFor="let item of departamentosActivos"
@@ -33,14 +34,37 @@
         </ion-select-option>
       </ion-select>
       <ion-searchbar
-        placeholder="Buscar..."
+        placeholder="Palabras claves..."
         formControlName="general"
       ></ion-searchbar>
+      <ion-item>
+        <ion-datetime
+        formControlName="fecha_desde"
+        yearValues="{{customYearValues}}"
+        [dayShortNames]="customDayShortNames"
+        monthShortNames="Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre"
+        min="{{fullDay}}"
+        displayFormat="DD.MM.YYYY"
+        placeholder="dd/mm/aaaa"
+        cancelText="Cancelar"
+        doneText="Seleccionar"
+      ></ion-datetime>
+      <ion-datetime
+        formControlName="fecha_hasta"
+        yearValues="{{customYearValues}}"
+        [dayShortNames]="customDayShortNames"
+        monthShortNames="Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre"
+        min="{{fullDay}}"
+        displayFormat="DD.MM.YYYY"
+        placeholder="dd/mm/aaaa"
+        cancelText="Cancelar"
+        doneText="Seleccionar"
+      ></ion-datetime>
+      </ion-item>
     </div>
-    <ion-button type="submit">Filtrar</ion-button>
+    <div class="form-button">
+      <ion-button color="success" type="submit">Filtrar</ion-button>
+      <ion-button color="danger" (click)="cancel()">Cancelar</ion-button>
+    </div>
   </form>
-
-  <!-- <h3>Formulario</h3>
-  <pre>Valid: {{ filterForm.valid }}</pre>
-  <pre>Valid: {{ filterForm.value | json }}</pre> -->
 </ion-content>
