@@ -17,7 +17,6 @@ export class EventsPage implements OnInit {
   today: Date = new Date();
 
   eventos: Eventos[] = [];
-  eventosActivos: Eventos[] = [];
 
   constructor(
     private modalCtrl: ModalController,
@@ -95,18 +94,16 @@ export class EventsPage implements OnInit {
   }
 
   getEventos() {
-    this.eventosActivos = [];
+    this.eventos = [];
     this.dbService
-      .getCollection("evento", (ref) => ref.orderBy("fecha", "asc"))
+      .getCollection("evento", (ref) =>
+        ref.where("fecha", ">=", this.today).orderBy("fecha", "asc")
+      )
       .subscribe((res) => {
         this.eventos = res;
 
         this.eventos.forEach((f) => {
           f.fecha = new Date(f.fecha["seconds"] * 1000);
-
-          if (this.today < f.fecha) {
-            this.eventosActivos.push(f);
-          }
         });
       });
   }

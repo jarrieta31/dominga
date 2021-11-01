@@ -128,7 +128,7 @@ export class FilterEventPage implements OnInit {
   customYearValues = [];
   customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   month: number = 0;
-  day: number = 0;
+  day: string;
   fullDay: string = ""
 
   /**
@@ -139,7 +139,14 @@ export class FilterEventPage implements OnInit {
     this.anioActual = new Date().getFullYear();
 
     this.month = this.today.getMonth()+1;
-    this.day = this.today.getDate();
+    this.day = this.today.getDate().toString();
+
+    if(this.day.length === 1){
+      this.day = ("0"+this.today.getDate()).toString();
+    }
+    else {
+      this.day = this.today.getDate().toString();
+    }
 
     this.fullDay = (this.anioActual + '-' + this.month + '-' + this.day).toString();
 
