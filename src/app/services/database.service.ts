@@ -60,7 +60,7 @@ export class DatabaseService {
 
   getCollection<T>(ref: Collection<T>, queryFn?): Observable<any[]> {
     return this.col(ref, queryFn)
-      .snapshotChanges()
+      .stateChanges()
       .pipe(
         map((docs) => {
           return docs.map((d) => {

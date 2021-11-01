@@ -14,9 +14,10 @@ import { DatabaseService } from "src/app/services/database.service";
 export class EventsPage implements OnInit {
   now = new Date();
   textoBuscar = "";
-  fecPrueba: Date;
+  today: Date = new Date();
 
   eventos: Eventos[] = [];
+  eventosActivos: Eventos[] = [];
 
   constructor(
     private modalCtrl: ModalController,
@@ -42,7 +43,6 @@ export class EventsPage implements OnInit {
    * Muestra el modal con descripción más detallada del evento seleccionado
    * @param id - id del evento
    * @param fecha - fecha del evento
-   * @param hora - hora del evento
    * @param titulo - titulo del evento
    * @param descripcion - descripcion del evento
    * @param imagen - imagen del evento
@@ -95,15 +95,19 @@ export class EventsPage implements OnInit {
   }
 
   getEventos() {
+    this.eventosActivos = [];
     this.dbService
       .getCollection("evento", (ref) => ref.orderBy("fecha", "asc"))
       .subscribe((res) => {
         this.eventos = res;
 
         this.eventos.forEach((f) => {
-         f.fecha = new Date(f.fecha['seconds']*1000);
-        })
+          f.fecha = new Date(f.fecha["seconds"] * 1000);
+
+          if (this.today < f.fecha) {
+            this.eventosActivos.push(f);
+          }
+        });
       });
-      
   }
 }

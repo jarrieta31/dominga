@@ -38,7 +38,7 @@
 </div>
   <ion-list>
     <ion-item
-    *ngFor="let item of eventos | filterEvents:textoBuscar"
+    *ngFor="let item of eventosActivos | filterEvents:textoBuscar"
       class="event"
       (click)="openModalDetailEvent(item.id, item.fecha, item.nombre, item.descripcion, item.imagen)"
     >
