@@ -127,6 +127,8 @@ export class FilterEventPage implements OnInit {
   anioActual: number = 0;
   customYearValues = [];
   customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  //monthShortNames="Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Setiembre, Octubre, Noviembre, Diciembre"
+  monthShortNames=["Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic"]
   month: number = 0;
   day: string;
   fullDay: string = ""
