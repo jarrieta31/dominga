@@ -22,12 +22,12 @@ export class FilterEventPage implements OnInit {
     general: ["", Validators.required],
     localidad: ["", Validators.required],
     fecha_desde: ["", Validators.required],
-    fecha_hasta: ["", Validators.required]
+    fecha_hasta: ["", Validators.required],
   });
 
   eventos: Eventos[] = [];
 
-  today:Date = new Date();
+  today: Date = new Date();
 
   constructor(
     private modalCtrl: ModalController,
@@ -128,29 +128,36 @@ export class FilterEventPage implements OnInit {
   customYearValues = [];
   customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   //monthShortNames="Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Setiembre, Octubre, Noviembre, Diciembre"
-  monthShortNames=["Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic"]
+  monthShortNames = [
+    "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic",
+  ];
   month: number = 0;
   day: string;
-  fullDay: string = ""
+  fullDay: string = "";
 
   /**
-   * Se completa el date picker con el año actual más los 10 siguientes y se genera la variables para el 
+   * Se completa el date picker con el año actual más los 10 siguientes y se genera la variables para el
    * día límite del date picker
    */
   customDatePicker() {
     this.anioActual = new Date().getFullYear();
 
-    this.month = this.today.getMonth()+1;
+    this.month = this.today.getMonth() + 1;
     this.day = this.today.getDate().toString();
 
-    if(this.day.length === 1){
-      this.day = ("0"+this.today.getDate()).toString();
-    }
-    else {
+    if (this.day.length === 1) {
+      this.day = ("0" + this.today.getDate()).toString();
+    } else {
       this.day = this.today.getDate().toString();
     }
 
-    this.fullDay = (this.anioActual + '-' + this.month + '-' + this.day).toString();
+    this.fullDay = (
+      this.anioActual +
+      "-" +
+      this.month +
+      "-" +
+      this.day
+    ).toString();
 
     for (let i = 0; i < 10; i++) {
       this.customYearValues.push(this.anioActual);
