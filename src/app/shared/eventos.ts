@@ -6,4 +6,5 @@ export interface Eventos {
     descripcion: string;
     imagen: string;
     localidad: string;
+    lugar: string;
 }

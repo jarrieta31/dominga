@@ -36,7 +36,7 @@ export class FilterEventPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAll();
+    // this.getAll();
     this.customDatePicker();
   }
 
@@ -68,13 +68,13 @@ export class FilterEventPage implements OnInit {
   /**
    * Obtengo todos los departamentos activos de la base (departamentos activos son aquellos que habilitados para tener eventos)
    */
-  getDepartamentosActivos() {
-    this.dbService
-      .getCollection("departamento", (ref) => ref.where("status", "==", true))
-      .subscribe((response) => {
-        this.departamentosActivos = response;
-      });
-  }
+  // getDepartamentosActivos() {
+  //   this.dbService
+  //     .getCollection("departamento", (ref) => ref.where("status", "==", true))
+  //     .subscribe((response) => {
+  //       this.departamentosActivos = response;
+  //     });
+  // }
 
   /**
    * Obtengo todas las localidades del departamento pasado por parametro que tienen eventos activos
@@ -93,21 +93,21 @@ export class FilterEventPage implements OnInit {
   /**
    * Obtengo todos los eventos para conocer las localidades con eventos
    */
-  getEventos() {
-    this.dbService
-      .getCollection("evento", (ref) => ref)
-      .subscribe((res) => {
-        this.eventos = res;
-      });
-  }
+  // getEventos() {
+  //   this.dbService
+  //     .getCollection("evento", (ref) => ref)
+  //     .subscribe((res) => {
+  //       this.eventos = res;
+  //     });
+  // }
 
   /**
    * Se obtienen los departamentos activos y las localidades activas por evento
    */
-  getAll() {
-    this.getDepartamentosActivos();
-    this.getEventos();
-  }
+  // getAll() {
+  //   this.getDepartamentosActivos();
+  //   this.getEventos();
+  // }
 
   /**
    * Si se cancela la acción de filtrar se devuelven todos los campos vacios

@@ -13,10 +13,11 @@ import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
+import { Eventos } from "../shared/eventos";
 
-type Collection<T> = string | AngularFirestoreCollection;
+
 
 @Injectable({
   providedIn: "root",
@@ -26,57 +27,42 @@ export class DatabaseService {
   appsRef: AngularFireList<any>;
   rating = this.db.database.ref("lugar");
 
-  //darkMode = this.db.database.ref('usuario_modo');
+  eventos: Subject<Eventos[]>;
+  allEvents: Eventos[] = [];  
+  today: Date = new Date();
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
-    // this.addEvent();
+    this.eventos = new Subject();
+    this.getEventos();
   }
 
-  // dataEvento: any = {
-  //   nombre:'Evento 8',
-  //   fecha: "07/11/2021",
-  //   hora: "13:00 hs",
-  //   dia: "11/07/2021 13:00",
-  //   descripcion: "Lorem ipsum dolor sit amet, consectetur adipisicing",
-  //   departamento: "San José",
-  //   localidad: "Libertad",
-  //   imagen:
-  //     "https://tickantel.cdn.antel.net.uy/media/Espectaculo/40009677/bannner_web1.jpg",
-  // };
-
-  // public generaCadenaAleatoria(n: number): string {
-  //   let result = '';
-  //   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  //   for (let i = 0; i < n; i++){
-  //     result += chars.charAt(Math.floor(Math.random() * chars.length));
-  //   }
-  //   return result;
-  // }
-
-  private col<T>(ref: Collection<T>, queryFn?): AngularFirestoreCollection {
-    return typeof ref === "string" ? this.afs.collection(ref, queryFn) : ref;
-  }
-
-  getCollection<T>(ref: Collection<T>, queryFn?): Observable<any[]> {
-    return this.col(ref, queryFn)
-      .snapshotChanges()
-      .pipe(
-        map((docs) => {
-          return docs.map((d) => {
-            const data = d.payload.doc.data();
-            const id = d.payload.doc.id;
-            return { id, ...data };
-          });
+  getEventos() {
+    this.afs.collection("evento").ref.where("fecha", ">=", this.today).orderBy("fecha", "asc").get().then(
+      querySnapshot => {
+        const arrEvents: any[] = [];
+        querySnapshot.forEach( item =>  {
+          const data: any = item.data();
+          arrEvents.push( {id: item.id, ...data} );
+        });
+        this.allEvents = arrEvents;
+        this.eventos.next(this.allEvents);
+        this.allEvents.forEach( f => {
+          f.fecha = new Date(f.fecha["seconds"] * 1000);
         })
-      );
+      }
+    ).catch( err => {
+      console.log(err)
+    }).finally( () => console.log("Finally"))
   }
 
-  // async addEvent(){
-  //   const newEvent = this.afs.collection('evento').doc(this.generaCadenaAleatoria(15));
-  //   await newEvent.set(this.dataEvento);
+  getObservable(): Observable<Eventos[]> {
+    return this.eventos.asObservable();
+  }
 
-  // }
+  getEventsLocal() {
+    this.eventos.next(this.allEvents);
+  }
 
   // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
   // queremos usar, la colección que usaremos se llama 'tipo_circuito'
@@ -119,29 +105,4 @@ export class DatabaseService {
     this.appsRef = this.db.list("slider_donde_comer");
     return this.appsRef;
   }
-
-  //Función para agregar array valoracion a cada lugar con valor default que luego
-  //será eliminado cuando un usuario realice la primera valoración sobre el lugar
-  //this.addValorar(idLugar, 0);
-
-  // addValorar(id: string, rate: number){
-  //         this.rating.child(id + '/valoracion/user').set(
-  //         rate
-  //     );
-  // }
-
-  // changeMode(id: string, dark: boolean){
-  //     if(dark){
-  //          this.darkMode.child('/' + id).set(
-  //         'dark'
-  //         );
-  //     } else {
-  //         this.darkMode.child('/' + id).remove();
-  //     }
-  // }
-
-  // checkMode(id: string){
-  //     this.appsRef = this.db.list('usuario_modo');
-  //     return this.appsRef;
-  // }
 }

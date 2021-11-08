@@ -1,22 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { FilterEventPage } from "../filter-event/filter-event.page";
 import { async } from "@angular/core/testing";
 import { DatabaseService } from "src/app/services/database.service";
+import { Subscription } from "rxjs";
+
 
 @Component({
   selector: "app-events",
   templateUrl: "./events.page.html",
   styleUrls: ["./events.page.scss"],
 })
-export class EventsPage implements OnInit {
+export class EventsPage implements OnInit, OnDestroy{
   now = new Date();
   textoBuscar = "";
   today: Date = new Date();
 
   eventos: Eventos[] = [];
+  eventosSuscription: Subscription;
 
   constructor(
     private modalCtrl: ModalController,
@@ -24,7 +27,12 @@ export class EventsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getEventos();
+    this.eventosSuscription = this.dbService.getObservable().subscribe( eventos => this.eventos = eventos );
+    this.dbService.getEventsLocal();
+  }
+
+  ngOnDestroy() {
+    this.eventosSuscription.unsubscribe();
   }
 
   /**
@@ -51,7 +59,8 @@ export class EventsPage implements OnInit {
     fecha: string,
     titulo: string,
     descripcion: string,
-    imagen: string
+    imagen: string,
+    lugar: string
   ) {
     if (descripcion.length > 250) {
       var desc = descripcion.substr(0, 250) + " ...";
@@ -71,6 +80,7 @@ export class EventsPage implements OnInit {
         descripcion: desc,
         descripcion_completa: descripcion,
         imagen: imagen,
+        lugar: lugar
       },
     });
 
@@ -91,20 +101,5 @@ export class EventsPage implements OnInit {
     const { data } = await modalFilter.onDidDismiss();
 
     this.textoBuscar = data;
-  }
-
-  getEventos() {
-    this.eventos = [];
-    this.dbService
-      .getCollection("evento", (ref) =>
-        ref.where("fecha", ">=", this.today).orderBy("fecha", "asc")
-      )
-      .subscribe((res) => {
-        this.eventos = res;
-
-        this.eventos.forEach((f) => {
-          f.fecha = new Date(f.fecha["seconds"] * 1000);
-        });
-      });
   }
 }

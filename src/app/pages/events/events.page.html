@@ -40,7 +40,7 @@
     <ion-item
     *ngFor="let item of eventos | filterEvents:textoBuscar"
       class="event"
-      (click)="openModalDetailEvent(item.id, item.fecha, item.nombre, item.descripcion, item.imagen)"
+      (click)="openModalDetailEvent(item.id, item.fecha, item.nombre, item.descripcion, item.imagen, item.lugar)"
     >
       <ion-avatar item-start class="image-event">
         <ion-img [src]="item.imagen" class="img-elem"></ion-img>
