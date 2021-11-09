@@ -16,8 +16,7 @@ import {
 import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
-
-
+import { Departament } from "../shared/departament";
 
 @Injectable({
   providedIn: "root",
@@ -27,33 +26,43 @@ export class DatabaseService {
   appsRef: AngularFireList<any>;
   rating = this.db.database.ref("lugar");
 
-  eventos: Subject<Eventos[]>;
-  allEvents: Eventos[] = [];  
   today: Date = new Date();
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
     this.eventos = new Subject();
+    this.departamentos = new Subject();
     this.getEventos();
+    this.getDepartamentosActivos();
   }
 
+  eventos: Subject<Eventos[]>;
+  allEvents: Eventos[] = [];
+  /**
+   * Obtener eventos desde fecha de hoy
+   */
   getEventos() {
-    this.afs.collection("evento").ref.where("fecha", ">=", this.today).orderBy("fecha", "asc").get().then(
-      querySnapshot => {
+    this.afs
+      .collection("evento")
+      .ref.where("fecha", ">=", this.today)
+      .orderBy("fecha", "asc")
+      .get()
+      .then((querySnapshot) => {
         const arrEvents: any[] = [];
-        querySnapshot.forEach( item =>  {
+        querySnapshot.forEach((item) => {
           const data: any = item.data();
-          arrEvents.push( {id: item.id, ...data} );
+          arrEvents.push({ id: item.id, ...data });
         });
         this.allEvents = arrEvents;
         this.eventos.next(this.allEvents);
-        this.allEvents.forEach( f => {
+        this.allEvents.forEach((f) => {
           f.fecha = new Date(f.fecha["seconds"] * 1000);
-        })
-      }
-    ).catch( err => {
-      console.log(err)
-    }).finally( () => console.log("Finally"))
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => console.log("Finally"));
   }
 
   getObservable(): Observable<Eventos[]> {
@@ -64,8 +73,44 @@ export class DatabaseService {
     this.eventos.next(this.allEvents);
   }
 
-  // En nuestra función listarDatos() especificamos la colección de datos de Firebase Database Realtime que
-  // queremos usar, la colección que usaremos se llama 'tipo_circuito'
+
+  departamentos: Subject<Departament[]>;
+  allDepartament: Departament[] = [];
+  /**
+   * Obtener departamentos activos
+   */
+  getDepartamentosActivos() {
+    this.afs
+      .collection("departamentos")
+      .ref.where("status", "==", true)
+      .get()
+      .then((querySnapshot) => {
+        const arrDeptos: any[] = [];
+        querySnapshot.forEach((item) => {
+          const data: any = item.data();
+          arrDeptos.push({ id: item.id, ...data });
+        });
+        this.allDepartament = arrDeptos;
+        this.departamentos.next(this.allDepartament);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => console.log("Finally"));
+  }
+
+  getObservableDepartment(): Observable<Departament[]> {
+    return this.departamentos.asObservable();
+  }
+
+  getDepartamentosLocal() {
+    this.departamentos.next(this.allDepartament);
+  }
+
+
+
+
+
   listarDatos() {
     this.appsRef = this.db.list("tipo_circuito");
     return this.appsRef;

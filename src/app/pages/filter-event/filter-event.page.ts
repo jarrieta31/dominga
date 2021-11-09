@@ -2,6 +2,7 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalController } from "@ionic/angular";
+import { Subscription } from "rxjs";
 import { DatabaseService } from "src/app/services/database.service";
 import { Departament } from "src/app/shared/departament";
 import { Eventos } from "src/app/shared/eventos";
@@ -14,6 +15,7 @@ import { Eventos } from "src/app/shared/eventos";
 export class FilterEventPage implements OnInit {
   dataForm: string = "";
   departamentosActivos: Departament[] = [];
+  departamentosSubscription: Subscription;
   localidadesActivas: string[];
   localidadesUnicas: string[];
 
@@ -36,7 +38,9 @@ export class FilterEventPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.getAll();
+    this.eventos = this.dbService.allEvents;
+    this.departamentosSubscription = this.dbService.getObservableDepartment().subscribe( deptos => this.departamentosActivos = deptos);
+    this.dbService.getDepartamentosLocal();
     this.customDatePicker();
   }
 
