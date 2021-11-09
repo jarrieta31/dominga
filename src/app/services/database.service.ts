@@ -18,6 +18,19 @@ import { map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
 
+export interface Visita {
+  id?             : string;
+  totalVisitas    : number;
+  id_evento        : string;
+  dia_visita : DiaVisita[];
+}
+
+export interface DiaVisita {
+    dia         : Date;
+    cant_visita : number;
+}
+
+
 @Injectable({
   providedIn: "root",
 })
@@ -28,16 +41,21 @@ export class DatabaseService {
 
   today: Date = new Date();
 
+  visita : Visita;
+
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
     this.eventos = new Subject();
     this.departamentos = new Subject();
     this.getEventos();
     this.getDepartamentosActivos();
+    // this.guardarVisita();
+    this.getVisita();
   }
 
   eventos: Subject<Eventos[]>;
   allEvents: Eventos[] = [];
+  visitas: string[]=[];
   /**
    * Obtener eventos desde fecha de hoy
    */
@@ -107,7 +125,19 @@ export class DatabaseService {
     this.departamentos.next(this.allDepartament);
   }
 
-
+  contadorVisitas( id: string){
+    let control : boolean = false;
+    if(this.visitas.length == 0) this.visitas.push(id);
+    
+    this.visitas.forEach( v => { 
+      if(v == id){
+        control = !control;
+      }
+    })
+    
+    if(!control) this.visitas.push(id);
+    console.log(this.visitas);
+  }
 
 
 
@@ -150,4 +180,44 @@ export class DatabaseService {
     this.appsRef = this.db.list("slider_donde_comer");
     return this.appsRef;
   }
+
+  guardarVisita(){
+    let fecha : Date = new Date();
+    let visita: Visita = {
+      "id_evento"     : '0',
+      "totalVisitas" :  8 ,
+      "dia_visita"  : [{ 
+        "dia"        : fecha,
+        "cant_visita" : 8
+      }]
+    }
+    this.afs.collection('visitas').add(visita);
+  }
+
+
+   
+  getVisita(){
+    this.afs.collection('visitas')
+        .ref.where("id_evento", "==", "NBgmewrfjEe4EcpnQgvO")
+        .get()
+        .then( querySnapshot => {
+          console.log(querySnapshot);
+          
+          const arrVisita: any[] = [];
+          querySnapshot.forEach((item) => {
+            const data: any = item.data();
+            arrVisita.push({ id: item.id, ...data });
+          });
+          // this.allDepartament = arrVisita;
+          // this.departamentos.next(this.allDepartament);
+          this.visita = arrVisita[0];
+          console.log(this.visita);
+        })
+        .catch((err) => {
+          console.error("Error en al traer la visita" + err);
+        })
+        .finally(() => console.log("Finally"));
+
+  }
 }
+
