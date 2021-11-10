@@ -61,15 +61,12 @@ export class EventsPage implements OnInit, OnDestroy{
     descripcion: string,
     imagen: string,
     lugar: string,
-    contar: number
   ) {
     if (descripcion.length > 250) {
       var desc = descripcion.substr(0, 250) + " ...";
     } else {
       desc = descripcion;
     }
-
-    this.contador(id, contar);
 
     const modal = await this.modalCtrl.create({
       component: EventDetailPage,
@@ -104,9 +101,5 @@ export class EventsPage implements OnInit, OnDestroy{
     const { data } = await modalFilter.onDidDismiss();
 
     this.textoBuscar = data;
-  }
-
-  contador(id: string, number: number) {
-    console.log(id, number);
   }
 }

@@ -7,14 +7,20 @@ import { IonicModule } from '@ionic/angular';
 import { EventDetailPageRoutingModule } from './event-detail-routing.module';
 
 import { EventDetailPage } from './event-detail.page';
+import { SellingPointsPageModule } from '../selling-points/selling-points.module';
+import { SellingPointsPage } from '../selling-points/selling-points.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EventDetailPageRoutingModule
+    EventDetailPageRoutingModule,
+    SellingPointsPageModule
   ],
-  declarations: [EventDetailPage]
+  declarations: [EventDetailPage],
+  entryComponents: [ 
+    SellingPointsPage
+  ]
 })
 export class EventDetailPageModule {}

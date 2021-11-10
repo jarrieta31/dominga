@@ -14,8 +14,8 @@ import { FilterEventPage } from './filter-event.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    FilterEventPageRoutingModule
+    FilterEventPageRoutingModule,
   ],
-  declarations: [FilterEventPage]
+  declarations: [FilterEventPage],
 })
 export class FilterEventPageModule {}
