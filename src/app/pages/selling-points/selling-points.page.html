@@ -1,21 +1,28 @@
 
 <ion-content>
+  <div class="selling-points-title">
+    <p>Puntos de venta</p>
+    <i class="fas fa-times-circle close" (click)="cancelar()"></i>
+  </div>
   <ion-grid>
   <ion-row>
     <ion-col size="4">
-      <ion-img src="/assets/selling-point/ticket-color.png"></ion-img>
+      <a href="https://tickantel.com.uy/inicio/espectaculo/40010081/espectaculo/Uruguay%20Open?1">
+      <ion-img src="/assets/selling-point/ticket-byn.png">
+      </ion-img>
       <ion-text>
-        <p>Ticket Antel</p>
+        <p>Tickantel</p>
       </ion-text>
-    </ion-col>
+    </a> 
+    </ion-col> 
     <ion-col size="4">
       <ion-img src="/assets/selling-point/wpp-color.png"></ion-img>
       <ion-text>
-        <p>Whatsapp</p>
+        <p>WhatsApp</p>
       </ion-text>
     </ion-col>
     <ion-col size="4">
-      <ion-img src="/assets/selling-point/ticket-color.png"></ion-img>
+      <ion-img src="/assets/selling-point/ig-byn.png"></ion-img>
       <ion-text>
         <p>Instagram</p>
       </ion-text>
@@ -23,24 +30,23 @@
   </ion-row>
   <ion-row>
     <ion-col size="4">
-      <ion-img src="/assets/selling-point/wpp-byn.png"></ion-img>
+      <ion-img src="/assets/selling-point/fb.svg"></ion-img>
       <ion-text>
         <p>Facebook</p>
       </ion-text>
     </ion-col>
     <ion-col size="4">
-      <ion-img src="/assets/selling-point/ticket-byn.png"></ion-img>
+      <ion-img src="/assets/selling-point/abitab.png"></ion-img>
       <ion-text>
         <p>Abitab</p>
       </ion-text>
     </ion-col>
     <ion-col size="4">
-      <ion-img src="/assets/selling-point/ticket-color.png"></ion-img>
+      <ion-img src="/assets/selling-point/rp.png"></ion-img>
       <ion-text>
         <p>Redpagos</p>
       </ion-text>
     </ion-col>
   </ion-row>
 </ion-grid>
-  <ion-button (click)="cancelar()">Cancelar</ion-button>
 </ion-content>

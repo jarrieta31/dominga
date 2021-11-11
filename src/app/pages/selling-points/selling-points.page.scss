@@ -7,12 +7,21 @@ ion-col {
   align-items: center;
 }
 
+a{ 
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 ion-grid {
   margin: 0;
   padding: 0;
 }
 
-ion-button {
+h3 {
   margin: 0;
   padding: 0;
   height: 50px;
@@ -21,11 +30,33 @@ ion-button {
 }
 
 ion-img {
-    width: 45%;
-    height: auto;
+  width: 40%;
+  height: auto;
 }
 
 ion-text > p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-size: 0.9em;
+  margin-top: 3px;
+}
+
+.selling-points-title {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--ion-color-information);
+}
+
+.selling-points-title > p {
+  width: 90%;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.close {
+  font-size: 1.3em;
 }

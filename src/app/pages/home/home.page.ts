@@ -13,7 +13,6 @@ import { LoadingController } from "@ionic/angular";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { tap } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
-import { InclusiveModalPage } from "../inclusive-modal/inclusive-modal.page";
 declare var jQuery: any;
 declare var $: any;
 
@@ -66,7 +65,7 @@ export class HomePage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private networkService: NetworkService,
     private loadingCtrl: LoadingController,
-    private browser: InAppBrowser
+    private browser: InAppBrowser,
   ) {
     this.geolocationService.iniciarSubscriptionClock();
     this.geolocationService.iniciarSubscriptionMatch();
@@ -182,17 +181,6 @@ export class HomePage implements OnInit, OnDestroy {
       this.su;
       this.loading.dismiss();
     });
-  }
-
-  async openModalInclusive() {
-    const modal = await this.modalCtrl.create({
-      component: InclusiveModalPage,
-      cssClass: "modal-inclusive",
-      backdropDismiss: false,
-      showBackdrop: true,
-    });
-
-    await modal.present();
   }
 
   /**

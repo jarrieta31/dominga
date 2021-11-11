@@ -1,0 +1,26 @@
+<ion-menu side="start" menuId="first" contentId="main">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Configuraciones</ion-title>
+      <ion-buttons slot="end">
+        <i class="fas fa-arrow-left closeMenu" color="back" (click)="toggleMenu()"></i>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item
+        >
+        Modo oscuro
+        <ion-toggle *ngIf="modoOscuro == 'true'" slot="end" checked (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+        <ion-toggle *ngIf="modoOscuro == null" slot="end" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+      </ion-item>
+      <ion-item
+        >Fuente dislexia
+        <ion-toggle *ngIf="dyslexic == 'true'" slot="end" checked (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
+        <ion-toggle *ngIf="dyslexic == null" slot="end" (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
+      </ion-item>
+      <ion-item>Departamento</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
