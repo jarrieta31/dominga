@@ -106,7 +106,7 @@ export class EventsPage implements OnInit, OnDestroy{
   }
 
   
-  contadorVisitas(id: string) {
+  contadorVisitas(id: string ) {
     this.dbService.contadorVisitas(id);
   }
 }

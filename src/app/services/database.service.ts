@@ -14,13 +14,16 @@ import {
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
 import { Observable, Subject } from "rxjs";
-import { map } from "rxjs/operators";
+import { isEmpty, map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
+import { loadavg, type } from "os";
+import { log } from "console";
+import { async } from "@angular/core/testing";
 
 export interface Visita {
   id?             : string;
-  totalVisitas    : number;
+  total_visitas    : number;
   id_evento        : string;
   dia_visita : DiaVisita[];
 }
@@ -49,8 +52,6 @@ export class DatabaseService {
     this.departamentos = new Subject();
     this.getEventos();
     this.getDepartamentosActivos();
-    // this.guardarVisita();
-    this.getVisita();
   }
 
   eventos: Subject<Eventos[]>;
@@ -135,8 +136,9 @@ export class DatabaseService {
       }
     })
     
-    if(!control) this.visitas.push(id);
-    console.log(this.visitas);
+    if(!control) this.getVisita(id);
+    //   this.visitas.push(id);
+    // console.log(this.visitas);
   }
 
 
@@ -181,43 +183,132 @@ export class DatabaseService {
     return this.appsRef;
   }
 
-  guardarVisita(){
-    let fecha : Date = new Date();
+  private sumarVisitaEvento( visita : Visita, evento_id? : string ){
+    
+    if( typeof visita != 'undefined' ){
+      let cantDiasVisita = visita.dia_visita.length
+      if(this.hoyTieneVisita(visita.dia_visita[cantDiasVisita-1])){
+        this.sumarVisita(visita.dia_visita[cantDiasVisita-1])
+        this.sumarTotalVisita(visita);
+        this.actulizarVisita(visita);
+      }else{
+        this.agregarDiaVisita(visita.dia_visita);
+        this.sumarTotalVisita(visita);
+        this.actulizarVisita(visita);
+      }
+    }else{
+      this.crearVisita( evento_id );
+      console.log(`entrando a crear visita para el evento`);
+      
+    }
+    
+  }
+
+  private crearVisita( evento_id : string ){
     let visita: Visita = {
-      "id_evento"     : '0',
-      "totalVisitas" :  8 ,
+      "id_evento"     : evento_id,
+      "total_visitas" :  1 ,
       "dia_visita"  : [{ 
-        "dia"        : fecha,
-        "cant_visita" : 8
+        "dia"        : this.getToday(),
+        "cant_visita" : 1
       }]
     }
     this.afs.collection('visitas').add(visita);
   }
 
-
-   
-  getVisita(){
+/**
+ * Esta funcion se encarga de traer una visita asociada a un evento y 
+ * setear la variable global visita: Vista.
+ * En el caso de que no exista una visita para ese evento, setea la 
+ * variable global en null.
+ * @param evento_id 
+ * Es de tipo string.
+ */
+  getVisita( evento_id : string )  {
     this.afs.collection('visitas')
-        .ref.where("id_evento", "==", "NBgmewrfjEe4EcpnQgvO")
+        .ref.where("id_evento", "==",evento_id )
         .get()
         .then( querySnapshot => {
-          console.log(querySnapshot);
-          
           const arrVisita: any[] = [];
           querySnapshot.forEach((item) => {
-            const data: any = item.data();
-            arrVisita.push({ id: item.id, ...data });
-          });
-          // this.allDepartament = arrVisita;
-          // this.departamentos.next(this.allDepartament);
-          this.visita = arrVisita[0];
-          console.log(this.visita);
+          const data : any = item.data();
+              arrVisita.push({ id: item.id, ...data })
+          })
+          this.visita = arrVisita[0]; 
+          this.sumarVisitaEvento(this.visita, evento_id);
         })
         .catch((err) => {
           console.error("Error en al traer la visita" + err);
         })
         .finally(() => console.log("Finally"));
+        
+  }
+  
 
+  private actulizarVisita( visita : Visita ){
+    
+    let total_visitas : number = visita.total_visitas;
+    let dia_visita    : DiaVisita[] = visita.dia_visita;
+
+  this.afs.doc( `visitas/${visita.id}` )
+    .update({
+        total_visitas,
+        dia_visita
+    })
+    .then( )
+    .catch((err) => {
+      console.error("Error en al traer la visita" + err)
+    })
+  }
+
+  private getToday() : Date  {
+    let aux : Date = new Date();
+    let dd         = aux.getDate();
+    let mm         = aux.getMonth();
+    let aa         = aux.getFullYear();
+    return new Date(aa, mm, dd);
+  }
+
+  private hoyTieneVisita( ultimaVisita : DiaVisita ) : boolean {
+    
+    let diaVisita  = new Date(ultimaVisita.dia['seconds'] * 1000);
+    let hoy        = this.getToday();
+
+    if( +hoy === +diaVisita ) return true;
+    else return false;
+    }
+
+/**
+ * Funcion que devuelve un nuevo objeto de tipo interfaz DiaVisita.
+ * @returns Devuelve un Objeto de tipo DiaVisita.
+ * La cant_visita = 1, porque se asume que al crear este elemento
+ * es debido a la primera visita del dia.
+ * dia = Al dia actual de formato anio/mes/dia. Ver getToday()
+ */
+  private crearDiaVisita( ): DiaVisita {
+    
+    const visita : DiaVisita = {
+      cant_visita : 1,
+      dia : this.getToday()
+    }
+    return visita;
+  }  
+
+  private agregarDiaVisita( visitas : DiaVisita[] ) : DiaVisita[] {
+    visitas.push(this.crearDiaVisita());
+    return visitas;
+  }
+
+  private sumarVisita( ultimaVisita : DiaVisita ) : DiaVisita {
+    
+    ultimaVisita.cant_visita++;
+    return ultimaVisita;
+
+  }
+
+  private sumarTotalVisita( visitas : Visita ){
+    visitas.total_visitas++;
+    return visitas;
   }
 }
 
