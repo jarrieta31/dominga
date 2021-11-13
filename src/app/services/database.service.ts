@@ -126,20 +126,7 @@ export class DatabaseService {
     this.departamentos.next(this.allDepartament);
   }
 
-  contadorVisitas( id: string){
-    let control : boolean = false;
-    if(this.visitas.length == 0) this.visitas.push(id);
-    
-    this.visitas.forEach( v => { 
-      if(v == id){
-        control = !control;
-      }
-    })
-    
-    if(!control) this.getVisita(id);
-    //   this.visitas.push(id);
-    // console.log(this.visitas);
-  }
+ 
 
 
 
@@ -183,6 +170,45 @@ export class DatabaseService {
     return this.appsRef;
   }
 
+/**
+ * funcion publica. recibe los datos del controlador.
+ * Guarda le parametro recibido en un array global "visitas : string[]".
+ * Revisa que no se repita le parametro recibido.
+ * Pasa el parametro a la funcion getVisita(id: string)
+ * @param id : string. 
+ * Recibe el id de un Evento.
+ */
+  contadorVisitas( id: string){
+    let control : boolean = false;
+    if(this.visitas.length == 0) {
+      this.visitas.push(id);
+      this.getVisita(id);
+    }else{
+      this.visitas.forEach( v => { 
+        if(v === id){
+          control = !control;
+        }
+      })
+      if(!control) {
+        this.visitas.push(id);
+        this.getVisita(id);
+      }
+
+      
+      
+      //   this.visitas.push(id);
+      // console.log(this.visitas);
+    }
+    
+  }
+
+/**
+ * Recibe los parametros de getVisita( evento_id : string )
+ * Se encarga de revisar el parametro visita recibido, luego llama a los 
+ * metodos para incrementar o crear la visita.
+ * @param visita : interfaz Visita.
+ * @param evento_id : string
+ */
   private sumarVisitaEvento( visita : Visita, evento_id? : string ){
     
     if( typeof visita != 'undefined' ){
@@ -203,7 +229,10 @@ export class DatabaseService {
     }
     
   }
-
+/**
+ * Funcion privada. Crea una objeto de Visita, y luego lo inserta en la BD.
+ * @param evento_id : string
+ */
   private crearVisita( evento_id : string ){
     let visita: Visita = {
       "id_evento"     : evento_id,
@@ -244,7 +273,10 @@ export class DatabaseService {
         
   }
   
-
+/**
+ * Funcion privada. Se encarga de actulizar un objeto de la BD de tipo visita
+ * @param visita : interfaz Visita
+ */
   private actulizarVisita( visita : Visita ){
     
     let total_visitas : number = visita.total_visitas;
@@ -260,7 +292,11 @@ export class DatabaseService {
       console.error("Error en al traer la visita" + err)
     })
   }
-
+/**
+ * funcion privada. Se encarga de crear una instancia de tipo Date con 
+ * la fecha actual.
+ * @returns Date 
+ */
   private getToday() : Date  {
     let aux : Date = new Date();
     let dd         = aux.getDate();
@@ -268,7 +304,12 @@ export class DatabaseService {
     let aa         = aux.getFullYear();
     return new Date(aa, mm, dd);
   }
-
+/**
+ * funcion privada. Se encarga de comparar si la fecha de la ultima visita realizada 
+ * es igual a la fecha actual.
+ * @param ultimaVisita : interfaz DiaVisita
+ * @returns boolean
+ */
   private hoyTieneVisita( ultimaVisita : DiaVisita ) : boolean {
     
     let diaVisita  = new Date(ultimaVisita.dia['seconds'] * 1000);
@@ -293,20 +334,33 @@ export class DatabaseService {
     }
     return visita;
   }  
-
+/**
+ * funcion privada. Agrega al arreglo un nuevo dia de visita para el evento asociado, 
+ * retornando un array de DiaVisita.
+ * @param visitas : array de interfaz DiaVisita[]
+ * @returns array de interfaz DiaVisita[]
+ */
   private agregarDiaVisita( visitas : DiaVisita[] ) : DiaVisita[] {
     visitas.push(this.crearDiaVisita());
     return visitas;
   }
-
+/**
+ * funcion privada. Se encarga de +1 a la variable cant_visita
+ * @param ultimaVisita : interfaz DiaVisita
+ * @returns interfaz DiaVisita
+ */
   private sumarVisita( ultimaVisita : DiaVisita ) : DiaVisita {
     
     ultimaVisita.cant_visita++;
     return ultimaVisita;
 
   }
-
-  private sumarTotalVisita( visitas : Visita ){
+/**
+ * funcion privada. Se encarga de +1 a la variable total_visitas
+ * @param visitas : interfaz Visita
+ * @returns interfaz Visita
+ */
+  private sumarTotalVisita( visitas : Visita ) : Visita {
     visitas.total_visitas++;
     return visitas;
   }
