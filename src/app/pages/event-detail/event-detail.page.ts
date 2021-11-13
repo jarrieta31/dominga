@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { timer } from "rxjs";
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+import { SellingPointsPage } from "../selling-points/selling-points.page";
 
 @Component({
   selector: "app-event-detail",
@@ -16,7 +17,6 @@ export class EventDetailPage implements OnInit {
   @Input() imagen: string;
   @Input() lugar: string;
 
-
   _second = 1000;
   _minute = this._second * 60;
   _hour = this._minute * 60;
@@ -30,9 +30,10 @@ export class EventDetailPage implements OnInit {
   source = timer(0, 1000);
   clock: any;
 
-  constructor(private modalCtrl: ModalController,
+  constructor(
+    private modalCtrl: ModalController,
     private browser: InAppBrowser
-    ) {}
+  ) {}
 
   ngOnInit() {
     this.clock = this.source.subscribe((t) => {
@@ -56,8 +57,7 @@ export class EventDetailPage implements OnInit {
       this.hours = Math.floor((distance % this._day) / this._hour);
       this.minutes = Math.floor((distance % this._hour) / this._minute);
       this.seconds = Math.floor((distance % this._minute) / this._second);
-    }
-    else {
+    } else {
       this.day = 0;
       this.hours = 0;
       this.minutes = 0;
@@ -65,8 +65,22 @@ export class EventDetailPage implements OnInit {
     }
   }
 
-  openMap(){
-    this.browser.create("https://www.google.com/maps/search/?api=1&query=" + this.lugar, "_system")
-}
+  openMap() {
+    this.browser.create(
+      "https://www.google.com/maps/search/?api=1&query=" + this.lugar,
+      "_system"
+    );
+  }
 
+  async openModalSellingPoint() {
+    const modalSellingPoint = await this.modalCtrl.create({
+      component: SellingPointsPage,
+      cssClass: "modal-selling-point",
+      backdropDismiss: false,
+      showBackdrop: true,
+      componentProps: {},
+    });
+
+    await modalSellingPoint.present();
+  }
 }

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { InclusiveModalPageRoutingModule } from './inclusive-modal-routing.module';
+import { SellingPointsPageRoutingModule } from './selling-points-routing.module';
 
-import { InclusiveModalPage } from './inclusive-modal.page';
+import { SellingPointsPage } from './selling-points.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    InclusiveModalPageRoutingModule
+    SellingPointsPageRoutingModule
   ],
-  declarations: [InclusiveModalPage]
+  declarations: [SellingPointsPage]
 })
-export class InclusiveModalPageModule {}
+export class SellingPointsPageModule {}

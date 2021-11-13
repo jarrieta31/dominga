@@ -1,85 +1,117 @@
 <ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-item>
-            <i class="fas fa-ellipsis-v" slot="end" (click)="openModalInclusive()"></i>
-        </ion-item>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first">
+        <i class="fas fa-bars" slot="start"></i>
+      </ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div class="padre">
-        <div id="alto" class="slider">
-            <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
-                <ion-slide class="sliderHijo">
-                    <a class="banner" href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas.">
-                        <ion-fab vertical="top" horizontal="start" slot="fixed">
-                            <ion-fab-button color="whatsapp">
-                                <ion-icon class="logoWhatsapp" name="logo-whatsapp"></ion-icon>
-                            </ion-fab-button>
-                        </ion-fab>
-                        <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
-                    </a>
-                </ion-slide>
-                <ion-slide class="sliderHijo">
-                    <a class="banner" (click)="pageDominga()">
-                        <img class="imgSlider" src="/assets/img/casaDominga.jpeg" />
-                    </a>
-                </ion-slide>
-                <ion-slide class="sliderHijo" [routerLink]="['/places/9']">
-                    <div class="banner">
-                        <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
-                    </div>
-                </ion-slide>
-                <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <div class="banner">
-                        <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
-                    </div>
-                </ion-slide>
-                <ion-slide class="sliderHijo" [routerLink]="['/']">
-                    <div class="banner">
-                        <img class="imgSlider" src="/assets/img/tour.jpeg" />
-                    </div>
-                </ion-slide>
-            </ion-slides>
-        </div>
-        <div class="menu">
-            <div class="contenedor-iconos">
-                <div class="icono">
-                    <a class="iconMenu" routerLink="/circuits">
-                        <ion-img src="/assets/icon/location.png"></ion-img>
-                    </a>
-                </div>
-                <div class="icono">
-                    <a class="iconMenu" routerLink="/information">
-                        <ion-img src="/assets/icon/info.png"></ion-img>
-                    </a>
-                </div>
-                <div class="icono">
-                    <a class="iconMenu" routerLink="/events">
-                        <ion-img src="/assets/icon/eventos.png"></ion-img>
-                    </a>
-                </div>
-                <div class="icono">
-                    <a class="iconMenu" routerLink="/more-options">
-                        <ion-img src="/assets/icon/masOpciones.png"></ion-img>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="cards">
-            <ion-card *ngFor="let item of obsItems$ | async" id="{{ item.id }}" [routerLink]="['/places', item.$key]">
-                <ion-card-header *ngIf="item.tipo == 'Rural'" color="options" id="place-title">
-                    {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-tractor"></i>
-                </ion-card-header>
-                <ion-card-header *ngIf="item.tipo == 'Urbano'" color="information" id="place-title">
-                    {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span> <i style="float: right" class="fas fa-city"></i>
-                </ion-card-header>
-                <ion-card-content>
-                    <img class="imgCard" src="{{ item.imagenHome }}" alt="{{ item.nombre }}">
-                    <div class="duracion">
-                        <b class="distancia">{{item.distancia | formatDistancia }}</b>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </div>
+  <div class="padre">
+    <div id="alto" class="slider">
+      <ion-slides
+        class="sliderPrimero"
+        scrollbar="false"
+        pager="false"
+        [options]="slideOpts"
+      >
+        <ion-slide class="sliderHijo">
+          <a
+            class="banner"
+            href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas."
+          >
+            <ion-fab vertical="top" horizontal="start" slot="fixed">
+              <ion-fab-button color="whatsapp">
+                <ion-icon class="logoWhatsapp" name="logo-whatsapp"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+            <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
+          </a>
+        </ion-slide>
+        <ion-slide class="sliderHijo">
+          <a class="banner" (click)="pageDominga()">
+            <img class="imgSlider" src="/assets/img/casaDominga.jpeg" />
+          </a>
+        </ion-slide>
+        <ion-slide class="sliderHijo" [routerLink]="['/places/9']">
+          <div class="banner">
+            <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
+          </div>
+        </ion-slide>
+        <ion-slide class="sliderHijo" [routerLink]="['/']">
+          <div class="banner">
+            <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
+          </div>
+        </ion-slide>
+        <ion-slide class="sliderHijo" [routerLink]="['/']">
+          <div class="banner">
+            <img class="imgSlider" src="/assets/img/tour.jpeg" />
+          </div>
+        </ion-slide>
+      </ion-slides>
     </div>
+    <div class="menu">
+      <div class="contenedor-iconos">
+        <div class="icono">
+          <a class="iconMenu" routerLink="/circuits">
+            <ion-img src="/assets/icon/location.png"></ion-img>
+          </a>
+        </div>
+        <div class="icono">
+          <a class="iconMenu" routerLink="/information">
+            <ion-img src="/assets/icon/info.png"></ion-img>
+          </a>
+        </div>
+        <div class="icono">
+          <a class="iconMenu" routerLink="/events">
+            <ion-img src="/assets/icon/eventos.png"></ion-img>
+          </a>
+        </div>
+        <div class="icono">
+          <a class="iconMenu" routerLink="/more-options">
+            <ion-img src="/assets/icon/masOpciones.png"></ion-img>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="cards">
+      <ion-card
+        *ngFor="let item of obsItems$ | async"
+        id="{{ item.id }}"
+        [routerLink]="['/places', item.$key]"
+      >
+        <ion-card-header
+          *ngIf="item.tipo == 'Rural'"
+          color="options"
+          id="place-title"
+        >
+          {{ item.nombre }}<span class="categoria"
+            >&nbsp;&nbsp;({{item.tipo}})</span
+          >
+          <i style="float: right" class="fas fa-tractor"></i>
+        </ion-card-header>
+        <ion-card-header
+          *ngIf="item.tipo == 'Urbano'"
+          color="information"
+          id="place-title"
+        >
+          {{ item.nombre }}<span class="categoria"
+            >&nbsp;&nbsp;({{item.tipo}})</span
+          >
+          <i style="float: right" class="fas fa-city"></i>
+        </ion-card-header>
+        <ion-card-content>
+          <img
+            class="imgCard"
+            src="{{ item.imagenHome }}"
+            alt="{{ item.nombre }}"
+          />
+          <div class="duracion">
+            <b class="distancia">{{item.distancia | formatDistancia }}</b>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>

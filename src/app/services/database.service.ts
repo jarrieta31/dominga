@@ -126,10 +126,6 @@ export class DatabaseService {
     this.departamentos.next(this.allDepartament);
   }
 
- 
-
-
-
   listarDatos() {
     this.appsRef = this.db.list("tipo_circuito");
     return this.appsRef;

@@ -66,13 +66,20 @@
    border-radius: 10px;
 }
 
-.filterModal {
+.filterModal .modal-wrapper{
    ion-backdrop {
      --backdrop-opacity: 0.5;
    }
  }
 
- .modal-inclusive {
+ .modal-inclusive .modal-wrapper{
     height: 300px;
     margin: auto 4%;
+ }
+
+ .modal-selling-point .modal-wrapper{
+    height: 250px;
+    margin: auto 4%;
+    border-radius: 10px;
+    padding: 0;
  }
