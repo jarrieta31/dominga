@@ -18,21 +18,31 @@ import { isEmpty, map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
 import { loadavg, type } from "os";
-import { log } from "console";
-import { async } from "@angular/core/testing";
 
-export interface Visita {
-  id?             : string;
+export interface VisitaEvento {
+  id?              : string;
   total_visitas    : number;
   id_evento        : string;
-  dia_visita : DiaVisita[];
+  visita_xdia : DiaVisita[];
+}
+
+export interface VisitaPlace{
+  id?              : string;
+  total_visitas    : number;
+  id_place         : string;
+  visita_xmes : MesVisita[];
 }
 
 export interface DiaVisita {
-    dia         : Date;
-    cant_visita : number;
+    dia           : Date;
+    cant_vta_xdia : number;
 }
 
+export interface MesVisita {
+  MesVisita     : Date;
+  cant_vta_xmes : number;
+  visita_xdia   : DiaVisita[];
+}
 
 @Injectable({
   providedIn: "root",
@@ -44,7 +54,7 @@ export class DatabaseService {
 
   today: Date = new Date();
 
-  visita : Visita;
+  visita : VisitaEvento;
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
@@ -166,6 +176,8 @@ export class DatabaseService {
     return this.appsRef;
   }
 
+// >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
+
 /**
  * funcion publica. recibe los datos del controlador.
  * Guarda le parametro recibido en un array global "visitas : string[]".
@@ -189,13 +201,7 @@ export class DatabaseService {
         this.visitas.push(id);
         this.getVisita(id);
       }
-
-      
-      
-      //   this.visitas.push(id);
-      // console.log(this.visitas);
     }
-    
   }
 
 /**
@@ -205,16 +211,16 @@ export class DatabaseService {
  * @param visita : interfaz Visita.
  * @param evento_id : string
  */
-  private sumarVisitaEvento( visita : Visita, evento_id? : string ){
+  private sumarVisitaEvento( visita : VisitaEvento, evento_id? : string ){
     
     if( typeof visita != 'undefined' ){
-      let cantDiasVisita = visita.dia_visita.length
-      if(this.hoyTieneVisita(visita.dia_visita[cantDiasVisita-1])){
-        this.sumarVisita(visita.dia_visita[cantDiasVisita-1])
+      let cantDiasVisita = visita.visita_xdia.length
+      if(this.hoyTieneVisita(visita.visita_xdia[cantDiasVisita-1])){
+        this.sumarVisita(visita.visita_xdia[cantDiasVisita-1])
         this.sumarTotalVisita(visita);
         this.actulizarVisita(visita);
       }else{
-        this.agregarDiaVisita(visita.dia_visita);
+        this.agregarDiaVisita(visita.visita_xdia);
         this.sumarTotalVisita(visita);
         this.actulizarVisita(visita);
       }
@@ -223,22 +229,21 @@ export class DatabaseService {
       console.log(`entrando a crear visita para el evento`);
       
     }
-    
   }
 /**
  * Funcion privada. Crea una objeto de Visita, y luego lo inserta en la BD.
  * @param evento_id : string
  */
   private crearVisita( evento_id : string ){
-    let visita: Visita = {
+    let visita: VisitaEvento = {
       "id_evento"     : evento_id,
       "total_visitas" :  1 ,
-      "dia_visita"  : [{ 
+      "visita_xdia"  : [{ 
         "dia"        : this.getToday(),
-        "cant_visita" : 1
+        "cant_vta_xdia" : 1
       }]
     }
-    this.afs.collection('visitas').add(visita);
+    this.afs.collection('visitas_evento').add(visita);
   }
 
 /**
@@ -250,7 +255,7 @@ export class DatabaseService {
  * Es de tipo string.
  */
   getVisita( evento_id : string )  {
-    this.afs.collection('visitas')
+    this.afs.collection('visitas_evento')
         .ref.where("id_evento", "==",evento_id )
         .get()
         .then( querySnapshot => {
@@ -273,15 +278,15 @@ export class DatabaseService {
  * Funcion privada. Se encarga de actulizar un objeto de la BD de tipo visita
  * @param visita : interfaz Visita
  */
-  private actulizarVisita( visita : Visita ){
+  private actulizarVisita( visita : VisitaEvento ){
     
     let total_visitas : number = visita.total_visitas;
-    let dia_visita    : DiaVisita[] = visita.dia_visita;
+    let visita_xdia    : DiaVisita[] = visita.visita_xdia;
 
-  this.afs.doc( `visitas/${visita.id}` )
+  this.afs.doc( `visitas_evento/${visita.id}` )
     .update({
         total_visitas,
-        dia_visita
+        visita_xdia
     })
     .then( )
     .catch((err) => {
@@ -318,14 +323,14 @@ export class DatabaseService {
 /**
  * Funcion que devuelve un nuevo objeto de tipo interfaz DiaVisita.
  * @returns Devuelve un Objeto de tipo DiaVisita.
- * La cant_visita = 1, porque se asume que al crear este elemento
+ * La cant_vta_xdia = 1, porque se asume que al crear este elemento
  * es debido a la primera visita del dia.
  * dia = Al dia actual de formato anio/mes/dia. Ver getToday()
  */
   private crearDiaVisita( ): DiaVisita {
     
     const visita : DiaVisita = {
-      cant_visita : 1,
+      cant_vta_xdia : 1,
       dia : this.getToday()
     }
     return visita;
@@ -341,13 +346,13 @@ export class DatabaseService {
     return visitas;
   }
 /**
- * funcion privada. Se encarga de +1 a la variable cant_visita
+ * funcion privada. Se encarga de +1 a la variable cant_vta_xdia
  * @param ultimaVisita : interfaz DiaVisita
  * @returns interfaz DiaVisita
  */
   private sumarVisita( ultimaVisita : DiaVisita ) : DiaVisita {
     
-    ultimaVisita.cant_visita++;
+    ultimaVisita.cant_vta_xdia++;
     return ultimaVisita;
 
   }
@@ -356,7 +361,7 @@ export class DatabaseService {
  * @param visitas : interfaz Visita
  * @returns interfaz Visita
  */
-  private sumarTotalVisita( visitas : Visita ) : Visita {
+  private sumarTotalVisita( visitas : VisitaEvento ) : VisitaEvento {
     visitas.total_visitas++;
     return visitas;
   }
