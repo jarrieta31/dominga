@@ -55,8 +55,6 @@ export class DatabaseService {
 
   today: Date = new Date();
 
-  visita : VisitaEvento;
-  visita_lugar : VisitaPlace;
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
     this.eventos = new Subject();
@@ -67,7 +65,12 @@ export class DatabaseService {
 
   eventos: Subject<Eventos[]>;
   allEvents: Eventos[] = [];
-  visitas: string[]=[];
+
+// Variables para contador de visitas a Eventos y Lugares
+  visita_evento   : VisitaEvento;
+  visita_lugar    : VisitaPlace;
+  visitasAEventos : string[]=[];
+  visitasALugares : string[]=[];
   /**
    * Obtener eventos desde fecha de hoy
    */
@@ -178,7 +181,6 @@ export class DatabaseService {
   }
 
 // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
-
 /**
  * funcion publica. recibe los datos del controlador.
  * Guarda le parametro recibido en un array global "visitas : string[]".
@@ -187,19 +189,19 @@ export class DatabaseService {
  * @param id : string. 
  * Recibe el id de un Evento.
  */
-  contadorVisitas( id: string){
+  contadorVisitasEvento( id: string){
     let control : boolean = false;
-    if(this.visitas.length == 0) {
-      this.visitas.push(id);
+    if(this.visitasAEventos.length == 0) {
+      this.visitasAEventos.push(id);
       this.getVisita(id);
     }else{
-      this.visitas.forEach( v => { 
+      this.visitasAEventos.forEach( v => { 
         if(v === id){
           control = !control;
         }
       })
       if(!control) {
-        this.visitas.push(id);
+        this.visitasAEventos.push(id);
         this.getVisita(id);
       }
     }
@@ -219,16 +221,6 @@ export class DatabaseService {
       this.sumarVisitaXDia(visita.visita_xdia);
       this.incrementarTotalVisitaXEvento(visita);
       this.actulizarVisita(visita)
-          
-      // if(this.hoyTieneVisita(visita.visita_xdia[cantDiasVisita-1])){
-      //   this.incrementarVisitaXDia(visita.visita_xdia[cantDiasVisita-1])
-      //   this.incrementarTotalVisitaXEvento(visita);
-      //   this.actulizarVisita(visita);
-      // }else{
-      //   this.agregarDiaVisita(visita.visita_xdia);
-      //   this.incrementarTotalVisitaXEvento(visita);
-      //   this.actulizarVisita(visita);
-      // }
     }else{
       this.crearVisita( evento_id );
       console.log(`entrando a crear visita para el evento`);
@@ -269,8 +261,8 @@ export class DatabaseService {
           const data : any = item.data();
               arrVisita.push({ id: item.id, ...data })
           })
-          this.visita = arrVisita[0]; 
-          this.sumarVisitaEvento(this.visita, evento_id);
+          this.visita_evento = arrVisita[0]; 
+          this.sumarVisitaEvento(this.visita_evento, evento_id);
         })
         .catch((err) => {
           console.error("Error en al traer la visita" + err);
@@ -346,7 +338,10 @@ export class DatabaseService {
     }
     return visita;
   }  
-
+/**
+ * crea y retorna una copia de MesVisita.
+ * @returns interfaz MesVisita
+ */
   private crearMesVisita() : MesVisita {
     const mesvisita : MesVisita = {
       "cant_vta_xmes" : 1,
@@ -385,10 +380,34 @@ export class DatabaseService {
   }
 
 // >>>>>>>>>>>>>  :: CONTADOR VISITAS A LUGARES  :: <<<<<<<<<<<<<<<<<<<
+/**
+ * Funcion publica que es accedida por el controlador.
+ * Se encarga de controlar que no se sume mas de una visita del mismo usuario por sesion.
+ * @param place_id : string ID del lugar que se visita. Recibe ese valor desde el card
+ * que muestra la informacion del lugar. Este valor viene por la url.
+ */
   contadorVistasPlace( place_id : string ){
-    this.getVisitasLugar( place_id );
+    
+    let control : boolean = false;
+    if(this.visitasALugares.length == 0) {
+      this.visitasALugares.push(place_id);
+      this.getVisitasLugar( place_id );
+    }else{
+      this.visitasALugares.forEach( v => { 
+        if(v === place_id){
+          control = !control;
+        }
+      })
+      if(!control) {
+        this.visitasALugares.push(place_id);
+        this.getVisitasLugar( place_id );
+      }
+    }
   }
-  
+/**
+ * Funcion privada, Inserta en la BD una nueva instancia de Visita a Lugar.
+ * @param place_id : string. 
+ */
   private createVisitaLugar( place_id : string ){
     let place : VisitaPlace = {
       "id_place"      : place_id,
@@ -397,7 +416,12 @@ export class DatabaseService {
     }
     this.afs.collection('visitas_lugares').add(place);
   }
-
+/**
+ * funcion Privada, se encarga de traer el registro de la tabla 'visitas_lugares' que 
+ * contega el valor que contenga la variable 'place_id'. 
+ * se asume que siempre va a existir un registro.
+ * @param place_id : string
+ */
   private getVisitasLugar( place_id : string) {
     this.afs.collection('visitas_lugares')
         .ref.where("id_place", "==",place_id )
@@ -417,9 +441,11 @@ export class DatabaseService {
         .finally(() => console.log("Finally"));
         
   }
-
+/**
+ * Funcion privada. Se encarga de actualizar los registros de Visitas a Lugares.
+ * @param visitaLugar : tipo Interfaz VisitaPlace
+ */
   private updateVisitaLugar( visitaLugar : VisitaPlace ){
-    console.log(visitaLugar + `::UPDATE visita Lugar `);
     let total_visitas : number      = visitaLugar.total_visitas;
     let visita_xmes   : MesVisita[] = visitaLugar.visita_xmes;
     this.afs.doc(`visitas_lugares/${visitaLugar.id}`)  
@@ -427,12 +453,19 @@ export class DatabaseService {
         total_visitas,
         visita_xmes
     })
-    .then( )
+    .then((a) => {
+      console.info("Success al ::ACTUALIZAR:: el registro " + a)
+    } )
     .catch((err) => {
-      console.error("Error al ::ACTUALIZAR:: la visita" + err)
+      console.error("Error al ::ACTUALIZAR:: la visita " + err)
     })  
   }
-
+/**
+ * Se encarga de actulizar el registro de la visita al lugar si este existe, o de 
+ * crear uno nuevo.
+ * @param visitaLugar 
+ * @param place_id 
+ */
   private sumarVisitaLugar( visitaLugar : VisitaPlace, place_id? : string ){
     if( typeof visitaLugar != 'undefined' ){
       this.sumarVisitaXMes(visitaLugar.visita_xmes);
@@ -454,7 +487,12 @@ export class DatabaseService {
     }
     return visita_xmes;
   }
-
+/**
+ * Se encarga de actulizar la visita realizada en dia para ese luegar, o de 
+ * crear una visita para ese dia.
+ * @param visita_xdia 
+ * @returns 
+ */
   private sumarVisitaXDia( visita_xdia : DiaVisita[] ) : DiaVisita[] {
     let cant_dia = visita_xdia.length
     if(this.hoyTieneVisita(visita_xdia[cant_dia-1])){
@@ -464,7 +502,11 @@ export class DatabaseService {
     }
     return visita_xdia;
   }
-
+/**
+ * Revisa si el Place tiene visitas este mes.
+ * @param mesVisita 
+ * @returns 
+ */
   private esteMesTieneVisita( mesVisita : MesVisita ) : boolean {
     let mesActual = new Date().toLocaleString('default', { month: 'long' })
     if( mesActual === mesVisita.mes ) return true;
@@ -475,12 +517,22 @@ export class DatabaseService {
     visita_xmes.push(this.crearMesVisita());
     return visita_xmes;
   }
-
+/**
+ * Incrementa el contador (+1) de visitas por mes, actualizando el total de visitas
+ * realizadas en ese mes.
+ * @param mesVisita 
+ * @returns 
+ */
   private incrementarTotalVisitasXMes( mesVisita : MesVisita ) : MesVisita {
     mesVisita.cant_vta_xmes++;
     return mesVisita;
   }
-
+/**
+ * Incrementa el contador (+1) de visitas, actualizando el total de visitas
+ * realizadas al Lugar.
+ * @param visitaLugar 
+ * @returns 
+ */
   private incrementarTotalVisitasLugar( visitaLugar : VisitaPlace ) : VisitaPlace {
     visitaLugar.total_visitas++;
     return visitaLugar;
