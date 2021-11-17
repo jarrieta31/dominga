@@ -444,8 +444,6 @@ export class PlacesPage implements OnInit, OnDestroy {
    * Abre modal de accesibilidad
    */
   async openModal() {
-   
-    
     const modal = await this.modalCtrl.create({
       component: AccessibilityPage,
       cssClass: "modal-accessibility",
@@ -459,4 +457,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
+
+
 }

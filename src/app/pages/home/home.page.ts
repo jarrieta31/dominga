@@ -189,4 +189,11 @@ export class HomePage implements OnInit, OnDestroy {
   pageDominga() {
     this.browser.create("https://casadominga.com.uy", "_system");
   }
+
+    sumaVisitaLugar(lugar_id : string ){
+      this.database.contadorVistasPlace( lugar_id )
+  }
 }
+
+
+ 

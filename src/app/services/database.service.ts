@@ -18,6 +18,7 @@ import { isEmpty, map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
 import { loadavg, type } from "os";
+import { stringify } from "querystring";
 
 export interface VisitaEvento {
   id?              : string;
@@ -39,7 +40,7 @@ export interface DiaVisita {
 }
 
 export interface MesVisita {
-  MesVisita     : Date;
+  mes           : string;
   cant_vta_xmes : number;
   visita_xdia   : DiaVisita[];
 }
@@ -55,7 +56,7 @@ export class DatabaseService {
   today: Date = new Date();
 
   visita : VisitaEvento;
-
+  visita_lugar : VisitaPlace;
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
     this.eventos = new Subject();
@@ -215,15 +216,19 @@ export class DatabaseService {
     
     if( typeof visita != 'undefined' ){
       let cantDiasVisita = visita.visita_xdia.length
-      if(this.hoyTieneVisita(visita.visita_xdia[cantDiasVisita-1])){
-        this.sumarVisita(visita.visita_xdia[cantDiasVisita-1])
-        this.sumarTotalVisita(visita);
-        this.actulizarVisita(visita);
-      }else{
-        this.agregarDiaVisita(visita.visita_xdia);
-        this.sumarTotalVisita(visita);
-        this.actulizarVisita(visita);
-      }
+      this.sumarVisitaXDia(visita.visita_xdia);
+      this.incrementarTotalVisitaXEvento(visita);
+      this.actulizarVisita(visita)
+          
+      // if(this.hoyTieneVisita(visita.visita_xdia[cantDiasVisita-1])){
+      //   this.incrementarVisitaXDia(visita.visita_xdia[cantDiasVisita-1])
+      //   this.incrementarTotalVisitaXEvento(visita);
+      //   this.actulizarVisita(visita);
+      // }else{
+      //   this.agregarDiaVisita(visita.visita_xdia);
+      //   this.incrementarTotalVisitaXEvento(visita);
+      //   this.actulizarVisita(visita);
+      // }
     }else{
       this.crearVisita( evento_id );
       console.log(`entrando a crear visita para el evento`);
@@ -236,10 +241,10 @@ export class DatabaseService {
  */
   private crearVisita( evento_id : string ){
     let visita: VisitaEvento = {
-      "id_evento"     : evento_id,
-      "total_visitas" :  1 ,
-      "visita_xdia"  : [{ 
-        "dia"        : this.getToday(),
+      "id_evento"       : evento_id,
+      "total_visitas"   :  1 ,
+      "visita_xdia"     : [{ 
+        "dia"           : this.getToday(),
         "cant_vta_xdia" : 1
       }]
     }
@@ -305,6 +310,13 @@ export class DatabaseService {
     let aa         = aux.getFullYear();
     return new Date(aa, mm, dd);
   }
+
+  private getMonth() : string {
+    let aux : Date   = new Date();
+    let mes : string = aux.toLocaleString('default', { month: 'long' });
+    return mes
+  }
+
 /**
  * funcion privada. Se encarga de comparar si la fecha de la ultima visita realizada 
  * es igual a la fecha actual.
@@ -312,7 +324,6 @@ export class DatabaseService {
  * @returns boolean
  */
   private hoyTieneVisita( ultimaVisita : DiaVisita ) : boolean {
-    
     let diaVisita  = new Date(ultimaVisita.dia['seconds'] * 1000);
     let hoy        = this.getToday();
 
@@ -335,6 +346,15 @@ export class DatabaseService {
     }
     return visita;
   }  
+
+  private crearMesVisita() : MesVisita {
+    const mesvisita : MesVisita = {
+      "cant_vta_xmes" : 1,
+      "mes"           : this.getMonth(),
+      "visita_xdia"   : [ this.crearDiaVisita() ],
+    }
+    return mesvisita;
+  }
 /**
  * funcion privada. Agrega al arreglo un nuevo dia de visita para el evento asociado, 
  * retornando un array de DiaVisita.
@@ -350,20 +370,120 @@ export class DatabaseService {
  * @param ultimaVisita : interfaz DiaVisita
  * @returns interfaz DiaVisita
  */
-  private sumarVisita( ultimaVisita : DiaVisita ) : DiaVisita {
-    
+  private incrementarVisitaXDia( ultimaVisita : DiaVisita ) : DiaVisita {
     ultimaVisita.cant_vta_xdia++;
     return ultimaVisita;
-
   }
 /**
  * funcion privada. Se encarga de +1 a la variable total_visitas
  * @param visitas : interfaz Visita
  * @returns interfaz Visita
  */
-  private sumarTotalVisita( visitas : VisitaEvento ) : VisitaEvento {
+  private incrementarTotalVisitaXEvento( visitas : VisitaEvento ) : VisitaEvento {
     visitas.total_visitas++;
     return visitas;
+  }
+
+// >>>>>>>>>>>>>  :: CONTADOR VISITAS A LUGARES  :: <<<<<<<<<<<<<<<<<<<
+  contadorVistasPlace( place_id : string ){
+    this.getVisitasLugar( place_id );
+  }
+  
+  private createVisitaLugar( place_id : string ){
+    let place : VisitaPlace = {
+      "id_place"      : place_id,
+      "total_visitas" : 1,
+      "visita_xmes"   : [ this.crearMesVisita() ],
+    }
+    this.afs.collection('visitas_lugares').add(place);
+  }
+
+  private getVisitasLugar( place_id : string) {
+    this.afs.collection('visitas_lugares')
+        .ref.where("id_place", "==",place_id )
+        .get()
+        .then( querySnapshot => {
+          const arrVisita: any[] = [];
+          querySnapshot.forEach((item) => {
+          const data : any = item.data();
+              arrVisita.push({ id: item.id, ...data })
+          })    
+          this.visita_lugar = arrVisita[0]; 
+          this.sumarVisitaLugar(this.visita_lugar, place_id);
+        })
+        .catch((err) => {
+          console.error("Error en al traer la informacion de Place ::getVisitasLugar" + err);
+        })
+        .finally(() => console.log("Finally"));
+        
+  }
+
+  private updateVisitaLugar( visitaLugar : VisitaPlace ){
+    console.log(visitaLugar + `::UPDATE visita Lugar `);
+    let total_visitas : number      = visitaLugar.total_visitas;
+    let visita_xmes   : MesVisita[] = visitaLugar.visita_xmes;
+    this.afs.doc(`visitas_lugares/${visitaLugar.id}`)  
+      .update({
+        total_visitas,
+        visita_xmes
+    })
+    .then( )
+    .catch((err) => {
+      console.error("Error al ::ACTUALIZAR:: la visita" + err)
+    })  
+  }
+
+  private sumarVisitaLugar( visitaLugar : VisitaPlace, place_id? : string ){
+    if( typeof visitaLugar != 'undefined' ){
+      this.sumarVisitaXMes(visitaLugar.visita_xmes);
+      this.incrementarTotalVisitasLugar( visitaLugar );
+      this.updateVisitaLugar(visitaLugar)
+    }else{
+      this.createVisitaLugar( place_id );
+    }
+  }
+  
+
+  private sumarVisitaXMes( visita_xmes : MesVisita[] ) : MesVisita[] {
+    let cant_meses = visita_xmes.length
+    if( this.esteMesTieneVisita( visita_xmes[cant_meses-1] )){
+      this.sumarVisitaXDia( visita_xmes[cant_meses-1].visita_xdia )
+      this.incrementarTotalVisitasXMes(visita_xmes[cant_meses-1]);
+    }else{
+      this.agregarMesVisita( visita_xmes );
+    }
+    return visita_xmes;
+  }
+
+  private sumarVisitaXDia( visita_xdia : DiaVisita[] ) : DiaVisita[] {
+    let cant_dia = visita_xdia.length
+    if(this.hoyTieneVisita(visita_xdia[cant_dia-1])){
+      this.incrementarVisitaXDia(visita_xdia[cant_dia-1])
+    }else{
+      this.agregarDiaVisita( visita_xdia );
+    }
+    return visita_xdia;
+  }
+
+  private esteMesTieneVisita( mesVisita : MesVisita ) : boolean {
+    let mesActual = new Date().toLocaleString('default', { month: 'long' })
+    if( mesActual === mesVisita.mes ) return true;
+    else return false;
+  }
+
+  private agregarMesVisita( visita_xmes : MesVisita[] ) : MesVisita[] {
+    visita_xmes.push(this.crearMesVisita());
+    return visita_xmes;
+  }
+
+  private incrementarTotalVisitasXMes( mesVisita : MesVisita ) : MesVisita {
+    mesVisita.cant_vta_xmes++;
+    return mesVisita;
+  }
+
+  private incrementarTotalVisitasLugar( visitaLugar : VisitaPlace ) : VisitaPlace {
+    visitaLugar.total_visitas++;
+    return visitaLugar;
   }
 }
 
