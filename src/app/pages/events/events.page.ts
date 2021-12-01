@@ -68,6 +68,8 @@ export class EventsPage implements OnInit, OnDestroy{
       desc = descripcion;
     }
 
+    this.contadorVisitas(id);
+
     const modal = await this.modalCtrl.create({
       component: EventDetailPage,
       cssClass: "modal-event",
@@ -102,5 +104,11 @@ export class EventsPage implements OnInit, OnDestroy{
     const { data } = await modalFilter.onDidDismiss();
 
     this.textoBuscar = data;
+  }
+
+  
+  contadorVisitas(id: string ) {
+    
+    this.dbService.contadorVisitasEvento(id);
   }
 }

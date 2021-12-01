@@ -80,6 +80,7 @@
         *ngFor="let item of obsItems$ | async"
         id="{{ item.id }}"
         [routerLink]="['/places', item.$key]"
+        (click)="sumaVisitaLugar(item.$key)"
       >
         <ion-card-header
           *ngIf="item.tipo == 'Rural'"

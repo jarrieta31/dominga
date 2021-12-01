@@ -457,4 +457,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
+
+
 }
