@@ -125,10 +125,6 @@ ion-chip {
   width: 100%;
 }
 
-* {
-  z-index: 0;
-}
-
 .filter {
   margin: 0 0 0 4%;
   padding-top: 5px;
@@ -138,4 +134,8 @@ ion-chip {
 
 .list-md {
   padding-top: 0 !important;
+}
+
+* {
+  z-index: 0;
 }

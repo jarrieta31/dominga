@@ -19,4 +19,7 @@ export interface Place {
     instagram?: string;
     whatsapp?: string;
     phone?: string;
+    ubicacion: {
+        lat, lng
+    }
 }

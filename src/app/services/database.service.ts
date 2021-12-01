@@ -17,6 +17,7 @@ import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
+import { Place } from "../shared/place";
 
 @Injectable({
   providedIn: "root",
@@ -28,16 +29,64 @@ export class DatabaseService {
 
   today: Date = new Date();
 
+
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(private db: AngularFireDatabase, private afs: AngularFirestore) {
     this.eventos = new Subject();
     this.departamentos = new Subject();
+    this.lugares = new Subject();
     this.getEventos();
     this.getDepartamentosActivos();
+    this.getLugares();  
   }
+
 
   eventos: Subject<Eventos[]>;
   allEvents: Eventos[] = [];
+
+  lugares: Subject<Place[]>;
+  allLugares: any[] = [];
+
+  deptos_limites: any[] = ["San José", "Colonia", "Canelones"];
+
+  save_depto: String[] = ["San José", "Colonia"];
+
+  getLugares() {
+    this.deptos_limites.forEach((depto) => {
+      let searchDepto: boolean = false;
+      this.save_depto.forEach((search) => {
+        if (search == depto) {
+          searchDepto = true;
+        }
+      });
+
+      if (!searchDepto) {
+        this.afs
+          .collection("lugares")
+          .ref.where("departamento", "==", depto)
+          .get()
+          .then((querySnapshot) => {
+            const arrPlaces: any[] = [];
+            querySnapshot.forEach((item) => {
+              const data: any = item.data();
+              arrPlaces.push({ id: item.id, ...data });
+            });
+            this.allLugares = arrPlaces;
+            this.lugares.next(this.allLugares);
+            this.save_depto.push(depto);
+            searchDepto = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => "Fin");
+      }
+    });
+  }
+
+  getObservablePlace(): Observable<Place[]> {
+    return this.lugares.asObservable();
+  }
   /**
    * Obtener eventos desde fecha de hoy
    */
@@ -72,7 +121,6 @@ export class DatabaseService {
   getEventsLocal() {
     this.eventos.next(this.allEvents);
   }
-
 
   departamentos: Subject<Departament[]>;
   allDepartament: Departament[] = [];

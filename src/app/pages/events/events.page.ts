@@ -94,6 +94,7 @@ export class EventsPage implements OnInit, OnDestroy{
       backdropDismiss: false,
       showBackdrop: true,
       keyboardClose: true,
+      mode: "ios"
     });
 
     await modalFilter.present();
