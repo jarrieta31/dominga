@@ -29,6 +29,9 @@ export class PlacesPage implements OnInit, OnDestroy {
   sug: Place[] = [];
   sug_2: Place[] = [];
   sug_3: Place[] = [];
+  
+ 
+
 
   private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>(
     "vacio"
@@ -457,6 +460,25 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
+ 
 
+  
+
+  escucharDescripcion( text : string ){
+    let txt = text.split('.')
+    let aux : string = txt[0];
+
+    let synt = window.speechSynthesis;
+    let spUttr = new SpeechSynthesisUtterance(aux);
+    let voices =  synt.getVoices()
+    
+    if(voices){
+      voices.forEach((v) => {
+        if(v.lang == 'es-ES') spUttr.voice = v;
+      })
+    }
+
+    synt.speak(spUttr);
+  }
 
 }

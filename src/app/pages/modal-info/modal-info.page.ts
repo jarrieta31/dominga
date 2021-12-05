@@ -125,4 +125,43 @@ export class ModalInfoPage implements OnInit {
         this.browser.create(this.facebook, "_system")
     }
 
+    limpiarTexto( text : string) : string{
+        let _txt : string;
+        let aux1 = text.replace(/<\/p>/g, '');
+        _txt = aux1.replace(/<p>/g, '')
+        return _txt;
+    }
+
+    getVoces(){
+
+        let spSyntVoices = window.speechSynthesis.getVoices();
+        
+        let esVoice : SpeechSynthesisVoice;
+
+        if(spSyntVoices){
+            spSyntVoices.forEach((v) => {
+            if(v.lang == 'es-ES' || v.lang == 'es-419') esVoice = v;
+            })
+        }
+        return esVoice;
+    }
+
+    escucharDescripcion( text : string ){
+        
+        let txt = this.limpiarTexto(text)
+        let spSynt = window.speechSynthesis;
+        let spUttr = new SpeechSynthesisUtterance(txt);
+        
+        let esVoices  = spSynt.getVoices();
+        
+        if(esVoices){
+            esVoices.forEach((v) => {
+            if(v.lang == 'es-ES' || v.lang == 'es-419') spUttr.voice = v;
+            })
+        }
+
+        console.log(spUttr);
+        
+        spSynt.speak(spUttr);
+    }
 }

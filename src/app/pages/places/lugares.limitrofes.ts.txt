@@ -1,0 +1,158 @@
+export interface Deptos {
+    Artigas : {
+        limites : any [] = [
+            "Rivera"
+            "Salto",
+        ];
+    }, 
+    Salto : {
+        limites : any [] = [
+            "Artigas",
+            "Rivera",
+            "Tacuarembo",
+            "Paysandu",
+        ];
+    }, 
+    Paysandu : {
+        limites : any [] = [
+            "Salto",
+            "Tacuarembo",
+            "RioNegro",
+        ];
+    }, 
+    RioNegro : {
+        limites : any [] = [
+            "Paysandu",
+            "Tacuarembo",
+            "Durazno",
+            "Flores",
+            "Soriano"
+        ];
+    },
+    Soriano : {
+        limites : any [] = [
+            "RioNegro",
+            "Flores",
+            "SanJose",
+            "Colonia"
+        ];
+    },
+    Colonia : {
+        limites : any [] = [
+            "Soriano",
+            "Flores",
+            "SanJose"
+        ];
+    },
+    SanJose : {
+        limites : any [] = [
+            "Colonia",
+            "Flores",
+            "Florida",
+            "Canelones",
+            "Montevideo"
+        ];
+    },
+    Montevideo : {
+        limites : any [] = [
+            "SanJose",
+            "Canelones"
+        ];
+    },
+    Canelones : {
+        limites : any [] = [
+            "Montevideo",
+            "SanJose",
+            "Florida",
+            "Lavalleja",
+            "Maldonado"
+        ];
+    },
+    Rocha : {
+        limites : any [] = [
+            "Maldonado",
+            "Lavalleja",
+            "TreintayTres",
+        ];
+    },
+    Maldonado : {
+        limites : any [] = [
+            "Canelones",
+            "Lavalleja",
+            "Rocha"
+        ];
+    },
+    TreintayTres : {
+        limites : any [] = [
+            "Rocha",
+            "Lavalleja",
+            "Florida",
+            "Durazno",
+            "CerroLargo"
+        ];
+    },
+    CerroLargo : {
+        limites : any [] = [
+            "TreintayTres",
+            "Durazno",
+            "Tacuarembo",
+            "Rivera"
+        ];
+    },
+    Rivera : {
+        limites : any [] = [
+            "CerroLargo",
+            "Tacuarembo",
+            "Artigas",
+            "Salto"
+        ];
+    },
+    Tacuarembo : {
+        limites : any [] = [
+            "Salto",
+            "Paysandu",
+            "RioNegro",
+            "Durazno",
+            "CerroLargo",
+            "Rivera"
+        ];
+    },
+    Durazno : {
+        limites : any [] = [
+            "RioNegro",
+            "Flores",
+            "Florida",
+            "TreintayTres",
+            "CerroLargo",
+            "Tacuarembo"
+        ];
+    },
+    Flores : {
+        limites : any [] = [
+            "Soriano",
+            "Colonia",
+            "SanJose",
+            "Florida",
+            "Durazno"
+        ];
+    },
+    Florida : {
+        limites : any [] = [
+            "Durazno",
+            "Flores",
+            "SanJose",
+            "Canelones",
+            "Lavalleja",
+            "TreintayTres"
+        ];
+    },
+    Lavalleja : {
+        limites : any [] = [
+            "Florida",
+            "Canelones",
+            "Maldonado",
+            "Rocha",
+            "TreintayTres"
+        ];
+    }
+}
