@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { DatabaseService } from '../../services/database.service';
 
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 
 import { CallNumber } from '@ionic-native/call-number/ngx';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-
+import { filter  } from 'rxjs/operators';
+import { Subscription } from 'rxjs'
 
 
 @Component({
@@ -15,7 +16,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     templateUrl: './modal-info.page.html',
     styleUrls: ['./modal-info.page.scss'],
 })
-export class ModalInfoPage implements OnInit {
+export class ModalInfoPage implements OnInit, OnDestroy {
 
     nombre: string;
     descripcion: string;
@@ -26,6 +27,9 @@ export class ModalInfoPage implements OnInit {
     whatsapp: string;
     phone: string;
     id: string;
+    currentUrl: string;
+    urlSuscription : Subscription;
+    spSynt = window.speechSynthesis;
 
     constructor(
         private database: DatabaseService,
@@ -37,6 +41,14 @@ export class ModalInfoPage implements OnInit {
 
     ngOnInit() {
         this.getInfoLugar();
+        this.urlSuscribe();
+    }
+
+    ngOnDestroy(): void {
+        //Called once, before the instance is destroyed.
+        //Add 'implements OnDestroy' to the class.
+        this.urlSuscription.unsubscribe();
+    
     }
 
     async getInfoLugar() {
@@ -127,32 +139,56 @@ export class ModalInfoPage implements OnInit {
 
     limpiarTexto( text : string) : string{
         let _txt : string;
-        let aux1 = text.replace(/<\/p>/g, '');
-        _txt = aux1.replace(/<p>/g, '')
+        if(text.search('<p>') == -1){
+            let aux1 = text.replace(/<\/b>/g, '');
+            _txt = aux1.replace(/<b>/g, '')
+        }else{
+            let aux1 = text.replace(/<\/p>/g, '');
+            _txt = aux1.replace(/<p>/g, '')
+        }
+
         return _txt;
     }
 
     getVoces(){
 
-        let spSyntVoices = window.speechSynthesis.getVoices();
+        let spSyntVoices = window.speechSynthesis;
         
         let esVoice : SpeechSynthesisVoice;
+        spSyntVoices.addEventListener('voiceschanged', () => {
+            let voces = spSyntVoices.getVoices()
+            if( voces.length > 0 ){
+                voces.forEach((v) => {
+                    if(v.lang == 'es-ES' || v.lang == 'es-419') esVoice = v;
+                    })
+            }    
+        })
+        
+        spSyntVoices.getVoices();
 
-        if(spSyntVoices){
-            spSyntVoices.forEach((v) => {
-            if(v.lang == 'es-ES' || v.lang == 'es-419') esVoice = v;
-            })
-        }
         return esVoice;
     }
 
+    urlSuscribe(){
+        this.urlSuscription = this.router.events.subscribe((event : NavigationEnd) => {
+            this.currentUrl = event.url;
+            console.log(this.currentUrl);
+            if( this.spSynt.speaking && event.url.search('descripcion') == -1) 
+                this.spSynt.cancel();
+            
+            
+        })
+
+    }
+    
     escucharDescripcion( text : string ){
+        let esVoices  = this.spSynt.getVoices();
         
-        let txt = this.limpiarTexto(text)
-        let spSynt = window.speechSynthesis;
+        let txt = this.limpiarTexto(text);
+        console.log(txt);
+        
         let spUttr = new SpeechSynthesisUtterance(txt);
         
-        let esVoices  = spSynt.getVoices();
         
         if(esVoices){
             esVoices.forEach((v) => {
@@ -160,8 +196,18 @@ export class ModalInfoPage implements OnInit {
             })
         }
 
-        console.log(spUttr);
+        spUttr.pitch = 1;
+        spUttr.rate = 1;
+        spUttr.volume = 0.5;
+
+        if(!this.spSynt.speaking) this.spSynt.speak(spUttr);
+
+        console.log('soy escruchar descripcion    '+this.currentUrl);
         
-        spSynt.speak(spUttr);
+    console.log(
+        this.urlSuscription
+    );
+    
+
     }
 }
