@@ -139,14 +139,10 @@ export class ModalInfoPage implements OnInit, OnDestroy {
 
     limpiarTexto( text : string) : string{
         let _txt : string;
-        if(text.search('<p>') == -1){
-            let aux1 = text.replace(/<\/b>/g, '');
-            _txt = aux1.replace(/<b>/g, '')
-        }else{
-            let aux1 = text.replace(/<\/p>/g, '');
-            _txt = aux1.replace(/<p>/g, '')
-        }
 
+        _txt = text.replace(/<[^>]*>?/g, '');
+        console.log(_txt);
+        
         return _txt;
     }
 
