@@ -14,6 +14,7 @@ import { InfoSlider } from '../../shared/info-slider';
 export class WhereEatPage implements OnInit, OnDestroy {
 
 	eat: DondeComer[];
+	weat: DondeComer[];
   sliderDondeComer: InfoSlider[];
   textoBuscar = '';
 
@@ -48,6 +49,7 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
 
   constructor(private database: DatabaseService,
               private loadingCtrl: LoadingController) {
+                this.cargarDondeComer();  
     
   }
 
@@ -77,4 +79,8 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   buscar(event){
     this.textoBuscar = event.detail.value;
   }
+
+  cargarDondeComer(){
+    this.weat = this.database.donde_comer;
+}
 }

@@ -26,8 +26,6 @@ export class HomeMenuPage implements OnInit, OnDestroy {
           console.log(this.geoSvc.calculateDistance(maxmin));
           console.log(this.lugares);
       })} );
-    //this.dbService.getEventsLocal();
-
   }
 
   ngOnDestroy() {

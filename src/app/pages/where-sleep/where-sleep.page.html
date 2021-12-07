@@ -10,7 +10,7 @@
 <ion-content>
     <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
+        <ion-item *ngFor="let item of wsleep | filtroDondeDormir:textoBuscar">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar item-start>

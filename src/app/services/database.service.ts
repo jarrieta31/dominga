@@ -36,13 +36,13 @@ export interface VisitaPlace{
 }
 
 export interface DiaVisita {
-    dia           : Date;
+    dia           :   Date;
     cant_vta_xdia : number;
 }
 
-export interface MesVisita {
-  mes           : string;
-  cant_vta_xmes : number;
+export interface MesVisita   {
+  mes           :      string;
+  cant_vta_xmes :      number;
   visita_xdia   : DiaVisita[];
 }
 
@@ -64,19 +64,23 @@ export class DatabaseService {
     this.lugares = new Subject();
     this.getEventos();
     this.getDepartamentosActivos();
-    this.getLugares();  
+    this.getLugares(); 
+    this.getDondeDormir(); 
+    this.getDondeComer(); 
   }
 
 
-  eventos: Subject<Eventos[]>;
-  allEvents: Eventos[] = [];
+  eventos        : Subject<Eventos[]>;
+  allEvents      : Eventos[] = [];
 
-  lugares: Subject<Place[]>;
-  allLugares: any[] = [];
+  lugares        : Subject<Place[]>;
+  allLugares     : any[] = [];
 
-  deptos_limites: any[] = ["San José", "Colonia", "Canelones"];
+  deptos_limites : any[] = ["San José", "Colonia", "Canelones"];
+  save_depto     : String[] = ["San José", "Colonia"];
 
-  save_depto: String[] = ["San José", "Colonia"];
+  donde_comer    : any[] = [];
+  donde_dormir   : any[] = [];
 
   getLugares() {
     this.deptos_limites.forEach((depto) => {
@@ -145,6 +149,39 @@ export class DatabaseService {
       })
       .finally(() => console.log("Finally"));
   }
+
+  getDondeDormir(){
+    this.afs
+      .collection("donde_dormir")
+      .ref.where('departamento', '==', 'San Jose' )
+      .get()
+      .then((querySanpshot) => {
+        const arryDondeDormir : any[] = [];
+        querySanpshot.forEach((item) => {
+          const data : any = item.data();
+          arryDondeDormir.push({ id: item.id, ...data })
+      })
+        this.donde_dormir = arryDondeDormir;
+      })
+      .finally(() => console.log("Finally"));
+  }
+
+  getDondeComer(){
+    this.afs
+      .collection("donde_comer")
+      .ref.where('departamento', '==', 'san jose' )
+      .get()
+      .then((querySanpshot) => {
+        const arryDondeComer : any[] = [];
+        querySanpshot.forEach((item) => {
+          const data : any = item.data();
+          arryDondeComer.push({ id: item.id, ...data })
+      })
+        this.donde_comer = arryDondeComer;
+      })
+      .finally(() => console.log("Finally"));
+  }
+
 
   getObservable(): Observable<Eventos[]> {
     return this.eventos.asObservable();
