@@ -58,6 +58,8 @@ export class DatabaseService {
     this.getEventos();
     this.getDepartamentosActivos();
     this.getLugares();
+    this.getDondeDormir();
+    this.getDondeComer();
 
     /**
      * Calcular distancia desde ubicación del usuario a lugares
@@ -108,6 +110,9 @@ export class DatabaseService {
   getSelectMenu(selection: String | number) {
     this.selection = selection;
   }
+
+  donde_comer: any[] = [];
+  donde_dormir: any[] = [];
 
   /**
    * Obtener lugares de departamento solicitado y limítrofes
@@ -178,6 +183,38 @@ export class DatabaseService {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => console.log("Finally"));
+  }
+
+  getDondeDormir() {
+    this.afs
+      .collection("donde_dormir")
+      .ref.where("departamento", "==", "San Jose")
+      .get()
+      .then((querySanpshot) => {
+        const arryDondeDormir: any[] = [];
+        querySanpshot.forEach((item) => {
+          const data: any = item.data();
+          arryDondeDormir.push({ id: item.id, ...data });
+        });
+        this.donde_dormir = arryDondeDormir;
+      })
+      .finally(() => console.log("Finally"));
+  }
+
+  getDondeComer() {
+    this.afs
+      .collection("donde_comer")
+      .ref.where("departamento", "==", "san jose")
+      .get()
+      .then((querySanpshot) => {
+        const arryDondeComer: any[] = [];
+        querySanpshot.forEach((item) => {
+          const data: any = item.data();
+          arryDondeComer.push({ id: item.id, ...data });
+        });
+        this.donde_comer = arryDondeComer;
       })
       .finally(() => console.log("Finally"));
   }

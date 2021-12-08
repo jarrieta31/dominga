@@ -12,11 +12,11 @@ import { LoadingController } from '@ionic/angular';
 })
 export class WhereSleepPage implements OnInit, OnDestroy {
 
-    sleep: DondeDormir[];
-    textoBuscar = '';
-    items: any[] = [];
-
-    loading: any;
+    sleep  : DondeDormir[];
+    wsleep : DondeDormir[];
+    items  :    any[] = [];
+    loading:           any;
+    textoBuscar       = '';
 
     su = this.database.getSleep().snapshotChanges().subscribe(data => {
         this.sleep = [];
@@ -27,8 +27,11 @@ export class WhereSleepPage implements OnInit, OnDestroy {
         })
     });
 
-    constructor(private database: DatabaseService,
-                private loadingCtrl: LoadingController) { }
+    constructor(
+        private database    : DatabaseService,
+        private loadingCtrl : LoadingController) {
+            this.cargarDondeDormir();
+        }
 
     
 
@@ -42,21 +45,29 @@ export class WhereSleepPage implements OnInit, OnDestroy {
 
     async show(message: string) {
 
-      this.loading = await this.loadingCtrl.create({
+        this.loading = await this.loadingCtrl.create({
         message,
         spinner: 'bubbles'
-      });
+    });
         
-     this.loading.present().then(() => {
-         this.su;
-         this.loading.dismiss();
-     });
+    this.loading.present().then(() => {
+            this.su;
+            this.loading.dismiss();
+        });
     }
 
     buscar( event ){
         this.textoBuscar = event.detail.value;
     }
 
-    
+    get dondeDormir(){
+        this.database.getDondeDormir();
+
+        return 'donde dormir';
+    }
+
+    cargarDondeDormir(){
+        this.wsleep = this.database.donde_dormir;
+    }
 
 }
