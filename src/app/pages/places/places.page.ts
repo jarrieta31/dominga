@@ -9,7 +9,6 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { GeolocationService } from "../../services/geolocation.service";
 import { LoadingController, ActionSheetController } from "@ionic/angular";
 import { Point } from "../../shared/point";
-import { Platform } from "@ionic/angular";
 import { tap } from "rxjs/operators";
 import { ModalController } from "@ionic/angular";
 import { VideoPage } from "../../pages/video/video.page";
@@ -29,9 +28,6 @@ export class PlacesPage implements OnInit, OnDestroy {
   sug: Place[] = [];
   sug_2: Place[] = [];
   sug_3: Place[] = [];
-  
- 
-
 
   private distancia$: BehaviorSubject<string> = new BehaviorSubject<string>(
     "vacio"
@@ -83,7 +79,6 @@ export class PlacesPage implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private geolocationService: GeolocationService,
     private router: Router,
-    private platform: Platform,
     private loadingCtrl: LoadingController,
     private actionSheetController: ActionSheetController,
     private modalCtrl: ModalController
@@ -460,9 +455,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
- 
-
-  
 
   escucharDescripcion( text : string ){
     let txt = text.split('.')
@@ -480,5 +472,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     synt.speak(spUttr);
   }
+
 
 }

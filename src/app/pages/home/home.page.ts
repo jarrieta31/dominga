@@ -58,11 +58,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private database: DatabaseService,
-    private router: Router,
     private geolocationService: GeolocationService,
-    private platform: Platform,
-    private alertController: AlertController,
-    private modalCtrl: ModalController,
     private networkService: NetworkService,
     private loadingCtrl: LoadingController,
     private browser: InAppBrowser,
@@ -136,11 +132,11 @@ export class HomePage implements OnInit, OnDestroy {
     $(document).ready(function () {
       var total = $(window).height();
       var height = document.getElementById("alto");
-      var menu = $(".menu").outerHeight(true);
+      //var menu = $(".menu").outerHeight(true);
 
       var altoSlider = height.clientWidth;
       altoSlider = altoSlider / 1.7 + 5 + 56;
-      total = total - altoSlider - menu;
+      total = total - altoSlider;
 
       $(".cards").height(total);
     });

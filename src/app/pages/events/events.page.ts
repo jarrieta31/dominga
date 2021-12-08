@@ -3,17 +3,15 @@ import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { FilterEventPage } from "../filter-event/filter-event.page";
-import { async } from "@angular/core/testing";
 import { DatabaseService } from "src/app/services/database.service";
 import { Subscription } from "rxjs";
-
 
 @Component({
   selector: "app-events",
   templateUrl: "./events.page.html",
   styleUrls: ["./events.page.scss"],
 })
-export class EventsPage implements OnInit, OnDestroy{
+export class EventsPage implements OnInit, OnDestroy {
   now = new Date();
   textoBuscar = "";
   today: Date = new Date();
@@ -27,7 +25,9 @@ export class EventsPage implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
-    this.eventosSuscription = this.dbService.getObservable().subscribe( eventos => this.eventos = eventos );
+    this.eventosSuscription = this.dbService
+      .getObservable()
+      .subscribe((eventos) => (this.eventos = eventos));
     this.dbService.getEventsLocal();
   }
 
@@ -60,7 +60,7 @@ export class EventsPage implements OnInit, OnDestroy{
     titulo: string,
     descripcion: string,
     imagen: string,
-    lugar: string,
+    lugar: string
   ) {
     if (descripcion.length > 250) {
       var desc = descripcion.substr(0, 250) + " ...";
@@ -82,7 +82,7 @@ export class EventsPage implements OnInit, OnDestroy{
         descripcion: desc,
         descripcion_completa: descripcion,
         imagen: imagen,
-        lugar: lugar
+        lugar: lugar,
       },
     });
 
@@ -96,7 +96,7 @@ export class EventsPage implements OnInit, OnDestroy{
       backdropDismiss: false,
       showBackdrop: true,
       keyboardClose: true,
-      mode: "ios"
+      mode: "ios",
     });
 
     await modalFilter.present();
@@ -106,9 +106,7 @@ export class EventsPage implements OnInit, OnDestroy{
     this.textoBuscar = data;
   }
 
-  
-  contadorVisitas(id: string ) {
-    
+  contadorVisitas(id: string) {
     this.dbService.contadorVisitasEvento(id);
   }
 }

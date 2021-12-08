@@ -1,38 +1,53 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DatabaseService } from 'src/app/services/database.service';
-import { GeolocationService } from 'src/app/services/geolocation.service';
-import { TwoPoints } from 'src/app/shared/two-points';
-import { Subscription } from "rxjs";
-import { Place } from 'src/app/shared/place';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
-  selector: 'app-home-menu',
-  templateUrl: './home-menu.page.html',
-  styleUrls: ['./home-menu.page.scss'],
+  selector: "app-home-menu",
+  templateUrl: "./home-menu.page.html",
+  styleUrls: ["./home-menu.page.scss"],
 })
 export class HomeMenuPage implements OnInit, OnDestroy {
+  filterDepto: boolean = false;
+  filterDistance: boolean = false;
 
-  lugares: Place[] = [];
-  lugaresSuscription: Subscription;
+  filterInitail: FormGroup;
+  default: string = "San José";
+  selected: any = '';
 
-  constructor(
-    private geoSvc: GeolocationService, private dbSvc: DatabaseService
-  ) { }
+  constructor(private dbService: DatabaseService) {
+    this.filterInitail = new FormGroup({
+      depto: new FormControl(null),
+    });
+    // setValue es para agregarle un valor
+    this.filterInitail.controls["depto"].setValue(this.default, {
+      onlySelf: true,
+    });
+    // para obtenerlo necesitarias un get por ejemplo
+    this.selected = this.filterInitail.get("depto");
+    
+  }
 
   ngOnInit() {
-    this.lugaresSuscription = this.dbSvc.getObservablePlace().subscribe( lugar => {this.lugares = lugar; 
-      this.lugares.forEach( res => {
-        let maxmin: TwoPoints = {longitud1: res.ubicacion.lng, latitud1: res.ubicacion.lat, longitud2: -56.7061826207969, latitud2:-34.33806617025381 }
-          console.log(this.geoSvc.calculateDistance(maxmin));
-          console.log(this.lugares);
-      })} );
-    //this.dbService.getEventsLocal();
-
   }
 
-  ngOnDestroy() {
-    this.lugaresSuscription.unsubscribe();
+  ngOnDestroy() {}
+
+  seeDepto() {
+    this.filterDepto = !this.filterDepto;
+    this.filterDistance = false;
+
+    if (this.filterDistance == false) {
+      this.filterDepto = true;
+    }
   }
 
+  seeDistance() {
+    this.filterDistance = !this.filterDistance;
+    this.filterDepto = false;
 
+    if (this.filterDepto == false) {
+      this.filterDistance = true;
+    }
+  }
 }

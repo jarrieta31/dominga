@@ -5,13 +5,11 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import * as Mapboxgl from 'mapbox-gl';
 import { environment } from '../../environments/environment';
-import { Platform } from '@ionic/angular';
 import { timer, Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { Place } from '../shared/place';
 import { TwoPoints } from '../shared/two-points';
 import { Point } from '../shared/point';
 import { tap, share } from 'rxjs/operators';
-import { DatabaseService } from './database.service';
 import distance from '@turf/distance';
 import { Assessment } from '../shared/assessment';
 
@@ -47,22 +45,22 @@ export class GeolocationService {
   public gps: boolean = false;
   subscriptionClock: any;
 
-  su = this.database.getPlaces().snapshotChanges().subscribe(data => {
-    this.items = [];
-    data.forEach(item => {
-      let a = item.payload.toJSON();
-      a['$key'] = item.key;
-      this.items.push(a as Place);
-    })
-    this.items.forEach(place => {
-      let respuestaValoracion: Assessment = { placeName: place.nombre, idUser: this.user, answer: false }
-      this.valuationsPlaces.push(respuestaValoracion)
-      // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
-    })
-  })
+  // su = this.database.getPlaces().snapshotChanges().subscribe(data => {
+  //   this.items = [];
+  //   data.forEach(item => {
+  //     let a = item.payload.toJSON();
+  //     a['$key'] = item.key;
+  //     this.items.push(a as Place);
+  //   })
+  //   this.items.forEach(place => {
+  //     let respuestaValoracion: Assessment = { placeName: place.nombre, idUser: this.user, answer: false }
+  //     this.valuationsPlaces.push(respuestaValoracion)
+  //     // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
+  //   })
+  // })
 
   constructor(private androidPermissions: AndroidPermissions,
-    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private database: DatabaseService) {
+    private geolocation: Geolocation, private locationAccuracy: LocationAccuracy) {
 
     this.checkGPSPermission()
     //Observable que obtiene los pulsos y obtiene la posicion

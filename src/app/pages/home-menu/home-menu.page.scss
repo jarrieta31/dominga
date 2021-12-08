@@ -1,2 +1,98 @@
+.container {
+    height: 100vh;
+}
 
+.chooseFilter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.chooseFilter > ion-button {
+    width: 45%;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 3% 0 3%;
+    height: 65%;
+}
+
+.div__menu {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.div__menu > .div__menu-izq {
+    height: 33%;
+}
+
+.div__menu > .div__menu-der {
+    height: 50%;
+}
+
+.div__menu > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2%;
+    border-radius: 5px;
+}
+
+.div__menu-izq:nth-child(1) {
+    background-color: #FEBF4E;
+}
+
+.div__menu-izq:nth-child(2) {
+    background-color: #68EBFF;
+}
+
+.div__menu-izq:nth-child(3) {
+    background-color: #FC67FF;
+}
+
+.div__menu-der:nth-child(1) {
+    background-color: #CCA5FE;
+}
+
+
+.div__menu-der:nth-child(2) {
+    background-color: #01DFB8;
+}
+
+.slider_filter {
+    height: 35%;
+    margin: 0 3%;
+}
+
+.slider_filter-title {
+    padding-top: 15%;
+    height: 75%;
+}
+
+span {
+    color: #FC67FF;
+}
+
+h1, span {
+    font-weight: bold;
+}
+
+p {
+    margin-top: 0 !important;
+}
+
+h1 {
+    margin-bottom: 12px !important;
+}
+
+h1, p {
+    margin: 0 3%;
+}
 

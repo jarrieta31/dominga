@@ -71,7 +71,11 @@ const routes: Routes = [
   {
     path: 'home-menu',
     loadChildren: () => import('./pages/home-menu/home-menu.module').then( m => m.HomeMenuPageModule)
+  },  {
+    path: 'tabs',
+    loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
   },
+
 
 ];
 
