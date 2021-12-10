@@ -49,7 +49,7 @@ export class HomePage implements OnInit, OnDestroy {
   // };
 
   lugarCercano$: Observable<Place>;
-  subscrictionLugarCercano: Subscription;
+  //subscrictionLugarCercano: Subscription;
   //subscrictionUser: any;
   idUser: string;
 
@@ -159,8 +159,8 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subsciptionNetwork.unsubscribe();
     this.subscripcionPosition.unsubscribe();
-    this.backButtonSubscription.unsubscribe();
-    this.subscrictionLugarCercano.unsubscribe();
+    //this.backButtonSubscription.unsubscribe();
+    //this.subscrictionLugarCercano.unsubscribe();
   }
 
   /**

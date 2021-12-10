@@ -9,6 +9,10 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: "home",
+        loadChildren: "../home-menu/home-menu.module#HomeMenuPageModule",
+      },
+      {
         path: "places",
         loadChildren: "../home/home.module#HomePageModule",
       },
@@ -19,6 +23,14 @@ const routes: Routes = [
       {
         path: "sleep",
         loadChildren: "../where-sleep/where-sleep.module#WhereSleepPageModule",
+      },
+      {
+        path: "eat",
+        loadChildren: "../where-eat/where-eat.module#WhereEatPageModule",
+      },
+      {
+        path: "info",
+        loadChildren: "../information/information.module#InformationPageModule",
       },
     ],
   },

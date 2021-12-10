@@ -1,0 +1,20 @@
+i {
+  font-size: 1.4em;
+}
+
+ion-tab-bar {
+  contain: none;
+  --border: none;
+}
+
+ion-tab-bar ion-tab-button:nth-child(4) {
+  border-radius: 50%;
+  margin-top: -40px;
+  box-shadow: -1px 1px 3px 1px rgba(199, 196, 196, 0.58);
+  -webkit-box-shadow: -1px 1px 3px 1px rgba(199, 196, 196, 0.58);
+  -moz-box-shadow: -1px 1px 3px 1px rgba(199, 196, 196, 0.58);
+}
+
+.main-option {
+  font-size: 20px;
+}
