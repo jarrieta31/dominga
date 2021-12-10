@@ -21,10 +21,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/information/information.module').then( m => m.InformationPageModule)
   },
   {
-    path: 'more-options',
-    loadChildren: () => import('./pages/more-options/more-options.module').then( m => m.MoreOptionsPageModule)
-  },
-  {
     path: 'modal-banner',
     loadChildren: () => import('./pages/modal-banner/modal-banner.module').then( m => m.ModalBannerPageModule)
   },
@@ -61,17 +57,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
   },
   {
-    path: 'party-house',
-    loadChildren: () => import('./pages/party-house/party-house.module').then( m => m.PartyHousePageModule)
-  },
-  {
     path: 'events',
     loadChildren: () => import('./pages/events/events.module').then( m => m.EventsPageModule)
   },
   {
     path: 'home-menu',
     loadChildren: () => import('./pages/home-menu/home-menu.module').then( m => m.HomeMenuPageModule)
-  },  {
+  },
+  {
     path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
   },
