@@ -463,7 +463,18 @@ export class PlacesPage implements OnInit, OnDestroy {
  
 
   
-
+/**
+ * Funcion que llamada desde el html transforma el texto a audio.
+ * La voz es tomada por defecto, la primera voz en espanol latino 
+ * que encuentra, en su defecto toma la del sistema.
+ * 
+ * Api usada TextToSpeech Google Api.
+ * Puede tener problemas en navegadores que no sean compatible 
+ * con funcionalidades de google.
+ * 
+ * En este momento no se usa esta funcion.
+ * @param text 
+ */
   escucharDescripcion( text : string ){
     let txt = text.split('.')
     let aux : string = txt[0];
