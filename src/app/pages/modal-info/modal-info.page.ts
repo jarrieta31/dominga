@@ -9,6 +9,8 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { filter  } from 'rxjs/operators';
 import { Subscription } from 'rxjs'
+import { TextToSpeechService } from 'src/app/services/text-to-speech.service';
+import { TipoSputtr } from 'src/app/shared/tipo-sputtr';
 
 
 @Component({
@@ -27,20 +29,32 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     whatsapp: string;
     phone: string;
     id: string;
+/**
+ * Funcionalidad: Texto a Audio (TextToSpeech)
+ * Variables globales
+ */
     currentUrl: string;
     urlSuscription : Subscription;
-    spSynt = window.speechSynthesis;
+    speaking : boolean = false;
+    paused   : boolean = false;
+    escuchar : boolean = false;
+    vr : string[] = ['1', '1.5', '2']; //representa las velocidades de reproduccion
+    spUttData : TipoSputtr = {
+        rate   : '1', //  Velocidad de Reproduccion: Rango 0.1 - 10, xDefecto 1
+        text   : '', // Texto a convertir a audio
+    }
 
     constructor(
         private database: DatabaseService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private callNumber: CallNumber,
-        private browser: InAppBrowser
+        private browser: InAppBrowser, 
+        private tts : TextToSpeechService,
     ) {}
 
     ngOnInit() {
-        this.getInfoLugar();
+        this.getInfoLugar()
         this.urlSuscribe();
     }
 
@@ -137,73 +151,53 @@ export class ModalInfoPage implements OnInit, OnDestroy {
         this.browser.create(this.facebook, "_system")
     }
 
-    limpiarTexto( text : string) : string{
-        let _txt : string;
 
-        _txt = text.replace(/<[^>]*>?/g, '');
-        console.log(_txt);
-        
-        return _txt;
-    }
+//  >>>>>> Texto a Audio <<<<<<<<
 
-    getVoces(){
 
-        let spSyntVoices = window.speechSynthesis;
-        
-        let esVoice : SpeechSynthesisVoice;
-        spSyntVoices.addEventListener('voiceschanged', () => {
-            let voces = spSyntVoices.getVoices()
-            if( voces.length > 0 ){
-                voces.forEach((v) => {
-                    if(v.lang == 'es-ES' || v.lang == 'es-419') esVoice = v;
-                    })
-            }    
-        })
-        
-        spSyntVoices.getVoices();
 
-        return esVoice;
-    }
+
+
+
+
 
     urlSuscribe(){
         this.urlSuscription = this.router.events.subscribe((event : NavigationEnd) => {
             this.currentUrl = event.url;
-            console.log(this.currentUrl);
-            if( this.spSynt.speaking && event.url.search('descripcion') == -1) 
-                this.spSynt.cancel();
-            
-            
+            if( this.tts.reproduciendo && event.url.search('descripcion') == -1) 
+                this.tts.detener();
         })
-
     }
-    
-    escucharDescripcion( text : string ){
-        let esVoices  = this.spSynt.getVoices();
-        
-        let txt = this.limpiarTexto(text);
-        console.log(txt);
-        
-        let spUttr = new SpeechSynthesisUtterance(txt);
-        
-        
-        if(esVoices){
-            esVoices.forEach((v) => {
-            if(v.lang == 'es-ES' || v.lang == 'es-419') spUttr.voice = v;
-            })
-        }
 
-        spUttr.pitch = 1;
-        spUttr.rate = 1;
-        spUttr.volume = 0.5;
+    limpiarTexto( text : string) : string{
+        let _txt : string;
+        _txt = text.replace(/<[^>]*>?/g, '');
+        return _txt;
+    }
 
-        if(!this.spSynt.speaking) this.spSynt.speak(spUttr);
-
-        console.log('soy escruchar descripcion    '+this.currentUrl);
+    pausarReproduccion(){this.tts.pausar();
+        console.log(`estoy pausando`);
         
-    console.log(
-        this.urlSuscription
-    );
-    
+    }
+    reanudarReproduccion(){this.tts.reanudar();
+        console.log(`estoy reanudando`);
+        
+    }
+    detenerReproduccion(){this.tts.detener()
+        console.log(`estoy cancelando`);
+        
+    }
 
+    reproducirDescripcion( texto : string ){
+        this.spUttData.text = this.limpiarTexto( texto );
+        this.tts.reproducir(this.spUttData);
+    }
+
+    velocidadReproduccion( v : string ){
+        let largo = this.vr.length;
+        let idx = this.vr.indexOf(v);
+        if(idx === largo-1)
+            this.spUttData.rate = this.vr[0];
+        else this.spUttData.rate = this.vr[idx+1];
     }
 }

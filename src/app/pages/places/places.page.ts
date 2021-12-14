@@ -455,7 +455,6 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
-
   escucharDescripcion( text : string ){
     let txt = text.split('.')
     let aux : string = txt[0];
