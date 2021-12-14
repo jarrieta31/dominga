@@ -5,10 +5,28 @@
         </ion-buttons>
         <ion-title color="back">
                 {{ nombre }}
-            <button (click)="escucharDescripcion(descripcion)" class="btn btn-outline-dark" type="button">
-                <i class="fas fa-assistive-listening-systems access" color="back"  ></i>
-            </button>
         </ion-title>
+<!-- Conjunto de botones para la reproduccion de texto a audio -->
+        <ion-buttons slot="end" >
+            <ion-button (click)=" escuchar = !escuchar" class="btn btn-outline-dark" type="button">
+                <i class="fas fa-assistive-listening-systems access" color="back"  ></i>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons *ngIf="escuchar" >
+            <ion-buttons *ngIf="!speaking && !paused" >
+                <ion-button class="btn btn-outline-secondary" (click)="velocidadReproduccion( spUttData.rate )" > x{{ spUttData.rate }} </ion-button>
+                <ion-button class="btn btn-outline-primary" (click)="speaking = !speaking ; reproducirDescripcion( descripcion ) ">play</ion-button>
+            </ion-buttons>
+            <ion-buttons *ngIf="speaking && !paused" >
+                <ion-button class="btn btn-outline-dark" (click)=" paused = !paused ; pausarReproduccion() " >pausa</ion-button>
+                <ion-button class="btn btn-outline-danger" (click)="speaking = !speaking " >stop</ion-button>
+            </ion-buttons>
+            <ion-buttons *ngIf="speaking && paused" >
+                <ion-button class="btn btn-outline-warning" (click)=" paused = !paused ; reanudarReproduccion() " >reanudar</ion-button>
+                <ion-button class="btn btn-outline-danger" (click)="speaking = !speaking; paused = false ; detenerReproduccion() " >stop</ion-button>
+            </ion-buttons>
+        </ion-buttons>
+<!-- Fin de los botones -->
     </ion-toolbar>
     <ion-toolbar *ngIf="tipo == 'Urbano'" color="information">
         <ion-buttons slot="start">
@@ -16,7 +34,7 @@
         </ion-buttons>
         <ion-title color="back">
                 {{ nombre }}
-            <button (click)="escucharDescripcion(descripcion)" class="btn btn-outline-dark" type="button">
+            <button (click)="reproducirDescripcion()" class="btn btn-outline-dark" type="button">
                 <i class="fas fa-assistive-listening-systems access" color="back"  ></i>
             </button>
         </ion-title>
