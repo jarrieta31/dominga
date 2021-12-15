@@ -162,10 +162,13 @@ export class ModalInfoPage implements OnInit, OnDestroy {
 
 
     urlSuscribe(){
-        this.urlSuscription = this.router.events.subscribe((event : NavigationEnd) => {
-            this.currentUrl = event.url;
-            if( this.tts.reproduciendo && event.url.search('descripcion') == -1) 
-                this.tts.detener();
+        this.urlSuscription = this.router.events.subscribe(( event ) => {
+            if( event instanceof NavigationEnd ){
+                if( this.tts.reproduciendo() && event.url.search('descripcion') == -1) 
+                    this.tts.detener();
+                this.currentUrl = event.url;
+                console.log(event.url);
+                }
         })
     }
 

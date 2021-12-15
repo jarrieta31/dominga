@@ -10,7 +10,11 @@ export class TextToSpeechService  {
   spSynt : SpeechSynthesis = window.speechSynthesis;
   spUttr : SpeechSynthesisUtterance;
   textoxDefecto : 'Usted esta en la aplicacion Domingo!, de casa dominga';
-
+  velocidadReproduccion : Object[] = [
+    { '1'      : 1.2 },
+    { '1.5'    : 1.5 },
+    { '2'      : 2   },
+  ]
   tvoz : SpeechSynthesisVoice = {
     default      : false,// true si es la voz por defecto 
     localService : false,// true si es la voz local por defecto
@@ -51,11 +55,10 @@ export class TextToSpeechService  {
     resume: reanuda la síntesis de voz previamente pausada.
     cancel: cancela el habla y además elimina cualquier declaración que haya todavía en cola para ser sintetizada.
  */
+  
 
   reproducir( spUttrData : TipoSputtr ){
-    
-    // console.log(this.spUttr);
-    this.spUttr.rate = parseInt( spUttrData.rate );
+    this.spUttr.rate = this.velocidad( spUttrData.rate );
     this.spUttr.text = spUttrData.text;
     this.spSynt.speak(this.spUttr);
   }
@@ -69,7 +72,14 @@ export class TextToSpeechService  {
   pausado(){ return this.spSynt.paused; }
 
   reproduciendo(){ return this.spSynt.speaking; }
-  
 
-
+  velocidad( v : string ){
+    switch (v) {
+      case '1'  : return 1.2;
+      case '1.5': return 1.5;
+      case '2'  : return 2  ;
+        
+      default: return 1;
+    }
+  }
 }
