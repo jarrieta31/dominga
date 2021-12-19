@@ -40,6 +40,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("../information/information.module").then((m) => m.InformationPageModule),
       },
+      {
+        path: "place",
+        loadChildren: () =>
+          import("../place/place.module").then((m) => m.PlacePageModule),
+      },
     ],
   },
 ];

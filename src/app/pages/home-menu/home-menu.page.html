@@ -1,43 +1,38 @@
 <ion-content>
   <div class="container">
-    <!-- <div class="chooseFilter">
-      <ion-button (click)="seeDepto()">Departamento</ion-button>
-      <ion-button (click)="seeDistance()">Distancia</ion-button>
-    </div>
-  
-    <form [formGroup]="filterInitail">
-      <ion-select
-        id="depto"
-        formControlName="depto"
-        placeholder="Departamento"
-        *ngIf="filterDepto"
-      >
-        <ion-select-option value="San José">San José</ion-select-option>
-        <ion-select-option value="Colonia">Colonia</ion-select-option>
-      </ion-select>
-    </form>
-    <ion-range
-      min="0"
-      max="150"
-      color="secondary"
-      *ngIf="filterDistance"
-      dualKnobs="true"
-      pin="true"
-    >
-      <ion-label slot="start">0</ion-label>
-      <ion-label slot="end">150</ion-label>
-    </ion-range> -->
     <div class="slider_filter">
-      <div class="slider_filter-title">
+      <!-- <div class="slider_filter-title">
         <h1>Hola, soy domin<span>go!</span></h1>
         <p>
           y a partir de ahora seré tu guía. <br />
           ¿Descubrimos juntos un nuevo sitio?
         </p>
-      </div>
-      <div class="slider_filter-filter">
-        <ion-searchbar></ion-searchbar>
-      </div>
+      </div> -->
+      <ion-label (click)="seeDepto()">Departamento</ion-label>
+      <ion-label>Distancia</ion-label>
+      <ion-list *ngIf="depto">
+        <ion-radio-group value="">
+          <ion-item (click)="select('San José', null)">
+            <ion-label>San José</ion-label>
+            <ion-radio slot="start" value="San José"></ion-radio>
+          </ion-item>
+      
+          <ion-item (click)="select('Colonia', null)">
+            <ion-label>Colonia</ion-label>
+            <ion-radio slot="start" value="Colonia"></ion-radio>
+          </ion-item>
+          <ion-item (click)="select('Canelones', null)">
+            <ion-label>Canelones</ion-label>
+            <ion-radio slot="start" value="Canelones"></ion-radio>
+          </ion-item>
+          <ion-item (click)="select('Florida', null)">
+            <ion-label>Florida</ion-label>
+            <ion-radio slot="start" value="Florida"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+        <ion-button>Seleccionar</ion-button>
+        <ion-button (click)="close()">Cancelar</ion-button>
+      </ion-list>
     </div>
 
     <div class="menu">

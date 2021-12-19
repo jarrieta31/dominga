@@ -1,5 +1,8 @@
 export interface Place {
     $key: string;
+    id: string;
+    departamento: string;
+    localidad: string;
     auto: boolean;
     bicicleta: boolean;
     caminar: boolean;

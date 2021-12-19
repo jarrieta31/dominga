@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
@@ -8,46 +7,36 @@ import { DatabaseService } from "src/app/services/database.service";
   styleUrls: ["./home-menu.page.scss"],
 })
 export class HomeMenuPage implements OnInit, OnDestroy {
-  filterDepto: boolean = false;
-  filterDistance: boolean = false;
 
-  filterInitail: FormGroup;
-  default: string = "San José";
-  selected: any = '';
+  depto: boolean = false
 
-  constructor(private dbService: DatabaseService) {
-    this.filterInitail = new FormGroup({
-      depto: new FormControl(null),
-    });
-    // setValue es para agregarle un valor
-    this.filterInitail.controls["depto"].setValue(this.default, {
-      onlySelf: true,
-    });
-    // para obtenerlo necesitarias un get por ejemplo
-    this.selected = this.filterInitail.get("depto");
-    
-  }
+  constructor(private dbService: DatabaseService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {}
 
   seeDepto() {
-    this.filterDepto = !this.filterDepto;
-    this.filterDistance = false;
+    this.depto = true;
 
-    if (this.filterDistance == false) {
-      this.filterDepto = true;
-    }
+    // if(this.depto) {
+    //   this.depto = false;
+    // }
   }
 
-  seeDistance() {
-    this.filterDistance = !this.filterDistance;
-    this.filterDepto = false;
+  close() {
+    this.depto = false;
 
-    if (this.filterDepto == false) {
-      this.filterDistance = true;
-    }
+    // if(this.depto) {
+    //   this.depto = false;
+    // }
   }
+
+  select(depto: string | null, distance: number |null) {
+    this.dbService.getSelectMenu(depto, distance);
+  }
+
+  // loadData() {
+  //   this.dbService.getDepto();
+  // }
 }
