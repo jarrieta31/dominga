@@ -4,7 +4,7 @@ import { DatabaseService } from '../../services/database.service';
 
 import { DondeDormir } from '../../shared/donde-dormir';
 import { LoadingController } from '@ionic/angular';
-import { DondeDormirService } from 'src/app/services/donde-dormir.service';
+import { WhereSleepService } from 'src/app/services/database/where-sleep.service';
 
 @Component({
     selector: 'app-where-sleep',
@@ -31,7 +31,7 @@ export class WhereSleepPage implements OnInit, OnDestroy {
     constructor(
         private database    : DatabaseService,
         private loadingCtrl : LoadingController,
-        private afs         : DondeDormirService ) 
+        private afs         : WhereSleepService ) 
         {
             this.cargarDondeDormir();
         }

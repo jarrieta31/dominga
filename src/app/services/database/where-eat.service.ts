@@ -7,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
-export class DondeComerService {
+export class WhereEatService {
 
   donde_comer: any[] = [];
     

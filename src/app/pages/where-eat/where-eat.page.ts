@@ -3,9 +3,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DondeComer } from '../../shared/donde-comer';
 
 import { DatabaseService } from '../../services/database.service';
+import { WhereEatService } from 'src/app/services/database/where-eat.service';
 import { LoadingController } from '@ionic/angular';
 import { InfoSlider } from '../../shared/info-slider';
-import { DondeComerService } from 'src/app/services/donde-comer.service';
 
 @Component({
   selector: 'app-where-eat',
@@ -50,7 +50,7 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
 
   constructor(
     private database    : DatabaseService,
-    private afs         : DondeComerService,          
+    private afs         : WhereEatService,          
     private loadingCtrl : LoadingController) 
     {
       this.cargarDondeComer();  
