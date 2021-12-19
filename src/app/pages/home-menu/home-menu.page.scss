@@ -1,98 +1,124 @@
 .container {
-    height: 100vh;
-}
-
-.chooseFilter {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.chooseFilter > ion-button {
-    width: 45%;
+  height: 100vh;
 }
 
 .menu {
-    display: flex;
-    flex-direction: row;
-    margin: 20px 3% 0 3%;
-    height: 65%;
+  display: flex;
+  flex-direction: row;
+  margin: 20px 3% 0 3%;
+  height: 65%;
 }
 
 .div__menu {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    color: #ffffff;
-    font-weight: bold;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .div__menu > .div__menu-izq {
-    height: 33%;
+  height: 33%;
 }
 
 .div__menu > .div__menu-der {
-    height: 50%;
+  height: 50%;
 }
 
 .div__menu > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2%;
-    border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2%;
+  border-radius: 5px;
 }
 
 .div__menu-izq:nth-child(1) {
-    background-color: #FEBF4E;
+  background-color: #febf4e;
 }
 
 .div__menu-izq:nth-child(2) {
-    background-color: #68EBFF;
+  background-color: #68ebff;
 }
 
 .div__menu-izq:nth-child(3) {
-    background-color: #FC67FF;
+  background-color: #fc67ff;
 }
 
 .div__menu-der:nth-child(1) {
-    background-color: #CCA5FE;
+  background-color: #cca5fe;
 }
 
-
 .div__menu-der:nth-child(2) {
-    background-color: #01DFB8;
+  background-color: #01dfb8;
 }
 
 .slider_filter {
-    height: 35%;
-    margin: 0 3%;
+  height: 25%;
+  //margin: 0 3%;
 }
 
-.slider_filter-title {
-    padding-top: 15%;
-    height: 75%;
+.slider_filter-filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border-bottom: 1px solid #666666;
+}
+
+.option {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.option__div {
+  width: 20%;
+  height: auto;
+  margin: 0 10px;
+}
+
+img {
+  padding: 15px;
 }
 
 span {
-    color: #FC67FF;
+  color: #fc67ff;
 }
 
-h1, span {
-    font-weight: bold;
+h1,
+span {
+  font-weight: bold;
 }
 
 p {
-    margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 h1 {
-    margin-bottom: 12px !important;
+  margin-bottom: 12px !important;
 }
 
-h1, p {
-    margin: 0 3%;
+h1,
+p {
+  margin: 0 3%;
 }
 
+ion-label {
+  display: inline-block;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding: 10px;
+}
+
+.btn {
+  width: 100%;
+}
+
+ion-button {
+  margin: auto;
+}

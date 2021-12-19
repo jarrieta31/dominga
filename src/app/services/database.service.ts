@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
-
 import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable, Subject, timer } from "rxjs";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
-import { Place } from "../shared/place";
 import { TwoPoints } from "src/app/shared/two-points";
 import { Subscription } from "rxjs";
 import { GeolocationService } from "./geolocation.service";
@@ -52,113 +50,72 @@ export class DatabaseService {
     private afs: AngularFirestore,
     private geoService: GeolocationService
   ) {
+    this.position$ = this.geoService.getPosicionActual$();
     this.eventos = new Subject();
     this.departamentos = new Subject();
-    this.lugares = new Subject();
     this.getEventos();
     this.getDepartamentosActivos();
-    this.getLugares();
+    // this.getLugares();
 
     //pasado a donde-dormir.service
     // this.getDondeDormir();
     //pasado a donde-comer.service
     // this.getDondeComer();
+   
 
     /**
      * Calcular distancia desde ubicación del usuario a lugares
      */
-    // this.sourceMatch$ = timer(1000, 2000).pipe(
+    // this.sourceMatch$ = timer(1000, 5000).pipe(
     //   tap(() => {
-    //     console.log("distancia");
-
-    //     this.allLugares.forEach((res) => {
-    //       let maxmin: TwoPoints = {
-    //         longitud1: res.ubicacion.lng,
-    //         latitud1: res.ubicacion.lat,
-    //         longitud2: -56.7061826207969,
-    //         latitud2: -34.33806617025381,
-    //       };
-    //       console.log(this.geoService.calculateDistance(maxmin));
-    //       console.log(this.allLugares);
-    //     });
-    //   })
+    //console.log("distancia");
+    //console.log(this.selection);
+    // this.allLugares.forEach((res) => {
+    //   let maxmin: TwoPoints = {
+    //     longitud1: res.ubicacion.lng,
+    //     latitud1: res.ubicacion.lat,
+    //     longitud2: -56.7061826207969,
+    //     latitud2: -34.33806617025381,
+    //   };
+    //console.log(this.geoService.calculateDistance(maxmin));
+    // this.currentPosition$ = this.position$
+    // .pipe(
+    // tap((posicion) => {
+    //   if (posicion != null){
+    //     console.log(posicion);
+    //   }
+    //   else console.log(posicion)
+    // }));
+    //console.log(this.allLugares);
+    // });
+    // })
     // );
-
-    //this.iniciarSubscriptionMatch();
   }
 
   eventos: Subject<Eventos[]>;
   allEvents: Eventos[] = [];
 
-  lugares: Subject<Place[]>;
-  allLugares: Place[] = [];
+  currentPosition$: Subscription;
+  position$: Observable<any>;
 
-  deptos_limites: any[] = ["San José", "Colonia", "Canelones", "Florida"];
-
-  save_depto: String[] = ["San José"];
-
-  lugaresSuscription: Subscription;
-  sourceMatch$: Observable<any>;
-  subscriptionMatch: any;
-
-  selection: String | number = "";
-
-  iniciarSubscriptionMatch() {
-    this.subscriptionMatch = this.sourceMatch$.subscribe();
-  }
+  selectionDepto: String | null = null;
+  selectionDistance: number | null = null;
 
   /**
    * Departamento o distancia seleeccionado en la pantalla inicial
    */
-  getSelectMenu(selection: String | number) {
-    this.selection = selection;
+  getSelectMenu(depto: String | null, distance: number | null) {
+    if (depto == null) {
+      this.selectionDistance = distance;
+    } else {
+      this.selectionDepto = depto;
+    }
   }
   // Pasado a donde-comer.service
   // donde_comer: any[] = [];
 
   // Pasado a donde-dormir.service
   // donde_dormir: any[] = [];
-
-  /**
-   * Obtener lugares de departamento solicitado y limítrofes
-   */
-  getLugares() {
-    this.deptos_limites.forEach((depto) => {
-      let searchDepto: boolean = false;
-      this.save_depto.forEach((search) => {
-        if (search == depto) {
-          searchDepto = true;
-        }
-      });
-
-      if (!searchDepto) {
-        this.afs
-          .collection("lugares")
-          .ref.where("departamento", "==", depto)
-          .get()
-          .then((querySnapshot) => {
-            const arrPlaces: any[] = [];
-            querySnapshot.forEach((item) => {
-              const data: any = item.data();
-              arrPlaces.push({ id: item.id, ...data });
-            });
-            this.allLugares = arrPlaces;
-            this.lugares.next(this.allLugares);
-            this.save_depto.push(depto);
-            searchDepto = false;
-            console.log(this.allLugares);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => "Fin");
-      }
-    });
-  }
-
-  getObservablePlace(): Observable<Place[]> {
-    return this.lugares.asObservable();
-  }
 
   // Variables para contador de visitas a Eventos y Lugares
   visita_evento: VisitaEvento;
@@ -189,7 +146,7 @@ export class DatabaseService {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => console.log("Finally"));
+      .finally(() => "Finally");
   }
 
 /**
@@ -261,7 +218,7 @@ export class DatabaseService {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => console.log("Finally"));
+      .finally(() => "Finally");
   }
 
   getObservableDepartment(): Observable<Departament[]> {
