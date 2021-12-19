@@ -58,8 +58,11 @@ export class DatabaseService {
     this.getEventos();
     this.getDepartamentosActivos();
     this.getLugares();
-    this.getDondeDormir();
-    this.getDondeComer();
+
+    //pasado a donde-dormir.service
+    // this.getDondeDormir();
+    //pasado a donde-comer.service
+    // this.getDondeComer();
 
     /**
      * Calcular distancia desde ubicación del usuario a lugares
@@ -110,9 +113,11 @@ export class DatabaseService {
   getSelectMenu(selection: String | number) {
     this.selection = selection;
   }
+  // Pasado a donde-comer.service
+  // donde_comer: any[] = [];
 
-  donde_comer: any[] = [];
-  donde_dormir: any[] = [];
+  // Pasado a donde-dormir.service
+  // donde_dormir: any[] = [];
 
   /**
    * Obtener lugares de departamento solicitado y limítrofes
@@ -187,37 +192,44 @@ export class DatabaseService {
       .finally(() => console.log("Finally"));
   }
 
-  getDondeDormir() {
-    this.afs
-      .collection("donde_dormir")
-      .ref.where("departamento", "==", "San Jose")
-      .get()
-      .then((querySanpshot) => {
-        const arryDondeDormir: any[] = [];
-        querySanpshot.forEach((item) => {
-          const data: any = item.data();
-          arryDondeDormir.push({ id: item.id, ...data });
-        });
-        this.donde_dormir = arryDondeDormir;
-      })
-      .finally(() => console.log("Finally"));
-  }
+/**
+ * Pasado a donde-dormir.service.ts
+ */
+  // getDondeDormir() {
+  //   this.afs
+  //     .collection("donde_dormir")
+  //     .ref.where("departamento", "==", "San Jose")
+  //     .get()
+  //     .then((querySanpshot) => {
+  //       const arryDondeDormir: any[] = [];
+  //       querySanpshot.forEach((item) => {
+  //         const data: any = item.data();
+  //         arryDondeDormir.push({ id: item.id, ...data });
+  //       });
+  //       this.donde_dormir = arryDondeDormir;
+  //     })
+  //     .finally(() => console.log("Finally"));
+  // }
 
-  getDondeComer() {
-    this.afs
-      .collection("donde_comer")
-      .ref.where("departamento", "==", "san jose")
-      .get()
-      .then((querySanpshot) => {
-        const arryDondeComer: any[] = [];
-        querySanpshot.forEach((item) => {
-          const data: any = item.data();
-          arryDondeComer.push({ id: item.id, ...data });
-        });
-        this.donde_comer = arryDondeComer;
-      })
-      .finally(() => console.log("Finally"));
-  }
+/**
+ * 
+ * Pasado a donde-comer.service.ts
+ */
+  // getDondeComer() {
+  //   this.afs
+  //     .collection("donde_comer")
+  //     .ref.where("departamento", "==", "san jose")
+  //     .get()
+  //     .then((querySanpshot) => {
+  //       const arryDondeComer: any[] = [];
+  //       querySanpshot.forEach((item) => {
+  //         const data: any = item.data();
+  //         arryDondeComer.push({ id: item.id, ...data });
+  //       });
+  //       this.donde_comer = arryDondeComer;
+  //     })
+  //     .finally(() => console.log("Finally"));
+  // }
 
   getObservable(): Observable<Eventos[]> {
     return this.eventos.asObservable();
@@ -300,8 +312,8 @@ export class DatabaseService {
     return this.appsRef;
   }
 
-  // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
-  /**
+    // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
+    /**
    * funcion publica. recibe los datos del controlador.
    * Guarda le parametro recibido en un array global "visitas : string[]".
    * Revisa que no se repita le parametro recibido.

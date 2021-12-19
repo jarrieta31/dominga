@@ -5,6 +5,7 @@ import { DondeComer } from '../../shared/donde-comer';
 import { DatabaseService } from '../../services/database.service';
 import { LoadingController } from '@ionic/angular';
 import { InfoSlider } from '../../shared/info-slider';
+import { DondeComerService } from 'src/app/services/donde-comer.service';
 
 @Component({
   selector: 'app-where-eat',
@@ -47,10 +48,12 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   })
 });
 
-  constructor(private database: DatabaseService,
-              private loadingCtrl: LoadingController) {
-                this.cargarDondeComer();  
-    
+  constructor(
+    private database    : DatabaseService,
+    private afs         : DondeComerService,          
+    private loadingCtrl : LoadingController) 
+    {
+      this.cargarDondeComer();  
   }
 
   ngOnInit() {
@@ -81,6 +84,6 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   }
 
   cargarDondeComer(){
-    this.weat = this.database.donde_comer;
+    this.weat = this.afs.donde_comer;
 }
 }
