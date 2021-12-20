@@ -1,0 +1,23 @@
+.empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 50px;
+    height: 35vh;
+    width: auto;
+}
+
+.text_empty {
+    color: #D6D2D1;
+    text-align: center !important;
+    padding-bottom: 15px !important;
+    font-size: 1.2em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+i {
+    font-size: 5em;
+    color: #D6D2D1;
+}
+
