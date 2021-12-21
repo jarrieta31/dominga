@@ -3,8 +3,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DondeComer } from '../../shared/donde-comer';
 
 import { DatabaseService } from '../../services/database.service';
+import { WhereEatService } from 'src/app/services/database/where-eat.service';
 import { LoadingController } from '@ionic/angular';
 import { InfoSlider } from '../../shared/info-slider';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-where-eat',
@@ -13,10 +15,11 @@ import { InfoSlider } from '../../shared/info-slider';
 })
 export class WhereEatPage implements OnInit, OnDestroy {
 
-	eat: DondeComer[];
-	weat: DondeComer[];
+	eat             : DondeComer[];
+	weat            : DondeComer[];
   sliderDondeComer: InfoSlider[];
   textoBuscar = '';
+  weat_suscribe : Subscription;
 
   loading: any;
 
@@ -47,11 +50,13 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   })
 });
 
-  constructor(private database: DatabaseService,
-              private loadingCtrl: LoadingController) {
-                this.cargarDondeComer();  
-    
-  }
+  constructor(
+    private database    : DatabaseService,
+    private afs         : WhereEatService,          
+    private loadingCtrl : LoadingController) 
+    {
+      this.cargarDondeComer();  
+    }
 
   ngOnInit() {
   	this.show("Cargando lugares...");
@@ -60,6 +65,7 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   ngOnDestroy(){
     this.su.unsubscribe();
     this.slider.unsubscribe();
+    this.weat_suscribe.unsubscribe();
   }
 
    async show(message: string) {
@@ -69,18 +75,18 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
         spinner: 'bubbles'
       });
         
-     this.loading.present().then(() => {
-         this.su;
-         this.slider;
-         this.loading.dismiss();
-     });
-    }
+    this.loading.present().then(() => {
+        this.su;
+        this.slider;
+        this.loading.dismiss();
+    });
+  }
 
   buscar(event){
     this.textoBuscar = event.detail.value;
   }
 
   cargarDondeComer(){
-    this.weat = this.database.donde_comer;
-}
+    this.weat_suscribe = this.afs.donde_comer.subscribe((res) => this.weat = res);
+  }
 }
