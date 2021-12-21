@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PlacePageRoutingModule } from './place-routing.module';
 
 import { PlacePage } from './place.page';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PlacePageRoutingModule
+    PlacePageRoutingModule,
+    PipesModule,
   ],
   declarations: [PlacePage]
 })

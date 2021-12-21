@@ -8,7 +8,6 @@ import { DatabaseService } from "../database.service";
   providedIn: "root",
 })
 export class PlaceService {
-
   /**Se guardan los lugares del departamento seleccionado */
   places: BehaviorSubject<Place[]>;
   /**Nombre del departamento seleccionado actualmente*/
@@ -45,6 +44,7 @@ export class PlaceService {
         .collection("lugares")
         .ref.where("departamento", "==", this.depto)
         .where("publicado", "==", true)
+        .orderBy("prioridad")
         .get()
         .then((querySnapshot) => {
           const arrPlaces: Place[] = [];
@@ -53,10 +53,10 @@ export class PlaceService {
             arrPlaces.push({ id: item.id, ...data });
             this.initPlace.push({ id: item.id, ...data });
           });
-          console.log(this.initPlace);
+          //console.log(this.initPlace);
           this.allLugares = arrPlaces;
           this.places.next(this.allLugares);
-          console.log(this.allLugares);
+          //console.log(this.allLugares);
           this.save_depto.push(this.depto);
           searchDepto = false;
         })

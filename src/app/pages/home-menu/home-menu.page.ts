@@ -35,8 +35,4 @@ export class HomeMenuPage implements OnInit, OnDestroy {
   select(depto: string | null, distance: number |null) {
     this.dbService.getSelectMenu(depto, distance);
   }
-
-  // loadData() {
-  //   this.dbService.getDepto();
-  // }
 }

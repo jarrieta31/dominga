@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { DatabaseService } from "src/app/services/database.service";
 import { PlaceService } from "src/app/services/database/place.service";
 import { Place } from "src/app/shared/place";
 
@@ -10,10 +9,7 @@ import { Place } from "src/app/shared/place";
   styleUrls: ["./place.page.scss"],
 })
 export class PlacePage {
-  constructor(
-    private browser: InAppBrowser,
-    private placeSvc: PlaceService
-  ) {}
+  constructor(private browser: InAppBrowser, private placeSvc: PlaceService) {}
 
   slideOpts = {
     initialSlide: 0,
@@ -32,5 +28,7 @@ export class PlacePage {
   ionViewWillEnter() {
     this.placeSvc.getPlaces();
     this.placeSvc.places.subscribe((res) => (this.places = res));
+
+    console.log(this.places);
   }
 }

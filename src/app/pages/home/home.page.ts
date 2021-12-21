@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
 import { DatabaseService } from "../../services/database.service";
 import { Place } from "../../shared/place";
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { GeolocationService } from "../../services/geolocation.service";
 import { Point } from "../../shared/point";
 import distance from "@turf/distance";
-import { AlertController, ModalController } from "@ionic/angular";
-import { Platform } from "@ionic/angular";
 import { NetworkService } from "../../services/network.service";
 import { LoadingController } from "@ionic/angular";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
@@ -40,21 +37,12 @@ export class HomePage implements OnInit, OnDestroy {
     autoplay: true,
   };
 
-  // cards = {
-  //     initialSlide: 0,
-  //     speed: 100,
-  //     slidesPerView: 1,
-  //     spaceBetween: 20,
-  //     direction: 'vertical'
-  // };
-
   lugarCercano$: Observable<Place>;
   //subscrictionLugarCercano: Subscription;
   //subscrictionUser: any;
   idUser: string;
 
   loading: any;
-  //mode = new Array();
 
   constructor(
     private database: DatabaseService,
@@ -66,8 +54,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.geolocationService.iniciarSubscriptionClock();
     this.geolocationService.iniciarSubscriptionMatch();
     this.posicion$ = this.geolocationService.getPosicionActual$();
-    // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    // this.darkMode = prefersDark.matches;
   }
 
   su = this.database
@@ -84,7 +70,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.items.forEach((place) => {
         let options = { units: "kilometers" };
         let dist = distance(
-          [place.longitud, place.latitud],
+          [place.ubicacion.lng, place.ubicacion.lat],
           [environment.casaDominga.longitud, environment.casaDominga.latitud],
           options
         );
@@ -104,10 +90,10 @@ export class HomePage implements OnInit, OnDestroy {
           tap((posicion) => {
             if (posicion != null) {
               this.items.forEach((place) => {
-                //console.log('posicion actual', posicion.latitud)
+                console.log('posicion actual', posicion.latitud)
                 let options = { units: "kilometers" };
                 let dist = distance(
-                  [place.longitud, place.latitud],
+                  [place.ubicacion.lng, place.ubicacion.lat],
                   [posicion.longitud, posicion.latitud],
                   options
                 );
