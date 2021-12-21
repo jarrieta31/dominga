@@ -5,6 +5,7 @@ import { EventDetailPage } from "../event-detail/event-detail.page";
 import { FilterEventPage } from "../filter-event/filter-event.page";
 import { DatabaseService } from "src/app/services/database.service";
 import { Subscription } from "rxjs";
+import { VisitEventService } from "src/app/services/database/visit-event.service";
 
 @Component({
   selector: "app-events",
@@ -21,7 +22,8 @@ export class EventsPage implements OnInit, OnDestroy {
 
   constructor(
     private modalCtrl: ModalController,
-    private dbService: DatabaseService
+    private dbService: DatabaseService,
+    private veService: VisitEventService
   ) {}
 
   ngOnInit() {
@@ -107,6 +109,6 @@ export class EventsPage implements OnInit, OnDestroy {
   }
 
   contadorVisitas(id: string) {
-    this.dbService.contadorVisitasEvento(id);
+    this.veService.contadorVisitasEvento(id);
   }
 }

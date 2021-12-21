@@ -4,6 +4,8 @@ import { DatabaseService } from '../../services/database.service';
 
 import { DondeDormir } from '../../shared/donde-dormir';
 import { LoadingController } from '@ionic/angular';
+import { WhereSleepService } from 'src/app/services/database/where-sleep.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-where-sleep',
@@ -12,11 +14,12 @@ import { LoadingController } from '@ionic/angular';
 })
 export class WhereSleepPage implements OnInit, OnDestroy {
 
-    sleep  : DondeDormir[];
-    wsleep : DondeDormir[];
-    items  :    any[] = [];
-    loading:           any;
-    textoBuscar       = '';
+    sleep           : DondeDormir[];
+    wsleep          : DondeDormir[];
+    items           :    any[] = [];
+    loading         :           any;
+    textoBuscar     =            '';
+    wsleep_suscribe :  Subscription;
 
     su = this.database.getSleep().snapshotChanges().subscribe(data => {
         this.sleep = [];
@@ -29,7 +32,9 @@ export class WhereSleepPage implements OnInit, OnDestroy {
 
     constructor(
         private database    : DatabaseService,
-        private loadingCtrl : LoadingController) {
+        private loadingCtrl : LoadingController,
+        private afs         : WhereSleepService ) 
+        {
             this.cargarDondeDormir();
         }
 
@@ -41,10 +46,10 @@ export class WhereSleepPage implements OnInit, OnDestroy {
 
     ngOnDestroy(){
         this.su.unsubscribe();
+        this.wsleep_suscribe.unsubscribe();
     }
 
     async show(message: string) {
-
         this.loading = await this.loadingCtrl.create({
         message,
         spinner: 'bubbles'
@@ -61,13 +66,13 @@ export class WhereSleepPage implements OnInit, OnDestroy {
     }
 
     get dondeDormir(){
-        this.database.getDondeDormir();
+        this.afs.getDondeDormir();
 
         return 'donde dormir';
     }
 
     cargarDondeDormir(){
-        this.wsleep = this.database.donde_dormir;
+        this.wsleep_suscribe = this.afs.donde_dormir.subscribe((res) => this.wsleep = res);
     }
 
 }

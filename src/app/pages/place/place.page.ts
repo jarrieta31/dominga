@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+import { Subscription } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { Place } from "src/app/shared/place";
 
@@ -8,8 +9,15 @@ import { Place } from "src/app/shared/place";
   templateUrl: "./place.page.html",
   styleUrls: ["./place.page.scss"],
 })
-export class PlacePage {
-  constructor(private browser: InAppBrowser, private placeSvc: PlaceService) {}
+export class PlacePage implements OnDestroy {
+  constructor(
+    private browser: InAppBrowser,
+    private placeSvc: PlaceService
+  ) {}
+
+  ngOnDestroy(){
+    this.sourcePlace.unsubscribe();
+  }
 
   slideOpts = {
     initialSlide: 0,
@@ -21,14 +29,14 @@ export class PlacePage {
 
   places: Place[] = [];
 
+  sourcePlace: Subscription;
+
   pageDominga() {
     this.browser.create("https://casadominga.com.uy", "_system");
   }
 
   ionViewWillEnter() {
     this.placeSvc.getPlaces();
-    this.placeSvc.places.subscribe((res) => (this.places = res));
-
-    console.log(this.places);
+    this.sourcePlace = this.placeSvc.places.subscribe((res) => (this.places = res));
   }
 }

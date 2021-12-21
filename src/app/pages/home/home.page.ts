@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DatabaseService } from "../../services/database.service";
+import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Place } from "../../shared/place";
+
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { GeolocationService } from "../../services/geolocation.service";
 import { Point } from "../../shared/point";
@@ -46,6 +48,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private database: DatabaseService,
+    private vpService : VisitPlaceService,
     private geolocationService: GeolocationService,
     private networkService: NetworkService,
     private loadingCtrl: LoadingController,
@@ -173,7 +176,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
     sumaVisitaLugar(lugar_id : string ){
-      this.database.contadorVistasPlace( lugar_id )
+      this.vpService.contadorVistasPlace( lugar_id )
   }
 }
 
