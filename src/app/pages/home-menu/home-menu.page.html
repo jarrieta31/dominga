@@ -1,15 +1,18 @@
 <ion-content>
   <div class="container">
     <div class="slider_filter">
-      <!-- <div class="slider_filter-title">
+      <div class="slider_filter-title">
         <h1>Hola, soy domin<span>go!</span></h1>
         <p>
           y a partir de ahora seré tu guía. <br />
           ¿Descubrimos juntos un nuevo sitio?
         </p>
-      </div> -->
-      <ion-label (click)="seeDepto()">Departamento</ion-label>
-      <ion-label>Distancia</ion-label>
+      </div>
+      <div class="filter_button">
+        <ion-label (click)="seeDepto()">departamento</ion-label>
+        <i class="fas fa-exchange-alt"></i>
+        <ion-label>distancia</ion-label>
+      </div>
       <ion-list *ngIf="depto">
         <ion-radio-group value="">
           <ion-item (click)="select('San José', null)">
@@ -37,12 +40,12 @@
     <div class="menu">
       <div class="div__menu">
         <div class="div__menu-izq" routerLink="/tabs/places">¿dónde ir?</div>
-        <div class="div__menu-izq" routerLink="/tabs/eat">¿dónde comer?</div>
-        <div class="div__menu-izq" routerLink="/tabs/sleep">¿dónde dormir?</div>
+        <div class="div__menu-izq" routerLink="/tabs/eat">¿dónde<br> comer?</div>
+        <div class="div__menu-izq" routerLink="/tabs/sleep">¿dónde<br> dormir?</div>
       </div>
       <div class="div__menu">
         <div class="div__menu-der" routerLink="/tabs/events">¿qué hacer?</div>
-        <div class="div__menu-der" routerLink="/places/9">Casa Dominga</div>
+        <div class="div__menu-der" routerLink="/places/9">Casa<br> Dominga</div>
       </div>
     </div>
   </div>

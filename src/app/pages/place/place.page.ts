@@ -17,6 +17,7 @@ export class PlacePage implements OnDestroy {
 
   ngOnDestroy(){
     this.sourcePlace.unsubscribe();
+    console.log("destroy");
   }
 
   slideOpts = {
@@ -36,6 +37,7 @@ export class PlacePage implements OnDestroy {
   }
 
   ionViewWillEnter() {
+    console.log("ionViewWillEnter");
     this.placeSvc.getPlaces();
     this.sourcePlace = this.placeSvc.places.subscribe((res) => (this.places = res));
   }

@@ -52,6 +52,7 @@
 
 .div__menu-der:nth-child(2) {
   background-color: #01dfb8;
+  text-align: center;
 }
 
 .slider_filter {
@@ -85,6 +86,11 @@ img {
   padding: 15px;
 }
 
+.slider_filter-title {
+  padding: 8% 0;
+  //height: 50%;
+}
+
 span {
   color: #fc67ff;
 }
@@ -112,7 +118,9 @@ ion-label {
   margin: auto;
   width: 50%;
   text-align: center;
-  padding: 10px;
+  font-weight: 700;
+  color: #888;
+  //padding: 20px 10px;
 }
 
 .btn {
@@ -121,4 +129,18 @@ ion-label {
 
 ion-button {
   margin: auto;
+}
+
+.filter_button {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid #888;
+  margin: auto;
+  width: 85%;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.filter_button > i {
+  color: #888;
 }

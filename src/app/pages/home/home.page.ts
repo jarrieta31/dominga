@@ -73,7 +73,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.items.forEach((place) => {
         let options = { units: "kilometers" };
         let dist = distance(
-          [place.ubicacion.lng, place.ubicacion.lat],
+          [place.longitud, place.latitud],
           [environment.casaDominga.longitud, environment.casaDominga.latitud],
           options
         );
