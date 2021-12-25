@@ -53,10 +53,8 @@ export class PlaceService {
             arrPlaces.push({ id: item.id, ...data });
             this.initPlace.push({ id: item.id, ...data });
           });
-          //console.log(this.initPlace);
           this.allLugares = arrPlaces;
           this.places.next(this.allLugares);
-          //console.log(this.allLugares);
           this.save_depto.push(this.depto);
           searchDepto = false;
         })

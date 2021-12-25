@@ -14,7 +14,6 @@ import { Eventos } from "src/app/shared/eventos";
 export class FilterEventPage implements OnInit {
   dataForm: string = "";
   departamentosActivos: Departament[] = [];
-  departamentosSubscription: Subscription;
   localidadesActivas: string[];
   localidadesUnicas: string[];
 
@@ -38,8 +37,7 @@ export class FilterEventPage implements OnInit {
 
   ngOnInit() {
     this.eventos = this.dbService.allEvents;
-    this.departamentosSubscription = this.dbService.getObservableDepartment().subscribe( deptos => this.departamentosActivos = deptos);
-    this.dbService.getDepartamentosLocal();
+    this.departamentosActivos = this.dbService.allDepartament;
     this.customDatePicker();
   }
 

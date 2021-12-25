@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { Observable, Subject, timer } from "rxjs";
+import { BehaviorSubject, Observable, Subject, timer } from "rxjs";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
 import { TwoPoints } from "src/app/shared/two-points";
@@ -52,16 +52,8 @@ export class DatabaseService {
   ) {
     this.position$ = this.geoService.getPosicionActual$();
     this.eventos = new Subject();
-    this.departamentos = new Subject();
     this.getEventos();
-    this.getDepartamentosActivos();
     // this.getLugares();
-
-    //pasado a donde-dormir.service
-    // this.getDondeDormir();
-    //pasado a donde-comer.service
-    // this.getDondeComer();
-   
 
     /**
      * Calcular distancia desde ubicación del usuario a lugares
@@ -111,17 +103,7 @@ export class DatabaseService {
       this.selectionDepto = depto;
     }
   }
-  // Pasado a donde-comer.service
-  // donde_comer: any[] = [];
-
-  // Pasado a donde-dormir.service
-  // donde_dormir: any[] = [];
-
-  // Variables para contador de visitas a Eventos y Lugares
-  // visita_evento: VisitaEvento;
-  // visita_lugar: VisitaPlace;
-  // visitasAEventos: string[] = [];
-  // visitasALugares: string[] = [];
+ 
   /**
    * Obtener eventos desde fecha de hoy
    */
@@ -149,45 +131,6 @@ export class DatabaseService {
       .finally(() => "Finally");
   }
 
-/**
- * Pasado a donde-dormir.service.ts
- */
-  // getDondeDormir() {
-  //   this.afs
-  //     .collection("donde_dormir")
-  //     .ref.where("departamento", "==", "San Jose")
-  //     .get()
-  //     .then((querySanpshot) => {
-  //       const arryDondeDormir: any[] = [];
-  //       querySanpshot.forEach((item) => {
-  //         const data: any = item.data();
-  //         arryDondeDormir.push({ id: item.id, ...data });
-  //       });
-  //       this.donde_dormir = arryDondeDormir;
-  //     })
-  //     .finally(() => console.log("Finally"));
-  // }
-
-/**
- * 
- * Pasado a donde-comer.service.ts
- */
-  // getDondeComer() {
-  //   this.afs
-  //     .collection("donde_comer")
-  //     .ref.where("departamento", "==", "san jose")
-  //     .get()
-  //     .then((querySanpshot) => {
-  //       const arryDondeComer: any[] = [];
-  //       querySanpshot.forEach((item) => {
-  //         const data: any = item.data();
-  //         arryDondeComer.push({ id: item.id, ...data });
-  //       });
-  //       this.donde_comer = arryDondeComer;
-  //     })
-  //     .finally(() => console.log("Finally"));
-  // }
-
   getObservable(): Observable<Eventos[]> {
     return this.eventos.asObservable();
   }
@@ -196,12 +139,15 @@ export class DatabaseService {
     this.eventos.next(this.allEvents);
   }
 
-  departamentos: Subject<Departament[]>;
   allDepartament: Departament[] = [];
+  departamentosActivos: BehaviorSubject<Departament[]>;
   /**
    * Obtener departamentos activos
    */
   getDepartamentosActivos() {
+    this.allDepartament = [];
+    this.departamentosActivos = new BehaviorSubject<Departament[]>(this.allDepartament);
+
     this.afs
       .collection("departamentos")
       .ref.where("status", "==", true)
@@ -213,20 +159,12 @@ export class DatabaseService {
           arrDeptos.push({ id: item.id, ...data });
         });
         this.allDepartament = arrDeptos;
-        this.departamentos.next(this.allDepartament);
+        this.departamentosActivos.next(this.allDepartament);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => "Finally");
-  }
-
-  getObservableDepartment(): Observable<Departament[]> {
-    return this.departamentos.asObservable();
-  }
-
-  getDepartamentosLocal() {
-    this.departamentos.next(this.allDepartament);
   }
 
   listarDatos() {
