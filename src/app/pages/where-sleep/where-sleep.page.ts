@@ -1,78 +1,49 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-
-import { DatabaseService } from '../../services/database.service';
-
-import { DondeDormir } from '../../shared/donde-dormir';
-import { LoadingController } from '@ionic/angular';
-import { WhereSleepService } from 'src/app/services/database/where-sleep.service';
-import { Subscription } from 'rxjs';
+import { Component } from "@angular/core";
+import { DondeDormir } from "../../shared/donde-dormir";
+import { LoadingController } from "@ionic/angular";
+import { WhereSleepService } from "src/app/services/database/where-sleep.service";
+import { Subscription } from "rxjs";
 
 @Component({
-    selector: 'app-where-sleep',
-    templateUrl: './where-sleep.page.html',
-    styleUrls: ['./where-sleep.page.scss'],
+  selector: "app-where-sleep",
+  templateUrl: "./where-sleep.page.html",
+  styleUrls: ["./where-sleep.page.scss"],
 })
-export class WhereSleepPage implements OnInit, OnDestroy {
+export class WhereSleepPage {
+  sleep: DondeDormir[];
+  loading: any;
+  textoBuscar = "";
+  wsleep_suscribe: Subscription;
 
-    sleep           : DondeDormir[];
-    wsleep          : DondeDormir[];
-    items           :    any[] = [];
-    loading         :           any;
-    textoBuscar     =            '';
-    wsleep_suscribe :  Subscription;
+  constructor(
+    private loadingCtrl: LoadingController,
+    private sleepSvc: WhereSleepService
+  ) {}
 
-    su = this.database.getSleep().snapshotChanges().subscribe(data => {
-        this.sleep = [];
-        data.forEach(item => {
-            let a = item.payload.toJSON();
-            a['$key'] = item.key;
-            this.sleep.push(a as DondeDormir);
-        })
+  async show(message: string) {
+    this.loading = await this.loadingCtrl.create({
+      message,
+      spinner: "bubbles",
     });
 
-    constructor(
-        private database    : DatabaseService,
-        private loadingCtrl : LoadingController,
-        private afs         : WhereSleepService ) 
-        {
-            this.cargarDondeDormir();
-        }
-
-    
-
-    ngOnInit() {
-        this.show("Cargando lugares...");
-    }
-
-    ngOnDestroy(){
-        this.su.unsubscribe();
-        this.wsleep_suscribe.unsubscribe();
-    }
-
-    async show(message: string) {
-        this.loading = await this.loadingCtrl.create({
-        message,
-        spinner: 'bubbles'
-    });
-        
     this.loading.present().then(() => {
-            this.su;
-            this.loading.dismiss();
-        });
-    }
+      this.loading.dismiss();
+    });
+  }
 
-    buscar( event ){
-        this.textoBuscar = event.detail.value;
-    }
+  buscar(event) {
+    this.textoBuscar = event.detail.value;
+  }
 
-    get dondeDormir(){
-        this.afs.getDondeDormir();
+  ionViewWillEnter() {
+    this.show("Cargando lugares...");
+    this.sleepSvc.getDondeDormir();
+    this.wsleep_suscribe = this.sleepSvc.donde_dormir.subscribe(
+      (res) => (this.sleep = res)
+    );
+  }
 
-        return 'donde dormir';
-    }
-
-    cargarDondeDormir(){
-        this.wsleep_suscribe = this.afs.donde_dormir.subscribe((res) => this.wsleep = res);
-    }
-
+  ionViewDidLeave() {
+    this.wsleep_suscribe.unsubscribe();
+  }
 }

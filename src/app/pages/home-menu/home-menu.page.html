@@ -15,22 +15,10 @@
         <ion-label>distancia</ion-label>
       </div>
       <ion-list *ngIf="depto" class="depto_list">
-        <ion-radio-group value="">
-          <ion-item (click)="select('San José', null)">
-            <ion-label>San José</ion-label>
-            <ion-radio slot="start" value="San José"></ion-radio>
-          </ion-item>
-          <ion-item (click)="select('Colonia', null)">
-            <ion-label>Colonia</ion-label>
-            <ion-radio slot="start" value="Colonia"></ion-radio>
-          </ion-item>
-          <ion-item (click)="select('Canelones', null)">
-            <ion-label>Canelones</ion-label>
-            <ion-radio slot="start" value="Canelones"></ion-radio>
-          </ion-item>
-          <ion-item (click)="select('Florida', null)">
-            <ion-label>Florida</ion-label>
-            <ion-radio slot="start" value="Florida"></ion-radio>
+        <ion-radio-group>
+          <ion-item *ngFor="let depto of deptosActivos" (click)="select(depto.nombre, null)">
+            <ion-label>{{ depto.nombre }}</ion-label>
+            <ion-radio slot="start" value="{{ depto.nombre }}"></ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>

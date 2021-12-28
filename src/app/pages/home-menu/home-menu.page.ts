@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 import { DatabaseService } from "src/app/services/database.service";
 import { Departament } from "src/app/shared/departament";
 
@@ -11,6 +12,8 @@ export class HomeMenuPage implements OnInit {
 
   depto: boolean = false;
   deptosActivos: Departament[] = [];
+
+  deptos: Subscription;
 
   constructor(private dbService: DatabaseService) {}
 
@@ -29,7 +32,10 @@ export class HomeMenuPage implements OnInit {
   ionViewWillEnter() {
     this.depto = false;
     this.dbService.getDepartamentosActivos();
-    this.dbService.departamentosActivos.subscribe( res => this.deptosActivos = res);
-    console.log(this.deptosActivos)
+    this.deptos = this.dbService.departamentosActivos.subscribe( res => this.deptosActivos = res);
+  }
+
+  ionViewDidLeave() {
+    this.deptos.unsubscribe();
   }
 }

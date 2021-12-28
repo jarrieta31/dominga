@@ -4,4 +4,5 @@ export interface DondeDormir {
 	direccion: string;
 	imagen: string;
 	telefono: string;
+	departamento: string;
 }
