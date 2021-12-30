@@ -31,6 +31,10 @@ export class PlacePage {
     this.browser.create("https://casadominga.com.uy", "_system");
   }
 
+  getPlace(id: string) {
+    this.placeSvc.getPlaceId(id);
+  }
+
   ionViewWillEnter() {
     this.placeSvc.getPlaces();
     this.sourcePlace = this.placeSvc.places.subscribe((res) => (this.places = res));

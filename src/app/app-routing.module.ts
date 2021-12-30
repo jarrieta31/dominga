@@ -71,6 +71,10 @@ const routes: Routes = [
     path: 'place',
     loadChildren: () => import('./pages/place/place.module').then( m => m.PlacePageModule)
   },
+  {
+    path: 'place-selected',
+    loadChildren: () => import('./pages/place-selected/place-selected.module').then( m => m.PlaceSelectedPageModule)
+  },
 
 
 
