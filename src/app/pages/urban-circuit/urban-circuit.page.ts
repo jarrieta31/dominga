@@ -47,7 +47,7 @@ export class UrbanCircuitPage implements OnInit, OnDestroy {
 
         this.items.forEach(data => {
             if (data.tipo == 'Urbano') {
-                this.point = {latitud: +data.latitud, longitud: +data.longitud}
+                this.point = {latitud: +data.ubicacion.lng, longitud: +data.ubicacion.lat}
                 this.points.push(this.point);
             }
         })
@@ -58,13 +58,13 @@ export class UrbanCircuitPage implements OnInit, OnDestroy {
 
             if (data.tipo == 'Urbano') {
                 var popup = new Mapboxgl.Popup({ offset: 25 }).setHTML(
-                    `<a href="places/${data.$key}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
+                    `<a href="places/${data.id}"><img src="${data.imagenPrincipal}" /><h5 style="text-align: center">${data.nombre}</h5></a>`
                     
                 );
                 const marker = new Mapboxgl.Marker({
                         draggable: false,
                         color: "#ea4335"
-                    }).setLngLat([data.longitud, data.latitud])
+                    }).setLngLat([data.ubicacion.lng, data.ubicacion.lat])
                     .setPopup(popup)
                     .addTo(this.geolocationService.mapa);
             }

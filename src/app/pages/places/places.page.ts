@@ -219,7 +219,7 @@ export class PlacesPage implements OnInit, OnDestroy {
         let options = { units: "kilometers" };
         let dist = distance(
           [this.longitud, this.latitud],
-          [sug.longitud, sug.latitud],
+          [sug.ubicacion.lng, sug.ubicacion.lat],
           options
         );
         let red = parseFloat(dist).toFixed(2);
@@ -231,7 +231,7 @@ export class PlacesPage implements OnInit, OnDestroy {
         if (sug.nombre == "Casa Dominga") {
           let dist_cd = distance(
             [this.longitud, this.latitud],
-            [sug.longitud, sug.latitud],
+            [sug.ubicacion.lng, sug.ubicacion.lat],
             options
           );
           let red_cd;
@@ -250,14 +250,14 @@ export class PlacesPage implements OnInit, OnDestroy {
       });
 
       this.sugerencias.forEach((res) => {
-        var dist_num = parseFloat(res.distancia);
-        res.distanciaNumber = dist_num;
+        var dist_num = parseFloat(res.distancia.toString());
+        res.distancia = dist_num;
       });
 
       this.sugerencias.sort((a, b) =>
-        a.distanciaNumber > b.distanciaNumber
+        a.distancia > b.distancia
           ? 1
-          : b.distanciaNumber > a.distanciaNumber
+          : b.distancia > a.distancia
           ? -1
           : 0
       );
