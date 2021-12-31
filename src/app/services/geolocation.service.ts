@@ -90,28 +90,28 @@ export class GeolocationService {
         let options = { units: 'meters' };
         this.items.forEach(place => {
           if (posicion != null) {
-            points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.longitud, latitud2: +place.latitud };
-            dist = distance([place.longitud, place.latitud], [posicion.longitud, posicion.latitud], options);
+            points = { longitud1: posicion.longitud, latitud1: posicion.latitud, longitud2: +place.ubicacion.lng, latitud2: +place.ubicacion.lat };
+            dist = distance([place.ubicacion.lng, place.ubicacion.lat], [posicion.longitud, posicion.latitud], options);
             //Verifica la distancia
-            if (dist <= 25) {
+            // if (dist <= 25) {
               //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
-              for (var key in place.valoracion) {
-                //si el usuario ya valoró se termina el forech                
-                if(this.user == key){
-                  break
-                }
-                //si el usuario no ha valorado
-                if (key != this.user) {
-                  //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
-                  this.valuationsPlaces.forEach(assessment => {
-                    if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
-                      assessment.answer = true;
-                      this.lugarCercano$.next(place)
-                    }
-                  });
-                }
-              }
-            }
+              // for (var key in place.valoracion) {
+              //   //si el usuario ya valoró se termina el forech                
+              //   if(this.user == key){
+              //     break
+              //   }
+              //   //si el usuario no ha valorado
+              //   if (key != this.user) {
+              //     //busca en el array de valoraciones para ver si ya dijo que no quiere valorar 
+              //     this.valuationsPlaces.forEach(assessment => {
+              //       if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
+              //         assessment.answer = true;
+              //         this.lugarCercano$.next(place)
+              //       }
+              //     });
+              //   }
+              // }
+            //}
           }
 
         });

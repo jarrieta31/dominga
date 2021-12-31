@@ -8,6 +8,7 @@ import { PlaceSelectedPageRoutingModule } from './place-selected-routing.module'
 
 import { PlaceSelectedPage } from './place-selected.page';
 import { VideoPageModule } from '../video/video.module';
+import { PipesModule } from '../../shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { VideoPageModule } from '../video/video.module';
     IonicModule,
     PlaceSelectedPageRoutingModule,
     VideoPageModule,
+    PipesModule
   ],
   declarations: [PlaceSelectedPage]
 })

@@ -79,7 +79,6 @@ export class PlaceService {
         }
       });
       this.places.next(this.allLugares);
-      console.log(this.allLugares);
     }
   }
 

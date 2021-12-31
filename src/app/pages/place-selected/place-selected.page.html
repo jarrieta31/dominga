@@ -62,7 +62,7 @@
               </a>
               <div class="infoSug">
                   <div class="sugNombre">{{ sug.name }}</div>
-                  <div class="sugDistancia">{{ sug.distance }} desde {{ place.nombre }}</div>
+                  <div class="sugDistancia">{{ sug.distance | formatDistancia }} desde {{ place.nombre }}</div>
               </div>
           </div>
       </div>

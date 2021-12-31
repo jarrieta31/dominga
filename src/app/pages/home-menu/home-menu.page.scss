@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
 .container {
   height: 100vh;
 }
@@ -57,7 +59,6 @@
 
 .slider_filter {
   height: 25%;
-  //margin: 0 3%;
 }
 
 .slider_filter-filter {
@@ -87,8 +88,7 @@ img {
 }
 
 .slider_filter-title {
-  padding: 8% 0;
-  //height: 50%;
+  padding: 20px 0 0 20px;
 }
 
 span {
@@ -98,10 +98,12 @@ span {
 h1,
 span {
   font-weight: bold;
+  font-family: 'Poppins', sans-serif;
 }
 
 p {
   margin-top: 0 !important;
+  font-family: 'Poppins', sans-serif;
 }
 
 h1 {
@@ -113,22 +115,20 @@ p {
   margin: 0 3%;
 }
 
-ion-label {
-  display: inline-block;
-  margin: auto;
-  width: 50%;
-  text-align: center;
-  font-weight: 700;
-  color: #888;
-  //padding: 20px 10px;
-}
-
 .btn {
   width: 100%;
 }
 
 ion-button {
   margin: auto;
+}
+
+.filter_button > ion-label {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  font-weight: 700;
+  color: #666;
 }
 
 .filter_button {
@@ -138,7 +138,6 @@ ion-button {
   margin: auto;
   width: 85%;
   border-radius: 10px;
-  padding: 4px;
 }
 
 .filter_button > i {
@@ -146,11 +145,57 @@ ion-button {
 }
 
 .depto_selected {
-  color: #01dfb8;
+  color: #01dfb8 !important;
 }
 
 .depto_list {
   margin: 10px auto;
-  width: 85%;
+  width: 70%;
   border-radius: 10px;
 }
+
+.endline {
+  font-weight: bold;
+  text-align: center;
+  color: #999;
+  font-size: 18px;
+}
+
+ion-item {
+  height: 40px !important;
+}
+
+.depto_bold {
+  font-weight: bold;
+}
+
+@media (min-width: 325px) {
+  .filter_button {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid #888;
+    margin: auto;
+    width: 85%;
+    border-radius: 10px;
+    margin-top: 6%;
+  }
+}
+
+@media (min-width: 375px) {
+  .filter_button {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid #888;
+    margin: auto;
+    width: 85%;
+    border-radius: 10px;
+    margin-top: 9%;
+  }
+}
+
+@media (max-width: 280px) {
+  .slider_filter-title {
+    padding: 10px 0 0 20px;
+  }
+}
+
