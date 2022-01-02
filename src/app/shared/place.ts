@@ -1,4 +1,4 @@
-export interface Place {
+    export interface Place {
     id: string;
     distancia?: string | number,
     nombre: string,
