@@ -31,7 +31,9 @@ export class PlaceService {
   constructor(
     private databaseSvc: DatabaseService,
     private afs: AngularFirestore
-  ) {}
+  ) {
+    this.places = new BehaviorSubject<Place[]>(this.initPlace);
+  }
 
   /**
    * Devuelve los lugares del departamento seleccionado por el usuario
@@ -106,7 +108,7 @@ export class PlaceService {
     let options = { units: "kilometers" };
 
     this.initPlace.forEach((res) => {
-      if (res.id != this.near_place.id) {
+      if (res.id != this.near_place.id && res.departamento == this.depto) {
         let dist = distance(
           [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
           [res.ubicacion.lng, res.ubicacion.lat],

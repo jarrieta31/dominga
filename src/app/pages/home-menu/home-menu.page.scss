@@ -1,7 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
 
 .container {
   height: 100vh;
+  margin-top: 15px;
 }
 
 .menu {
@@ -97,13 +100,12 @@ span {
 
 h1,
 span {
-  font-weight: bold;
   font-family: 'Poppins', sans-serif;
 }
 
 p {
   margin-top: 0 !important;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 h1 {
@@ -127,8 +129,9 @@ ion-button {
   display: inline-block;
   width: 50%;
   text-align: center;
-  font-weight: 700;
+  font-family: 'Josefin Sans', sans-serif;
   color: #666;
+
 }
 
 .filter_button {
@@ -138,6 +141,7 @@ ion-button {
   margin: auto;
   width: 85%;
   border-radius: 10px;
+  padding: 5px 2.5px 2.5px 2.5px;
 }
 
 .filter_button > i {
@@ -151,7 +155,7 @@ ion-button {
 .depto_list {
   margin: 10px auto;
   width: 70%;
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 
 .endline {
@@ -169,7 +173,7 @@ ion-item {
   font-weight: bold;
 }
 
-@media (min-width: 325px) {
+@media (min-width: 320px) {
   .filter_button {
     display: flex;
     flex-direction: row;
@@ -195,7 +199,7 @@ ion-item {
 
 @media (max-width: 280px) {
   .slider_filter-title {
-    padding: 10px 0 0 20px;
+    padding: 10px 0 0 15px;
   }
 }
 

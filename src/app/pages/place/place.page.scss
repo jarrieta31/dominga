@@ -1,6 +1,7 @@
 * {
   padding: 0;
   margin: 0;
+  z-index: 0;
 }
 
 .empty {
@@ -55,30 +56,18 @@ ion-label {
   text-align: left;
 }
 
-.padre {
-  height: 100%;
-  overflow-y: hidden;
-}
-
 .slider {
   width: 100%;
-}
-
-.cards {
-  overflow-y: scroll;
+  position: -webkit-sticky;  // required for Safari
+  position: sticky;   
+  top: 0; // required as well.
+  z-index: 1;
 }
 
 .distancia {
   float: left;
   margin-left: 3%;
   padding: 0;
-}
-
-.sliderPrimero,
-.sliderHijo,
-.bannerLink,
-.imgSlider {
-  width: 100%;
 }
 
 .sliderPrimero,
