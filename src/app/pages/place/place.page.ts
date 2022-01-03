@@ -36,6 +36,8 @@ export class PlacePage {
   places: Place[] = [];
   /**subscription activa con los lugares del servicio*/
   sourcePlace: Subscription;
+  /**guarda las localidades con lugares publicados */
+  location: any[] = [];
   distancia: string;
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
@@ -49,12 +51,18 @@ export class PlacePage {
   /**controla cuando descartar el spinner de carga */
   isLoading = false;
 
+  isFilter = false;
+
   pageDominga() {
     this.browser.create("https://casadominga.com.uy", "_system");
   }
 
   getPlace(id: string) {
     this.placeSvc.getPlaceId(id);
+  }
+
+  changeFilter() {
+    this.isFilter = !this.isFilter;
   }
 
   /**
@@ -80,6 +88,22 @@ export class PlacePage {
     this.placeSvc.getPlaces();
     this.sourcePlace = this.placeSvc.places.subscribe((res) => {
       this.places = res;
+      /**====================== localidades activas ==================================== */
+      this.location = [];
+      this.places.forEach((loc) => {
+        let isLocation = false;
+        if (this.location.length == 0) {
+          this.location.push({ localidad: loc.localidad });
+          isLocation = true;
+        }
+        else {
+          this.location.forEach((locExist) => {
+            if (loc.localidad == locExist.localidad) isLocation = true;
+          });
+        }
+        if (!isLocation) this.location.push({ localidad: loc.localidad });
+      });
+      /**============================================================================== */
       this.isLoading = true;
       this.timerSubs = this.timer$.subscribe(() => {
         this.places.forEach((calcDist) => {
@@ -118,7 +142,7 @@ export class PlacePage {
   ionViewDidLeave() {
     this.sourcePlace.unsubscribe();
     this.timerSubs.unsubscribe();
-    if(this.places.length > 0) {
+    if (this.places.length > 0) {
       this.subscripcionPosition.unsubscribe();
     }
   }

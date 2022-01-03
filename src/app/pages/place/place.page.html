@@ -8,89 +8,108 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div id="alto" class="slider">
-      <ion-slides
-        class="sliderPrimero"
-        scrollbar="false"
-        pager="false"
-        [options]="slideOpts"
+  <div id="alto" class="slider">
+    <ion-slides
+      class="sliderPrimero"
+      scrollbar="false"
+      pager="false"
+      [options]="slideOpts"
+    >
+      <ion-slide class="sliderHijo">
+        <a
+          class="banner"
+          href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas."
+        >
+          <ion-fab vertical="top" horizontal="start" slot="fixed">
+            <ion-fab-button color="whatsapp">
+              <ion-icon class="logoWhatsapp" name="logo-whatsapp"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+          <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
+        </a>
+      </ion-slide>
+      <ion-slide class="sliderHijo">
+        <a class="banner" (click)="pageDominga()">
+          <img class="imgSlider" src="/assets/img/casaDominga.jpeg" />
+        </a>
+      </ion-slide>
+      <ion-slide class="sliderHijo" [routerLink]="['/places/9']">
+        <div class="banner">
+          <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
+        </div>
+      </ion-slide>
+      <ion-slide class="sliderHijo" [routerLink]="['/']">
+        <div class="banner">
+          <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
+        </div>
+      </ion-slide>
+      <ion-slide class="sliderHijo" [routerLink]="['/']">
+        <div class="banner">
+          <img class="imgSlider" src="/assets/img/tour.jpeg" />
+        </div>
+      </ion-slide>
+    </ion-slides>
+    <div class="filter_place" (click)="changeFilter()">
+      <ion-chip color="primary">
+        <i class="fas fa-search magnifying"></i
+        ><ion-label>filtrar lugares</ion-label></ion-chip
       >
-        <ion-slide class="sliderHijo">
-          <a
-            class="banner"
-            href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas."
-          >
-            <ion-fab vertical="top" horizontal="start" slot="fixed">
-              <ion-fab-button color="whatsapp">
-                <ion-icon class="logoWhatsapp" name="logo-whatsapp"></ion-icon>
-              </ion-fab-button>
-            </ion-fab>
-            <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
-          </a>
-        </ion-slide>
-        <ion-slide class="sliderHijo">
-          <a class="banner" (click)="pageDominga()">
-            <img class="imgSlider" src="/assets/img/casaDominga.jpeg" />
-          </a>
-        </ion-slide>
-        <ion-slide class="sliderHijo" [routerLink]="['/places/9']">
-          <div class="banner">
-            <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
-          </div>
-        </ion-slide>
-        <ion-slide class="sliderHijo" [routerLink]="['/']">
-          <div class="banner">
-            <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
-          </div>
-        </ion-slide>
-        <ion-slide class="sliderHijo" [routerLink]="['/']">
-          <div class="banner">
-            <img class="imgSlider" src="/assets/img/tour.jpeg" />
-          </div>
-        </ion-slide>
-      </ion-slides>
     </div>
-    <div class="cards">
-      <div class="empty" *ngIf="places.length == 0">
-        <div class="text_empty">No hay lugares para el departamento seleccionado</div>
-        <i class="far fa-sad-tear icon_empty"></i>
+    <div *ngIf="isFilter" class="form_filter">
+      <form>
+        <ion-select placeholder="Localidad">
+          <ion-select-option *ngFor="let loc of location" value="{{ loc.localidad }}">{{ loc.localidad }}</ion-select-option>
+        </ion-select>
+        <ion-select placeholder="Categoría">
+          <ion-select-option>Departamento</ion-select-option>
+        </ion-select>
+        <ion-button>Filtrar</ion-button>
+      </form>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="empty" *ngIf="places.length == 0">
+      <div class="text_empty">
+        No hay lugares para el departamento seleccionado
       </div>
-      <ion-card
-        *ngFor="let item of places"
-        id="{{ item.id }}"
-        (click)="getPlace(item.id)"
-        [routerLink]="['/place-selected']"
-      >
-        <ion-card-header
-          *ngIf="item.tipo == 'Rural'"
-          color="options"
-          id="place-title"
-        >
-          {{ item.nombre }}<span class="categoria"
-            >&nbsp;&nbsp;({{item.tipo}})</span
-          >
-          <i style="float: right" class="fas fa-tractor"></i>
-        </ion-card-header>
-        <ion-card-header
-          *ngIf="item.tipo == 'Urbano'"
-          color="information"
-          id="place-title"
-        >
-          {{ item.nombre }}<span class="categoria"
-            >&nbsp;&nbsp;({{item.tipo}})</span
-          >
-          <i style="float: right" class="fas fa-city"></i>
-        </ion-card-header>
-        <ion-card-content>
-          <img
-            class="imgCard"
-            src="{{ item.imagenHome['url']}}"
-            alt="{{ item.nombre }}"
-          />
-          <div class="duracion">
-            <b class="distancia">{{item.distancia | formatDistancia }}</b>
-          </div>
-        </ion-card-content>
-      </ion-card>
+      <i class="far fa-sad-tear icon_empty"></i>
     </div>
+    <ion-card
+      *ngFor="let item of places"
+      id="{{ item.id }}"
+      (click)="getPlace(item.id)"
+      [routerLink]="['/place-selected']"
+    >
+      <ion-card-header
+        *ngIf="item.tipo == 'Rural'"
+        color="options"
+        id="place-title"
+      >
+        {{ item.nombre }}<span class="categoria"
+          >&nbsp;&nbsp;({{item.tipo}})</span
+        >
+        <i style="float: right" class="fas fa-tractor"></i>
+      </ion-card-header>
+      <ion-card-header
+        *ngIf="item.tipo == 'Urbano'"
+        color="information"
+        id="place-title"
+      >
+        {{ item.nombre }}<span class="categoria"
+          >&nbsp;&nbsp;({{item.tipo}})</span
+        >
+        <i style="float: right" class="fas fa-city"></i>
+      </ion-card-header>
+      <ion-card-content>
+        <img
+          class="imgCard"
+          src="{{ item.imagenHome['url']}}"
+          alt="{{ item.nombre }}"
+        />
+        <div class="duracion">
+          <b class="distancia">{{item.distancia | formatDistancia }}</b>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

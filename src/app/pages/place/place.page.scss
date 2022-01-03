@@ -61,7 +61,7 @@ ion-label {
   position: -webkit-sticky;  // required for Safari
   position: sticky;   
   top: 0; // required as well.
-  z-index: 1;
+  z-index: 50;
 }
 
 .distancia {
@@ -106,7 +106,46 @@ ion-card-header {
   min-height: 11.875em;
 }
 
-.toggle-item {
+.filter_place {
+  margin: -30px auto 0 auto;
+  z-index: 20;
+  width: 85%;
+  opacity: 1;
+}
+
+ion-chip {
+  width: 100%;
+  background-color: #e2edff;
+  margin-bottom: 10px;
+  padding: 21px 21px 21px 3px;
+  --color: #3880ff;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.magnifying {
+  padding: 10.5px;
+  border-radius: 100%;
+  color: #fff;
+  background-color: #01dfb8;
+  margin-right: 10px;
+}
+
+.form_filter {
+  width: 85%;
+  margin: 0 auto 5px auto;
+  border: 1px solid #3880ff;
+}
+
+form {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+form > ion-select {
+  width: 40%;
 }

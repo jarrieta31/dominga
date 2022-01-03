@@ -75,6 +75,10 @@ const routes: Routes = [
     path: 'place-selected',
     loadChildren: () => import('./pages/place-selected/place-selected.module').then( m => m.PlaceSelectedPageModule)
   },
+  {
+    path: 'artist',
+    loadChildren: () => import('./pages/artist/artist.module').then( m => m.ArtistPageModule)
+  },
 
 
 
