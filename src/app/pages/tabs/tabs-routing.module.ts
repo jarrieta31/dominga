@@ -16,9 +16,9 @@ const routes: Routes = [
           ),
       },
       {
-        path: "places",
+        path: "place",
         loadChildren: () =>
-          import("../home/home.module").then((m) => m.HomePageModule),
+          import("../place/place.module").then((m) => m.PlacePageModule),
       },
       {
         path: "events",
@@ -28,22 +28,30 @@ const routes: Routes = [
       {
         path: "sleep",
         loadChildren: () =>
-          import("../where-sleep/where-sleep.module").then((m) => m.WhereSleepPageModule),
+          import("../where-sleep/where-sleep.module").then(
+            (m) => m.WhereSleepPageModule
+          ),
       },
       {
         path: "eat",
         loadChildren: () =>
-          import("../where-eat/where-eat.module").then((m) => m.WhereEatPageModule),
+          import("../where-eat/where-eat.module").then(
+            (m) => m.WhereEatPageModule
+          ),
       },
       {
         path: "info",
         loadChildren: () =>
-          import("../information/information.module").then((m) => m.InformationPageModule),
+          import("../information/information.module").then(
+            (m) => m.InformationPageModule
+          ),
       },
       {
-        path: "place",
+        path: "artist",
         loadChildren: () =>
-          import("../place/place.module").then((m) => m.PlacePageModule),
+          import("../artist/artist.module").then(
+            (m) => m.ArtistPageModule
+          ),
       },
     ],
   },
