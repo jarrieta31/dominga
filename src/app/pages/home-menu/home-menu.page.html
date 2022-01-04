@@ -9,8 +9,8 @@
         </p>
       </div>
       <div class="filter_button">
-        <ion-label (click)="seeDepto()" *ngIf="depto" class="depto_selected">departamento</ion-label>
-        <ion-label (click)="seeDepto()" *ngIf="!depto">departamento</ion-label>
+        <ion-label (click)="seeDepto()" *ngIf="depto || deptoSelected != null" class="depto_selected">departamento</ion-label>
+        <ion-label (click)="seeDepto()" *ngIf="!depto && deptoSelected == null">departamento</ion-label>
         <i class="fas fa-exchange-alt"></i>
         <ion-label>distancia</ion-label>
       </div>

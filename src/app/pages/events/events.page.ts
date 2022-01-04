@@ -65,7 +65,7 @@ export class EventsPage implements OnInit, OnDestroy {
     lugar: string
   ) {
     if (descripcion.length > 250) {
-      var desc = descripcion.substr(0, 250) + " ...";
+      var desc = descripcion.substring(0, 250) + " ...";
     } else {
       desc = descripcion;
     }

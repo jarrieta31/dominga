@@ -56,14 +56,16 @@
       >
     </div>
     <div *ngIf="isFilter" class="form_filter">
-      <form>
-        <ion-select placeholder="Localidad">
+      <form [formGroup]="filterForm">
+        <ion-select placeholder="localidad" formControlName="localidad">
+          <ion-select-option value="">Todo</ion-select-option>
           <ion-select-option *ngFor="let loc of location" value="{{ loc.localidad }}">{{ loc.localidad }}</ion-select-option>
         </ion-select>
-        <ion-select placeholder="Categoría">
-          <ion-select-option>Departamento</ion-select-option>
+        <ion-select placeholder="categoría" formControlName="tipo">
+          <ion-select-option value="">Todo</ion-select-option>
+          <ion-select-option *ngFor="let cat of category" value="{{ cat.categoria }}">{{ cat.categoria }}</ion-select-option>
         </ion-select>
-        <ion-button>Filtrar</ion-button>
+        <ion-button type="submit" (click)="filterPlace()">Filtrar</ion-button>
       </form>
     </div>
   </div>
@@ -75,7 +77,7 @@
       <i class="far fa-sad-tear icon_empty"></i>
     </div>
     <ion-card
-      *ngFor="let item of places"
+      *ngFor="let item of places | filterPlaces:dataForm"
       id="{{ item.id }}"
       (click)="getPlace(item.id)"
       [routerLink]="['/place-selected']"
