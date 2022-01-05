@@ -32,9 +32,25 @@ export class HomeMenuPage {
   select(depto: string | null, distance: number | null) {
     this.dbService.getSelectMenu(depto, distance);
     this.deptoSelected = depto;
+
+    if(depto != null && depto != undefined) {
+      localStorage.setItem("deptoActivo", depto)
+    } else if (distance != null && distance != undefined) {
+      localStorage.setItem("distanceActivo", distance.toString())
+    }
   }
 
   ionViewWillEnter() {
+    let deptoSave = localStorage.getItem("deptoActivo");
+    let distanceSave = localStorage.getItem("distanceActivo");
+
+    if(deptoSave != null && deptoSave != undefined) {
+      this.dbService.selectionDepto = deptoSave;
+    }
+    else if(distanceSave != null && distanceSave != undefined) {
+      this.dbService.selectionDepto = distanceSave;
+    }
+
     this.deptoSelected = this.dbService.selectionDepto;
     this.depto = false;
     this.dbService.getDepartamentosActivos();

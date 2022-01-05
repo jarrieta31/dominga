@@ -100,6 +100,7 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    this.isFilter = false;
     this.show("Cargando lugares...");
     this.placeSvc.getPlaces();
     this.sourcePlace = this.placeSvc.places.subscribe((res) => {
