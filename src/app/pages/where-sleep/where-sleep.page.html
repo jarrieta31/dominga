@@ -1,29 +1,41 @@
 <ion-header>
-    <ion-toolbar color="circuits">
-        <ion-img slot="start" src="/assets/icon/dormir.png"></ion-img>
-        <ion-title>¿Dónde Dormir?</ion-title>
-    </ion-toolbar>
+  <ion-toolbar color="circuits">
+    <ion-img slot="start" src="/assets/icon/dormir.png"></ion-img>
+    <ion-title>¿Dónde Dormir?</ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
-    <ion-list>
-        <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
-            <div class="padre">
-                <div class="imagen">
-                    <ion-avatar item-start>
-                        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
-                    </ion-avatar>
-                </div>
-                <div class="info">
-                    <ion-label>
-                        <h2 id="sleep-info">{{ item.nombre }}</h2>
-                        <div class="infoAbajo">
-                            <h3 id="sleep-info">{{ item.direccion }}</h3>
-                            <p id="sleep-info"><span id="sleep-info">Tel: </span>{{ item.telefono }}</p>
-                        </div>
-                    </ion-label>
-                </div>
+  <ion-searchbar
+    cancelButtonText="Custom Cancel"
+    placeholder=""
+    (ionChange)="buscar($event)"
+  ></ion-searchbar>
+  <ion-list>
+    <div class="empty" *ngIf="sleep.length == 0">
+      <div class="text_empty">
+        No hay lugares para el departamento seleccionado
+      </div>
+      <i class="far fa-sad-tear icon_empty"></i>
+    </div>
+    <ion-item *ngFor="let item of sleep | filtroDondeDormir:textoBuscar">
+      <div class="padre">
+        <div class="imagen">
+          <ion-avatar item-start>
+            <ion-img [src]="item.imagen" class="img-elem"></ion-img>
+          </ion-avatar>
+        </div>
+        <div class="info">
+          <ion-label>
+            <h2 id="sleep-info">{{ item.nombre }}</h2>
+            <div class="infoAbajo">
+              <h3 id="sleep-info">{{ item.direccion }}</h3>
+              <p id="sleep-info">
+                <span id="sleep-info">Tel: </span>{{ item.telefono }}
+              </p>
             </div>
-        </ion-item>
-    </ion-list>
+          </ion-label>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

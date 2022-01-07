@@ -83,7 +83,7 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
     lugar: string
   ) {
     if (descripcion.length > 250) {
-      var desc = descripcion.substr(0, 250) + " ...";
+      var desc = descripcion.substring(0, 250) + " ...";
     } else {
       desc = descripcion;
     }

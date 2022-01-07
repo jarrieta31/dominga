@@ -9,6 +9,7 @@ import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { timer } from "rxjs";
 import { LoadingController } from "@ionic/angular";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-place",
@@ -20,7 +21,8 @@ export class PlacePage {
     private browser: InAppBrowser,
     private placeSvc: PlaceService,
     private geolocationSvc: GeolocationService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private fb: FormBuilder,
   ) {}
 
   /**Configuración de slider mini galeria */
@@ -38,6 +40,8 @@ export class PlacePage {
   sourcePlace: Subscription;
   /**guarda las localidades con lugares publicados */
   location: any[] = [];
+  /**guarda los tipos de lugares */
+  category: any[] = [];
   distancia: string;
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
@@ -52,6 +56,18 @@ export class PlacePage {
   isLoading = false;
 
   isFilter = false;
+  /**captura los datos del formulario de filtros */
+  dataForm: string = "";
+
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+    tipo: ["", Validators.required],
+  });
+
+  filterPlace() {
+    this.dataForm = this.filterForm.value;
+  }
+
 
   pageDominga() {
     this.browser.create("https://casadominga.com.uy", "_system");
@@ -84,14 +100,17 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    this.isFilter = false;
     this.show("Cargando lugares...");
     this.placeSvc.getPlaces();
     this.sourcePlace = this.placeSvc.places.subscribe((res) => {
       this.places = res;
-      /**====================== localidades activas ==================================== */
+      /**====================== localidades y categorías activas ==================================== */
       this.location = [];
+      this.category = [];
       this.places.forEach((loc) => {
         let isLocation = false;
+        let isCategory = false;
         if (this.location.length == 0) {
           this.location.push({ localidad: loc.localidad });
           isLocation = true;
@@ -101,7 +120,18 @@ export class PlacePage {
             if (loc.localidad == locExist.localidad) isLocation = true;
           });
         }
+
+        if (this.category.length == 0) {
+          this.category.push({ categoria: loc.tipo });
+          isCategory = true;
+        }
+        else {
+          this.category.forEach((catExist) => {
+            if (loc.tipo == catExist.categoria) isCategory = true;
+          });
+        }
         if (!isLocation) this.location.push({ localidad: loc.localidad });
+        if (!isCategory) this.category.push({ categoria: loc.tipo });
       });
       /**============================================================================== */
       this.isLoading = true;

@@ -9,32 +9,84 @@
         </p>
       </div>
       <div class="filter_button">
-        <ion-label (click)="seeDepto()" *ngIf="depto" class="depto_selected">departamento</ion-label>
-        <ion-label (click)="seeDepto()" *ngIf="!depto">departamento</ion-label>
+        <ion-label
+          (click)="seeDepto()"
+          *ngIf="depto || deptoSelected != null"
+          class="depto_selected"
+          >departamento</ion-label
+        >
+        <ion-label (click)="seeDepto()" *ngIf="!depto && deptoSelected == null"
+          >departamento</ion-label
+        >
         <i class="fas fa-exchange-alt"></i>
         <ion-label>distancia</ion-label>
       </div>
       <ion-list *ngIf="depto" class="depto_list">
         <ion-radio-group value="{{ deptoSelected }}">
-          <ion-item lines="none" *ngFor="let depto of deptosActivos" (click)="select(depto.nombre, null)">
-            <ion-text *ngIf="deptoSelected !== depto.nombre">{{ depto.nombre }}</ion-text>
-            <ion-text class="depto_bold" *ngIf="deptoSelected === depto.nombre">{{ depto.nombre }}</ion-text>
-            <ion-radio mode="ios" slot="end" value="{{ depto.nombre }}"></ion-radio>
+          <ion-item
+            lines="none"
+            *ngFor="let depto of deptosActivos"
+            (click)="select(depto.nombre, null)"
+          >
+            <ion-text *ngIf="deptoSelected !== depto.nombre"
+              >{{ depto.nombre }}</ion-text
+            >
+            <ion-text class="depto_bold" *ngIf="deptoSelected === depto.nombre"
+              >{{ depto.nombre }}</ion-text
+            >
+            <ion-radio
+              mode="ios"
+              slot="end"
+              value="{{ depto.nombre }}"
+            ></ion-radio>
           </ion-item>
         </ion-radio-group>
-        <div class="endline"> _ </div>
+        <div class="endline">_</div>
       </ion-list>
     </div>
 
-    <div class="menu">
+    <div class="menu" *ngIf="deptoSelected != null">
       <div class="div__menu">
         <div class="div__menu-izq" routerLink="/tabs/place">¿dónde ir?</div>
-        <div class="div__menu-izq" routerLink="/tabs/eat">¿dónde<br> comer?</div>
-        <div class="div__menu-izq" routerLink="/tabs/sleep">¿dónde<br> dormir?</div>
+        <div class="div__menu-izq" routerLink="/tabs/eat">
+          ¿dónde<br />
+          comer?
+        </div>
+        <div class="div__menu-izq" routerLink="/tabs/sleep">
+          ¿dónde<br />
+          dormir?
+        </div>
       </div>
       <div class="div__menu">
         <div class="div__menu-der" routerLink="/tabs/events">¿qué hacer?</div>
-        <div class="div__menu-der" routerLink="/places/9">Casa<br> Dominga</div>
+        <div class="div__menu-der" routerLink="/places/9">
+          Casa<br />
+          Dominga
+        </div>
+      </div>
+    </div>
+    <div class="menu" *ngIf="deptoSelected == null">
+      <div class="div__menu">
+        <div class="div__menu-izq" id="filter_null" (click)="presentAlert()">
+          ¿dónde ir?
+        </div>
+        <div class="div__menu-izq" id="filter_null" (click)="presentAlert()">
+          ¿dónde<br />
+          comer?
+        </div>
+        <div class="div__menu-izq" id="filter_null" (click)="presentAlert()">
+          ¿dónde<br />
+          dormir?
+        </div>
+      </div>
+      <div class="div__menu">
+        <div class="div__menu-der" id="filter_null" (click)="presentAlert()">
+          ¿qué hacer?
+        </div>
+        <div class="div__menu-der" id="filter_null" (click)="presentAlert()">
+          Casa<br />
+          Dominga
+        </div>
       </div>
     </div>
   </div>

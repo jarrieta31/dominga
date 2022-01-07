@@ -10,7 +10,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./where-sleep.page.scss"],
 })
 export class WhereSleepPage {
-  sleep: DondeDormir[];
+  sleep: DondeDormir[] = [];
   loading: any;
   textoBuscar = "";
   wsleep_suscribe: Subscription;
