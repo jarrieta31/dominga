@@ -12,30 +12,48 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
   templateUrl: "./events.page.html",
   styleUrls: ["./events.page.scss"],
 })
-export class EventsPage implements OnInit, OnDestroy {
+// export class EventsPage implements OnInit, OnDestroy {
+  export class EventsPage {
   now = new Date();
   textoBuscar = "";
   today: Date = new Date();
 
   eventos: Eventos[] = [];
+  eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
+  dpto_select: String;
 
   constructor(
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
     private veService: VisitEventService
   ) {}
+// eliminar y cambiar por illwill 
+  // ngOnInit() {
+  //   this.eventosSuscription = this.dbService
+  //     .getObservable()
+  //     .subscribe((eventos) => (this.eventos = eventos));
+  //   this.dbService.getEventsLocal();
+  // }
 
-  ngOnInit() {
+  ionViewWillEnter(){
     this.eventosSuscription = this.dbService
       .getObservable()
       .subscribe((eventos) => (this.eventos = eventos));
     this.dbService.getEventsLocal();
+    /** Actualizo el dpto seleccionado */
+    this.dpto_select = this.dbService.selectionDepto;
+    /** Cargo los eventos por el Dpto Seleccionado */
+    this.eventos_xdptoSelection = this.eventosxDptoSeleccionado();
   }
 
-  ngOnDestroy() {
+  // ngOnDestroy() {
+  //   this.eventosSuscription.unsubscribe();
+  // }
+
+  ionViewDidLeave(){
     this.eventosSuscription.unsubscribe();
-  }
+  } 
 
   /**
    * Slide
@@ -110,5 +128,25 @@ export class EventsPage implements OnInit, OnDestroy {
 
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
+  }
+  
+  /**
+   * Funcion que genera un arreglo de eventos por departamento seleccionado.
+   * @returns Arregldo de Interfaz Eventos
+   */
+  eventosxDptoSeleccionado(): Eventos[] {
+    let eventsxdpto : Eventos[] = [];
+    if( this.dpto_select == '' ){
+      eventsxdpto = this.eventos;
+    }else if( this.eventos.length > 0){
+      this.eventos.forEach((ev) => {
+        if( ev.departamento == this.dpto_select )
+          eventsxdpto.push(ev);
+      })
+    } else {
+      eventsxdpto = this.eventos;
+    }
+
+    return eventsxdpto;
   }
 }

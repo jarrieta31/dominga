@@ -1,10 +1,33 @@
-export interface Eventos {
-    id: number;
+export interface Eventos{
+    carpeta:string;
     departamento: string;
-    fecha: Date;
-    nombre: string;
     descripcion: string;
-    imagen: string;
+    direccion?: string;
+    facebook?: string;
+    fechaFin?: any;
+    fechaInicio: any;
+    id?: string;
+    imagen: Imagen;
+    instagram: string;
     localidad: string;
     lugar: string;
-}
+    moneda: string;
+    nombre: string; 
+    precio: number;
+    precioUnico: boolean;
+    publicado: boolean;
+    ticktAntel?: string;
+    tipo:string;
+    ubicacion: Posicion;
+    whatsapp?: string; 
+    } 
+
+    export interface Posicion{
+        lng: number;
+        lat: number;
+        } 
+
+        export interface Imagen {
+            name: string;
+            url: string;
+            } 

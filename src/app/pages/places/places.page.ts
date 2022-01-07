@@ -455,6 +455,12 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     await modal.present();
   }
+
+  /**
+   * Funcionalidad que esta implementada como servicio.
+   * Actualmente esta funcionalidad no se encuentra habilitada.
+   * @param text descripcion del lugar
+   */
   escucharDescripcion( text : string ){
     let txt = text.split('.')
     let aux : string = txt[0];

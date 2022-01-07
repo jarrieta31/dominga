@@ -55,7 +55,7 @@
         ><ion-label>filtrar lugares</ion-label></ion-chip
       >
     </div>
-    <div *ngIf="isFilter" class="form_filter">
+    <div  class="form_filter">
       <form>
         <ion-select placeholder="Localidad">
           <ion-select-option *ngFor="let loc of location" value="{{ loc.localidad }}">{{ loc.localidad }}</ion-select-option>

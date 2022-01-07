@@ -11,15 +11,32 @@
                 <img class="imgSlider" src="{{item.imagen}}" />                
             </ion-slide>            
         </ion-slides>
-        <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar>
+        <!-- <ion-searchbar cancelButtonText="Custom Cancel" placeholder="" (ionChange)="buscar($event)"></ion-searchbar> -->
+        <div class="filter_place" (click)="changeFilter()">
+            <ion-chip color="primary">
+            <i class="fas fa-search magnifying"></i
+            ><ion-label>filtrar lugares</ion-label></ion-chip
+            >
+        </div>
+
+    <div *ngIf="isFilter" class="form_filter">
+        <form>
+        <ion-select placeholder="Localidad">
+        <ion-select-option >localida</ion-select-option>
+        </ion-select>
+        <ion-select placeholder="Categoría">
+        <ion-select-option>Departamento</ion-select-option>
+        </ion-select>
+        <ion-button>Filtrar</ion-button>
+    </form>
     </div>
-   
-    <ion-list class="lista">
-        <ion-item *ngFor="let item of weat | filtroDondeComer:textoBuscar">
+</div>
+<ion-list class="lista">
+        <ion-item *ngFor="let item of weat_location | filtroDondeComer:textoBuscar">
             <div class="padre">
                 <div class="imagen">
                     <ion-avatar item-start>
-                        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
+                        <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
                     </ion-avatar>
                 </div>
                 <div class="info">
@@ -27,7 +44,7 @@
                         <h2 id="eat-info">{{ item.nombre }}</h2>
                         <div class="infoAbajo">
                             <h3 id="eat-info">{{ item.direccion }}</h3>
-                            <p id="eat-info"><span id="eat-info">Tel: </span>{{ item.telefono }}</p>
+                            <p id="eat-info"><span id="eat-info">Tel: </span>{{ item.telefonos["numero"] }}</p>
                         </div>
                     </ion-label>
                 </div>

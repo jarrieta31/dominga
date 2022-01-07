@@ -6,7 +6,8 @@ import { DatabaseService } from '../../services/database.service';
 import { WhereEatService } from 'src/app/services/database/where-eat.service';
 import { LoadingController } from '@ionic/angular';
 import { InfoSlider } from '../../shared/info-slider';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
+import { Point } from 'src/app/shared/point';
 
 @Component({
   selector: 'app-where-eat',
@@ -19,7 +20,7 @@ export class WhereEatPage implements OnInit, OnDestroy {
 	weat            : DondeComer[];
   sliderDondeComer: InfoSlider[];
   textoBuscar = '';
-  weat_suscribe : Subscription;
+  weat_suscribe   : Subscription;
 
   loading: any;
 
@@ -31,14 +32,26 @@ export class WhereEatPage implements OnInit, OnDestroy {
         autoplay:true,
     };
 
-  su = this.database.getEat().snapshotChanges().subscribe(data => {
-    this.eat = [];
-    data.forEach(item => {
-        let a = item.payload.toJSON();
-        a['$key'] = item.key;
-        this.eat.push(a as DondeComer);
-    })
-});
+/** =====>=>=>=> Variables Filtro localidad <============== */    
+/**guarda los lugares activos en la subscription del servicio */
+weat_location: DondeComer[] = [];
+/**subscription activa con los lugares del servicio*/
+sourceDondeComer: Subscription;
+/**guarda las localidades con lugares publicados */
+location: any[] = [];
+distancia: string;
+posicion$: Observable<Point>;
+subscripcionPosition: Subscription;
+
+timerSubs: Subscription;
+
+timer$ = timer(0, 30000);
+
+/**controla cuando descartar el spinner de carga */
+isLoading = false;
+
+isFilter = false;
+/** =====<=<=<=< Variables Filtro localidad <============== */    
 
 
 slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data => {
@@ -59,28 +72,26 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
     }
 
   ngOnInit() {
-  	this.show("Cargando lugares...");
+  	// this.show("Cargando lugares...");
   }
 
   ngOnDestroy(){
-    this.su.unsubscribe();
     this.slider.unsubscribe();
     this.weat_suscribe.unsubscribe();
   }
 
-   async show(message: string) {
+  //  async show(message: string) {
 
-      this.loading = await this.loadingCtrl.create({
-        message,
-        spinner: 'bubbles'
-      });
+  //     this.loading = await this.loadingCtrl.create({
+  //       message,
+  //       spinner: 'bubbles'
+  //     });
         
-    this.loading.present().then(() => {
-        this.su;
-        this.slider;
-        this.loading.dismiss();
-    });
-  }
+  //   this.loading.present().then(() => {
+  //       this.slider;
+  //       this.loading.dismiss();
+  //   });
+  // }
 
   buscar(event){
     this.textoBuscar = event.detail.value;
@@ -89,4 +100,28 @@ slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data =
   cargarDondeComer(){
     this.weat_suscribe = this.afs.donde_comer.subscribe((res) => this.weat = res);
   }
+
+/** =====>=>=>=> Metodos Filtro localidad <============== */    
+
+  changeFilter() {
+    this.isFilter = !this.isFilter;
+  }
+
+  ionViewWillEnter() {
+    // this.show("Cargando lugares...");
+    this.afs.getDondeComer();
+    this.sourceDondeComer = this.afs.donde_comer.subscribe(
+      (res) => {(this.weat_location = res)
+        console.log(res);
+        
+      }
+      
+    );
+  }
+
+  ionViewDidLeave() {
+    this.sourceDondeComer.unsubscribe();
+  }  
+
+
 }

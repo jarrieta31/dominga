@@ -71,8 +71,8 @@ export class FilterEventsPipe implements PipeTransform {
         (item.descripcion.toLowerCase().includes(data.formulario["general"]) ||
           item.nombre.toLowerCase().includes(data.formulario["general"])) &&
         item.localidad.toLowerCase().includes(data.formulario["localidad"]) &&
-        item.fecha >= data.formulario["fecha_desde"] &&
-        item.fecha <= data.formulario["fecha_hasta"]
+        item.fechaInicio >= data.formulario["fecha_desde"] &&
+        item.fechaFin <= data.formulario["fecha_hasta"]
       );
     });
   }

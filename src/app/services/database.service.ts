@@ -107,11 +107,12 @@ export class DatabaseService {
   /**
    * Obtener eventos desde fecha de hoy
    */
+  
   getEventos() {
     this.afs
-      .collection("evento")
-      .ref.where("fecha", ">=", this.today)
-      .orderBy("fecha", "asc")
+      .collection("eventos")
+      .ref.where("fechaInicio", ">=", this.today)
+      .orderBy("fechaInicio", "asc")
       .get()
       .then((querySnapshot) => {
         const arrEvents: any[] = [];
@@ -122,7 +123,7 @@ export class DatabaseService {
         this.allEvents = arrEvents;
         this.eventos.next(this.allEvents);
         this.allEvents.forEach((f) => {
-          f.fecha = new Date(f.fecha["seconds"] * 1000);
+          f.fechaInicio = new Date(f.fechaInicio["seconds"] * 1000);
         });
       })
       .catch((err) => {

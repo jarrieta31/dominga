@@ -35,15 +35,15 @@
 </div>
   <ion-list>
     <ion-item
-    *ngFor="let item of eventos | filterEvents:textoBuscar"
+    *ngFor="let item of eventos_xdptoSelection"
       class="event"
-      (click)="openModalDetailEvent(item.id, item.fecha, item.nombre, item.descripcion, item.imagen, item.lugar)"
+      (click)="openModalDetailEvent(item.id, item.fechaInicio, item.nombre, item.descripcion, item['imagen'].url, item.lugar)"
     >
       <ion-avatar item-start class="image-event">
         <ion-img [src]="item.imagen" class="img-elem"></ion-img>
       </ion-avatar>
       <div class="info-event">
-        <div class="fecha">{{item.fecha | date:'dd.MM.yyyy - HH:mm'}} hs</div>
+        <div class="fecha">{{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs</div>
         <div class="titulo">{{item.nombre}}</div>
         <div class="descripcion">{{item.descripcion}}</div>
       </div>
