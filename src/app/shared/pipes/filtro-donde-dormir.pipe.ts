@@ -6,18 +6,16 @@ import { DondeDormir } from '../../shared/donde-dormir';
 })
 export class FiltroDondeDormirPipe implements PipeTransform {
 
-  transform(dondeDormir: DondeDormir[], texto: string): DondeDormir[] {
+  transform(dondeDormir: DondeDormir[], data: any): DondeDormir[] {
 
-  	if(texto.length === 0){
+  	if(data.length === 0){
     	return dondeDormir;
   	}
 
-    texto = texto.toLowerCase();
+   if(data.localidad != null || data.localidad != undefined) data.localidad = data.localidad.toLowerCase();
 
   	return dondeDormir.filter( item => {
-  		return item.nombre.toLowerCase().includes(texto)
-  		|| item.direccion.toLowerCase().includes(texto)
-  		|| item.telefono.toLowerCase().includes(texto);
+  		return item.localidad.toLowerCase().includes(data.localidad)
   	})
   }
 }

@@ -1,24 +1,20 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { DondeComer } from '../../shared/donde-comer';
+import { Pipe, PipeTransform } from "@angular/core";
+import { DondeComer } from "../../shared/donde-comer";
 
 @Pipe({
-  name: 'filtroDondeComer'
+  name: "filtroDondeComer",
 })
 export class FiltroDondeComerPipe implements PipeTransform {
-
-  transform(dondeComer: DondeComer[], texto: string): DondeComer[] {
-    
-    if(texto.length === 0){
-    	return dondeComer;
+  transform(eat: DondeComer[], data: any): DondeComer[] {
+    if (data.length === 0) {
+      return eat;
     }
 
-    texto = texto.toLowerCase();
+    if (data.localidad !== undefined || data.localidad !== null)
+      data.localidad = data.localidad.toLowerCase();
 
-    return dondeComer.filter( item => {
-    	return item.nombre.toLowerCase().includes(texto)
-    	|| item.direccion.toLowerCase().includes(texto)
-    	|| item.telefonos.numero.toLowerCase().includes(texto)
-    })
+    return eat.filter((item) => {
+      return item.localidad.toLowerCase().includes(data.localidad);
+    });
   }
-
 }

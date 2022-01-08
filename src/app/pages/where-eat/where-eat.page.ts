@@ -1,127 +1,122 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { DondeComer } from '../../shared/donde-comer';
+import { DondeComer } from "../../shared/donde-comer";
 
-import { DatabaseService } from '../../services/database.service';
-import { WhereEatService } from 'src/app/services/database/where-eat.service';
-import { LoadingController } from '@ionic/angular';
-import { InfoSlider } from '../../shared/info-slider';
-import { Observable, Subscription, timer } from 'rxjs';
-import { Point } from 'src/app/shared/point';
+import { DatabaseService } from "../../services/database.service";
+import { WhereEatService } from "src/app/services/database/where-eat.service";
+import { LoadingController } from "@ionic/angular";
+import { InfoSlider } from "../../shared/info-slider";
+import { Subscription } from "rxjs";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'app-where-eat',
-  templateUrl: './where-eat.page.html',
-  styleUrls: ['./where-eat.page.scss'],
+  selector: "app-where-eat",
+  templateUrl: "./where-eat.page.html",
+  styleUrls: ["./where-eat.page.scss"],
 })
-export class WhereEatPage implements OnInit, OnDestroy {
+export class WhereEatPage {
+  /**captura los datos del formulario de filtros */
+  dataForm: string = "";
 
-	eat             : DondeComer[];
-	weat            : DondeComer[];
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+  });
+
   sliderDondeComer: InfoSlider[];
-  textoBuscar = '';
-  weat_suscribe   : Subscription;
 
   loading: any;
 
+  locationActive: any[] = [];
+
   slideOpts = {
-        initialSlide: 0,
-        speed: 600,
-        slidesPerView: 1,
-        spaceBetween: 0,
-        autoplay:true,
-    };
+    initialSlide: 0,
+    speed: 600,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    autoplay: true,
+  };
 
-/** =====>=>=>=> Variables Filtro localidad <============== */    
-/**guarda los lugares activos en la subscription del servicio */
-weat_location: DondeComer[] = [];
-/**subscription activa con los lugares del servicio*/
-sourceDondeComer: Subscription;
-/**guarda las localidades con lugares publicados */
-location: any[] = [];
-distancia: string;
-posicion$: Observable<Point>;
-subscripcionPosition: Subscription;
+  /** =====>=>=>=> Variables Filtro localidad <============== */
+  /**guarda los lugares activos en la subscription del servicio */
+  eat: DondeComer[] = [];
+  /**subscription activa con los lugares del servicio*/
+  sourceEat: Subscription;
+  /**guarda las localidades con lugares publicados */
+  location: any[] = [];
+  /**controla cuando descartar el spinner de carga */
+  isLoading = false;
 
-timerSubs: Subscription;
+  isFilter = false;
+  /** =====<=<=<=< Variables Filtro localidad <============== */
 
-timer$ = timer(0, 30000);
-
-/**controla cuando descartar el spinner de carga */
-isLoading = false;
-
-isFilter = false;
-/** =====<=<=<=< Variables Filtro localidad <============== */    
-
-
-slider =  this.database.getSliderDondeComer().snapshotChanges().subscribe(data => {
-  this.sliderDondeComer = [];
-  data.forEach(item => {
-      let a = item.payload.toJSON();
-      a['$key'] = item.key;
-      this.sliderDondeComer.push(a as InfoSlider);
-  })
-});
+  slider = this.database
+    .getSliderDondeComer()
+    .snapshotChanges()
+    .subscribe((data) => {
+      this.sliderDondeComer = [];
+      data.forEach((item) => {
+        let a = item.payload.toJSON();
+        a["$key"] = item.key;
+        this.sliderDondeComer.push(a as InfoSlider);
+      });
+    });
 
   constructor(
-    private database    : DatabaseService,
-    private afs         : WhereEatService,          
-    private loadingCtrl : LoadingController) 
-    {
-      this.cargarDondeComer();  
-    }
+    private database: DatabaseService,
+    private afs: WhereEatService,
+    private loadingCtrl: LoadingController,
+    private fb: FormBuilder
+  ) {}
 
-  ngOnInit() {
-  	// this.show("Cargando lugares...");
-  }
-
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.slider.unsubscribe();
-    this.weat_suscribe.unsubscribe();
   }
 
-  //  async show(message: string) {
+  async show(message: string) {
+    this.loading = await this.loadingCtrl.create({
+      message,
+      spinner: "bubbles",
+    });
 
-  //     this.loading = await this.loadingCtrl.create({
-  //       message,
-  //       spinner: 'bubbles'
-  //     });
-        
-  //   this.loading.present().then(() => {
-  //       this.slider;
-  //       this.loading.dismiss();
-  //   });
-  // }
-
-  buscar(event){
-    this.textoBuscar = event.detail.value;
+    this.loading.present().then(() => {
+      this.slider;
+      this.loading.dismiss();
+    });
   }
 
-  cargarDondeComer(){
-    this.weat_suscribe = this.afs.donde_comer.subscribe((res) => this.weat = res);
-  }
-
-/** =====>=>=>=> Metodos Filtro localidad <============== */    
+  /** =====>=>=>=> Metodos Filtro localidad <============== */
 
   changeFilter() {
     this.isFilter = !this.isFilter;
   }
 
+  filterEat() {
+    this.dataForm = this.filterForm.value;
+  }
+
   ionViewWillEnter() {
-    // this.show("Cargando lugares...");
+    this.show("Cargando lugares...");
     this.afs.getDondeComer();
-    this.sourceDondeComer = this.afs.donde_comer.subscribe(
-      (res) => {(this.weat_location = res)
-        console.log(res);
-        
-      }
-      
-    );
+    this.sourceEat = this.afs.donde_comer.subscribe((res) => {
+      this.eat = res;
+
+      this.locationActive = [];
+      this.eat.forEach((loc) => {
+        let isLocation = false;
+        if (this.locationActive.length == 0) {
+          this.locationActive.push({ localidad: loc.localidad });
+          isLocation = true;
+        } else {
+          this.locationActive.forEach((locExist) => {
+            if (loc.localidad == locExist.localidad) isLocation = true;
+          });
+        }
+        if (!isLocation) this.locationActive.push({ localidad: loc.localidad });
+      });
+    });
   }
 
   ionViewDidLeave() {
-    this.sourceDondeComer.unsubscribe();
-  }  
-
-
+    this.sourceEat.unsubscribe();
+  }
 }

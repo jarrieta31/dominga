@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { DatabaseService } from "src/app/services/database.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Departament } from "src/app/shared/departament";
@@ -42,7 +42,11 @@ export class HomeMenuPage {
       ],
     });
 
-    if (this.deptoSelected == null && this.deptoSelected == undefined && !this.depto)
+    if (
+      (this.deptoSelected == null ||
+      this.deptoSelected == undefined) &&
+      !this.depto
+    )
       await alert.present();
 
     const { role } = await alert.onDidDismiss();

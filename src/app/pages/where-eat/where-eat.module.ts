@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from '../../shared/pipes/pipes.module';
 
 import { IonicModule } from '@ionic/angular';
@@ -13,6 +13,7 @@ import { WhereEatPage } from './where-eat.page';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     PipesModule,
     WhereEatPageRoutingModule
