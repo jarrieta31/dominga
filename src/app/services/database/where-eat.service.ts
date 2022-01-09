@@ -14,9 +14,7 @@ export class WhereEatService {
   depto: String;
   allDondeComer: DondeComer[] = [];
 
-  constructor(private afs: AngularFirestore, private db: DatabaseService) {
-    this.getDondeComer();
-  }
+  constructor(private afs: AngularFirestore, private db: DatabaseService) {}
 
   getDondeComer() {
     this.depto = this.db.selectionDepto;
@@ -29,7 +27,6 @@ export class WhereEatService {
         searchDepto = true;
       }
     });
-    console.log(this.depto);
 
     if (this.depto != null && !searchDepto) {
       this.afs

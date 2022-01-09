@@ -1,7 +1,11 @@
-import { Component } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { tap } from "rxjs/operators";
+import { Observable, Subject } from "rxjs";
+import { takeUntil, tap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -10,20 +14,27 @@ import { Point } from "src/app/shared/point";
 import { timer } from "rxjs";
 import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
   selector: "app-place",
   templateUrl: "./place.page.html",
   styleUrls: ["./place.page.scss"],
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlacePage {
   constructor(
     private browser: InAppBrowser,
     private placeSvc: PlaceService,
     private geolocationSvc: GeolocationService,
+    private databaseSvc: DatabaseService,
     private loadingCtrl: LoadingController,
     private fb: FormBuilder,
+    private http: HttpClient //private cd: ChangeDetectorRef
   ) {}
+
+  private unsubscribe$: Subject<void>;
 
   /**Configuración de slider mini galeria */
   slideOpts = {
@@ -36,19 +47,14 @@ export class PlacePage {
 
   /**guarda los lugares activos en la subscription del servicio */
   places: Place[] = [];
-  /**subscription activa con los lugares del servicio*/
-  sourcePlace: Subscription;
   /**guarda las localidades con lugares publicados */
   location: any[] = [];
   /**guarda los tipos de lugares */
   category: any[] = [];
   distancia: string;
   posicion$: Observable<Point>;
-  subscripcionPosition: Subscription;
 
-  timerSubs: Subscription;
-
-  timer$ = timer(0, 30000);
+  currentDepto: String = this.databaseSvc.selectionDepto;
 
   /**instance del spinner de carga */
   loading: any;
@@ -66,8 +72,8 @@ export class PlacePage {
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
+    console.log(this.dataForm);
   }
-
 
   pageDominga() {
     this.browser.create("https://casadominga.com.uy", "_system");
@@ -79,6 +85,16 @@ export class PlacePage {
 
   changeFilter() {
     this.isFilter = !this.isFilter;
+  }
+
+  getLocation(lng: number, lat: number) {
+    return this.http.get(
+      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+        lng +
+        "," +
+        lat +
+        ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
   }
 
   /**
@@ -100,11 +116,21 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    if (this.databaseSvc.selectionDepto != this.currentDepto) {
+      this.currentDepto = this.databaseSvc.selectionDepto;
+      this.filterForm.reset();
+      this.dataForm = "";
+    }
+
+    this.unsubscribe$ = new Subject<void>();
     this.isFilter = false;
-    this.show("Cargando lugares...");
     this.placeSvc.getPlaces();
-    this.sourcePlace = this.placeSvc.places.subscribe((res) => {
+
+    this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+      //console.log("sub1");
       this.places = res;
+      console.log(this.places);
+      //this.cd.markForCheck();
       /**====================== localidades y categorías activas ==================================== */
       this.location = [];
       this.category = [];
@@ -114,8 +140,7 @@ export class PlacePage {
         if (this.location.length == 0) {
           this.location.push({ localidad: loc.localidad });
           isLocation = true;
-        }
-        else {
+        } else {
           this.location.forEach((locExist) => {
             if (loc.localidad == locExist.localidad) isLocation = true;
           });
@@ -124,8 +149,7 @@ export class PlacePage {
         if (this.category.length == 0) {
           this.category.push({ categoria: loc.tipo });
           isCategory = true;
-        }
-        else {
+        } else {
           this.category.forEach((catExist) => {
             if (loc.tipo == catExist.categoria) isCategory = true;
           });
@@ -134,13 +158,27 @@ export class PlacePage {
         if (!isCategory) this.category.push({ categoria: loc.tipo });
       });
       /**============================================================================== */
+
       this.isLoading = true;
-      this.timerSubs = this.timer$.subscribe(() => {
+    });
+    this.show("Cargando lugares...");
+
+    timer(0, 5000)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        //console.log("sub2");
         this.places.forEach((calcDist) => {
           this.posicion$ = this.geolocationSvc.getPosicionActual$();
-          this.subscripcionPosition = this.posicion$
+          this.posicion$
             .pipe(
               tap((posicion) => {
+                //console.log("sub3");
+                // this.getLocation(posicion.longitud, posicion.latitud)
+                //   .pipe(takeUntil(this.unsubscribe$))
+                //   .subscribe((dto) => {
+                //     console.log("sub4");
+                //     this.placeSvc.currentDpto = dto.features[2].text;
+                //   });
                 if (posicion != null) {
                   let options = { units: "kilometers" };
                   let dist = distance(
@@ -162,18 +200,16 @@ export class PlacePage {
                 }
               })
             )
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe();
         });
+        //this.cd.markForCheck();
       });
-    });
   }
 
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
-    this.sourcePlace.unsubscribe();
-    this.timerSubs.unsubscribe();
-    if (this.places.length > 0) {
-      this.subscripcionPosition.unsubscribe();
-    }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

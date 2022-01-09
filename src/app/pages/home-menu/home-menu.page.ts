@@ -12,10 +12,15 @@ import { AlertController } from "@ionic/angular";
 })
 export class HomeMenuPage {
   depto: boolean = false;
+  distance: boolean = false;
+
   deptosActivos: Departament[] = [];
   deptoSelected: any = null;
+  distanceSelected: any = null;
 
   deptos: Subscription;
+
+  optionDsitance: number[] = [10, 25, 50, 75, 100, 150];
 
   constructor(
     private dbService: DatabaseService,
@@ -38,14 +43,19 @@ export class HomeMenuPage {
             this.depto = true;
           },
         },
-        { text: "Distancia" },
+        {
+          text: "Distancia",
+          handler: () => {
+            this.distance = true;
+          },
+        },
       ],
     });
 
     if (
-      (this.deptoSelected == null ||
-      this.deptoSelected == undefined) &&
-      !this.depto
+      (this.deptoSelected == null || this.deptoSelected == undefined) &&
+      !this.depto && (this.distanceSelected == null || this.distanceSelected == undefined) &&
+      !this.distance
     )
       await alert.present();
 
@@ -55,6 +65,14 @@ export class HomeMenuPage {
 
   seeDepto() {
     this.depto = !this.depto;
+
+    if(this.distance) this.distance = !this.distance;
+  }
+
+  seeDistance() {
+    this.distance = !this.distance;
+    
+    if(this.depto) this.depto = !this.depto;
   }
 
   select(depto: string | null, distance: number | null) {
@@ -63,8 +81,17 @@ export class HomeMenuPage {
     if (depto != null && depto != undefined) {
       this.deptoSelected = depto;
       localStorage.setItem("deptoActivo", depto);
+      localStorage.removeItem("distanceActivo");
+      this.dbService.selectionDistance = null;
+      this.distance = false;
+      this.distanceSelected = null;
     } else if (distance != null && distance != undefined) {
+      this.distanceSelected = distance;
       localStorage.setItem("distanceActivo", distance.toString());
+      localStorage.removeItem("deptoActivo");
+      this.dbService.selectionDepto = null;
+      this.depto = false;
+      this.deptoSelected = null;
     }
   }
 
@@ -77,11 +104,12 @@ export class HomeMenuPage {
 
     if (deptoSave != null && deptoSave != undefined) {
       this.dbService.selectionDepto = deptoSave;
+      this.deptoSelected = this.dbService.selectionDepto;
     } else if (distanceSave != null && distanceSave != undefined) {
-      this.dbService.selectionDepto = distanceSave;
+      this.dbService.selectionDistance = parseInt(distanceSave);
+      this.distanceSelected = this.dbService.selectionDistance;
     }
 
-    this.deptoSelected = this.dbService.selectionDepto;
     this.depto = false;
     this.dbService.getDepartamentosActivos();
     this.deptos = this.dbService.departamentosActivos.subscribe(

@@ -19,7 +19,17 @@
           >departamento</ion-label
         >
         <i class="fas fa-exchange-alt"></i>
-        <ion-label>distancia</ion-label>
+        <ion-label
+          class="distance_selected"
+          (click)="seeDistance()"
+          *ngIf="distance || distanceSelected != null"
+          >distancia</ion-label
+        >
+        <ion-label
+          (click)="seeDistance()"
+          *ngIf="!distance && distanceSelected == null"
+          >distancia</ion-label
+        >
       </div>
       <ion-list *ngIf="depto" class="depto_list">
         <ion-radio-group value="{{ deptoSelected }}">
@@ -43,9 +53,25 @@
         </ion-radio-group>
         <div class="endline">_</div>
       </ion-list>
+      <ion-list *ngIf="distance" class="depto_list">
+        <ion-radio-group value="{{ distanceSelected }}">
+          <ion-item
+            lines="none"
+            *ngFor="let dis of optionDsitance"
+            (click)="select(null, dis)"
+          >
+            <ion-text *ngIf="distanceSelected !== dis">{{ dis }} km</ion-text>
+            <ion-text class="depto_bold" *ngIf="distanceSelected === dis"
+              >{{ dis }} km</ion-text
+            >
+            <ion-radio mode="ios" slot="end" value="{{ dis }}"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+        <div class="endline">_</div>
+      </ion-list>
     </div>
 
-    <div class="menu" *ngIf="deptoSelected != null">
+    <div class="menu" *ngIf="deptoSelected != null || distanceSelected != null">
       <div class="div__menu">
         <div class="div__menu-izq" routerLink="/tabs/place">¿dónde ir?</div>
         <div class="div__menu-izq" routerLink="/tabs/eat">
@@ -65,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div class="menu" *ngIf="deptoSelected == null">
+    <div class="menu" *ngIf="deptoSelected == null && distanceSelected == null">
       <div class="div__menu">
         <div class="div__menu-izq" id="filter_null" (click)="presentAlert()">
           ¿dónde ir?

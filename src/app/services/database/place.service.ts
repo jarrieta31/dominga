@@ -12,7 +12,11 @@ export class PlaceService {
   /**Se guardan los lugares del departamento seleccionado */
   places: BehaviorSubject<Place[]>;
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = "";
+  depto: String = null;
+  /**Distancia seleccionada actualmente */
+  distance: number = null;
+  /**Departamento actual para usar cuando se selecciona filtro por distancia */
+  currentDpto: String = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allLugares: Place[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
@@ -28,6 +32,102 @@ export class PlaceService {
   /**Guarda los 4 lugares más cercanos al seleccionado */
   near_places: BehaviorSubject<any[]>;
 
+  deptoLimit: any = [
+    { nameDepto: "Artigas", limit: ["Salto", "Rivera"] },
+    {
+      nameDepto: "Canelones",
+      limit: ["Florida", "Lavalleja", "Maldonado", "San José"],
+    },
+    {
+      nameDepto: "Cerro Largo",
+      limit: ["Durazno", "Rivera", "Tacuarembó", "Treinta y Tres"],
+    },
+    { nameDepto: "Colonia", limit: ["Flores", "San José", "Soriano"] },
+    {
+      nameDepto: "Durazno",
+      limit: [
+        "Cerro Largo",
+        "Flores",
+        "Florida",
+        "Río Negro",
+        "Soriano",
+        "Tacuarembó",
+        "Treinta y Tres",
+      ],
+    },
+    {
+      nameDepto: "Flores",
+      limit: [
+        "Colonia",
+        "Durazno",
+        "Florida",
+        "Río Negro",
+        "San José",
+        "Soriano",
+      ],
+    },
+    {
+      nameDepto: "Florida",
+      limit: [
+        "Canelones",
+        "Durazno",
+        "Flores",
+        "Lavalleja",
+        "San José",
+        "Treinta y Tres",
+      ],
+    },
+    {
+      nameDepto: "Lavalleja",
+      limit: ["Canelones", "Florida", "Maldonado", "Rocha", "Treinta y Tres"],
+    },
+    { nameDepto: "Maldonado", limit: ["Canelones", "Lavalleja", "Rocha"] },
+    { nameDepto: "Paysandú", limit: ["Río Negro", "Salto", "Tacuarembó"] },
+    {
+      nameDepto: "Río Negro",
+      limit: ["Durazno", "Flores", "Paysandú", "Soriano", "Tacuarembó"],
+    },
+    {
+      nameDepto: "Rivera",
+      limit: ["Artigas", "Cerro Largo", "Salto", "Tacuarembó"],
+    },
+    { nameDepto: "Rocha", limit: ["Maldonado", "Lavalleja", "Treinta y Tres"] },
+    {
+      nameDepto: "Salto",
+      limit: ["Artigas", "Paysandú", "Rivera", "Tacuarembó"],
+    },
+    {
+      nameDepto: "San José",
+      limit: ["Canelones", "Colonia", "Flores", "Florida", "Soriano"],
+    },
+    {
+      nameDepto: "Soriano",
+      limit: ["Colonia", "Durazno", "Flores", "Río Negro", "San José"],
+    },
+    {
+      nameDepto: "Tacuarembó",
+      limit: [
+        "Cerro Largo",
+        "Durazno",
+        "Paysandú",
+        "Río Negro",
+        "Rivera",
+        "Salto",
+      ],
+    },
+    {
+      nameDepto: "Treinta y Tres",
+      limit: [
+        "Cerro Largo",
+        "Durazno",
+        "Florida",
+        "Lavalleja",
+        "Rocha",
+        "Tacuarembó",
+      ],
+    },
+  ];
+
   constructor(
     private databaseSvc: DatabaseService,
     private afs: AngularFirestore
@@ -40,15 +140,22 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces() {
+    //console.log(this.currentDpto);
     this.depto = this.databaseSvc.selectionDepto;
+    this.distance = this.databaseSvc.selectionDistance;
+    this.allLugares = [];
+
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
 
     let searchDepto: boolean = false;
-    this.save_depto.forEach((search) => {
-      if (search == this.depto) {
-        searchDepto = true;
-      }
-    });
+
+    if (this.depto != null) {
+      this.save_depto.forEach((search) => {
+        if (search == this.depto) {
+          searchDepto = true;
+        }
+      });
+    }
 
     if (this.depto != null && !searchDepto) {
       this.afs
@@ -73,14 +180,27 @@ export class PlaceService {
           console.log(err);
         })
         .finally(() => "Fin");
-    } else if (searchDepto) {
-      this.allLugares = [];
+    } else if (this.depto != null && searchDepto) {
       this.initPlace.forEach((res) => {
         if (res.departamento == this.depto) {
           this.allLugares.push(res);
         }
       });
       this.places.next(this.allLugares);
+    } else if (this.distance != null) {
+    
+      this.save_depto.forEach((dep) => {
+        let deptoDistance: boolean = false;
+        if (dep == this.depto) {
+          deptoDistance = true;
+        }
+
+        if (!deptoDistance) {
+          this.places.next(this.allLugares);
+        } else if (deptoDistance) {
+          this.places.next(this.allLugares);
+        }
+      });
     }
   }
 

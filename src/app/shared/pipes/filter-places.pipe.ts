@@ -10,8 +10,11 @@ export class FilterPlacesPipe implements PipeTransform {
       return places;
     }
 
-    if(data.localidad !== undefined || data.localidad !== null) data.localidad = data.localidad.toLowerCase(); 
-    if(data.tipo !== undefined || data.tipo !== null) data.tipo = data.tipo.toLowerCase();
+    if(data.localidad !== null) data.localidad = data.localidad.toLowerCase(); 
+    else data.localidad = ""
+
+    if(data.tipo !== null) data.tipo = data.tipo.toLowerCase();
+    else data.tipo = ""
 
     return places.filter((item) => {
       return (

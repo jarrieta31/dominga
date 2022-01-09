@@ -99,8 +99,10 @@ export class DatabaseService {
   getSelectMenu(depto: String | null, distance: number | null) {
     if (depto == null) {
       this.selectionDistance = distance;
+      this.selectionDepto = null;
     } else {
       this.selectionDepto = depto;
+      this.selectionDistance = null;
     }
   }
  

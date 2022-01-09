@@ -58,7 +58,6 @@ export class WhereSleepPage {
   }
 
   ionViewWillEnter() {
-    this.show("Cargando lugares...");
     this.sleepSvc.getDondeDormir();
     this.sleep_suscribe = this.sleepSvc.donde_dormir.subscribe((res) => {
       this.sleep = res;
@@ -79,6 +78,7 @@ export class WhereSleepPage {
         if (!isLocation) this.locationActive.push({ localidad: loc.localidad });
       });
     });
+    this.show("Cargando lugares...");
   }
 
   ionViewDidLeave() {

@@ -41,6 +41,7 @@ export class WhereSleepService {
       this.afs
         .collection("donde_dormir")
         .ref.where("departamento", "==", this.depto)
+        .where("publicado", "==", true)
         .get()
         .then((querySnapshot) => {
           const arrPlaces: DondeDormir[] = [];

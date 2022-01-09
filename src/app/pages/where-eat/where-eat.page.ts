@@ -95,11 +95,9 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
-    this.show("Cargando lugares...");
     this.afs.getDondeComer();
     this.sourceEat = this.afs.donde_comer.subscribe((res) => {
       this.eat = res;
-
       this.locationActive = [];
       this.eat.forEach((loc) => {
         let isLocation = false;
@@ -114,6 +112,7 @@ export class WhereEatPage {
         if (!isLocation) this.locationActive.push({ localidad: loc.localidad });
       });
     });
+    this.show("Cargando lugares...");
   }
 
   ionViewDidLeave() {
