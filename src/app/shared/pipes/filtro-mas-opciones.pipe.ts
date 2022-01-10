@@ -16,7 +16,7 @@ export class FiltroMasOpcionesPipe implements PipeTransform {
 
     return Opciones.filter( item => {
     	return item.nombre.toLowerCase().includes( texto )
-    	|| item.telefono.toLowerCase().includes( texto )
+    	|| item.telefonos.numero.toLowerCase().includes( texto )
     	|| item.direccion.toLowerCase().includes( texto )
     })
   }

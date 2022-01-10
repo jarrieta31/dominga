@@ -8,34 +8,35 @@
 <ion-content>
   <div id="alto" class="slider">
     <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
-        <ion-slide class="sliderHijo"> 
-            <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-        </ion-slide>    
-        <ion-slide class="sliderHijo"> 
-          <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
+      <ion-slide class="sliderHijo"> 
+          <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
+      </ion-slide>    
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
       </ion-slide>     
       <ion-slide class="sliderHijo"> 
         <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-    </ion-slide>    
-    <ion-slide class="sliderHijo"> 
-      <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
-  </ion-slide>        
-  <ion-slide class="sliderHijo"> 
-    <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-</ion-slide>    
-<ion-slide class="sliderHijo"> 
-  <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
-</ion-slide>    
+      </ion-slide>    
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
+      </ion-slide>        
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
+      </ion-slide>    
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
+      </ion-slide>    
     </ion-slides>
-    <div class="filter">
+    <!-- Modal para filtros de eventos. Se elimina -->
+    <!-- <div class="filter">
       <ion-chip color="primary" (click)="filterEvents()">
         <ion-label><i class="fas fa-sliders-h"></i>&nbsp; Filtrar eventos</ion-label>
       </ion-chip>
-    </div>
+    </div> -->
 </div>
   <ion-list>
     <ion-item
-    *ngFor="let item of eventos_xdptoSelection"
+    *ngFor="let item of eventos"
       class="event"
       (click)="openModalDetailEvent(item.id, item.fechaInicio, item.nombre, item.descripcion, item['imagen'].url, item.lugar)"
     >
