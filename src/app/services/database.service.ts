@@ -113,7 +113,9 @@ export class DatabaseService {
   getEventos() {
     this.afs
       .collection("eventos")
-      .ref.where("fechaInicio", ">=", this.today)
+      .ref
+      .where("departamento", "==", this.selectionDepto  )
+      .where("fechaInicio", ">=", this.today)
       .orderBy("fechaInicio", "asc")
       .get()
       .then((querySnapshot) => {
@@ -122,6 +124,7 @@ export class DatabaseService {
           const data: any = item.data();
           arrEvents.push({ id: item.id, ...data });
         });
+
         this.allEvents = arrEvents;
         this.eventos.next(this.allEvents);
         this.allEvents.forEach((f) => {

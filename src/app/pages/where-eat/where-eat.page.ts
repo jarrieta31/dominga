@@ -62,10 +62,10 @@ export class WhereEatPage {
     });
 
   constructor(
-    private database: DatabaseService,
-    private afs: WhereEatService,
     private loadingCtrl: LoadingController,
-    private fb: FormBuilder
+    private database   : DatabaseService,
+    private afs        : WhereEatService,
+    private fb         : FormBuilder
   ) {}
 
   ngOnDestroy() {

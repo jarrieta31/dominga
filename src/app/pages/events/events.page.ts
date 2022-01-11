@@ -4,8 +4,9 @@ import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { FilterEventPage } from "../filter-event/filter-event.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-events",
@@ -23,10 +24,18 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
   eventosSuscription: Subscription;
   dpto_select: String;
 
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+    tipo     : ["", Validators.required],
+  });
+
+  isFilter: boolean = false;
+
   constructor(
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
-    private veService: VisitEventService
+    private veService: VisitEventService,
+    private fb       : FormBuilder,
   ) {}
 // eliminar y cambiar por illwill 
   // ngOnInit() {
@@ -40,11 +49,28 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
     this.eventosSuscription = this.dbService
       .getObservable()
       .subscribe((eventos) => (this.eventos = eventos));
+    
+
+    if(this.eventos.length > 0){
+    
+      if(this.eventos[0].departamento != this.dbService.selectionDepto){
+        this.dbService.getEventos();
+      }    
+    }else{ this.dbService.getEventos(); }
+  /**Se suscribe al array de eventos, si se genera cambios al estar en la pantalla
+     * se van a actulizar
+     */
+
+      /** */
     this.dbService.getEventsLocal();
     /** Actualizo el dpto seleccionado */
     this.dpto_select = this.dbService.selectionDepto;
-    /** Cargo los eventos por el Dpto Seleccionado */
-    this.eventos_xdptoSelection = this.eventosxDptoSeleccionado();
+
+    /** ======>>> Pruebas <<<======= */
+    
+
+    /** ===========>>>><<<<========= */
+    
   }
 
   // ngOnDestroy() {
@@ -108,7 +134,11 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
 
     await modal.present();
   }
-
+  /**
+   * Filtro de Eventos: Funcion relacionada con el Modal para
+   * filtros de eventos.
+   * Actualmente deshabilitada.
+   * Filtro de eventos se implementa de otra manera.
   async filterEvents() {
     const modalFilter = await this.modalCtrl.create({
       component: FilterEventPage,
@@ -125,28 +155,123 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
 
     this.textoBuscar = data;
   }
-
+  */
+  
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
   }
   
-  /**
-   * Funcion que genera un arreglo de eventos por departamento seleccionado.
-   * @returns Arregldo de Interfaz Eventos
-   */
-  eventosxDptoSeleccionado(): Eventos[] {
-    let eventsxdpto : Eventos[] = [];
-    if( this.dpto_select == '' ){
-      eventsxdpto = this.eventos;
-    }else if( this.eventos.length > 0){
-      this.eventos.forEach((ev) => {
-        if( ev.departamento == this.dpto_select )
-          eventsxdpto.push(ev);
-      })
-    } else {
-      eventsxdpto = this.eventos;
-    }
+/** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/  
 
-    return eventsxdpto;
+  /**
+   * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
+   * @param tipoEventos Arreglo de tipos de eventos. String
+   * @param evento nombre del tipo de evento a verificar.
+   * @returns true o false.
+   */
+  tipoEventoGuradado( tipoEventos: string[], evento: string ): boolean {
+    let evento_save : boolean = false;
+    tipoEventos.forEach(ev => {
+      if( ev == evento ) evento_save = true;
+    })
+    return evento_save;
   }
+
+  dataform : string = '';        
+  filterEvento(){
+    this.dataform = this.filterForm.value
+  }
+  changeFilter(){
+    
+  }
+  /**Ordeno los eventos alfabeticamente por el "Tipo"
+   *  0 : son iguales
+   *  1 : antes
+   * -1 : despues
+   */
+  get eventos_ordenados_asc_xlocalidad(): Eventos[]{
+    let result: Eventos[] = [];
+    const eventos = this.eventos;
+    result = eventos.sort((a, b) => {
+      if(a.tipo.toLocaleLowerCase() > b.tipo.toLocaleLowerCase()) return 1;
+
+      if(a.tipo.toLocaleLowerCase() < b.tipo.toLocaleLowerCase()) return -1;
+
+      if(a.tipo.toLocaleLowerCase() == b.tipo.toLocaleLowerCase()) return 0;
+    })
+    return result;
+  }
+
+  /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
+  get lista_tipos_eventos(){
+    /**Copia de arreglo de eventos para trabajar dentro de la funcion */
+    const eventos = this.eventos;
+    /**Pasar a variable Global
+     * Guarda los tipos de eventos que estan en la base.
+     * Luego se muestran al usuario
+     */
+    let tipos_eventos : string[] = [];
+    if(eventos.length > 0){
+      eventos.forEach((ev) => {
+        if( tipos_eventos.indexOf(ev.tipo) == -1 ){
+          tipos_eventos.push( ev.tipo );
+        }
+      })
+    }
+    return tipos_eventos;
+  }
+  
+  /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
+  get lista_localidades_eventos(){
+    /**Copia de arreglo de eventos para trabajar dentro de la funcion */
+    const eventos = this.eventos;
+    /**Pasar a variable Global
+     * Guarda los tipos de eventos que estan en la base.
+     * Luego se muestran al usuario
+     */
+    let localidades_eventos : string[] = [];
+    if(eventos.length > 0){
+      eventos.forEach((ev) => {
+        if( localidades_eventos.indexOf(ev.localidad) == -1 ){
+          localidades_eventos.push( ev.localidad );
+        }
+      })
+    }
+    return localidades_eventos;
+  }
+
+
+
+  /**
+   * 
+   * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
+   * @returns Arreglo de Eventos para el "tipo" buscado.
+   */
+  eventosPorTipo( tipo: string ): Eventos[]{
+    /**Copia del arreglo de eventos */
+    const eventos : Eventos[] = this.eventos;
+    let eventos_xtipo : Eventos[] = [];
+    if (eventos.length > 0) {
+      eventos_xtipo = eventos.filter(ev => ev.tipo == tipo);
+    }
+    return eventos_xtipo;
+  }
+
+    /**
+   * 
+   * @param tipo Nombre de la "localidad" donde se realiza el Evento. 
+   *  Es usado como criterio de buscanda.
+   * @returns Arreglo de Eventos que se realizaran en esa "localidad".
+   */
+  eventosPorLocalidad( localidad: string ): Eventos[]{
+    /**Copia del arreglo de eventos */
+    const eventos : Eventos[] = this.eventos;
+    let eventos_xlocalidad : Eventos[] = [];
+    if (eventos.length > 0) {
+      eventos_xlocalidad = eventos.filter(ev => ev.localidad == localidad);
+    }
+    return eventos_xlocalidad;
+  }
+  /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/  
+
 }
