@@ -139,3 +139,59 @@ ion-chip {
 * {
   z-index: 0;
 }
+
+.form_filter {
+  width: 85%;
+  margin: 0 auto 5px auto;
+  border: 1px solid #3880ff;
+}
+
+.filter_place {
+  margin: -30px auto 0 auto;
+  z-index: 20;
+  width: 85%;
+  opacity: 1;
+}
+
+.magnifying {
+  padding: 10.5px;
+  border-radius: 100%;
+  color: #fff;
+  background-color: #01dfb8;
+  margin-right: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+form > ion-select {
+  width: 40%;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 50px;
+  height: 35vh;
+  width: auto;
+}
+
+.text_empty {
+  color: #d6d2d1;
+  text-align: center;
+  padding-bottom: 15px;
+  font-size: 1.2em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.icon_empty {
+  font-size: 5em;
+  color: #d6d2d1;
+}

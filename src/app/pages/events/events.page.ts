@@ -4,8 +4,9 @@ import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { FilterEventPage } from "../filter-event/filter-event.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-events",
@@ -23,10 +24,18 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
   eventosSuscription: Subscription;
   dpto_select: String;
 
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+    tipo     : ["", Validators.required],
+  });
+
+  isFilter: boolean = false;
+
   constructor(
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
-    private veService: VisitEventService
+    private veService: VisitEventService,
+    private fb       : FormBuilder,
   ) {}
 // eliminar y cambiar por illwill 
   // ngOnInit() {
@@ -52,7 +61,6 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
      * se van a actulizar
      */
 
-  
       /** */
     this.dbService.getEventsLocal();
     /** Actualizo el dpto seleccionado */
@@ -60,14 +68,6 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
 
     /** ======>>> Pruebas <<<======= */
     
-    this.lista_tipos_eventos.forEach(e => {
-      console.log(e);
-      
-      this.eventosPorTipo(e).forEach(a => {
-        console.log(a);
-        
-      })
-    })
 
     /** ===========>>>><<<<========= */
     
@@ -177,6 +177,13 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
     return evento_save;
   }
 
+  dataform : string = '';        
+  filterEvento(){
+    this.dataform = this.filterForm.value
+  }
+  changeFilter(){
+    
+  }
   /**Ordeno los eventos alfabeticamente por el "Tipo"
    *  0 : son iguales
    *  1 : antes
@@ -214,6 +221,27 @@ import { VisitEventService } from "src/app/services/database/visit-event.service
     return tipos_eventos;
   }
   
+  /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
+  get lista_localidades_eventos(){
+    /**Copia de arreglo de eventos para trabajar dentro de la funcion */
+    const eventos = this.eventos;
+    /**Pasar a variable Global
+     * Guarda los tipos de eventos que estan en la base.
+     * Luego se muestran al usuario
+     */
+    let localidades_eventos : string[] = [];
+    if(eventos.length > 0){
+      eventos.forEach((ev) => {
+        if( localidades_eventos.indexOf(ev.localidad) == -1 ){
+          localidades_eventos.push( ev.localidad );
+        }
+      })
+    }
+    return localidades_eventos;
+  }
+
+
+
   /**
    * 
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
