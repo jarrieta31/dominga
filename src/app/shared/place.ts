@@ -1,6 +1,8 @@
     export interface Place {
     id: string;
     distancia?: string | number,
+    hora: string | number,
+    minuto: string | number,
     nombre: string,
     prioridad: number,
     publicado: boolean,

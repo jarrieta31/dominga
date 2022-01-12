@@ -16,6 +16,8 @@ import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-place",
@@ -51,7 +53,9 @@ export class PlacePage {
   location: any[] = [];
   /**guarda los tipos de lugares */
   category: any[] = [];
-  distancia: string;
+  distancia: string | number;
+  hora: string | number;
+  minuto: string | number;
   posicion$: Observable<Point>;
 
   currentDepto: String = this.databaseSvc.selectionDepto;
@@ -69,6 +73,8 @@ export class PlacePage {
     localidad: ["", Validators.required],
     tipo: ["", Validators.required],
   });
+
+  distancePlace: MapboxDirections = ""; //Buscador de direcciones para indicar recorrido
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -94,6 +100,25 @@ export class PlacePage {
         "," +
         lat +
         ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
+  }
+
+  getDistance(
+    lngUser: number,
+    latUser: number,
+    lngPlace: number,
+    latPlace: number
+  ) {
+    return this.http.get(
+      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        lngUser +
+        "," +
+        latUser +
+        ";" +
+        lngPlace +
+        "," +
+        latPlace +
+        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
     );
   }
 
@@ -127,9 +152,7 @@ export class PlacePage {
     this.placeSvc.getPlaces();
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      //console.log("sub1");
       this.places = res;
-      console.log(this.places);
       //this.cd.markForCheck();
       /**====================== localidades y categorías activas ==================================== */
       this.location = [];
@@ -163,16 +186,28 @@ export class PlacePage {
     });
     this.show("Cargando lugares...");
 
-    timer(0, 5000)
+    timer(1000, 10000)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
-        //console.log("sub2");
         this.places.forEach((calcDist) => {
+          //Crea el objeto direction para agregarlo al mapa
+          // this.distancePlace = new MapboxDirections({
+          //   accessToken: environment.mapBoxToken,
+          //   unit: "metric",
+          //   profile: "mapbox/driving-traffic",
+          // });
+          // this.distancePlace.setOrigin([
+          //   calcDist.ubicacion.lng,
+          //   calcDist.ubicacion.lat,
+          // ]);
           this.posicion$ = this.geolocationSvc.getPosicionActual$();
           this.posicion$
             .pipe(
               tap((posicion) => {
-                //console.log("sub3");
+                // this.distancePlace.setDestination([
+                //   posicion.longitud,
+                //   posicion.latitud,
+                // ]);
                 // this.getLocation(posicion.longitud, posicion.latitud)
                 //   .pipe(takeUntil(this.unsubscribe$))
                 //   .subscribe((dto) => {
@@ -180,23 +215,68 @@ export class PlacePage {
                 //     this.placeSvc.currentDpto = dto.features[2].text;
                 //   });
                 if (posicion != null) {
-                  let options = { units: "kilometers" };
-                  let dist = distance(
-                    [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
-                    [posicion.longitud, posicion.latitud],
-                    options
-                  );
-                  let distFormat: string | number,
-                    placeDistance: string | number;
-                  if (dist >= 1) {
-                    distFormat = parseFloat(dist).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
-                  } else {
-                    distFormat = parseFloat(dist).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
-                  }
+                  //Subscripcion para ver la ruta
 
-                  calcDist.distancia = placeDistance;
+                  this.getDistance(
+                    posicion.longitud,
+                    posicion.latitud,
+                    calcDist.ubicacion.lng,
+                    calcDist.ubicacion.lat
+                  )
+                    .pipe(takeUntil(this.unsubscribe$))
+                    .subscribe((res) => {
+                      this.distancia = res["routes"]["0"].distance / 1000;
+
+                      this.hora = Math.trunc(
+                        res["routes"]["0"].duration / 60 / 60
+                      );
+                      this.minuto = Math.trunc(
+                        (res["routes"]["0"].duration / 60) % 60
+                      );
+
+                      let distFormat: string | number, placeDistance: string;
+                      if (this.distancia >= 1) {
+                        distFormat = parseFloat(String(this.distancia)).toFixed(
+                          3
+                        );
+                        placeDistance = "Estás a " + distFormat;
+                      } else {
+                        distFormat = parseFloat(String(this.distancia)).toFixed(
+                          2
+                        );
+                        placeDistance = "Estás a " + distFormat;
+                      }
+
+                      calcDist.distancia = placeDistance;
+                      calcDist.hora = String(this.hora + " h");
+                      calcDist.minuto = String(this.minuto + " min");
+                    });
+
+                  // this.distancePlace.on("route", (e: { route: any }) => {
+                  //   let routes = e.route;
+                  //   //console.log(routes)
+                  //   this.distancia = parseFloat(
+                  //     routes.map((r: { distance: number }) => r.distance / 1000)
+                  //   );
+                  //   this.hora = parseFloat(
+                  //     routes.map((r: { duration: number }) =>
+                  //       Math.trunc(r.duration / 60 / 60)
+                  //     )
+                  //   );
+                  //   this.minuto = parseFloat(
+                  //     routes.map((r: { duration: number }) =>
+                  //       Math.trunc((r.duration / 60) % 60)
+                  //     )
+                  //   );
+
+                  //   console.log(calcDist.distancia);
+                  // });
+                  // let options = { units: "kilometers" };
+                  // let dist = distance(
+                  //   [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
+                  //   [posicion.longitud, posicion.latitud],
+                  //   options
+                  // );
                 }
               })
             )
