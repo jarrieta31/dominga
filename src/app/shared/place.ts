@@ -14,6 +14,7 @@
     patrimonial: boolean,
     accesibilidad: boolean,
     descripcion: string,
+    descripcionCorta: string,
     imagenHome: {
         name: string,
         url: string,

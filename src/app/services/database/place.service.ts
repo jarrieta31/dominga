@@ -213,8 +213,7 @@ export class PlaceService {
 
     this.initPlace.forEach((res) => {
       if (res.id == id) {
-        res.descripcion = res.descripcion.substring(0, 140) + " ...";
-        res.descripcion = res.descripcion.replace(/<\/?[^>]+(>|$)/g, "");
+        res.descripcionCorta = res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) + "...";
         this.near_place = res;
         this.place_selected.next(res);
       }

@@ -49,7 +49,7 @@
                   <div>{{ distancia | formatDistancia }}</div>                 
               </div> -->
           </div>
-          <p class="text" id="place-description">{{place.descripcion}}<a class="verMas" [routerLink]="['/descripcion', place.id]">Ver más</a></p>
+          <p class="text" id="place-description">{{place.descripcionCorta}}<a class="verMas" [routerLink]="['/descripcion', place.id]">Ver más</a></p>
       </div>
       <div class="divd">
           <div id="mapaBox"></div>

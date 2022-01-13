@@ -1,10 +1,10 @@
 <ion-header>
-    <ion-toolbar *ngIf="tipo == 'Rural'" color="options">
+    <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
+            <ion-back-button defaultHref="places/{{place.id}}" color="back"></ion-back-button>
         </ion-buttons>
         <ion-title color="back">
-                {{ nombre }}
+                {{ place.nombre }}
         </ion-title>
 <!-- Conjunto de botones para la reproduccion de texto a audio -->
         <ion-buttons slot="end" >
@@ -25,7 +25,7 @@
                 <ion-button 
                     size="small"
                     (click)="speaking = !speaking ; 
-                    reproducirDescripcion( descripcion ) "
+                    reproducirDescripcion( place.descripcion ) "
                     color="primary"
                     >
                     <i class="fas fa-play-circle"></i>
@@ -61,12 +61,12 @@
    
 <!-- Fin de los botones -->
     </ion-toolbar>
-    <ion-toolbar *ngIf="tipo == 'Urbano'" color="information">
+    <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="places/{{id}}" color="back"></ion-back-button>
+            <ion-back-button defaultHref="places/{{place.id}}" color="back"></ion-back-button>
         </ion-buttons>
         <ion-title color="back">
-                {{ nombre }}
+                {{ place.nombre }}
         </ion-title>
 <!-- Conjunto de botones para la reproduccion de texto a audio -->
 <ion-buttons slot="end" >
@@ -87,7 +87,7 @@
         <ion-button 
             size="small"
             (click)="speaking = !speaking ; 
-            reproducirDescripcion( descripcion ) "
+            reproducirDescripcion( place.descripcion ) "
             color="primary"
             >
             <i class="fas fa-play-circle"></i>
@@ -125,41 +125,41 @@
 </ion-header>
 <ion-content>
     <ion-text>
-        <div class="texto" id="all-description" [innerHTML]="descripcion">
+        <div class="texto" id="all-description" [innerHTML]="place.descripcion">
         </div>
     </ion-text>
     <ion-grid>
         <ion-row>
             <ion-col id="web">
                 <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="web?.length > 0">
+                    <div class="circulo_red" *ngIf="place.web?.length > 0">
                         <div (click)="openWeb()"><i class="fas fa-globe"></i></div>
                     </div>
                 </div>
             </ion-col>
             <ion-col id="facebook">
                 <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="facebook?.length > 0">
+                    <div class="circulo_red" *ngIf="place.facebook?.length > 0">
                         <div (click)="openFacebook()"><i class="fab fa-facebook"></i></div>
                     </div>
                 </div>
             </ion-col>
             <ion-col id="instagram">
                 <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="instagram?.length > 0">
-                        <a href="{{ instagram }}"><i class="fab fa-instagram"></i></a>
+                    <div class="circulo_red" *ngIf="place.instagram?.length > 0">
+                        <a href="{{ place.instagram }}"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </ion-col>
             <ion-col id="whatsapp">
-                <div class="ion-text-center" *ngIf="whatsapp?.length > 0">
+                <div class="ion-text-center" *ngIf="place.whatsapp?.length > 0">
                     <div class="circulo_red_wpp">
-                        <a href="{{ whatsapp }}"><i class="fab fa-whatsapp"></i></a>
+                        <a href="{{ place.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </ion-col>
             <ion-col id="phone">
-                <div class="ion-text-center" *ngIf="phone?.length > 0">
+                <div class="ion-text-center" *ngIf="place.telefonos?.length > 0">
                     <div class="circulo_red" (click)="callPhone()">
                         <i class="fas fa-phone-alt"></i>
                     </div>

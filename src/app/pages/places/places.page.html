@@ -72,9 +72,6 @@
                 <div id="dist">
                     <div>{{ distancia | formatDistancia }}</div>                 
                 </div>
-               <!--  <div class="iconEstilos">
-                    <i class="fas fa-globe"></i>
-                </div> -->
             </div>
             <p class="text" id="place-description">{{descripcion}}<a class="verMas" [routerLink]="['/descripcion', key]">Ver más</a></p>
         </div>
@@ -84,7 +81,7 @@
         <h6 class="interes">Te puede interesar</h6>
         <div class="divf">
             <div class="sugerencia" *ngFor="let s of sug_2">
-                <a href="places/{{s.$key}}" class="sug">
+                <a href="places/{{s.id}}" class="sug">
                     <img class="sug_img" src="{{ s.imagenPrincipal }}" alt="">
                 </a>
                 <div class="infoSug">

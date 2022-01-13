@@ -44,7 +44,6 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
       this.placeSvc.getPlaceNear();
       
       this.near_places = this.placeSvc.near_places.subscribe( res => {
-        console.log(this.near)
         this.near = [];
         this.near = res;
       })

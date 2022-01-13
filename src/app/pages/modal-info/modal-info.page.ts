@@ -1,16 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
-import { DatabaseService } from '../../services/database.service';
-
-import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
-
+import { Router, NavigationEnd } from '@angular/router';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { filter  } from 'rxjs/operators';
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { TextToSpeechService } from 'src/app/services/text-to-speech.service';
 import { TipoSputtr } from 'src/app/shared/tipo-sputtr';
+import { PlaceService } from 'src/app/services/database/place.service';
+import { takeUntil } from 'rxjs/operators';
+import { Place } from 'src/app/shared/place';
 
 
 @Component({
@@ -19,16 +16,6 @@ import { TipoSputtr } from 'src/app/shared/tipo-sputtr';
     styleUrls: ['./modal-info.page.scss'],
 })
 export class ModalInfoPage implements OnInit, OnDestroy {
-
-    nombre: string;
-    descripcion: string;
-    tipo: string;
-    web: string;
-    facebook: string;
-    instagram: string;
-    whatsapp: string;
-    phone: string;
-    id: string;
 /**
  * Funcionalidad: Texto a Audio (TextToSpeech)
  * Variables globales
@@ -44,130 +31,79 @@ export class ModalInfoPage implements OnInit, OnDestroy {
         text   : '', // Texto a convertir a audio
     }
 
+    private unsubscribe$ = new Subject<void>();
+
+    place: Place = null;
+
     constructor(
-        private database: DatabaseService,
-        private activatedRoute: ActivatedRoute,
         private router: Router,
         private callNumber: CallNumber,
         private browser: InAppBrowser, 
         private tts : TextToSpeechService,
+        private placeSvc: PlaceService
     ) {}
 
     ngOnInit() {
-        this.getInfoLugar()
+        this.placeSvc.place_selected.pipe(takeUntil(this.unsubscribe$)).subscribe( res => this.place = res);
         this.urlSuscribe();
+
+        console.log(this.place.web)
+        console.log(this.place.telefonos)
+
+        if (this.place.web == null) {
+            let elem: HTMLElement = document.getElementById('web');
+            elem.setAttribute("style", "display:none");
+        }
+
+        if (this.place.facebook == null) {
+            let elem: HTMLElement = document.getElementById('facebook');
+            elem.setAttribute("style", "display:none");
+        }
+
+        if (this.place.instagram == null) {
+            let elem: HTMLElement = document.getElementById('instagram');
+            elem.setAttribute("style", "display:none");
+        }
+
+        if (this.place.whatsapp == null) {
+            let elem: HTMLElement = document.getElementById('whatsapp');
+            elem.setAttribute("style", "display:none");
+        }
+
+        if (this.place.telefonos.length == 0) {
+            let elem: HTMLElement = document.getElementById('phone');
+            elem.setAttribute("style", "display:none");
+        }
     }
 
     ngOnDestroy(): void {
-        //Called once, before the instance is destroyed.
-        //Add 'implements OnDestroy' to the class.
-        this.urlSuscription.unsubscribe();
-    
-    }
-
-    async getInfoLugar() {
-        this.activatedRoute.paramMap.subscribe(params => {
-            // Dentro de la variable s colocamos el método database y hacemos llamado al 
-            // método getPlaces() que se encuentra en el servicio 'DataService'
-
-            let par = params.get("id");
-            this.id = par;
-
-            let s = this.database.getPlaces();
-            // Llamamos los datos desde Firebase e iteramos los datos con data.ForEach y por
-            // último pasamos los datos a JSON
-            s.snapshotChanges().subscribe(data => {
-
-                    data.forEach(item => {
-                        if (par == item.key) {
-                            let a = item.payload.toJSON();
-                            a['$key'] = item.key;
-                            this.nombre = a['nombre'];
-                            this.descripcion = a['descripcion'];
-                            this.tipo = a['tipo'];
-
-                            if (a['web'] != undefined && a['web'] != null) {
-                                this.web = a['web'];
-                            }
-
-                            if (a['facebook'] != undefined && a['facebook'] != null) {
-                                this.facebook = a['facebook'];
-                            }
-
-                            if (a['instagram'] != undefined && a['instagram'] != null) {
-                                this.instagram = a['instagram'];
-                            }
-
-                            if (a['whatsapp'] != undefined && a['whatsapp'] != null) {
-                                this.whatsapp = a['whatsapp'];
-                            }
-
-                            if (a['phone'] != undefined && a['phone'] != null) {
-                                this.phone = a['phone'];
-                            }
-                        }
-                    })
-                 
-                    if (this.web == undefined) {
-                        let elem: HTMLElement = document.getElementById('web');
-                        elem.setAttribute("style", "display:none");
-                    }
-
-                    if (this.facebook == undefined) {
-                        let elem: HTMLElement = document.getElementById('facebook');
-                        elem.setAttribute("style", "display:none");
-                    }
-
-                    if (this.instagram == undefined) {
-                        let elem: HTMLElement = document.getElementById('instagram');
-                        elem.setAttribute("style", "display:none");
-                    }
-
-                    if (this.whatsapp == undefined) {
-                        let elem: HTMLElement = document.getElementById('whatsapp');
-                        elem.setAttribute("style", "display:none");
-                    }
-
-                    if (this.phone == undefined) {
-                        let elem: HTMLElement = document.getElementById('phone');
-                        elem.setAttribute("style", "display:none");
-                    }
-                }),
-                err => console.log(err)
-        });
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
     }
 
     callPhone(){
-        this.callNumber.callNumber(this.phone, true)
+        this.callNumber.callNumber(this.place.telefonos['numero'], true)
           .then(res => console.log('Llamando!', res))
           .catch(err => console.log('Error en llamada', err));
     }
 
     openWeb(){
-        this.browser.create(this.web, "_system")
+        this.browser.create(this.place.web, "_system")
     }
 
     openFacebook(){
-        this.browser.create(this.facebook, "_system")
+        this.browser.create(this.place.facebook, "_system")
     }
 
 
 //  >>>>>> Texto a Audio <<<<<<<<
 
-
-
-
-
-
-
-
     urlSuscribe(){
-        this.urlSuscription = this.router.events.subscribe(( event ) => {
+        this.urlSuscription = this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(( event ) => {
             if( event instanceof NavigationEnd ){
                 if( this.tts.reproduciendo() && event.url.search('descripcion') == -1) 
                     this.tts.detener();
                 this.currentUrl = event.url;
-                console.log(event.url);
                 }
         })
     }
