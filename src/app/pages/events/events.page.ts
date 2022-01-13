@@ -27,6 +27,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
     tipo     : ["", Validators.required],
+    mondeda  : ["", Validators.required],
+    precio   : [ , Validators.required],
   });
 
   isFilter: boolean = false;

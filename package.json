@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "@flaticon/flaticon-uicons": "^1.5.0",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@ionic-native/android-permissions": "^5.24.0",
     "@ionic-native/call-number": "^5.27.0",

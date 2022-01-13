@@ -36,8 +36,9 @@
 <!-- =========>=>=>=> Filtro =========>=>=>=> -->
   <div class="filter_place" (click)="isFilter = !isFilter">
     <ion-chip color="primary">
-      <i class="fas fa-search magnifying"></i
-      ><ion-label>filtrar lugares</ion-label></ion-chip
+      <!-- <i class="fas fa-search magnifying"></i> -->
+      <i class="fi fi-sr-search-alt"></i>
+      <ion-label>filtrar lugares</ion-label></ion-chip
     >
   </div>
 
@@ -49,8 +50,8 @@
         <ion-select-option >All</ion-select-option>
         <ion-select-option
           *ngFor="let ev of this.lista_tipos_eventos"
-          >{{ ev }}</ion-select-option
-        >
+          >{{ ev }}</ion-select-option>
+          
       </ion-select>
       <ion-select 
         placeholder="Localidad"
