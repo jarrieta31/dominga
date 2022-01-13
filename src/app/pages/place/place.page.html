@@ -50,6 +50,8 @@
       </ion-slide>
     </ion-slides>
     <div class="filter_place" (click)="changeFilter()">
+      <ion-label class="depto_selected">localidad</ion-label>
+      <ion-label>tipo</ion-label>
       <ion-chip color="primary">
         <i class="fas fa-search magnifying"></i
         ><ion-label>filtrar lugares</ion-label></ion-chip
@@ -59,11 +61,19 @@
       <form [formGroup]="filterForm">
         <ion-select placeholder="localidad" formControlName="localidad">
           <ion-select-option value="">Todo</ion-select-option>
-          <ion-select-option *ngFor="let loc of location" value="{{ loc.localidad }}">{{ loc.localidad }}</ion-select-option>
+          <ion-select-option
+            *ngFor="let loc of location"
+            value="{{ loc.localidad }}"
+            >{{ loc.localidad }}</ion-select-option
+          >
         </ion-select>
         <ion-select placeholder="categoría" formControlName="tipo">
           <ion-select-option value="">Todo</ion-select-option>
-          <ion-select-option *ngFor="let cat of category" value="{{ cat.categoria }}">{{ cat.categoria }}</ion-select-option>
+          <ion-select-option
+            *ngFor="let cat of category"
+            value="{{ cat.categoria }}"
+            >{{ cat.categoria }}</ion-select-option
+          >
         </ion-select>
         <ion-button type="submit" (click)="filterPlace()">Filtrar</ion-button>
       </form>
@@ -109,7 +119,13 @@
           alt="{{ item.nombre }}"
         />
         <div class="duracion">
-          <b class="distancia">{{item.distancia | formatDistancia }}</b>
+          <b class="distancia"
+            >{{item.distancia | formatDistancia }} -
+            <span *ngIf="item.hora !== '0 h'">{{ item.hora }}</span>&nbsp;<span
+              *ngIf="item.minuto !== '0 min'"
+              >{{ item.minuto }}</span
+            ></b
+          >
         </div>
       </ion-card-content>
     </ion-card>
