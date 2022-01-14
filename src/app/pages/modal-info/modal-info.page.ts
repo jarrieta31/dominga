@@ -47,9 +47,6 @@ export class ModalInfoPage implements OnInit, OnDestroy {
         this.placeSvc.place_selected.pipe(takeUntil(this.unsubscribe$)).subscribe( res => this.place = res);
         this.urlSuscribe();
 
-        console.log(this.place.web)
-        console.log(this.place.telefonos)
-
         if (this.place.web == null) {
             let elem: HTMLElement = document.getElementById('web');
             elem.setAttribute("style", "display:none");

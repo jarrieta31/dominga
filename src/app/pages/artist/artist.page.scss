@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+.slider {
+  width: 100%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sliderPrimero,
+.sliderHijo,
+.banner,
+.imgSlider {
+  width: 100%;
+}
+
+.artist {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 4%;
+  border-radius: 5px;
+  background-color: rgb(243, 243, 243);
+}
+
+.imgArtist {
+  width: 33%;
+  height: auto;
+}
+
+.infoArtist {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  padding-left: 40px;
+}
+
+.img-elem {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  overflow: hidden;
+}
+
+.netArtist > img {
+  padding: 3px 1em 3px 0;
+}
+
+.tipo {
+  font-family: "Poppins", sans-serif;
+  color: #01dfb8;
+  font-size: 13px;
+}
+
+.nombre {
+  font-family: "Poppins", sans-serif;
+  color: #999;
+}

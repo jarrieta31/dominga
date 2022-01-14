@@ -1,9 +1,40 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>artist</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
-
+  <div id="alto" class="slider">
+    <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
+      <ion-slide class="sliderHijo"> 
+          <img class="imgSlider" src="https://www.am-artconsulting.com/wp-content/uploads/2016/09/0319-convocatoria.jpg" />                
+      </ion-slide>    
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://assets.diarioconcepcion.cl/2020/10/pag-12-pinacoteca-udec-850x500.jpg"/>                
+      </ion-slide>     
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://www.am-artconsulting.com/wp-content/uploads/2016/09/0319-convocatoria.jpg" />                
+      </ion-slide>    
+      <ion-slide class="sliderHijo"> 
+        <img class="imgSlider" src="https://assets.diarioconcepcion.cl/2020/10/pag-12-pinacoteca-udec-850x500.jpg"/>                
+      </ion-slide>         
+    </ion-slides>
+    </div>
+  <ion-list >
+    <div class="artist" *ngFor="let art of artist">
+      <div class="imgArtist">
+        <ion-img [src]="art.imagen" class="img-elem"></ion-img>
+      </div>
+      <div class="infoArtist">
+        <div class="tipo">{{ art.tipo }}</div>
+        <div class="nombre">{{ art.nombre }}</div>
+        <div class="netArtist">
+          <img src="/assets/icon/instagram.png" alt="instagram">
+          <img src="/assets/icon/spotify.png" alt="spotify">
+          <img src="/assets/icon/youtube.png" alt="youtube">
+        </div>
+      </div>
+    </div>
+  </ion-list>
 </ion-content>

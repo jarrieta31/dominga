@@ -44,10 +44,10 @@
   
   <ion-list class="lista">
     <div class="empty" *ngIf="eat.length == 0">
+      <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
         No hay lugares para el departamento seleccionado
       </div>
-      <i class="far fa-sad-tear icon_empty"></i>
     </div>
     <ion-item *ngFor="let item of eat | filtroDondeComer:dataForm">
       <div class="padre">
