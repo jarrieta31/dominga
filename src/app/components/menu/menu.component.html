@@ -3,24 +3,74 @@
     <ion-toolbar color="primary">
       <ion-title>Configuraciones</ion-title>
       <ion-buttons slot="end">
-        <i class="fas fa-arrow-left closeMenu" color="back" (click)="toggleMenu()"></i>
+        <i
+          class="fi fi-rr-arrow-left closeMenu"
+          color="back"
+          (click)="toggleMenu()"
+        ></i>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item
-        >
-        Modo oscuro
-        <ion-toggle *ngIf="modoOscuro == 'true'" slot="end" checked (ionChange)="changeTheme()" mode="ios"></ion-toggle>
-        <ion-toggle *ngIf="modoOscuro == null" slot="end" (ionChange)="changeTheme()" mode="ios"></ion-toggle>
+      <ion-item>
+        <ion-text>
+          <h4>Interfaz</h4>
+        </ion-text>
       </ion-item>
-      <ion-item
-        >Fuente dislexia
-        <ion-toggle *ngIf="dyslexic == 'true'" slot="end" checked (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
-        <ion-toggle *ngIf="dyslexic == null" slot="end" (ionChange)="dyslexicFont()" mode="ios"></ion-toggle>
+      <ion-item>
+        <ion-icon slot="start" name="sunny-outline"></ion-icon>
+        <ion-label *ngIf="labelCheck == true"> Tema claro</ion-label>
+        <ion-label *ngIf="labelCheck == false"> Tema oscuro</ion-label>
+        <ion-toggle
+          *ngIf="modoOscuro == 'true'"
+          slot="end"
+          checked
+          (ionChange)="changeTheme()"
+          mode="ios"
+        ></ion-toggle>
+        <ion-toggle
+          *ngIf="modoOscuro == null"
+          slot="end"
+          (ionChange)="changeTheme()"
+          mode="ios"
+        ></ion-toggle>
       </ion-item>
-      <ion-item>Departamento</ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="text-outline"></ion-icon>
+        <ion-label *ngIf="dyslexicCheck == false"> Fuente dislexia</ion-label>
+        <ion-label *ngIf="dyslexicCheck == true">Quitar fuente</ion-label>
+        <ion-toggle
+          *ngIf="dyslexic == 'true'"
+          slot="end"
+          checked
+          (ionChange)="dyslexicFont()"
+          mode="ios"
+        ></ion-toggle>
+        <ion-toggle
+          *ngIf="dyslexic == null"
+          slot="end"
+          (ionChange)="dyslexicFont()"
+          mode="ios"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-text>
+          <h4>Más opciones</h4>
+        </ion-text>
+      </ion-item>
+      <ion-item (click)="sleep()">
+        <ion-icon slot="start" name="bed-outline"></ion-icon>
+        <ion-label>Donde dormir</ion-label>
+      </ion-item>
+      <ion-item (click)="artist()">
+        <ion-icon slot="start" name="color-palette-outline"></ion-icon>
+        <ion-label>Artistas</ion-label>
+      </ion-item>
+      <ion-item (click)="info()">
+        <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+        <ion-label>Datos útiles</ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>

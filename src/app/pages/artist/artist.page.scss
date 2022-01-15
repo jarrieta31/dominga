@@ -46,13 +46,20 @@
   padding: 6px 1em 3px 0;
 }
 
-.tipo {
+.type {
   font-family: "Poppins", sans-serif;
   color: #01dfb8;
   font-size: 13px;
 }
 
-.nombre {
+.name {
   font-family: "Poppins", sans-serif;
   color: #999;
+  padding-right: 3px;
+}
+
+@media (max-width: 341px) {
+  .name {
+    font-size: 14px;
+  }
 }
