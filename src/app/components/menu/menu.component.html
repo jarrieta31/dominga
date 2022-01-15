@@ -15,13 +15,13 @@
     <ion-list>
       <ion-item>
         <ion-text>
-          <h4>Interfaz</h4>
+          <h3>Interfaz</h3>
         </ion-text>
       </ion-item>
       <ion-item>
         <ion-icon slot="start" name="sunny-outline"></ion-icon>
-        <ion-label *ngIf="labelCheck == true"> Tema claro</ion-label>
-        <ion-label *ngIf="labelCheck == false"> Tema oscuro</ion-label>
+        <ion-label *ngIf="labelCheck == true" class="fontOption"> Tema claro</ion-label>
+        <ion-label *ngIf="labelCheck == false" class="fontOption"> Tema oscuro</ion-label>
         <ion-toggle
           *ngIf="modoOscuro == 'true'"
           slot="end"
@@ -38,8 +38,8 @@
       </ion-item>
       <ion-item>
         <ion-icon slot="start" name="text-outline"></ion-icon>
-        <ion-label *ngIf="dyslexicCheck == false"> Fuente dislexia</ion-label>
-        <ion-label *ngIf="dyslexicCheck == true">Quitar fuente</ion-label>
+        <ion-label *ngIf="dyslexicCheck == false" class="fontOption"> Fuente dislexia</ion-label>
+        <ion-label *ngIf="dyslexicCheck == true" class="fontOption">Quitar fuente</ion-label>
         <ion-toggle
           *ngIf="dyslexic == 'true'"
           slot="end"
@@ -56,20 +56,20 @@
       </ion-item>
       <ion-item>
         <ion-text>
-          <h4>Más opciones</h4>
+          <h3>Más opciones</h3>
         </ion-text>
       </ion-item>
       <ion-item (click)="sleep()">
         <ion-icon slot="start" name="bed-outline"></ion-icon>
-        <ion-label>Donde dormir</ion-label>
+        <ion-label class="fontOption">Donde dormir</ion-label>
       </ion-item>
       <ion-item (click)="artist()">
         <ion-icon slot="start" name="color-palette-outline"></ion-icon>
-        <ion-label>Artistas</ion-label>
+        <ion-label class="fontOption">Artistas</ion-label>
       </ion-item>
       <ion-item (click)="info()">
         <ion-icon slot="start" name="information-circle-outline"></ion-icon>
-        <ion-label>Datos útiles</ion-label>
+        <ion-label class="fontOption">Datos útiles</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>

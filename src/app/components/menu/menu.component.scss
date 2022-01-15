@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
 .closeMenu {
     margin-right: 8px;
     font-size: 1.1em;
@@ -9,5 +11,10 @@ i {
 }
 
 h3 {
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.fontOption {
+    font-family: 'Poppins', sans-serif;
 }

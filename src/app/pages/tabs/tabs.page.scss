@@ -2,10 +2,6 @@
   font-size: 2em;
 }
 
-ion-menu-button {
-  font-size: 2em;
-}
-
 ion-tab-bar {
   contain: none;
   --border: none;
@@ -16,6 +12,11 @@ ion-tab-bar {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+ion-label {
+  font-size: 0.9em;
+  font-family: 'Poppins', sans-serif;
 }
 
 // ion-tab-bar ion-tab-button:nth-child(3) {
