@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { MenuController } from "@ionic/angular";
 
 @Component({
   selector: "app-tabs",
@@ -6,7 +7,12 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./tabs.page.scss"],
 })
 export class TabsPage implements OnInit {
-  constructor() {}
+  constructor(private menu: MenuController) {}
 
   ngOnInit() {}
+
+  openCustom() {
+    this.menu.enable(true, "first");
+    this.menu.open("first");
+  }
 }
