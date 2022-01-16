@@ -19,7 +19,8 @@
         </ion-text>
       </ion-item>
       <ion-item>
-        <ion-icon slot="start" name="sunny-outline"></ion-icon>
+        <ion-icon *ngIf="labelCheck == true" slot="start" name="sunny-outline"></ion-icon>
+        <ion-icon *ngIf="labelCheck == false" slot="start" name="moon-outline"></ion-icon>
         <ion-label *ngIf="labelCheck == true" class="fontOption"> Tema claro</ion-label>
         <ion-label *ngIf="labelCheck == false" class="fontOption"> Tema oscuro</ion-label>
         <ion-toggle

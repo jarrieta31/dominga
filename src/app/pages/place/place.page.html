@@ -1,10 +1,5 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <!-- <ion-buttons slot="start">
-      <ion-menu-button menu="first">
-        <i class="fas fa-bars" slot="start"></i>
-      </ion-menu-button>
-    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -50,12 +45,10 @@
       </ion-slide>
     </ion-slides>
     <div class="filter_place" (click)="changeFilter()">
-      <ion-label class="depto_selected">localidad</ion-label>
+      <ion-label>localidad</ion-label>
+      <img src="/assets/icon/exchange.png" alt="">
       <ion-label>tipo</ion-label>
-      <ion-chip color="primary">
-        <i class="fas fa-search magnifying"></i
-        ><ion-label>filtrar lugares</ion-label></ion-chip
-      >
+      <div class="btn-filter">Filtrar</div>
     </div>
     <div *ngIf="isFilter" class="form_filter">
       <form [formGroup]="filterForm">

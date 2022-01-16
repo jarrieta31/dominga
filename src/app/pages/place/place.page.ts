@@ -67,7 +67,7 @@ export class PlacePage {
 
   isFilter = false;
   /**captura los datos del formulario de filtros */
-  dataForm: string = "";
+  dataForm: any = "";
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -141,6 +141,11 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    this.dataForm = {
+      localidad: "", 
+      tipo: "Rural"
+    }
+
     if (this.databaseSvc.selectionDepto != this.currentDepto) {
       this.currentDepto = this.databaseSvc.selectionDepto;
       this.filterForm.reset();
