@@ -44,23 +44,28 @@
 
   <div *ngIf="isFilter" class="form_filter">
     <form [formGroup]="filterForm">
+
       <ion-select 
         placeholder="Tipos" 
           formControlName="tipo">
-        <ion-select-option >All</ion-select-option>
+        <ion-select-option  value="" >All</ion-select-option>
         <ion-select-option
           *ngFor="let ev of this.lista_tipos_eventos"
+          value="{{ ev }}"
           >{{ ev }}</ion-select-option>
           
       </ion-select>
+
       <ion-select 
         placeholder="Localidad"
         formControlName="localidad"  >
-        <ion-select-option>All</ion-select-option>
+        <ion-select-option value="" >All</ion-select-option>
           <ion-select-option
             *ngFor="let loc of this.lista_localidades_eventos"
           >{{ loc }}</ion-select-option>
       </ion-select>
+
+
       <ion-button type="submit" (click)="filterEvento()">Filtrar</ion-button>
     </form>
 

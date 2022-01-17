@@ -7,50 +7,49 @@ import { Eventos } from '../eventos';
 export class FilterEvents1Pipe implements PipeTransform {
 
   transform(eventos: Eventos[], dataform: any): Eventos[] {
-    console.log(dataform);
   
     if ( dataform.length === 0 ) {
       return eventos;
     }
 
-    if ( dataform.tipo === undefined || dataform.tipo === null ) dataform.tipo = "all";
-    if ( dataform.localidad === undefined || dataform.localidad === null ) dataform.localidad = "all";
-    if ( dataform.precio === undefined || dataform.precio === null || dataform.precio < 0) dataform.precio = 0;
-    if ( dataform.moneda === undefined || dataform.moneda === null ) dataform.moneda = "all";
-
-    /**se asume que los valores siempre van a ser string, ya sea vacio "" o con datos */
-    let tipo = dataform.tipo.toLowerCase();
-    let loc = dataform.localidad.toLowerCase();
-    if( tipo === "" ) tipo = "all";
-    if( loc === "" ) loc = "all";
-    /**No aplica filtros  */
-      if (tipo === "all" && loc === "all" ) {
-      return eventos;
-    }
-    /**Filtra solo por tipo */
-    if (tipo != "all" && tipo != "all" && loc === "all" || loc === "all" ) this.filtroxTipo(eventos, tipo);
-    /**Filtra solo por localidad */
-    if (loc != "all" && loc != "all" && tipo === "all" || tipo === "all" ) this.filtroxTipo(eventos, loc);
-      
-    }
+    if ( dataform.localidad !== null )  dataform.localidad = dataform.localidad.toLowerCase();
+    else dataform.localidad = "";
     
-  
-   /**Filtra solo por tipo */
-  filtroxTipo( eventos: Eventos[] , tipo: string ): Eventos[]{
+    if ( dataform.tipo !== null )  dataform.tipo = dataform.tipo.toLowerCase();
+    else dataform.tipo = "";
+
+    if ( dataform.moneda === null || dataform.moneda === undefined  )  dataform.moneda = "";
+
+    if ( dataform.precio === null || dataform.precio < 0 || dataform.precio === undefined )   dataform.precio = 0;
+    console.log(dataform);
+    
+
     return eventos.filter((ev) => {
+
+      console.log(ev);
+      
       return(
-        ev.tipo.toLowerCase().includes(tipo)
+            ev.tipo.toLowerCase().includes( dataform.tipo)  
+        &&  ev.localidad.toLowerCase().includes( dataform.localidad) 
+        // && ev.moneda.toLowerCase().includes( dataform.moneda  ) 
+        
+    )
+  });
+    
+
+  }  
+
+  /**Aplica los filtros de localidad, moneda, tipo.*/
+  filtrosEventos(  eventos: Eventos[], filtro?: any[] ): Eventos[]{
+    filtro.forEach(e => console.log(e))
+    
+    return eventos.filter((ev) => {
+        return(
+          ev.tipo.toLowerCase().includes(filtro['tipo']) &&
+          ev.localidad.toLowerCase().includes(filtro['loc']) &&
+          ev.moneda.toLowerCase().includes(filtro['moneda']) 
       )
-    })  
-  }
-  
-  /**Filtra solo por localidad */
-  filtroxLocalidad( eventos: Eventos[] , loc: string ): Eventos[]{
-  return eventos.filter((ev) => {
-    return(
-      ev.localidad.toLowerCase().includes(loc)
-      )
-    })  
+    })
   }
   /**Filtro por rango de precio. */
   filtroxPrecio( eventos: Eventos[], precioMax: number, precioMin: number ){
