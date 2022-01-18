@@ -51,25 +51,7 @@
       <div class="btn-filter">Filtrar</div>
     </div>
     <div *ngIf="isFilter" class="form_filter">
-      <form [formGroup]="filterForm">
-        <ion-select placeholder="localidad" formControlName="localidad">
-          <ion-select-option value="">Todo</ion-select-option>
-          <ion-select-option
-            *ngFor="let loc of location"
-            value="{{ loc.localidad }}"
-            >{{ loc.localidad }}</ion-select-option
-          >
-        </ion-select>
-        <ion-select placeholder="categoría" formControlName="tipo">
-          <ion-select-option value="">Todo</ion-select-option>
-          <ion-select-option
-            *ngFor="let cat of category"
-            value="{{ cat.categoria }}"
-            >{{ cat.categoria }}</ion-select-option
-          >
-        </ion-select>
-        <ion-button type="submit" (click)="filterPlace()">Filtrar</ion-button>
-      </form>
+      
     </div>
   </div>
   <div class="cards">
