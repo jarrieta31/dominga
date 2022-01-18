@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ChangeDetectorRef,
-} from "@angular/core";
+import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { Observable, Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
@@ -13,17 +9,15 @@ import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { timer } from "rxjs";
 import { LoadingController } from "@ionic/angular";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
-import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-place",
   templateUrl: "./place.page.html",
   styleUrls: ["./place.page.scss"],
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlacePage {
   constructor(
@@ -32,10 +26,10 @@ export class PlacePage {
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
     private loadingCtrl: LoadingController,
-    private fb: FormBuilder,
-    private http: HttpClient //private cd: ChangeDetectorRef
+    private http: HttpClient
   ) {}
 
+  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
 
   /**Configuración de slider mini galeria */
@@ -53,31 +47,29 @@ export class PlacePage {
   location: any[] = [];
   /**guarda los tipos de lugares */
   category: any[] = [];
+  /**guarda la distancia del usuario a cada lugar en tiempo real */
   distancia: string | number;
+  /**cantidad de horas para llegar a cada lugar */
   hora: string | number;
+  /**cantidad de minutos para llegar a cada lugar */
   minuto: string | number;
+  /**guarda la posición actual del usuario */
   posicion$: Observable<Point>;
-
+  /**departamente seleccionado actualmente */
   currentDepto: String = this.databaseSvc.selectionDepto;
-
   /**instance del spinner de carga */
   loading: any;
   /**controla cuando descartar el spinner de carga */
   isLoading = false;
-
+  /**controla si se muestra o no el filtro general de lugares */
   isFilter = false;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
 
-  filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
-    tipo: ["", Validators.required],
-  });
-
   distancePlace: MapboxDirections = ""; //Buscador de direcciones para indicar recorrido
 
   filterPlace() {
-    this.dataForm = this.filterForm.value;
+    this.dataForm = "";
     console.log(this.dataForm);
   }
 
@@ -103,6 +95,7 @@ export class PlacePage {
     );
   }
 
+  /**endpoint de mapbox para calcular distancia entra dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
     latUser: number,
@@ -142,13 +135,12 @@ export class PlacePage {
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
     this.dataForm = {
-      localidad: "", 
-      tipo: "Rural"
-    }
+      localidad: "",
+      tipo: "Rural",
+    };
 
     if (this.databaseSvc.selectionDepto != this.currentDepto) {
       this.currentDepto = this.databaseSvc.selectionDepto;
-      this.filterForm.reset();
       this.dataForm = "";
     }
 
@@ -158,7 +150,6 @@ export class PlacePage {
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.places = res;
-      //this.cd.markForCheck();
       /**====================== localidades y categorías activas ==================================== */
       this.location = [];
       this.category = [];
@@ -288,7 +279,6 @@ export class PlacePage {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe();
         });
-        //this.cd.markForCheck();
       });
   }
 
