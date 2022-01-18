@@ -22,12 +22,8 @@ export class FilterEvents1Pipe implements PipeTransform {
     else dataform.moneda = "u$s";
 
     if ( dataform.precio === null || dataform.precio < 0 || dataform.precio === undefined )   dataform.precio = 0;
-    console.log(dataform);
     
-
     return eventos.filter((ev) => {
-      
-      console.log(`evento : ${ev.moneda.toLowerCase()} -- mondeda: ${dataform.moneda.toLowerCase()}`);
       return(
             ev.tipo.toLowerCase().includes( dataform.tipo)  
         &&  ev.localidad.toLowerCase().includes( dataform.localidad) 
@@ -35,7 +31,6 @@ export class FilterEvents1Pipe implements PipeTransform {
         )
   });
     
-
   }  
 
   /**Aplica los filtros de localidad, moneda, tipo.*/

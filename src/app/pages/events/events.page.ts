@@ -7,7 +7,6 @@ import { DatabaseService } from "src/app/services/database.service";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { EventService } from "src/app/services/database/event.service";
 
 @Component({
   selector: "app-events",
@@ -26,7 +25,7 @@ import { EventService } from "src/app/services/database/event.service";
   dpto_select: String;
 
   filterForm: FormGroup = this.fb.group({
-    localidad: [this.eService.localidad, Validators.required],
+    localidad: ["", Validators.required],
     tipo     : ["", Validators.required],
     moneda   : ["", Validators.required],
     precio   : [ , Validators.required],
@@ -37,7 +36,6 @@ import { EventService } from "src/app/services/database/event.service";
   constructor(
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
-    private eService : EventService,      //Servcio de eventos
     private veService: VisitEventService, //Servicio contador de visitas eventos.
     private fb       : FormBuilder,
   ) {}
@@ -184,8 +182,6 @@ import { EventService } from "src/app/services/database/event.service";
   dataform : string = '';        
   filterEvento(){
     this.dataform = this.filterForm.value
-    console.log(`estoy filtrando eventos`);
-    
   }
   changeFilter(){
     
