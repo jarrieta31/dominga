@@ -141,16 +141,42 @@ ion-chip {
 }
 
 .form_filter {
-  width: 85%;
+  width: 92%;
   margin: 0 auto 5px auto;
   border: 1px solid #3880ff;
+  border-radius: 60px; 
+
 }
 
 .filter_place {
-  margin: -30px auto 0 auto;
-  z-index: 20;
-  width: 85%;
-  opacity: 1;
+  // margin: -30px auto 0 auto;
+  // z-index: 20;
+  // width: 85%;
+  // opacity: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: -30px auto 10px auto;
+  position: relative;
+  z-index: 100;
+  width: 92%;
+  background-color: rgb(240, 240, 240);
+  padding: 7px;
+  border-radius: 60px;  
+}
+
+.btn-filter {
+  border-radius: 60px;
+  background-color: #fc67ff;
+  padding: 10px;
+  width: 35%;
+  text-align: center;
+  font-weight: bold;
+  font-family: 'Poppins';
+  color: #fff;
+  font-size: .8em;
 }
 
 .magnifying {

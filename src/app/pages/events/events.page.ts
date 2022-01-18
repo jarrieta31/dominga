@@ -136,28 +136,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
     await modal.present();
   }
-  /**
-   * Filtro de Eventos: Funcion relacionada con el Modal para
-   * filtros de eventos.
-   * Actualmente deshabilitada.
-   * Filtro de eventos se implementa de otra manera.
-  async filterEvents() {
-    const modalFilter = await this.modalCtrl.create({
-      component: FilterEventPage,
-      cssClass: "filterModal",
-      backdropDismiss: false,
-      showBackdrop: true,
-      keyboardClose: true,
-      mode: "ios",
-    });
-
-    await modalFilter.present();
-
-    const { data } = await modalFilter.onDidDismiss();
-
-    this.textoBuscar = data;
-  }
-  */
   
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
@@ -183,9 +161,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   filterEvento(){
     this.dataform = this.filterForm.value
   }
-  changeFilter(){
-    
-  }
+
   /**Ordeno los eventos alfabeticamente por el "Tipo"
    *  0 : son iguales
    *  1 : antes
