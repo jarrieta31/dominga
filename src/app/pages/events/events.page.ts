@@ -7,6 +7,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { EventService } from "src/app/services/database/event.service";
 
 @Component({
   selector: "app-events",
@@ -25,9 +26,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   dpto_select: String;
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
+    localidad: [this.eService.localidad, Validators.required],
     tipo     : ["", Validators.required],
-    mondeda  : ["", Validators.required],
+    moneda   : ["", Validators.required],
     precio   : [ , Validators.required],
   });
 
@@ -36,7 +37,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   constructor(
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
-    private veService: VisitEventService,
+    private eService : EventService,      //Servcio de eventos
+    private veService: VisitEventService, //Servicio contador de visitas eventos.
     private fb       : FormBuilder,
   ) {}
 // eliminar y cambiar por illwill 
@@ -69,8 +71,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     this.dpto_select = this.dbService.selectionDepto;
 
     /** ======>>> Pruebas <<<======= */
-    
 
+  
     /** ===========>>>><<<<========= */
     
   }
@@ -182,6 +184,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   dataform : string = '';        
   filterEvento(){
     this.dataform = this.filterForm.value
+    console.log(`estoy filtrando eventos`);
+    
   }
   changeFilter(){
     

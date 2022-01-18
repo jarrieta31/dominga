@@ -18,22 +18,21 @@ export class FilterEvents1Pipe implements PipeTransform {
     if ( dataform.tipo !== null )  dataform.tipo = dataform.tipo.toLowerCase();
     else dataform.tipo = "";
 
-    if ( dataform.moneda === null || dataform.moneda === undefined  )  dataform.moneda = "";
+    if ( dataform.moneda === null || dataform.moneda === undefined || dataform.moneda === false )  dataform.moneda = "$";
+    else dataform.moneda = "u$s";
 
     if ( dataform.precio === null || dataform.precio < 0 || dataform.precio === undefined )   dataform.precio = 0;
     console.log(dataform);
     
 
     return eventos.filter((ev) => {
-
-      console.log(ev);
       
+      console.log(`evento : ${ev.moneda.toLowerCase()} -- mondeda: ${dataform.moneda.toLowerCase()}`);
       return(
             ev.tipo.toLowerCase().includes( dataform.tipo)  
         &&  ev.localidad.toLowerCase().includes( dataform.localidad) 
-        // && ev.moneda.toLowerCase().includes( dataform.moneda  ) 
-        
-    )
+        &&  ev.moneda.toLowerCase() === dataform.moneda.toLowerCase()  
+        )
   });
     
 
