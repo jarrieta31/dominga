@@ -12,10 +12,11 @@ import { EventDetailPageModule } from '../event-detail/event-detail.module';
 import { FilterEventPageModule } from '../filter-event/filter-event.module';
 import { FilterEventPage } from '../filter-event/filter-event.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { CircuitsPageModule } from '../circuits/circuits.module';
 
 @NgModule({
   imports: [
-    CommonModule,
+  CommonModule,
     FormsModule,
     IonicModule,
     EventsPageRoutingModule,
@@ -23,13 +24,12 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     FilterEventPageModule,
     PipesModule,
     ReactiveFormsModule, 
-
+    CircuitsPageModule
   ],
   declarations: [EventsPage],
   entryComponents: [
     EventDetailPage,
     FilterEventPage,
-
   ]
 })
 export class EventsPageModule {}
