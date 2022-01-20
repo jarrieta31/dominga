@@ -73,20 +73,13 @@
           >{{ loc }}</ion-select-option>
       </ion-select>
       
-      <ng-container>
-        <ion-label> <small>$</small></ion-label>
-        <ion-toggle 
-        (ionChange)="filterEvento()"
-        formControlName="moneda"
-          value="" ></ion-toggle>
-        <ion-label> <small>u$s</small>  </ion-label>
-      </ng-container>
 
-  
+      <ion-button (click)="modalDate( $event )" >Open Datetime Modal</ion-button>
+      <ion-item>
+      </ion-item>
       
       <!-- <ion-button type="submit" (click)="filterEvento()">Filtrar</ion-button> -->
     </form>
-
   </div>
 
 

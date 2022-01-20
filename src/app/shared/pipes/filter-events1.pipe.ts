@@ -17,17 +17,26 @@ export class FilterEvents1Pipe implements PipeTransform {
     
     if ( dataform.tipo !== null )  dataform.tipo = dataform.tipo.toLowerCase();
     else dataform.tipo = "";
-
+/**Filtro por tipo de moneda es descartado por el cliente. Para que funcione descomentar estas lines
     if ( dataform.moneda === null || dataform.moneda === undefined || dataform.moneda === false )  dataform.moneda = "$";
     else dataform.moneda = "u$s";
-
+*/
+    if ( dataform.fecha_inicio === null || dataform.fecha_inicio === undefined)  dataform.fecha_inicio = new Date();
+      
     if ( dataform.precio === null || dataform.precio < 0 || dataform.precio === undefined )   dataform.precio = 0;
     
     return eventos.filter((ev) => {
+      console.log(`
+       horaInicio: ${ev.fechaInicio} ##
+       horaFin: ${dataform.fecha_inicio}
+      `);
+      
       return(
             ev.tipo.toLowerCase().includes( dataform.tipo)  
         &&  ev.localidad.toLowerCase().includes( dataform.localidad) 
-        &&  ev.moneda.toLowerCase() === dataform.moneda.toLowerCase()  
+
+/**Filtro por tipo de moneda es descartado por el cliente.*/
+        // &&  ev.moneda.toLowerCase() === dataform.moneda.toLowerCase()  
         )
   });
     

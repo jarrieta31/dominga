@@ -22,12 +22,14 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     EventDetailPageModule,
     FilterEventPageModule,
     PipesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule, 
+
   ],
   declarations: [EventsPage],
   entryComponents: [
     EventDetailPage,
-    FilterEventPage
+    FilterEventPage,
+
   ]
 })
 export class EventsPageModule {}

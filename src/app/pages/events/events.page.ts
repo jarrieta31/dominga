@@ -7,6 +7,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { EventModalComponent } from "../event-modal/event-modal.component";
 
 @Component({
   selector: "app-events",
@@ -25,10 +26,11 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   dpto_select: String;
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
-    tipo     : ["", Validators.required],
-    moneda   : ["", Validators.required],
-    precio   : [ , Validators.required],
+    localidad    : ["", Validators.required],
+    tipo         : ["", Validators.required],
+    fecha_inicio : ["", Validators.required],
+    // moneda   : ["", Validators.required],
+    precio       : [ , Validators.required],
   });
 
   isFilter: boolean = false;
@@ -158,10 +160,16 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   }
 
   dataform : string = '';        
-  filterEvento(){
+  filterEvento( ){
     this.dataform = this.filterForm.value
-  }
 
+    
+  }
+  
+  filterfilter(e){
+    console.log('ionChange', e);
+
+  }
   /**Ordeno los eventos alfabeticamente por el "Tipo"
    *  0 : son iguales
    *  1 : antes
@@ -249,6 +257,26 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
       eventos_xlocalidad = eventos.filter(ev => ev.localidad == localidad);
     }
     return eventos_xlocalidad;
+  }
+
+  async modalDate( event ){
+    console.log(event );
+    
+    const modal = await this.modalCtrl.create({
+
+      component: EventModalComponent,
+      componentProps: {
+
+        nombre: 'ramon',
+      }
+    })
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss()
+    console.log(
+      data 
+    );
+    
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/  
 
