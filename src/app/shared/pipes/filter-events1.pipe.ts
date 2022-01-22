@@ -37,7 +37,13 @@ export class FilterEvents1Pipe implements PipeTransform {
       dataform.fecha_fin =  new Date(format(fecha_fin, 'MM/dd/yy'));
     }
     else {
-      dataform.fecha_fin = new Date(format(parseISO(dataform.fecha_fin),'MM/dd/yyy'))
+      dataform.fecha_fin = new Date(format(parseISO(dataform.fecha_fin),'MM/dd/yyy'));
+      if( dataform.fecha_inicio.getTime() >= dataform.fecha_fin.getTime() ){
+        const dias = 90;
+        let fecha_fin : Date = new Date(dataform.fecha_inicio)
+        fecha_fin.setDate( fecha_fin.getDate() + dias ); 
+        dataform.fecha_fin =  new Date(format(fecha_fin, 'MM/dd/yy'));
+      }
     }
 
 /**Filtro por precio. */      
