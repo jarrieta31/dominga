@@ -29,6 +29,7 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
     localidad    : ["", Validators.required],
     tipo         : ["", Validators.required],
     fecha_inicio : ["", Validators.required],
+    fecha_fin    : ["", Validators.required],
     // moneda   : ["", Validators.required],
     precio       : [ , Validators.required],
   });

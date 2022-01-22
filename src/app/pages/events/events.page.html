@@ -74,8 +74,22 @@
       </ion-select>
       
 
-      <ion-button (click)="modalDate( $event )" >Open Datetime Modal</ion-button>
+      <!-- <ion-button (click)="modalDate( $event )" >Open Datetime Modal</ion-button> -->
       <ion-item>
+        <ion-datetime 
+          mode="ios" 
+          placeholder="fecha desde"
+          (ionChange)="filterEvento()"
+          formControlName="fecha_inicio"
+          value=""></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-datetime 
+          mode="ios" 
+          placeholder="fecha desde"
+          (ionChange)="filterEvento()"
+          formControlName="fecha_fin"
+          value=""></ion-datetime>
       </ion-item>
       <!-- <ion-button type="submit" (click)="filterEvento()">Filtrar</ion-button> -->
     </form>
