@@ -6,8 +6,6 @@ import { DondeComer } from "../../shared/donde-comer";
 })
 export class FiltroDondeComerPipe implements PipeTransform {
   transform(eat: DondeComer[], data: any): DondeComer[] {
-
-    eat.forEach(e => console.log(e.localidad))
     
     if (data.length === 0) {
       return eat;

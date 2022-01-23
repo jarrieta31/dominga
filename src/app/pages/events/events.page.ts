@@ -163,8 +163,6 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
   dataform : string = '';        
   filterEvento( ){
     this.dataform = this.filterForm.value
-
-    
   }
   
   filterfilter(e){

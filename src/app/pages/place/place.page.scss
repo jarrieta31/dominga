@@ -140,11 +140,13 @@ ion-label {
 }
 
 .form_filter {
-  width: 85%;
+  width: 92%;
+  height: 6%;
   margin: 0 auto 5px auto;
   border: 1px solid #3880ff;
   z-index: 100;
   background-color: #fff;
+  border-radius: 60px;
 }
 
 form {

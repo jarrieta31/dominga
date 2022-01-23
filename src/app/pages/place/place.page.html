@@ -51,10 +51,37 @@
       <ion-label>tipo</ion-label>
       <div class="btn-filter">Filtrar</div>
     </div>
+    
     <div *ngIf="isFilter" class="form_filter">
-      
-    </div>
-  </div>
+        <form [formGroup]="filterForm">
+    
+          <ion-select 
+            placeholder="Tipos" 
+            (ionChange)="filterPlace()"
+              formControlName="tipo">
+            <ion-select-option value="" >All</ion-select-option>
+
+            <ion-select-option
+              *ngFor="let cry of category "
+              value="{{ cry.categoria }}"
+              
+              >{{ cry.categoria }}</ion-select-option>
+              
+          </ion-select>
+    
+          <ion-select 
+            placeholder="Localidad"
+            (ionChange)="filterPlace()"
+            formControlName="localidad"  >
+            <ion-select-option value="" >All</ion-select-option>
+              <ion-select-option
+                *ngFor="let loc of location"
+                value="{{ loc.localidad }}"
+              >{{ loc.localidad }}</ion-select-option>
+          </ion-select>      
+        </form>
+      </div>
+
   <div class="cards">
     <div class="empty" *ngIf="places.length == 0">
       <div class="text_empty">
@@ -105,5 +132,6 @@
         </div>
       </ion-card-content>
     </ion-card>
+  </div>
   </div>
 </ion-content>

@@ -6,6 +6,7 @@ import { Place } from "../place";
 })
 export class FilterPlacesPipe implements PipeTransform {
   transform(places: Place[], data: any): Place[] {
+
     if (data.length === 0) {
       return places;
     }

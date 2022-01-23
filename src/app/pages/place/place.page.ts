@@ -9,7 +9,7 @@ import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { timer } from "rxjs";
 import { LoadingController } from "@ionic/angular";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
@@ -21,12 +21,13 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 })
 export class PlacePage {
   constructor(
-    private browser: InAppBrowser,
-    private placeSvc: PlaceService,
-    private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService,
-    private loadingCtrl: LoadingController,
-    private http: HttpClient
+    private browser        : InAppBrowser,
+    private placeSvc       : PlaceService,
+    private geolocationSvc : GeolocationService,
+    private databaseSvc    : DatabaseService,
+    private loadingCtrl    : LoadingController,
+    private http           : HttpClient, 
+    private fb             : FormBuilder
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -68,9 +69,13 @@ export class PlacePage {
 
   distancePlace: MapboxDirections = ""; //Buscador de direcciones para indicar recorrido
 
+  filterForm : FormGroup = this.fb.group({
+    localidad : ["", Validators.required],
+    tipo      : ["", Validators.required],
+  })
+
   filterPlace() {
-    this.dataForm = "";
-    console.log(this.dataForm);
+    this.dataForm = this.filterForm.value;
   }
 
   pageDominga() {

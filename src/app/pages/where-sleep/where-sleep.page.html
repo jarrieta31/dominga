@@ -5,27 +5,27 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+
   <div class="filter_place" (click)="changeFilter()">
-    <ion-chip color="primary">
-      <i class="fas fa-search magnifying"></i
-      ><ion-label>filtrar lugares</ion-label></ion-chip
-    >
+    <ion-label>localidad</ion-label>
+    <img src="/assets/icon/exchange.png" alt="">
+    <ion-label>tipo</ion-label>
+    <button type="button" class="btn-filter">Filtrar</button>
   </div>
 
   <div *ngIf="isFilter" class="form_filter">
     <form [formGroup]="filterForm">
-      <ion-select placeholder="Localidad" formControlName="localidad">
-        <ion-select-option value="">Todos</ion-select-option>
+      <ion-select 
+        placeholder="Localidad" 
+        formControlName="localidad"
+        (ionChange)="filterSleep()"
+        ><ion-select-option value="">Todos</ion-select-option>
         <ion-select-option
           *ngFor="let loc of locationActive"
           value="{{ loc.localidad }}"
           >{{ loc.localidad }}</ion-select-option
         >
       </ion-select>
-      <ion-select placeholder="Categoría">
-        <ion-select-option>Categoría</ion-select-option>
-      </ion-select>
-      <ion-button type="submit" (click)="filterSleep()">Filtrar</ion-button>
     </form>
   </div>
   <ion-list>
