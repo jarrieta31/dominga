@@ -91,7 +91,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
    */
-   async cambiarImagen() {
+  async cambiarImagen() {
     $(".imgGaleria").click(function () {
       var src = $(this).attr("src");
       $("#foto").attr("src", src);

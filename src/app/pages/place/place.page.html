@@ -92,7 +92,7 @@
     <ion-card
       *ngFor="let item of places | filterPlaces:dataForm"
       id="{{ item.id }}"
-      (click)="getPlace(item.id)"
+      (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
       [routerLink]="['/place-selected']"
     >
       <ion-card-header
