@@ -60,10 +60,22 @@ export class TextToSpeechService  {
   reproducir( spUttrData : TipoSputtr ){
     this.spUttr.rate = this.velocidad( spUttrData.rate );
     this.spUttr.text = spUttrData.text;
+    
     this.spSynt.speak(this.spUttr);
+
+    this.spUttr.onpause = (event) =>{
+      const char = event.utterance.text.charAt(event.charIndex);
+      console.log(event);    
+    }
+
+    this.spUttr.onend = (event) => {
+      console.log(event.utterance.text.length)
+    }
+
   }
   
-  pausar(){this.spSynt.pause();}
+  pausar(){this.spSynt.pause(); console.log(this.spUttr)
+   }
   
   reanudar(){this.spSynt.resume();}
   
