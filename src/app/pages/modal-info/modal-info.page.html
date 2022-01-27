@@ -6,61 +6,8 @@
         <ion-title color="back">
                 {{ place.nombre }}
         </ion-title>
-<!-- Conjunto de botones para la reproduccion de texto a audio -->
-        <ion-buttons slot="end" >
-            <ion-button (click)=" escuchar = !escuchar"  type="button">
-                <i class="fas fa-assistive-listening-systems access" color="back"  ></i>
-            </ion-button>
-        </ion-buttons>
-        <ion-buttons *ngIf="escuchar"  >
-            <ion-buttons *ngIf="!speaking && !paused" >
-                <ion-button 
-                    (click)="velocidadReproduccion( spUttData.rate )"
-                    shape="round"
-                    fill="outline"
-                    color="back"
-                    > 
-                    <strong>{{ spUttData.rate }}</strong><small>x</small> 
-                </ion-button>
-                <ion-button 
-                    size="small"
-                    (click)="speaking = !speaking ; 
-                    reproducirDescripcion( place.descripcion ) "
-                    color="primary"
-                    >
-                    <i class="fas fa-play-circle"></i>
-                </ion-button>
-            </ion-buttons>
-            <ion-buttons *ngIf="speaking && !paused" >
-                <ion-button 
-                    class="btn btn-outline-dark" 
-                    (click)=" paused = !paused ; pausarReproduccion() " 
-                    >
-                        <i class="fas fa-pause-circle"></i>
-                    </ion-button>
-                <ion-button 
-                    (click)="speaking = !speaking "
-                    color="medium" >
-                    <i class="fas fa-stop-circle"></i>
-                </ion-button>
-            </ion-buttons>
-            <ion-buttons *ngIf="speaking && paused" >
-                <ion-button 
-                    (click)=" paused = !paused ; reanudarReproduccion()"
-                    color="secondary" >
-                    <i class="fas fa-play-circle"></i>
-                </ion-button>
-                <ion-button 
-                    color="danger" 
-                    (click)="speaking = !speaking; paused = false ; 
-                    detenerReproduccion()">
-                    <i class="fas fa-stop-circle"></i>
-                </ion-button>
-            </ion-buttons>
-    </ion-buttons>
-   
-<!-- Fin de los botones -->
     </ion-toolbar>
+    
     <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="places/{{place.id}}" color="back"></ion-back-button>
@@ -68,79 +15,17 @@
         <ion-title color="back">
                 {{ place.nombre }}
         </ion-title>
-<!-- Conjunto de botones para la reproduccion de texto a audio -->
-<ion-buttons slot="end" >
-    <ion-button (click)=" escuchar = !escuchar"  type="button">
-        <i class="fas fa-assistive-listening-systems access" color="back"  ></i>
-    </ion-button>
-</ion-buttons>
-<ion-buttons *ngIf="escuchar"  >
-    <ion-buttons *ngIf="!speaking && !paused" >
-        <ion-button 
-            (click)="velocidadReproduccion( spUttData.rate )"
-            shape="round"
-            fill="outline"
-            color="back"
-            > 
-            <strong>{{ spUttData.rate }}</strong><small>x</small> 
-        </ion-button>
-        <ion-button 
-            size="small"
-            (click)="speaking = !speaking ; 
-            reproducirDescripcion( place.descripcion ) "
-            color="primary"
-            >
-            <i class="fas fa-play-circle"></i>
-        </ion-button>
-    </ion-buttons>
-    <ion-buttons *ngIf="speaking && !paused" >
-        <ion-button 
-            class="btn btn-outline-dark" 
-            (click)=" paused = !paused ; pausarReproduccion() " 
-            >
-                <i class="fas fa-pause-circle"></i>
-            </ion-button>
-        <ion-button 
-            (click)="speaking = !speaking "
-            color="medium" >
-            <i class="fas fa-stop-circle"></i>
-        </ion-button>
-    </ion-buttons>
-    <ion-buttons *ngIf="speaking && paused" >
-        <ion-button 
-            (click)=" paused = !paused ; reanudarReproduccion()"
-            color="secondary" >
-            <i class="fas fa-play-circle"></i>
-        </ion-button>
-        <ion-button 
-            color="danger" 
-            (click)="speaking = !speaking; paused = false ; 
-            detenerReproduccion()">
-            <i class="fas fa-stop-circle"></i>
-        </ion-button>
-    </ion-buttons>
-</ion-buttons>
-<!-- Fin de los botones -->
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-grid class="ion-margin-top ion-margin-start:0px " >
-
-        <ion-row >
-            <ion-col size="2" >
-                <!-- <i class="fi fi-rr-file-music"></i> -->
-                <i color="back"  class="fi fi-rr-play"></i>
-            </ion-col>
-            <ion-col size="2" >
-                <i color="back"  class="fi fi-rr-file-music"></i>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <!-- Botones de reproduccion Text To Speech -->
+    <app-text-to-speech [descripcion]="place.descripcion" ></app-text-to-speech>
 
     <ion-text>
         <div class="texto" id="all-description" [innerHTML]="place.descripcion">
         </div>
     </ion-text>
+
     <ion-grid>
         <ion-row>
             <ion-col id="web">

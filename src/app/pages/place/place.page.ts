@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 
 @Component({
   selector: "app-place",
@@ -21,13 +22,14 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 })
 export class PlacePage {
   constructor(
-    private browser: InAppBrowser,
-    private placeSvc: PlaceService,
-    private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService,
-    private loadingCtrl: LoadingController,
-    private http: HttpClient,
-    private fb: FormBuilder
+    private geolocationSvc : GeolocationService,
+    private visitPlaceSvc  : VisitPlaceService,
+    private loadingCtrl    : LoadingController,
+    private databaseSvc    : DatabaseService,
+    private placeSvc       : PlaceService,
+    private browser        : InAppBrowser,
+    private http           : HttpClient, 
+    private fb             : FormBuilder,
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -325,4 +327,8 @@ export class PlacePage {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+/**Contador de visitas de Lugares */
+  sumaVisitaLugar(lugar_id : string ){
+    this.visitPlaceSvc.contadorVistasPlace( lugar_id )
+}  
 }
