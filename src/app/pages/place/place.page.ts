@@ -21,13 +21,13 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 })
 export class PlacePage {
   constructor(
-    private browser        : InAppBrowser,
-    private placeSvc       : PlaceService,
-    private geolocationSvc : GeolocationService,
-    private databaseSvc    : DatabaseService,
-    private loadingCtrl    : LoadingController,
-    private http           : HttpClient, 
-    private fb             : FormBuilder
+    private browser: InAppBrowser,
+    private placeSvc: PlaceService,
+    private geolocationSvc: GeolocationService,
+    private databaseSvc: DatabaseService,
+    private loadingCtrl: LoadingController,
+    private http: HttpClient,
+    private fb: FormBuilder
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -63,16 +63,20 @@ export class PlacePage {
   /**controla cuando descartar el spinner de carga */
   isLoading = false;
   /**controla si se muestra o no el filtro general de lugares */
-  isFilter = false;
+  isFilterLocation = false;
+  isFilterType = false;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
+  /**control de acordeon de filtros */
+  isOpenLocation: boolean = false;
+  isOpenType: boolean = false;
 
   distancePlace: MapboxDirections = ""; //Buscador de direcciones para indicar recorrido
 
-  filterForm : FormGroup = this.fb.group({
-    localidad : ["", Validators.required],
-    tipo      : ["", Validators.required],
-  })
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+    tipo: ["", Validators.required],
+  });
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -86,8 +90,36 @@ export class PlacePage {
     this.placeSvc.getPlaceId(id);
   }
 
-  changeFilter() {
-    this.isFilter = !this.isFilter;
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isFilterType) {
+      this.isFilterType = false;
+      this.isOpenType = false;
+    }
+  }
+
+  changeFilterType() {
+    this.isFilterType = !this.isFilterType;
+    this.isOpenType = !this.isOpenType;
+    if (this.isFilterLocation) {
+      this.isFilterLocation = false;
+      this.isOpenLocation = false;
+    }
+  }
+
+  changeLocation() {
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isOpenType) {
+      this.isOpenType = false;
+    }
+  }
+
+  changeType() {
+    this.isOpenType = !this.isOpenType;
+    if (this.isOpenLocation) {
+      this.isOpenLocation = false;
+    }
   }
 
   getLocation(lng: number, lat: number) {
@@ -139,10 +171,10 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
-    this.dataForm = {
-      localidad: "",
-      tipo: "Rural",
-    };
+    // this.dataForm = {
+    //   localidad: "",
+    //   tipo: "Rural",
+    // };
 
     if (this.databaseSvc.selectionDepto != this.currentDepto) {
       this.currentDepto = this.databaseSvc.selectionDepto;
@@ -150,7 +182,8 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    this.isFilter = false;
+    this.isFilterLocation = false;
+    this.isFilterType = false;
     this.placeSvc.getPlaces();
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {

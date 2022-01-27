@@ -1,6 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-  </ion-toolbar>
+  <ion-toolbar> </ion-toolbar>
 </ion-header>
 <ion-content>
   <div id="alto" class="slider">
@@ -45,42 +44,90 @@
       </ion-slide>
     </ion-slides>
     <!-- filtro -->
-    <div class="filter_place" (click)="changeFilter()">
-      <ion-label>localidad</ion-label>
-      <img src="/assets/icon/exchange.png" alt="">
-      <ion-label>tipo</ion-label>
-      <div class="btn-filter">Filtrar</div>
+    <div class="filter_place">
+      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
+      <img src="/assets/icon/exchange.png" alt="" />
+      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
+      <ion-label *ngIf="isOpenType" class="open_acordeon" (click)="changeFilterType()">tipo</ion-label>
     </div>
-    
-    <div *ngIf="isFilter" class="form_filter">
-        <form [formGroup]="filterForm">
-    
-          <ion-select 
-            placeholder="Tipos" 
-            (ionChange)="filterPlace()"
-              formControlName="tipo">
-            <ion-select-option value="" >All</ion-select-option>
 
-            <ion-select-option
-              *ngFor="let cry of category "
-              value="{{ cry.categoria }}"
-              
-              >{{ cry.categoria }}</ion-select-option>
-              
-          </ion-select>
-    
-          <ion-select 
-            placeholder="Localidad"
-            (ionChange)="filterPlace()"
-            formControlName="localidad"  >
-            <ion-select-option value="" >All</ion-select-option>
-              <ion-select-option
-                *ngFor="let loc of location"
-                value="{{ loc.localidad }}"
-              >{{ loc.localidad }}</ion-select-option>
-          </ion-select>      
-        </form>
-      </div>
+    <div *ngIf="isFilterLocation || isFilterType">
+      <form [formGroup]="filterForm" class="form_filter">
+        <div>
+          <div (click)="changeLocation()" class="filter_name">
+            <span *ngIf="isOpenLocation === false">Localidad</span>
+            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <i
+              *ngIf="isOpenLocation === false"
+              class="fi fi-rr-angle-down icon_arrow"
+            ></i>
+            <i *ngIf="isOpenLocation" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
+          </div>
+          <div *ngIf="isOpenLocation">
+            <ion-list>
+              <ion-radio-group
+                (ionChange)="filterPlace()"
+                formControlName="localidad"
+              >
+                <ion-item class="filter_list" lines="none">
+                  <ion-text>Todo</ion-text>
+                  <ion-radio slot="end" value=""></ion-radio>
+                </ion-item>
+                <ion-item
+                  class="filter_list"
+                  lines="none"
+                  *ngFor="let loc of location"
+                >
+                  <ion-text>{{ loc.localidad }}</ion-text>
+                  <ion-radio
+                    slot="end"
+                    value="{{ loc.localidad }}"
+                  ></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </div>
+        <div>
+          <div (click)="changeType()" class="filter_name filter_type">
+            <span *ngIf="isOpenType === false">Tipo</span>
+            <span class="open_acordeon" *ngIf="isOpenType">Tipo</span>
+            <i
+              *ngIf="isOpenType === false"
+              class="fi fi-rr-angle-down icon_arrow"
+            ></i>
+            <i *ngIf="isOpenType" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
+          </div>
+          <div *ngIf="isOpenType">
+            <ion-list class="list_type">
+              <ion-radio-group
+                (ionChange)="filterPlace()"
+                formControlName="tipo"
+                class="type_border"
+              >
+                <ion-item class="filter_list" lines="none">
+                  <ion-text>Todo</ion-text>
+                  <ion-radio slot="end" value=""></ion-radio>
+                </ion-item>
+                <ion-item
+                  class="filter_list last"
+                  lines="none"
+                  *ngFor="let cry of category"
+                >
+                  <ion-text>{{ cry.categoria }}</ion-text>
+                  <ion-radio
+                    slot="end"
+                    value="{{ cry.categoria }}"
+                  ></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="cards">
     <div class="empty" *ngIf="places.length == 0">
@@ -132,6 +179,5 @@
         </div>
       </ion-card-content>
     </ion-card>
-  </div>
   </div>
 </ion-content>
