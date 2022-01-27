@@ -24,6 +24,16 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
   dpto_select: String;
+  /**captura los datos del formulario de filtros */
+  dataform : string = '';
+  /**controla si se muestra o no el filtro general de lugares */
+  isFilterLocation = false;
+  isFilterType = false;
+  isFilterDate = false;
+   /**control de acordeon de filtros */
+  isOpenLocation: boolean = false;
+  isOpenType: boolean = false;
+  isOpenDate: boolean = false;
 
   filterForm: FormGroup = this.fb.group({
     localidad    : ["", Validators.required],
@@ -42,13 +52,6 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
     private veService: VisitEventService, //Servicio contador de visitas eventos.
     private fb       : FormBuilder,
   ) {}
-// eliminar y cambiar por illwill 
-  // ngOnInit() {
-  //   this.eventosSuscription = this.dbService
-  //     .getObservable()
-  //     .subscribe((eventos) => (this.eventos = eventos));
-  //   this.dbService.getEventsLocal();
-  // }
 
   ionViewWillEnter(){
     this.eventosSuscription = this.dbService
@@ -78,9 +81,6 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
     
   }
 
-  // ngOnDestroy() {
-  //   this.eventosSuscription.unsubscribe();
-  // }
 
   ionViewDidLeave(){
     this.eventosSuscription.unsubscribe();
@@ -145,7 +145,56 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
   }
   
 /** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/  
+changeFilterLocation() {
+  this.isFilterLocation = !this.isFilterLocation;
+  this.isOpenLocation = !this.isOpenLocation;
+  if (this.isFilterType) {
+    this.isFilterType = false;
+    this.isOpenType = false;
+  }
+}
 
+changeFilterType() {
+  this.isFilterType = !this.isFilterType;
+  this.isOpenType = !this.isOpenType;
+  if (this.isFilterLocation) {
+    this.isFilterLocation = false;
+    this.isOpenLocation = false;
+  }
+}
+
+changeFilterDate(){
+  this.isFilterDate = !this.isFilterDate;
+  this.isOpenDate = !this.isOpenDate;
+  if (this.isFilterLocation || this.isFilterType) {
+    this.isFilterLocation = false;
+    this.isOpenLocation = false;
+    this.isFilterType = false;
+    this.isOpenType = false;
+  }
+}
+
+changeLocation() {
+  this.isOpenLocation = !this.isOpenLocation;
+  if (this.isOpenType) {
+    this.isOpenType = false;
+  }
+}
+
+changeType() {
+  this.isOpenType = !this.isOpenType;
+  if (this.isOpenLocation) {
+    this.isOpenLocation = false;
+  }
+}
+
+changeDate() {
+  this.isOpenDate = !this.isOpenDate;
+  if (this.isOpenLocation || this.isOpenType) {
+    this.isOpenLocation = false;
+    this.isOpenType = false;
+  }
+}
   /**
    * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
    * @param tipoEventos Arreglo de tipos de eventos. String
@@ -160,15 +209,11 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
     return evento_save;
   }
 
-  dataform : string = '';        
-  filterEvento( ){
+        
+  filterEvento(){
     this.dataform = this.filterForm.value
   }
-  
-  filterfilter(e){
-    console.log('ionChange', e);
 
-  }
   /**Ordeno los eventos alfabeticamente por el "Tipo"
    *  0 : son iguales
    *  1 : antes
