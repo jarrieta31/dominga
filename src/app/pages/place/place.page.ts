@@ -77,7 +77,7 @@ export class PlacePage {
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
-    tipo: ["", Validators.required],
+    tipo     : ["", Validators.required],
   });
 
   filterPlace() {

@@ -47,6 +47,11 @@ export class WhereEatPage {
   isLoading = false;
 
   isFilter = false;
+
+  /**control de acordeon de filtros */
+  isOpenLocation: boolean = false;
+  /**controla si se muestra o no el filtro general de lugares */
+  isFilterLocation = false;
   /** =====<=<=<=< Variables Filtro localidad <============== */
 
   slider = this.database
@@ -85,13 +90,35 @@ export class WhereEatPage {
   }
 
   /** =====>=>=>=> Metodos Filtro localidad <============== */
-
+/** Devuelve una lista de localidades */
+  get localidades(){
+    const weat = this.eat;
+    let localidades : string[] = [];
+    if(weat.length > 0){
+      weat.forEach((we) => {
+        if(localidades.indexOf(we.localidad) == -1){
+          localidades.push(we.localidad);
+        }
+      })
+    }
+    return localidades;
+  }
+    
   changeFilter() {
     this.isFilter = !this.isFilter;
   }
 
   filterEat() {
     this.dataForm = this.filterForm.value;
+  }
+
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    this.isOpenLocation = !this.isOpenLocation;
+  }
+
+  changeLocation() {
+    this.isOpenLocation = !this.isOpenLocation;
   }
 
   ionViewWillEnter() {
