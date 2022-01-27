@@ -46,8 +46,6 @@ export class WhereEatPage {
   /**controla cuando descartar el spinner de carga */
   isLoading = false;
 
-  isFilter = false;
-
   /**control de acordeon de filtros */
   isOpenLocation: boolean = false;
   /**controla si se muestra o no el filtro general de lugares */
@@ -104,10 +102,6 @@ export class WhereEatPage {
     return localidades;
   }
     
-  changeFilter() {
-    this.isFilter = !this.isFilter;
-  }
-
   filterEat() {
     this.dataForm = this.filterForm.value;
   }

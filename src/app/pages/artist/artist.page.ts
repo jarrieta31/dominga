@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-artist',
@@ -7,7 +8,68 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ArtistPage implements OnInit {
 
-  constructor() { }
+  constructor( private fb : FormBuilder ) { }
+
+  /**
+   * Slide
+   */
+   slideOpts = {
+    initialSlide: 0,
+    speed: 600,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    autoplay: true,
+  };
+  
+  /**controla si se muestra o no el filtro general de lugares */
+  isFilterLocation = false;
+  isFilterType = false;
+  /**captura los datos del formulario de filtros */
+  dataForm: any = "";
+  /**control de acordeon de filtros */
+  isOpenLocation: boolean = false;
+  isOpenType: boolean = false;
+
+  filterForm: FormGroup = this.fb.group({
+    localidad: ["", Validators.required],
+    tipo     : ["", Validators.required],
+  });
+
+  filterArtist() {
+    this.dataForm = this.filterForm.value;
+  }
+
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isFilterType) {
+      this.isFilterType = false;
+      this.isOpenType = false;
+    }
+  }
+
+  changeFilterType() {
+    this.isFilterType = !this.isFilterType;
+    this.isOpenType = !this.isOpenType;
+    if (this.isFilterLocation) {
+      this.isFilterLocation = false;
+      this.isOpenLocation = false;
+    }
+  }
+
+  changeLocation() {
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isOpenType) {
+      this.isOpenType = false;
+    }
+  }
+
+  changeType() {
+    this.isOpenType = !this.isOpenType;
+    if (this.isOpenLocation) {
+      this.isOpenLocation = false;
+    }
+  }
 
   artist: any[] = [
     {
@@ -72,16 +134,7 @@ export class ArtistPage implements OnInit {
     },
   ];
 
-  /**
-   * Slide
-   */
-   slideOpts = {
-    initialSlide: 0,
-    speed: 600,
-    slidesPerView: 1,
-    spaceBetween: 0,
-    autoplay: true,
-  };
+
 
   ngOnInit() {
   }

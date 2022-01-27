@@ -21,7 +21,10 @@ export class WhereSleepPage {
   /**captura los datos del formulario de filtros */
   dataForm: string = "";
 
-  isFilter: boolean = false;
+ /**control de acordeon de filtros */
+ isOpenLocation: boolean = false;
+ /**controla si se muestra o no el filtro general de lugares */
+ isFilterLocation = false;
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -49,14 +52,18 @@ export class WhereSleepPage {
     this.textoBuscar = event.detail.value;
   }
 
-  changeFilter() {
-    this.isFilter = !this.isFilter;
-  }
-
   filterSleep() {
     this.dataForm = this.filterForm.value;
   }
 
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    this.isOpenLocation = !this.isOpenLocation;
+  }
+
+  changeLocation() {
+    this.isOpenLocation = !this.isOpenLocation;
+  }
   ionViewWillEnter() {
     this.sleepSvc.getDondeDormir();
     this.sleep_suscribe = this.sleepSvc.donde_dormir.subscribe((res) => {

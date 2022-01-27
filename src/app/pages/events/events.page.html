@@ -43,7 +43,7 @@
 <div *ngIf="isFilterLocation || isFilterType || isFilterDate">
   <form [formGroup]="filterForm" class="form_filter">
     <div>
-      <div (click)="isOpenDate = !isOpenDate" class="filter_name">
+      <div (click)="changeDate()" class="filter_name">
         <span *ngIf="isOpenDate === false">Date</span>
         <span class="open_acordeon" *ngIf="isOpenDate">Date</span>
         <i
