@@ -24,7 +24,6 @@ export class TextToSpeechComponent implements OnInit {
 
   constructor(
     private ttsSvc  : TextToSpeechService,
-    private placeSvc: PlaceService
 ) {}
 
 
