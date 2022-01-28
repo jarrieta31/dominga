@@ -20,12 +20,12 @@
         <img class="imgSlider" src="https://assets.diarioconcepcion.cl/2020/10/pag-12-pinacoteca-udec-850x500.jpg"/>                
       </ion-slide>         
     </ion-slides>
-  </div>
+  <!-- </div> -->
 
-    !-- =========>=>=>=> Filtro =========>=>=>=> -->
+    <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
-      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">nombre</ion-label>
+      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">nombre</ion-label>
       <img src="/assets/icon/exchange.png" alt="" />
       <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
       <ion-label *ngIf="isOpenType" class="open_acordeon" (click)="changeFilterType()">tipo</ion-label>
@@ -33,11 +33,11 @@
 
     <div *ngIf="isFilterLocation || isFilterType">
       <form [formGroup]="filterForm" class="form_filter">
-  <!-- Filtro por Localidad  -->
+  <!-- Filtro por Nombre  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
-            <span *ngIf="isOpenLocation === false">Localidad</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <span *ngIf="isOpenLocation === false">Nombre</span>
+            <span class="open_acordeon" *ngIf="isOpenLocation">Nombre</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -48,7 +48,7 @@
             <ion-list>
               <ion-radio-group
                 (ionChange)="filterArtist()"
-                formControlName="localidad"
+                formControlName="nombre"
               >
                 <ion-item class="filter_list" lines="none">
                   <ion-text>Todo</ion-text>
@@ -57,12 +57,12 @@
                 <ion-item
                   class="filter_list"
                   lines="none"
-                  *ngFor="let loc of artist"
+                  *ngFor="let nombre of lista_nombre_artis"
                 >
-                  <ion-text>{{ loc.localidad }}</ion-text>
+                  <ion-text>{{ nombre }}</ion-text>
                   <ion-radio
                     slot="end"
-                    value="{{ loc.localidad }}"
+                    value="{{ nombre }}"
                   ></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -96,12 +96,12 @@
                 <ion-item
                   class="filter_list last"
                   lines="none"
-                  *ngFor="let cry of artist"
+                  *ngFor="let tipo of lista_tipo_artis"
                 >
-                  <ion-text>{{ cry.tipo }}</ion-text>
+                  <ion-text>{{ tipo }}</ion-text>
                   <ion-radio
                     slot="end"
-                    value="{{ cry.tipo }}"
+                    value="{{ tipo }}"
                   ></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -111,12 +111,12 @@
   <!-- Filtro por Tipo -->
       </form>
     </div>
-
+  </div>
 
 
 
   <ion-list >
-    <div class="artist" *ngFor="let art of artist">
+    <div class="artist" *ngFor="let art of artist | filterArtist:dataForm">
       <div class="imgArtist">
         <ion-img [src]="art.imagen" class="img-elem"></ion-img>
       </div>

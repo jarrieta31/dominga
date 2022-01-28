@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TipoArtist } from '../../shared/tipo-artist';
 
 @Component({
   selector: 'app-artist',
@@ -31,7 +32,7 @@ export class ArtistPage implements OnInit {
   isOpenType: boolean = false;
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
+    nombre: ["", Validators.required],
     tipo     : ["", Validators.required],
   });
 
@@ -69,6 +70,28 @@ export class ArtistPage implements OnInit {
     if (this.isOpenLocation) {
       this.isOpenLocation = false;
     }
+  }
+
+  get lista_nombre_artis(){
+    const artisList = this.artist;
+    let artistnamelist : string[] = [];
+    artisList.forEach(ar => {
+      if(artistnamelist.indexOf(ar.nombre) == -1){
+        artistnamelist.push(ar.nombre)
+      }
+    })
+    return artistnamelist;
+  }
+
+  get lista_tipo_artis(){
+    const artisList = this.artist;
+    let artisttipolist : string[] = [];
+    artisList.forEach(ar => {
+      if(artisttipolist.indexOf(ar.tipo) == -1){
+        artisttipolist.push(ar.tipo)
+      }
+    })
+    return artisttipolist;
   }
 
   artist: any[] = [

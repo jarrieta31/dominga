@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
-import { FilterEventPage } from "../filter-event/filter-event.page";
 import { DatabaseService } from "src/app/services/database.service";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
