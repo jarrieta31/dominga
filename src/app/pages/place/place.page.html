@@ -9,39 +9,9 @@
       pager="false"
       [options]="slideOpts"
     >
-      <ion-slide class="sliderHijo">
-        <a
-          class="banner"
-          href="https://api.whatsapp.com/send?phone=59899468473&text=Hola,%20quer%C3%ADa%20consultar%20sobre%20el%20servicio%20de%20alquiler%20de%20bicicletas."
-        >
-          <ion-fab vertical="top" horizontal="start" slot="fixed">
-            <ion-fab-button color="whatsapp">
-              <ion-icon class="logoWhatsapp" name="logo-whatsapp"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-          <img class="imgSlider" src="/assets/img/whatsapp.jpeg" />
-        </a>
-      </ion-slide>
-      <ion-slide class="sliderHijo">
-        <a class="banner" (click)="pageDominga()">
-          <img class="imgSlider" src="/assets/img/casaDominga.jpeg" />
-        </a>
-      </ion-slide>
-      <ion-slide class="sliderHijo" [routerLink]="['/places/9']">
-        <div class="banner">
-          <img class="imgSlider" src="/assets/img/alquiler.jpeg" />
-        </div>
-      </ion-slide>
-      <ion-slide class="sliderHijo" [routerLink]="['/']">
-        <div class="banner">
-          <img class="imgSlider" src="/assets/img/bicicletas.jpeg" />
-        </div>
-      </ion-slide>
-      <ion-slide class="sliderHijo" [routerLink]="['/']">
-        <div class="banner">
-          <img class="imgSlider" src="/assets/img/tour.jpeg" />
-        </div>
-      </ion-slide>
+    <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
+      <img class="imgSlider" src="{{item.imagen.url}}" />
+    </ion-slide>
     </ion-slides>
 <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">

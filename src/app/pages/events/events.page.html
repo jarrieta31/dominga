@@ -8,23 +8,8 @@
 <ion-content>
   <div id="alto" class="slider">
     <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
-      <ion-slide class="sliderHijo"> 
-          <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-      </ion-slide>    
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
-      </ion-slide>     
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-      </ion-slide>    
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
-      </ion-slide>        
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://laterapiadelarte.com/wp-content/uploads/2021/07/Kamwuaka1-850x500.jpg" />                
-      </ion-slide>    
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://blogtrabajo.gallito.com.uy/wp-content/uploads/2018/07/Image-Une-6-indicateurs-850x500.png"/>                
+      <ion-slide *ngFor="let item of sliderEvents" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
       </ion-slide>    
     </ion-slides>
 
@@ -44,8 +29,8 @@
   <form [formGroup]="filterForm" class="form_filter">
     <div>
       <div (click)="changeDate()" class="filter_name">
-        <span *ngIf="isOpenDate === false">Date</span>
-        <span class="open_acordeon" *ngIf="isOpenDate">Date</span>
+        <span *ngIf="isOpenDate === false">Fecha</span>
+        <span class="open_acordeon" *ngIf="isOpenDate">Fecha</span>
         <i
           *ngIf="isOpenDate === false"
           class="fi fi-rr-angle-down icon_arrow"
@@ -53,7 +38,7 @@
         <i *ngIf="isOpenDate" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
       </div>
       <div *ngIf="isOpenDate" >
-        <div  >
+        <div  class="filter_list">
           <ion-datetime 
             (ionChange)="filterEvento()"
             mode="ios" 
@@ -62,7 +47,7 @@
             value="">
           </ion-datetime>
         </div>
-        <div >
+        <div class="filter_list">
           <ion-datetime 
             (ionChange)="filterEvento()"
             mode="ios" 
@@ -76,7 +61,7 @@
 
 <!-- Filtro por Localidad  -->
     <div>
-      <div (click)="changeLocation()" class="filter_name">
+      <div (click)="changeLocation()" class="filter_name filter_type">
         <span *ngIf="isOpenLocation === false">Localidad</span>
         <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
         <i
@@ -165,7 +150,7 @@
       (click)="openModalDetailEvent(item.id, item.fechaInicio, item.nombre, item.descripcion, item['imagen'].url, item.lugar)"
     >
       <ion-avatar item-start class="image-event">
-        <ion-img [src]="item.imagen" class="img-elem"></ion-img>
+        <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
       </ion-avatar>
       <div class="info-event">
         <div class="fecha">{{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs</div>

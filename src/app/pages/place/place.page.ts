@@ -14,6 +14,8 @@ import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
+import { Slider } from "src/app/shared/slider";
+import { SlidesService } from "src/app/services/database/slides.service";
 
 @Component({
   selector: "app-place",
@@ -30,6 +32,7 @@ export class PlacePage {
     private browser        : InAppBrowser,
     private http           : HttpClient, 
     private fb             : FormBuilder,
+    private sliderSvc      : SlidesService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -72,6 +75,8 @@ export class PlacePage {
   /**control de acordeon de filtros */
   isOpenLocation: boolean = false;
   isOpenType: boolean = false;
+  /**se guardan los sliders de la pantalla lugares */
+  sliderPlace: Slider[] = [];
 
   distancePlace: MapboxDirections = ""; //Buscador de direcciones para indicar recorrido
 
@@ -192,9 +197,16 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    this.isFilterLocation = false;
-    this.isFilterType = false;
+    // this.isFilterLocation = false;
+    // this.isFilterType = false;
     this.placeSvc.getPlaces();
+    this.sliderSvc.getSliders();
+
+    this.sliderSvc.slider.pipe(takeUntil(this.unsubscribe$)).subscribe( res => {
+      res.forEach( item => {
+        if(item.pantalla == 'lugares') this.sliderPlace.push(item)
+      })
+    })
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.places = res;

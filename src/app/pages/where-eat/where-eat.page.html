@@ -12,15 +12,15 @@
       pager="false"
       [options]="slideOpts"
     >
-      <ion-slide *ngFor="let item of sliderDondeComer" class="sliderHijo">
-        <img class="imgSlider" src="{{item.imagen}}" />
+      <ion-slide *ngFor="let item of sliderEat" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
       </ion-slide>
     </ion-slides>
     
     <!-- filtro -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">Localidad</ion-label>
-      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">Localidad</ion-label>
+      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
     </div>
 
     
@@ -38,17 +38,18 @@
             <i *ngIf="isOpenLocation" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
           </div>
           <div *ngIf="isOpenLocation">
-            <ion-list>
+            <ion-list class="list_location">
               <ion-radio-group
                 (ionChange)="filterEat()"
                 formControlName="localidad"
+                class="location_border"
               >
                 <ion-item class="filter_list" lines="none">
                   <ion-text>Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
-                  class="filter_list"
+                  class="filter_list last"
                   lines="none"
                   *ngFor="let loc of localidades"
                 >

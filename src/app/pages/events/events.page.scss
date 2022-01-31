@@ -125,39 +125,8 @@ ion-chip {
   width: 100%;
 }
 
-.filter {
-  margin: 0 0 0 4%;
-  padding-top: 5px;
-  z-index: 10;
-  background-color: #fff;
-}
-
-.list-md {
-  padding-top: 0 !important;
-}
-
 * {
   z-index: 0;
-}
-
-.magnifying {
-  padding: 10.5px;
-  border-radius: 100%;
-  color: #fff;
-  background-color: #01dfb8;
-  margin-right: 10px;
-}
-
-form {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-form > ion-select {
-  width: 40%;
 }
 
 .empty {
@@ -264,4 +233,8 @@ ion-label {
 
 ion-radio {
   --color-checked: #fc67ff;
+}
+
+.list-md {
+  padding: 0 !important;
 }
