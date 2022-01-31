@@ -7,25 +7,16 @@
 <ion-content>
   <div id="alto" class="slider">
     <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
-      <ion-slide class="sliderHijo"> 
-          <img class="imgSlider" src="https://www.am-artconsulting.com/wp-content/uploads/2016/09/0319-convocatoria.jpg" />                
-      </ion-slide>    
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://assets.diarioconcepcion.cl/2020/10/pag-12-pinacoteca-udec-850x500.jpg"/>                
-      </ion-slide>     
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://www.am-artconsulting.com/wp-content/uploads/2016/09/0319-convocatoria.jpg" />                
-      </ion-slide>    
-      <ion-slide class="sliderHijo"> 
-        <img class="imgSlider" src="https://assets.diarioconcepcion.cl/2020/10/pag-12-pinacoteca-udec-850x500.jpg"/>                
-      </ion-slide>         
+      <ion-slide *ngFor="let item of sliderArtist" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
+      </ion-slide>          
     </ion-slides>
   <!-- </div> -->
 
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">nombre</ion-label>
-      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">nombre</ion-label>
+      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
       <img src="/assets/icon/exchange.png" alt="" />
       <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
       <ion-label *ngIf="isOpenType" class="open_acordeon" (click)="changeFilterType()">tipo</ion-label>
@@ -36,8 +27,8 @@
   <!-- Filtro por Nombre  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
-            <span *ngIf="isOpenLocation === false">Nombre</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Nombre</span>
+            <span *ngIf="isOpenLocation === false">Localidad</span>
+            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -48,7 +39,7 @@
             <ion-list>
               <ion-radio-group
                 (ionChange)="filterArtist()"
-                formControlName="nombre"
+                formControlName="localidad"
               >
                 <ion-item class="filter_list" lines="none">
                   <ion-text>Todo</ion-text>
@@ -57,12 +48,12 @@
                 <ion-item
                   class="filter_list"
                   lines="none"
-                  *ngFor="let nombre of lista_nombre_artis"
+                  *ngFor="let localidad of lista_localidad_artis"
                 >
-                  <ion-text>{{ nombre }}</ion-text>
+                  <ion-text>{{ localidad }}</ion-text>
                   <ion-radio
                     slot="end"
-                    value="{{ nombre }}"
+                    value="{{ localidad }}"
                   ></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -86,7 +77,7 @@
             <ion-list class="list_type">
               <ion-radio-group
                 (ionChange)="filterArtist()"
-                formControlName="tipo"
+                formControlName="categoria"
                 class="type_border"
               >
                 <ion-item class="filter_list" lines="none">
@@ -116,12 +107,12 @@
 
 
   <ion-list >
-    <div class="artist" *ngFor="let art of artist | filterArtist:dataForm">
+    <div class="artist" *ngFor="let art of artists | filterArtist:dataForm">
       <div class="imgArtist">
-        <ion-img [src]="art.imagen" class="img-elem"></ion-img>
+        <ion-img [src]="art.imagen.url" class="img-elem"></ion-img>
       </div>
       <div class="infoArtist">
-        <div class="type">{{ art.tipo }}</div>
+        <div class="type">{{ art.categoria }}</div>
         <div class="name">{{ art.nombre }}</div>
         <div class="netArtist">
           <img src="/assets/icon/instagram.png" alt="instagram">

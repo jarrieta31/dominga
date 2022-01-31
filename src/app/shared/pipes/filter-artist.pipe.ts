@@ -10,16 +10,16 @@ export class FilterArtistPipe implements PipeTransform {
       return artist;
     }
 
-    if(data.nombre !== null) data.nombre = data.nombre.toLowerCase(); 
-    else data.nombre = ""
+    if(data.localidad !== null) data.localidad = data.localidad.toLowerCase(); 
+    else data.localidad = ""
 
-    if(data.tipo !== null) data.tipo = data.tipo.toLowerCase();
-    else data.tipo = ""
+    if(data.categoria !== null) data.categoria = data.categoria.toLowerCase();
+    else data.categoria = ""
 
     return artist.filter((item) => {
       return (
-        item.nombre.toLowerCase().includes(data.nombre) &&
-        item.tipo.toLowerCase().includes(data.tipo)
+        item.localidad.toLowerCase().includes(data.localidad) &&
+        item.categoria.toLowerCase().includes(data.categoria)
       );
     });
   }

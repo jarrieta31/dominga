@@ -39,24 +39,25 @@
             <i *ngIf="isOpenLocation" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
           </div>
           <div *ngIf="isOpenLocation">
-            <ion-list>
+            <ion-list class="list_location">
               <ion-radio-group
-                (ionChange)="filterSleep()"
+                (ionChange)="filterEat()"
                 formControlName="localidad"
+                class="location_border"
               >
                 <ion-item class="filter_list" lines="none">
                   <ion-text>Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
-                  class="filter_list"
+                  class="filter_list last"
                   lines="none"
-                  *ngFor="let loc of locationActive"
+                  *ngFor="let loc of localidades"
                 >
-                  <ion-text>{{ loc.localidad }}</ion-text>
+                  <ion-text>{{ loc }}</ion-text>
                   <ion-radio
                     slot="end"
-                    value="{{ loc.localidad }}"
+                    value="{{ loc }}"
                   ></ion-radio>
                 </ion-item>
               </ion-radio-group>

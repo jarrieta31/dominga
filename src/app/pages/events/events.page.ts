@@ -3,10 +3,13 @@ import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { EventModalComponent } from "../event-modal/event-modal.component";
+import { takeUntil } from "rxjs/operators";
+import { SlidesService } from "src/app/services/database/slides.service";
+import { Slider } from "src/app/shared/slider";
 
 @Component({
   selector: "app-events",
@@ -14,7 +17,10 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
   styleUrls: ["./events.page.scss"],
 })
 // export class EventsPage implements OnInit, OnDestroy {
-  export class EventsPage {
+export class EventsPage {
+  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
+  private unsubscribe$: Subject<void>;
+
   now = new Date();
   textoBuscar = "";
   today: Date = new Date();
@@ -24,23 +30,26 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
   eventosSuscription: Subscription;
   dpto_select: String;
   /**captura los datos del formulario de filtros */
-  dataform : string = '';
+  dataform: string = "";
   /**controla si se muestra o no el filtro general de lugares */
   isFilterLocation = false;
   isFilterType = false;
   isFilterDate = false;
-   /**control de acordeon de filtros */
+  /**control de acordeon de filtros */
   isOpenLocation: boolean = false;
   isOpenType: boolean = false;
   isOpenDate: boolean = false;
 
+  /**se guardan los sliders de la pantalla eventos */
+  sliderEvents: Slider[] = [];
+
   filterForm: FormGroup = this.fb.group({
-    localidad    : ["", Validators.required],
-    tipo         : ["", Validators.required],
-    fecha_inicio : ["", Validators.required],
-    fecha_fin    : ["", Validators.required],
+    localidad: ["", Validators.required],
+    tipo: ["", Validators.required],
+    fecha_inicio: ["", Validators.required],
+    fecha_fin: ["", Validators.required],
     // moneda   : ["", Validators.required],
-    precio       : [ , Validators.required],
+    precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
@@ -49,41 +58,51 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
     private veService: VisitEventService, //Servicio contador de visitas eventos.
-    private fb       : FormBuilder,
+    private fb: FormBuilder,
+    private sliderSvc: SlidesService
   ) {}
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
+    this.unsubscribe$ = new Subject<void>();
+
+    this.sliderSvc.getSliders();
+
+    this.sliderSvc.slider
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        res.forEach((item) => {
+          if (item.pantalla == "eventos") this.sliderEvents.push(item);
+        });
+      });
+
     this.eventosSuscription = this.dbService
       .getObservable()
       .subscribe((eventos) => (this.eventos = eventos));
-    
 
-    if(this.eventos.length > 0){
-    
-      if(this.eventos[0].departamento != this.dbService.selectionDepto){
+    if (this.eventos.length > 0) {
+      if (this.eventos[0].departamento != this.dbService.selectionDepto) {
         this.dbService.getEventos();
-      }    
-    }else{ this.dbService.getEventos(); }
-  /**Se suscribe al array de eventos, si se genera cambios al estar en la pantalla
+      }
+    } else {
+      this.dbService.getEventos();
+    }
+    /**Se suscribe al array de eventos, si se genera cambios al estar en la pantalla
      * se van a actulizar
      */
 
-      /** */
+    /** */
     this.dbService.getEventsLocal();
     /** Actualizo el dpto seleccionado */
     this.dpto_select = this.dbService.selectionDepto;
 
     /** ======>>> Pruebas <<<======= */
 
-  
     /** ===========>>>><<<<========= */
-    
   }
 
-
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.eventosSuscription.unsubscribe();
-  } 
+  }
 
   /**
    * Slide
@@ -138,79 +157,78 @@ import { EventModalComponent } from "../event-modal/event-modal.component";
 
     await modal.present();
   }
-  
+
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
   }
-  
-/** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/  
-changeFilterLocation() {
-  this.isFilterLocation = !this.isFilterLocation;
-  this.isOpenLocation = !this.isOpenLocation;
-  if (this.isFilterType) {
-    this.isFilterType = false;
-    this.isOpenType = false;
-  }
-}
 
-changeFilterType() {
-  this.isFilterType = !this.isFilterType;
-  this.isOpenType = !this.isOpenType;
-  if (this.isFilterLocation) {
-    this.isFilterLocation = false;
-    this.isOpenLocation = false;
+  /** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isFilterType) {
+      this.isFilterType = false;
+      this.isOpenType = false;
+    }
   }
-}
 
-changeFilterDate(){
-  this.isFilterDate = !this.isFilterDate;
-  this.isOpenDate = !this.isOpenDate;
-  if (this.isFilterLocation || this.isFilterType) {
-    this.isFilterLocation = false;
-    this.isOpenLocation = false;
-    this.isFilterType = false;
-    this.isOpenType = false;
+  changeFilterType() {
+    this.isFilterType = !this.isFilterType;
+    this.isOpenType = !this.isOpenType;
+    if (this.isFilterLocation) {
+      this.isFilterLocation = false;
+      this.isOpenLocation = false;
+    }
   }
-}
 
-changeLocation() {
-  this.isOpenLocation = !this.isOpenLocation;
-  if (this.isOpenType) {
-    this.isOpenType = false;
+  changeFilterDate() {
+    this.isFilterDate = !this.isFilterDate;
+    this.isOpenDate = !this.isOpenDate;
+    if (this.isFilterLocation || this.isFilterType) {
+      this.isFilterLocation = false;
+      this.isOpenLocation = false;
+      this.isFilterType = false;
+      this.isOpenType = false;
+    }
   }
-}
 
-changeType() {
-  this.isOpenType = !this.isOpenType;
-  if (this.isOpenLocation) {
-    this.isOpenLocation = false;
+  changeLocation() {
+    this.isOpenLocation = !this.isOpenLocation;
+    if (this.isOpenType) {
+      this.isOpenType = false;
+    }
   }
-}
 
-changeDate() {
-  this.isOpenDate = !this.isOpenDate;
-  if (this.isOpenLocation || this.isOpenType) {
-    this.isOpenLocation = false;
-    this.isOpenType = false;
+  changeType() {
+    this.isOpenType = !this.isOpenType;
+    if (this.isOpenLocation) {
+      this.isOpenLocation = false;
+    }
   }
-}
+
+  changeDate() {
+    this.isOpenDate = !this.isOpenDate;
+    if (this.isOpenLocation || this.isOpenType) {
+      this.isOpenLocation = false;
+      this.isOpenType = false;
+    }
+  }
   /**
    * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
    * @param tipoEventos Arreglo de tipos de eventos. String
    * @param evento nombre del tipo de evento a verificar.
    * @returns true o false.
    */
-  tipoEventoGuradado( tipoEventos: string[], evento: string ): boolean {
-    let evento_save : boolean = false;
-    tipoEventos.forEach(ev => {
-      if( ev == evento ) evento_save = true;
-    })
+  tipoEventoGuradado(tipoEventos: string[], evento: string): boolean {
+    let evento_save: boolean = false;
+    tipoEventos.forEach((ev) => {
+      if (ev == evento) evento_save = true;
+    });
     return evento_save;
   }
 
-        
-  filterEvento(){
-    this.dataform = this.filterForm.value
+  filterEvento() {
+    this.dataform = this.filterForm.value;
   }
 
   /**Ordeno los eventos alfabeticamente por el "Tipo"
@@ -218,109 +236,101 @@ changeDate() {
    *  1 : antes
    * -1 : despues
    */
-  get eventos_ordenados_asc_xlocalidad(): Eventos[]{
+  get eventos_ordenados_asc_xlocalidad(): Eventos[] {
     let result: Eventos[] = [];
     const eventos = this.eventos;
     result = eventos.sort((a, b) => {
-      if(a.tipo.toLocaleLowerCase() > b.tipo.toLocaleLowerCase()) return 1;
+      if (a.tipo.toLocaleLowerCase() > b.tipo.toLocaleLowerCase()) return 1;
 
-      if(a.tipo.toLocaleLowerCase() < b.tipo.toLocaleLowerCase()) return -1;
+      if (a.tipo.toLocaleLowerCase() < b.tipo.toLocaleLowerCase()) return -1;
 
-      if(a.tipo.toLocaleLowerCase() == b.tipo.toLocaleLowerCase()) return 0;
-    })
+      if (a.tipo.toLocaleLowerCase() == b.tipo.toLocaleLowerCase()) return 0;
+    });
     return result;
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
-  get lista_tipos_eventos(){
+  get lista_tipos_eventos() {
     /**Copia de arreglo de eventos para trabajar dentro de la funcion */
     const eventos = this.eventos;
     /**Pasar a variable Global
      * Guarda los tipos de eventos que estan en la base.
      * Luego se muestran al usuario
      */
-    let tipos_eventos : string[] = [];
-    if(eventos.length > 0){
+    let tipos_eventos: string[] = [];
+    if (eventos.length > 0) {
       eventos.forEach((ev) => {
-        if( tipos_eventos.indexOf(ev.tipo) == -1 ){
-          tipos_eventos.push( ev.tipo );
+        if (tipos_eventos.indexOf(ev.tipo) == -1) {
+          tipos_eventos.push(ev.tipo);
         }
-      })
+      });
     }
     return tipos_eventos;
   }
-  
+
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
-  get lista_localidades_eventos(){
+  get lista_localidades_eventos() {
     /**Copia de arreglo de eventos para trabajar dentro de la funcion */
     const eventos = this.eventos;
     /**Pasar a variable Global
      * Guarda los tipos de eventos que estan en la base.
      * Luego se muestran al usuario
      */
-    let localidades_eventos : string[] = [];
-    if(eventos.length > 0){
+    let localidades_eventos: string[] = [];
+    if (eventos.length > 0) {
       eventos.forEach((ev) => {
-        if( localidades_eventos.indexOf(ev.localidad) == -1 ){
-          localidades_eventos.push( ev.localidad );
+        if (localidades_eventos.indexOf(ev.localidad) == -1) {
+          localidades_eventos.push(ev.localidad);
         }
-      })
+      });
     }
     return localidades_eventos;
   }
 
-
-
   /**
-   * 
+   *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
    * @returns Arreglo de Eventos para el "tipo" buscado.
    */
-  eventosPorTipo( tipo: string ): Eventos[]{
+  eventosPorTipo(tipo: string): Eventos[] {
     /**Copia del arreglo de eventos */
-    const eventos : Eventos[] = this.eventos;
-    let eventos_xtipo : Eventos[] = [];
+    const eventos: Eventos[] = this.eventos;
+    let eventos_xtipo: Eventos[] = [];
     if (eventos.length > 0) {
-      eventos_xtipo = eventos.filter(ev => ev.tipo == tipo);
+      eventos_xtipo = eventos.filter((ev) => ev.tipo == tipo);
     }
     return eventos_xtipo;
   }
 
-    /**
-   * 
-   * @param tipo Nombre de la "localidad" donde se realiza el Evento. 
+  /**
+   *
+   * @param tipo Nombre de la "localidad" donde se realiza el Evento.
    *  Es usado como criterio de buscanda.
    * @returns Arreglo de Eventos que se realizaran en esa "localidad".
    */
-  eventosPorLocalidad( localidad: string ): Eventos[]{
+  eventosPorLocalidad(localidad: string): Eventos[] {
     /**Copia del arreglo de eventos */
-    const eventos : Eventos[] = this.eventos;
-    let eventos_xlocalidad : Eventos[] = [];
+    const eventos: Eventos[] = this.eventos;
+    let eventos_xlocalidad: Eventos[] = [];
     if (eventos.length > 0) {
-      eventos_xlocalidad = eventos.filter(ev => ev.localidad == localidad);
+      eventos_xlocalidad = eventos.filter((ev) => ev.localidad == localidad);
     }
     return eventos_xlocalidad;
   }
 
-  async modalDate( event ){
-    console.log(event );
-    
-    const modal = await this.modalCtrl.create({
+  async modalDate(event) {
+    console.log(event);
 
+    const modal = await this.modalCtrl.create({
       component: EventModalComponent,
       componentProps: {
-
-        nombre: 'ramon',
-      }
-    })
+        nombre: "ramon",
+      },
+    });
     await modal.present();
 
-    const { data } = await modal.onDidDismiss()
-    console.log(
-      data 
-    );
-    
+    const { data } = await modal.onDidDismiss();
+    console.log(data);
   }
-  /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/  
-
+  /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 }
