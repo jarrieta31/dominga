@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
-
 import { DondeComer } from "../../shared/donde-comer";
-
-import { DatabaseService } from "../../services/database.service";
 import { WhereEatService } from "src/app/services/database/where-eat.service";
 import { LoadingController } from "@ionic/angular";
-import { InfoSlider } from "../../shared/info-slider";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { takeUntil } from "rxjs/operators";
+import { SlidesService } from "src/app/services/database/slides.service";
+import { Slider } from "src/app/shared/slider";
 
 @Component({
   selector: "app-where-eat",
@@ -15,14 +14,15 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrls: ["./where-eat.page.scss"],
 })
 export class WhereEatPage {
+  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
+  private unsubscribe$: Subject<void>;
+
   /**captura los datos del formulario de filtros */
   dataForm: string = "";
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
   });
-
-  sliderDondeComer: InfoSlider[];
 
   loading: any;
 
@@ -39,8 +39,6 @@ export class WhereEatPage {
   /** =====>=>=>=> Variables Filtro localidad <============== */
   /**guarda los lugares activos en la subscription del servicio */
   eat: DondeComer[] = [];
-  /**subscription activa con los lugares del servicio*/
-  sourceEat: Subscription;
   /**guarda las localidades con lugares publicados */
   location: any[] = [];
   /**controla cuando descartar el spinner de carga */
@@ -52,28 +50,15 @@ export class WhereEatPage {
   isFilterLocation = false;
   /** =====<=<=<=< Variables Filtro localidad <============== */
 
-  slider = this.database
-    .getSliderDondeComer()
-    .snapshotChanges()
-    .subscribe((data) => {
-      this.sliderDondeComer = [];
-      data.forEach((item) => {
-        let a = item.payload.toJSON();
-        a["$key"] = item.key;
-        this.sliderDondeComer.push(a as InfoSlider);
-      });
-    });
+  /**se guardan los sliders de la pantalla donde_comer */
+  sliderEat: Slider[] = [];
 
   constructor(
     private loadingCtrl: LoadingController,
-    private database   : DatabaseService,
-    private afs        : WhereEatService,
-    private fb         : FormBuilder
+    private afs: WhereEatService,
+    private fb: FormBuilder,
+    private sliderSvc: SlidesService
   ) {}
-
-  ngOnDestroy() {
-    this.slider.unsubscribe();
-  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -82,26 +67,25 @@ export class WhereEatPage {
     });
 
     this.loading.present().then(() => {
-      this.slider;
       this.loading.dismiss();
     });
   }
 
   /** =====>=>=>=> Metodos Filtro localidad <============== */
-/** Devuelve una lista de localidades */
-  get localidades(){
+  /** Devuelve una lista de localidades */
+  get localidades() {
     const weat = this.eat;
-    let localidades : string[] = [];
-    if(weat.length > 0){
+    let localidades: string[] = [];
+    if (weat.length > 0) {
       weat.forEach((we) => {
-        if(localidades.indexOf(we.localidad) == -1){
+        if (localidades.indexOf(we.localidad) == -1) {
           localidades.push(we.localidad);
         }
-      })
+      });
     }
     return localidades;
   }
-    
+
   filterEat() {
     this.dataForm = this.filterForm.value;
   }
@@ -116,8 +100,20 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
+    this.unsubscribe$ = new Subject<void>();
+
     this.afs.getDondeComer();
-    this.sourceEat = this.afs.donde_comer.subscribe((res) => {
+    this.sliderSvc.getSliders();
+
+    this.sliderSvc.slider
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        res.forEach((item) => {
+          if (item.pantalla == "donde_comer") this.sliderEat.push(item);
+        });
+      });
+
+    this.afs.donde_comer.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.eat = res;
       this.locationActive = [];
       this.eat.forEach((loc) => {
@@ -137,6 +133,7 @@ export class WhereEatPage {
   }
 
   ionViewDidLeave() {
-    this.sourceEat.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

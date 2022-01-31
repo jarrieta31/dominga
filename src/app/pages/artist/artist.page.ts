@@ -1,27 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TipoArtist } from '../../shared/tipo-artist';
+import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { ArtistService } from "src/app/services/database/artist.service"; 
+import { Artistas } from "src/app/shared/artistas";
+import { LoadingController } from "@ionic/angular";
+import { TipoArtist } from "../../shared/tipo-artist";
+import { SlidesService } from "src/app/services/database/slides.service";
+import { Slider } from "src/app/shared/slider";
 
 @Component({
-  selector: 'app-artist',
-  templateUrl: './artist.page.html',
-  styleUrls: ['./artist.page.scss'],
+  selector: "app-artist",
+  templateUrl: "./artist.page.html",
+  styleUrls: ["./artist.page.scss"],
 })
-export class ArtistPage implements OnInit {
+export class ArtistPage {
+  constructor(
+    private fb: FormBuilder,
+    private artistSvc: ArtistService,
+    private loadingCtrl: LoadingController,
+    private sliderSvc: SlidesService
+  ) {}
 
-  constructor( private fb : FormBuilder ) { }
+  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
+  private unsubscribe$: Subject<void>;
+
+  /**guarda los lugares activos en la subscription del servicio */
+  artists: Artistas[] = [];
 
   /**
    * Slide
    */
-   slideOpts = {
+  slideOpts = {
     initialSlide: 0,
     speed: 600,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,
   };
-  
+
+  locationActive: any[] = [];
+
+  loading: any;
+
   /**controla si se muestra o no el filtro general de lugares */
   isFilterLocation = false;
   isFilterType = false;
@@ -30,10 +51,12 @@ export class ArtistPage implements OnInit {
   /**control de acordeon de filtros */
   isOpenLocation: boolean = false;
   isOpenType: boolean = false;
+  /**se guardan los sliders de la pantalla artistas */
+  sliderArtist: Slider[] = [];
 
   filterForm: FormGroup = this.fb.group({
-    nombre: ["", Validators.required],
-    tipo     : ["", Validators.required],
+    localidad: ["", Validators.required],
+    categoria: ["", Validators.required],
   });
 
   filterArtist() {
@@ -72,94 +95,63 @@ export class ArtistPage implements OnInit {
     }
   }
 
-  get lista_nombre_artis(){
-    const artisList = this.artist;
-    let artistnamelist : string[] = [];
-    artisList.forEach(ar => {
-      if(artistnamelist.indexOf(ar.nombre) == -1){
-        artistnamelist.push(ar.nombre)
-      }
-    })
-    return artistnamelist;
+  async show(message: string) {
+    this.loading = await this.loadingCtrl.create({
+      message,
+      spinner: "bubbles",
+    });
+
+    this.loading.present().then(() => {
+      this.loading.dismiss();
+    });
   }
 
-  get lista_tipo_artis(){
-    const artisList = this.artist;
-    let artisttipolist : string[] = [];
-    artisList.forEach(ar => {
-      if(artisttipolist.indexOf(ar.tipo) == -1){
-        artisttipolist.push(ar.tipo)
+  get lista_localidad_artis() {
+    const artisList = this.artists;
+    let artistlocalidadlist: String[] = [];
+    artisList.forEach((ar) => {
+      if (artistlocalidadlist.indexOf(ar.localidad) == -1) {
+        artistlocalidadlist.push(ar.localidad);
       }
-    })
+    });
+    return artistlocalidadlist;
+  }
+
+  get lista_tipo_artis() {
+    const artisList = this.artists;
+    let artisttipolist: String[] = [];
+    artisList.forEach((ar) => {
+      if (artisttipolist.indexOf(ar.categoria) == -1) {
+        artisttipolist.push(ar.categoria);
+      }
+    });
     return artisttipolist;
   }
 
-  artist: any[] = [
-    {
-      nombre: "Juana Agustina",
-      tipo: "Artista Plástica",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Cuerda La Explanada",
-      tipo: "Música",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Niña Lobo",
-      tipo: "Banda",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Juana Agustina",
-      tipo: "Artista Plástica",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Cuerda La Explanada",
-      tipo: "Música",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Niña Lobo",
-      tipo: "Banda",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Juana Agustina",
-      tipo: "Artista Plástica",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Cuerda La Explanada",
-      tipo: "Música",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Niña Lobo",
-      tipo: "Banda",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Juana Agustina",
-      tipo: "Artista Plástica",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Cuerda La Explanada",
-      tipo: "Música",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-    {
-      nombre: "Niña Lobo",
-      tipo: "Banda",
-      imagen: "https://pbs.twimg.com/profile_images/3126853679/e3934db663898e16c42d6e4c04e150eb.jpeg"
-    },
-  ];
+  ionViewWillEnter() {
+    this.unsubscribe$ = new Subject<void>();
 
+    this.sliderSvc.getSliders();
+    this.sliderSvc.slider
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        res.forEach((item) => {
+          if (item.pantalla == "artistas") this.sliderArtist.push(item);
+        });
+      });
 
-
-  ngOnInit() {
+    this.artistSvc.getArtist();
+    this.artistSvc.artist
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        this.artists = res;
+      });
+    this.show("Cargando lugares...");
   }
 
+  /**se ejecuta cada vez que se sale de la tab */
+  ionViewDidLeave() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }
