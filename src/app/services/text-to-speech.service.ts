@@ -65,11 +65,23 @@ export class TextToSpeechService  {
 
     this.spUttr.onpause = (event) =>{
       const char = event.utterance.text.charAt(event.charIndex);
-      console.log(event);    
+      console.log(event.utterance);    
     }
 
     this.spUttr.onend = (event) => {
       console.log(event.utterance.text.length)
+    }
+
+    this.spUttr.onstart = (event) => {
+      console.log(
+        event
+      );
+    }
+
+    this.spUttr.onresume = (event) => {
+      console.log(
+        event
+      );
     }
 
   }
