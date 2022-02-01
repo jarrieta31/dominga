@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {  EventEmitter, Injectable } from '@angular/core';
 import { TipoSputtr } from '../shared/tipo-sputtr';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class TextToSpeechService  {
   spSynt : SpeechSynthesis = window.speechSynthesis;
   spUttr : SpeechSynthesisUtterance;
   textoxDefecto : 'Usted esta en la aplicacion Domingo!, de casa dominga';
+  onend$ = new EventEmitter<boolean>();
   velocidadReproduccion : Object[] = [
     { '1'      : 1.2 },
     { '1.5'    : 1.5 },
@@ -55,36 +56,39 @@ export class TextToSpeechService  {
     resume: reanuda la síntesis de voz previamente pausada.
     cancel: cancela el habla y además elimina cualquier declaración que haya todavía en cola para ser sintetizada.
  */
-  
-
   reproducir( spUttrData : TipoSputtr ){
+    if(this.spSynt.speaking){
+      console.log(`Esta escuchando una descripcion`);
+    }
+      
     this.spUttr.rate = this.velocidad( spUttrData.rate );
     this.spUttr.text = spUttrData.text;
     
     this.spSynt.speak(this.spUttr);
-
-    this.spUttr.onpause = (event) =>{
-      const char = event.utterance.text.charAt(event.charIndex);
-      console.log(event);    
-    }
-
+/**evento SpeechSynthesisUtterance se emite al finalizar la reproduccion*/
     this.spUttr.onend = (event) => {
-      console.log(event.utterance.text.length)
+      const aux:any = false;
+      this.onend$.emit(aux);
+    }
+/**evento SpeechSynthesisUtterance se emite al iniciar la reproduccion*/
+    this.spUttr.onstart = (event) => {
+      console.log(`text leng: ${event.utterance.text.length}`);
     }
 
+    this.spUttr.onerror = (event) => {
+      console.log(`Error en reproduccion`);
+      event.utterance.onend
+    }
   }
   
-  pausar(){this.spSynt.pause(); console.log(this.spUttr)
-   }
+  get enreproduccion(){return this.spSynt.speaking}
+
+  pausar(){this.spSynt.pause();}
   
   reanudar(){this.spSynt.resume();}
   
   detener(){this.spSynt.cancel();}
   
-  pausado(){ return this.spSynt.paused; }
-
-  reproduciendo(){ return this.spSynt.speaking; }
-
   velocidad( v : string ){
     switch (v) {
       case '1'  : return 0.5;
