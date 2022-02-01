@@ -97,6 +97,7 @@ export class WhereEatPage {
 
   changeLocation() {
     this.isOpenLocation = !this.isOpenLocation;
+    if (this.isOpenLocation == false) this.isFilterLocation = false;
   }
 
   ionViewWillEnter() {

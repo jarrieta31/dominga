@@ -6,7 +6,7 @@ import { Place } from 'src/app/shared/place';
 import { environment } from 'src/environments/environment';
 import { VideoPage } from '../video/video.page';
 import * as Mapboxgl from "mapbox-gl";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 declare var $: any;
 
@@ -23,6 +23,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   near: any[] = [];
   near_places: Subscription;
 
+  param: String = "";
+
   slideOpts = {
     initialSlide: 0,
     speed: 400,
@@ -36,9 +38,16 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private router: Router, 
     private actionSheetController: ActionSheetController,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      this.param = params.get("id");
+      console.log(this.param)
+      this.placeSvc.getPlaceId(this.param);
+    });
+
     this.place_suscription = this.placeSvc.place_selected.subscribe( res => {
       this.place = res; 
       this.placeSvc.getPlaceNear();
@@ -86,6 +95,11 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.place_suscription.unsubscribe();
     this.near_places.unsubscribe();
+  }
+
+  /**selecciona lugar actual */
+  getPlace(id: string) {
+    this.placeSvc.getPlaceId(id);
   }
 
   /**

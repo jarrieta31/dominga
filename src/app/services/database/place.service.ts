@@ -207,7 +207,7 @@ export class PlaceService {
   /**Devuelve un lugar específico
    * @param id del lugar a buscar
    */
-  getPlaceId(id: string) {
+  getPlaceId(id: String) {
     this.place_selected = new BehaviorSubject<Place>(null);
     this.near_place = null;
 
