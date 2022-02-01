@@ -115,7 +115,7 @@
       *ngFor="let item of places | filterPlaces:dataForm"
       id="{{ item.id }}"
       (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
-      [routerLink]="['/place-selected']"
+      [routerLink]="['/place-selected', item.id]"
     >
       <ion-card-header
         *ngIf="item.tipo == 'Rural'"

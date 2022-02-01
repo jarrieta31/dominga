@@ -70,6 +70,8 @@ export class ArtistPage {
       this.isFilterType = false;
       this.isOpenType = false;
     }
+
+    if(this.isOpenType) this.isOpenType = false;
   }
 
   changeFilterType() {
@@ -79,19 +81,25 @@ export class ArtistPage {
       this.isFilterLocation = false;
       this.isOpenLocation = false;
     }
+
+    if(this.isOpenLocation) this.isOpenLocation = false;
   }
 
-  changeLocation() {
+  changeLocation() {  
     this.isOpenLocation = !this.isOpenLocation;
+    this.isFilterLocation = !this.isFilterLocation;
     if (this.isOpenType) {
       this.isOpenType = false;
+      this.isFilterType = false;
     }
   }
 
   changeType() {
     this.isOpenType = !this.isOpenType;
+    this.isFilterType = !this.isFilterType;
     if (this.isOpenLocation) {
       this.isOpenLocation = false;
+      this.isFilterLocation = false;
     }
   }
 

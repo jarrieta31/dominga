@@ -67,12 +67,13 @@ const routes: Routes = [
   {
     path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
-  },  {
+  },
+  {
     path: 'place',
     loadChildren: () => import('./pages/place/place.module').then( m => m.PlacePageModule)
   },
   {
-    path: 'place-selected',
+    path: 'place-selected/:id',
     loadChildren: () => import('./pages/place-selected/place-selected.module').then( m => m.PlaceSelectedPageModule)
   },
   {

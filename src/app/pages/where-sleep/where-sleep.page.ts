@@ -63,6 +63,7 @@ export class WhereSleepPage {
 
   changeLocation() {
     this.isOpenLocation = !this.isOpenLocation;
+    if (this.isOpenLocation == false) this.isFilterLocation = false;
   }
   ionViewWillEnter() {
     this.sleepSvc.getDondeDormir();
