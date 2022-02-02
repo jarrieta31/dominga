@@ -158,6 +158,7 @@ export class EventsPage {
     await modal.present();
   }
 
+
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
   }

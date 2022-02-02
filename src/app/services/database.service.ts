@@ -128,6 +128,7 @@ export class DatabaseService {
         this.allEvents = arrEvents;
         this.eventos.next(this.allEvents);
         this.allEvents.forEach((f) => {
+          f.descripcion = this.limpiarTexto(f.descripcion);
           f.fechaInicio = new Date(f.fechaInicio["seconds"] * 1000);
         });
       })
@@ -213,6 +214,15 @@ export class DatabaseService {
     return this.appsRef;
   }
 
+  limpiarTexto( text : string) : string{
+    let _txt : string;
+    _txt = text.replace(/<[^>]*>?/g, '');
+    const base64 = window.btoa(_txt);
+    console.log(base64);
+    
+    text = window.atob(base64);
+    return text;
+  }
     // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
     /**
    * funcion publica. recibe los datos del controlador.
