@@ -39,27 +39,30 @@ export class EventsPage {
   isOpenLocation: boolean = false;
   isOpenType: boolean = false;
   isOpenDate: boolean = false;
+  /**varibles de filtro por fecha */
+  fecha_inicio: Date = new Date();
+  fecha_fin   : Date = new Date(this.fecha_inicio.getDate()+90);
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
-    tipo: ["", Validators.required],
+    tipo        : ["", Validators.required],
+    localidad   : ["", Validators.required],
+    fecha_fin   : ["", Validators.required],
     fecha_inicio: ["", Validators.required],
-    fecha_fin: ["", Validators.required],
     // moneda   : ["", Validators.required],
-    precio: [, Validators.required],
+    // precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
 
   constructor(
+    private veService: VisitEventService, //Servicio contador de visitas eventos.
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
-    private veService: VisitEventService, //Servicio contador de visitas eventos.
-    private fb: FormBuilder,
-    private sliderSvc: SlidesService
+    private sliderSvc: SlidesService,
+    private        fb: FormBuilder,
   ) {}
 
   ionViewWillEnter() {
@@ -94,10 +97,6 @@ export class EventsPage {
     this.dbService.getEventsLocal();
     /** Actualizo el dpto seleccionado */
     this.dpto_select = this.dbService.selectionDepto;
-
-    /** ======>>> Pruebas <<<======= */
-
-    /** ===========>>>><<<<========= */
   }
 
   ionViewDidLeave() {
@@ -229,6 +228,12 @@ export class EventsPage {
 
   filterEvento() {
     this.dataform = this.filterForm.value;
+    this.actualizarFechas();
+  }
+
+  actualizarFechas(){
+    this.fecha_inicio = this.filterForm.get("fecha_inicio").value;
+    this.fecha_fin    = this.filterForm.get("fecha_fin").value;
   }
 
   /**Ordeno los eventos alfabeticamente por el "Tipo"

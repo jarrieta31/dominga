@@ -8,6 +8,13 @@ import { format, parseISO } from 'date-fns';
 export class FilterEvents1Pipe implements PipeTransform {
 
   transform(eventos: Eventos[], dataform: any): Eventos[] {
+
+    console.log(
+      `fechaInicio: ${typeof dataform.fecha_inicio} ${dataform.fecha_inicio}
+        fecha fin : ${typeof dataform.fecha_fin} ${dataform.fecha_fin}
+        `
+    );
+    
   
     if ( dataform.length === 0 ) {
       return eventos;
@@ -26,7 +33,10 @@ export class FilterEvents1Pipe implements PipeTransform {
 /**Filtro xFecha Inicio: Si no selecciona fechaIncio, toma la fecha del dia. */
     if ( dataform.fecha_inicio === null || dataform.fecha_inicio === undefined || dataform.fecha_inicio === "")  dataform.fecha_inicio = new Date();
     else {
-      dataform.fecha_inicio = new Date(format(parseISO(dataform.fecha_inicio),'MM/dd/yyy'))
+      if(typeof dataform.fecha_inicio === 'object')
+        dataform.fecha_inicio = new Date(format(dataform.fecha_inicio,'MM/dd/yyy'))
+      else      
+        dataform.fecha_inicio = new Date(format(parseISO(dataform.fecha_inicio),'MM/dd/yyy'))
     }
 
 /**Filtro xFechaFin: Si no se selecciona fechaFin, toma la fechaInicio + 90 dias. */
@@ -37,7 +47,10 @@ export class FilterEvents1Pipe implements PipeTransform {
       dataform.fecha_fin =  new Date(format(fecha_fin, 'MM/dd/yy'));
     }
     else {
-      dataform.fecha_fin = new Date(format(parseISO(dataform.fecha_fin),'MM/dd/yyy'));
+      if(typeof dataform.fecha_fin === 'object')
+        dataform.fecha_fin = new Date(format(dataform.fecha_fin,'MM/dd/yyy'));
+      else
+        dataform.fecha_fin = new Date(format(parseISO(dataform.fecha_fin),'MM/dd/yyy'));
       if( dataform.fecha_inicio.getTime() >= dataform.fecha_fin.getTime() ){
         const dias = 90;
         let fecha_fin : Date = new Date(dataform.fecha_inicio)

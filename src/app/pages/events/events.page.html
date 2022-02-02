@@ -28,6 +28,7 @@
 <div *ngIf="isFilterLocation || isFilterType || isFilterDate">
   <form [formGroup]="filterForm" class="form_filter">
     <div>
+<!-- Filtro por Fecha  -->
       <div (click)="changeDate()" class="filter_name">
         <span *ngIf="isOpenDate === false">Fecha</span>
         <span class="open_acordeon" *ngIf="isOpenDate">Fecha</span>
@@ -44,8 +45,9 @@
             mode="ios" 
             placeholder="desde"
             formControlName="fecha_inicio"
-            value="">
-          </ion-datetime>
+            > 
+            <!-- [ngModel]="fecha_inicio"   -->
+          </ion-datetime> 
         </div>
         <div class="filter_list">
           <ion-datetime 
@@ -53,12 +55,13 @@
             mode="ios" 
             placeholder="hasta"
             formControlName="fecha_fin"
-            value="">
+            >
+            <!-- [ngModel]="fecha_fin"   -->
           </ion-datetime>
         </div>
       </div>
   </div>
-
+<!-- Filtro por Fecha  -->
 <!-- Filtro por Localidad  -->
     <div>
       <div (click)="changeLocation()" class="filter_name filter_type">
