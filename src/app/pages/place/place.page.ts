@@ -252,7 +252,7 @@ export class PlacePage {
             tap((posicion) => {
               this.getLocation(posicion.longitud, posicion.latitud)
                 .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((dto) => {
+                .subscribe((dto: any) => {
                   this.placeSvc.currentDpto =  dto.features[4].text;
                 });
               if (posicion != null) {
