@@ -12,7 +12,6 @@ import { EventDetailPageModule } from '../event-detail/event-detail.module';
 import { FilterEventPageModule } from '../filter-event/filter-event.module';
 import { FilterEventPage } from '../filter-event/filter-event.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
-import { CircuitsPageModule } from '../circuits/circuits.module';
 
 @NgModule({
   imports: [
@@ -23,8 +22,7 @@ import { CircuitsPageModule } from '../circuits/circuits.module';
     EventDetailPageModule,
     FilterEventPageModule,
     PipesModule,
-    ReactiveFormsModule, 
-    CircuitsPageModule
+    ReactiveFormsModule
   ],
   declarations: [EventsPage],
   entryComponents: [

@@ -13,7 +13,7 @@ import { InfoSlider } from '../../shared/info-slider';
 export class InformationPage implements OnInit, OnDestroy {
   
   ngOnDestroy() {
-    this.su.unsubscribe();
+    // this.su.unsubscribe();
   }
 
 	information: any[];
