@@ -82,8 +82,10 @@ export class PlacePage {
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
-    tipo: ["", Validators.required]
+    tipo: ["", Validators.required],
   });
+
+  featureDepto: any[] = [];
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -253,7 +255,16 @@ export class PlacePage {
               this.getLocation(posicion.longitud, posicion.latitud)
                 .pipe(takeUntil(this.unsubscribe$))
                 .subscribe((dto: any) => {
-                  this.placeSvc.currentDpto =  dto.features[4].text;
+                  this.featureDepto = [];
+                  dto.features.forEach((res: any) => {
+                    this.featureDepto.push(res.text);
+                  });
+                
+                  let featureLen = this.featureDepto.length;
+                 
+                  let currentDepto = this.featureDepto[featureLen - 2];
+                  
+                  this.placeSvc.currentDpto = currentDepto
                 });
               if (posicion != null) {
                 //Subscripcion para ver la ruta
