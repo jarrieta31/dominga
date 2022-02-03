@@ -59,63 +59,63 @@ export class HomePage implements OnInit, OnDestroy {
     this.posicion$ = this.geolocationService.getPosicionActual$();
   }
 
-  su = this.database
-    .getPlaces()
-    .snapshotChanges()
-    .subscribe((data) => {
-      this.items = [];
-      data.forEach((item) => {
-        let a = item.payload.toJSON();
-        a["$key"] = item.key;
-        this.items.push(a as Place);
-      });
-      // Agrega las distancias calculadas desde casa dominga al array de lugares
-      this.items.forEach((place) => {
-        let options = { units: "kilometers" };
-        let dist = distance(
-          [place.ubicacion.lng, place.ubicacion.lat],
-          [environment.casaDominga.longitud, environment.casaDominga.latitud],
-          options
-        );
-        let distFormat;
-        if (dist > 1) {
-          distFormat = parseFloat(dist).toFixed(3);
-          place.distancia = "Desde C. Dominga " + distFormat;
-        } else {
-          distFormat = parseFloat(dist).toFixed(2);
-          place.distancia = "Desde C. Dominga " + distFormat;
-        }
-      });
-      // Actualiza el observable de lugares con toda la información
-      this.items$.next(this.items);
-      this.subscripcionPosition = this.posicion$
-        .pipe(
-          tap((posicion) => {
-            if (posicion != null) {
-              this.items.forEach((place) => {
-                console.log('posicion actual', posicion.latitud, posicion.longitud)
-                let options = { units: "kilometers" };
-                let dist = distance(
-                  [place.ubicacion.lng, place.ubicacion.lat],
-                  [posicion.longitud, posicion.latitud],
-                  options
-                );
-                let distFormat;
-                if (dist > 1) {
-                  distFormat = parseFloat(dist).toFixed(3);
-                  place.distancia = "Estás a " + distFormat;
-                } else {
-                  distFormat = parseFloat(dist).toFixed(2);
-                  place.distancia = "Estás a " + distFormat;
-                }
-              });
-              // Actualiza el observable de lugares con toda la información
-              this.items$.next(this.items);
-            }
-          })
-        )
-        .subscribe();
-    });
+  // su = this.database
+  //   .getPlaces()
+  //   .snapshotChanges()
+  //   .subscribe((data) => {
+  //     this.items = [];
+  //     data.forEach((item) => {
+  //       let a = item.payload.toJSON();
+  //       a["$key"] = item.key;
+  //       this.items.push(a as Place);
+  //     });
+  //     // Agrega las distancias calculadas desde casa dominga al array de lugares
+  //     this.items.forEach((place) => {
+  //       let options = { units: "kilometers" };
+  //       let dist = distance(
+  //         [place.ubicacion.lng, place.ubicacion.lat],
+  //         [environment.casaDominga.longitud, environment.casaDominga.latitud],
+  //         options
+  //       );
+  //       let distFormat;
+  //       if (dist > 1) {
+  //         distFormat = parseFloat(dist).toFixed(3);
+  //         place.distancia = "Desde C. Dominga " + distFormat;
+  //       } else {
+  //         distFormat = parseFloat(dist).toFixed(2);
+  //         place.distancia = "Desde C. Dominga " + distFormat;
+  //       }
+  //     });
+  //     // Actualiza el observable de lugares con toda la información
+  //     this.items$.next(this.items);
+  //     this.subscripcionPosition = this.posicion$
+  //       .pipe(
+  //         tap((posicion) => {
+  //           if (posicion != null) {
+  //             this.items.forEach((place) => {
+  //               console.log('posicion actual', posicion.latitud, posicion.longitud)
+  //               let options = { units: "kilometers" };
+  //               let dist = distance(
+  //                 [place.ubicacion.lng, place.ubicacion.lat],
+  //                 [posicion.longitud, posicion.latitud],
+  //                 options
+  //               );
+  //               let distFormat;
+  //               if (dist > 1) {
+  //                 distFormat = parseFloat(dist).toFixed(3);
+  //                 place.distancia = "Estás a " + distFormat;
+  //               } else {
+  //                 distFormat = parseFloat(dist).toFixed(2);
+  //                 place.distancia = "Estás a " + distFormat;
+  //               }
+  //             });
+  //             // Actualiza el observable de lugares con toda la información
+  //             this.items$.next(this.items);
+  //           }
+  //         })
+  //       )
+  //       .subscribe();
+  //   });
 
   ngOnInit() {
     $(document).ready(function () {
@@ -163,7 +163,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
 
     this.loading.present().then(() => {
-      this.su;
+      // this.su;
       this.loading.dismiss();
     });
   }

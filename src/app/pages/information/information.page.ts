@@ -32,15 +32,15 @@ export class InformationPage implements OnInit, OnDestroy {
         autoplay:true,
     };
 
-  su = this.db.getSliderInfo().snapshotChanges().subscribe(data => {
-    this.imagesSliderInfo = [];
-    data.forEach(item => {
-      let a = item.payload.toJSON();
-            a['$key'] = item.key;
-            this.imagesSliderInfo.push(a as InfoSlider);
-    })
+  // su = this.db.getSliderInfo().snapshotChanges().subscribe(data => {
+  //   this.imagesSliderInfo = [];
+  //   data.forEach(item => {
+  //     let a = item.payload.toJSON();
+  //           a['$key'] = item.key;
+  //           this.imagesSliderInfo.push(a as InfoSlider);
+  //   })
     
-  })
+  // })
 
   constructor(private http: HttpClient, private db: DatabaseService) { 
   	this.http.get('../../../assets/information.json').subscribe(res => {
@@ -51,7 +51,7 @@ export class InformationPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.su;
+    // this.su;
   }
 
   /**
