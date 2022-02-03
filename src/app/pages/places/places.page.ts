@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { Component, OnDestroy } from "@angular/core";
 import { DatabaseService } from "../../services/database.service";
 import { Place } from "../../shared/place";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -9,7 +8,6 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { GeolocationService } from "../../services/geolocation.service";
 import { LoadingController, ActionSheetController } from "@ionic/angular";
 import { Point } from "../../shared/point";
-import { tap } from "rxjs/operators";
 import { ModalController } from "@ionic/angular";
 import { VideoPage } from "../../pages/video/video.page";
 import { AccessibilityPage } from "../accessibility/accessibility.page";
@@ -22,7 +20,7 @@ declare var $: any;
   templateUrl: "./places.page.html",
   styleUrls: ["./places.page.scss"],
 })
-export class PlacesPage implements OnInit, OnDestroy {
+export class PlacesPage implements OnDestroy {
   items: Place[];
   sugerencias: Place[] = [];
   sug: Place[] = [];

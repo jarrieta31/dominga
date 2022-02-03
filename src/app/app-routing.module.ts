@@ -49,10 +49,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
   },
   {
-    path: 'Urbano',
-    loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
-  },
-  {
     path: 'events',
     loadChildren: () => import('./pages/events/events.module').then( m => m.EventsPageModule)
   },

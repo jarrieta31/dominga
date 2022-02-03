@@ -253,7 +253,7 @@ export class PlacePage {
               this.getLocation(posicion.longitud, posicion.latitud)
                 .pipe(takeUntil(this.unsubscribe$))
                 .subscribe((dto) => {
-                  this.placeSvc.currentDpto = dto.features[4].text;
+                  this.placeSvc.currentDpto =  dto.features[4].text;
                 });
               if (posicion != null) {
                 //Subscripcion para ver la ruta
