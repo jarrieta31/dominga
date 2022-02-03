@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { timeStamp } from 'console';
+import { Subscription } from 'rxjs';
 import { PlaceService } from 'src/app/services/database/place.service';
 import { TextToSpeechService } from 'src/app/services/text-to-speech.service';
 import { TipoSputtr } from 'src/app/shared/tipo-sputtr';
@@ -16,6 +18,7 @@ export class TextToSpeechComponent implements OnInit {
   speaking : boolean = false;
   paused   : boolean = false;
   escuchar : boolean = false;
+  onendsuscription : Subscription;
   vr : string[] = ['1', '1.5', '2']; //representa las velocidades de reproduccion
   spUttData : TipoSputtr = {
       rate   : '1.6', //  Velocidad de Reproduccion: Rango 0.1 - 10, xDefecto 1
@@ -24,36 +27,42 @@ export class TextToSpeechComponent implements OnInit {
 
   constructor(
     private ttsSvc  : TextToSpeechService,
-    private placeSvc: PlaceService
 ) {}
 
 
   ngOnInit() {}
 
-  pausarReproduccion(){this.ttsSvc.pausar();
-    console.log(`estoy pausando`);
-    
-}
-reanudarReproduccion(){this.ttsSvc.reanudar();
-    console.log(`estoy reanudando`);
-    
-}
-detenerReproduccion(){this.ttsSvc.detener()
-    console.log(`estoy cancelando`);
-    
-}
-
+  pausarReproduccion()   {this.ttsSvc.pausar();  }
+  reanudarReproduccion() {this.ttsSvc.reanudar();}
+  detenerReproduccion()  {this.ttsSvc.detener()  }
+/**Elimina los caracteres raros del texto que viene de la DB */
 limpiarTexto( text : string) : string{
   let _txt : string;
   _txt = text.replace(/<[^>]*>?/g, '');
   return _txt;
 }
-
+/**Toma el texto de la descripcion y se lo pasa al servicio para que pase a audio */
 reproducirDescripcion( texto : string ){
     this.spUttData.text = this.limpiarTexto( texto );
+/*se suscribe al observable onend$ que emite un valor cuando es invocado por el
+  evento onend(). ver SpeechSyntesis*/  
+    this.onendsuscription = this.ttsSvc.onend$.subscribe(onend => {
+      if(!onend){
+        this.speaking = onend;
+        this.paused   = onend;
+        this.eliminarSuscripcion();
+      }
+    })
     this.ttsSvc.reproducir(this.spUttData);
 }
-
+/**Elimina la suscripcion al observable onend$ una vez que finaliza la 
+ * reproduccion de un audio */
+eliminarSuscripcion(){
+  if(!this.onendsuscription.closed) this.onendsuscription.unsubscribe();
+}
+/**Cambia la velocidad de reproduccion
+ * Al momento la funcionalidad tiene velociadad por defecto
+ */
 velocidadReproduccion( v : string ){
     let largo = this.vr.length;
     let idx = this.vr.indexOf(v);
