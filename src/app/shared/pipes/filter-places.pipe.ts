@@ -6,16 +6,15 @@ import { Place } from "../place";
 })
 export class FilterPlacesPipe implements PipeTransform {
   transform(places: Place[], data: any): Place[] {
-
     if (data.length === 0) {
       return places;
     }
 
-    if(data.localidad !== null) data.localidad = data.localidad.toLowerCase(); 
-    else data.localidad = ""
+    if (data.localidad !== null) data.localidad = data.localidad.toLowerCase();
+    else data.localidad = "";
 
-    if(data.tipo !== null) data.tipo = data.tipo.toLowerCase();
-    else data.tipo = ""
+    if (data.tipo !== null) data.tipo = data.tipo.toLowerCase();
+    else data.tipo = "";
 
     return places.filter((item) => {
       return (

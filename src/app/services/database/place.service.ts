@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Place } from "src/app/shared/place";
 import { DatabaseService } from "../database.service";
 import distance from "@turf/distance";
+import { Point } from "src/app/shared/point";
 
 @Injectable({
   providedIn: "root",
@@ -31,21 +32,35 @@ export class PlaceService {
   distance_place: any[] = [];
   /**Guarda los 4 lugares más cercanos al seleccionado */
   near_places: BehaviorSubject<any[]>;
+  /**guarda la posición actual del usuario */
+  posicion$: Observable<Point>;
+  /**se guardan los lugares recibidos desde el filtro distancia */
+  distancePlaces: Place[] = [];
 
-  deptoLimit: any = [
-    { nameDepto: "Artigas", limit: ["Salto", "Rivera"] },
+  deptoLimit: any[] = [
+    { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
     {
       nameDepto: "Canelones",
-      limit: ["Florida", "Lavalleja", "Maldonado", "San José"],
+      limit: ["Canelones", "Florida", "Lavalleja", "Maldonado", "San José"],
     },
     {
       nameDepto: "Cerro Largo",
-      limit: ["Durazno", "Rivera", "Tacuarembó", "Treinta y Tres"],
+      limit: [
+        "Cerro Largo",
+        "Durazno",
+        "Rivera",
+        "Tacuarembó",
+        "Treinta y Tres",
+      ],
     },
-    { nameDepto: "Colonia", limit: ["Flores", "San José", "Soriano"] },
+    {
+      nameDepto: "Colonia",
+      limit: ["Colonia", "Flores", "San José", "Soriano"],
+    },
     {
       nameDepto: "Durazno",
       limit: [
+        "Durazno",
         "Cerro Largo",
         "Flores",
         "Florida",
@@ -58,6 +73,7 @@ export class PlaceService {
     {
       nameDepto: "Flores",
       limit: [
+        "Flores",
         "Colonia",
         "Durazno",
         "Florida",
@@ -69,6 +85,7 @@ export class PlaceService {
     {
       nameDepto: "Florida",
       limit: [
+        "Florida",
         "Canelones",
         "Durazno",
         "Flores",
@@ -79,34 +96,73 @@ export class PlaceService {
     },
     {
       nameDepto: "Lavalleja",
-      limit: ["Canelones", "Florida", "Maldonado", "Rocha", "Treinta y Tres"],
+      limit: [
+        "Lavalleja",
+        "Canelones",
+        "Florida",
+        "Maldonado",
+        "Rocha",
+        "Treinta y Tres",
+      ],
     },
-    { nameDepto: "Maldonado", limit: ["Canelones", "Lavalleja", "Rocha"] },
-    { nameDepto: "Paysandú", limit: ["Río Negro", "Salto", "Tacuarembó"] },
+    {
+      nameDepto: "Maldonado",
+      limit: ["Maldonado", "Canelones", "Lavalleja", "Rocha"],
+    },
+    { nameDepto: "Montevideo", limit: ["Montevideo", "Canelones", "San José"] },
+    {
+      nameDepto: "Paysandú",
+      limit: ["Paysandú", "Río Negro", "Salto", "Tacuarembó"],
+    },
     {
       nameDepto: "Río Negro",
-      limit: ["Durazno", "Flores", "Paysandú", "Soriano", "Tacuarembó"],
+      limit: [
+        "Río Negro",
+        "Durazno",
+        "Flores",
+        "Paysandú",
+        "Soriano",
+        "Tacuarembó",
+      ],
     },
     {
       nameDepto: "Rivera",
-      limit: ["Artigas", "Cerro Largo", "Salto", "Tacuarembó"],
+      limit: ["Rivera", "Artigas", "Cerro Largo", "Salto", "Tacuarembó"],
     },
-    { nameDepto: "Rocha", limit: ["Maldonado", "Lavalleja", "Treinta y Tres"] },
+    {
+      nameDepto: "Rocha",
+      limit: ["Rocha", "Maldonado", "Lavalleja", "Treinta y Tres"],
+    },
     {
       nameDepto: "Salto",
-      limit: ["Artigas", "Paysandú", "Rivera", "Tacuarembó"],
+      limit: ["Salto", "Artigas", "Paysandú", "Rivera", "Tacuarembó"],
     },
     {
       nameDepto: "San José",
-      limit: ["Canelones", "Colonia", "Flores", "Florida", "Soriano"],
+      limit: [
+        "San José",
+        "Canelones",
+        "Colonia",
+        "Flores",
+        "Florida",
+        "Soriano",
+      ],
     },
     {
       nameDepto: "Soriano",
-      limit: ["Colonia", "Durazno", "Flores", "Río Negro", "San José"],
+      limit: [
+        "Soriano",
+        "Colonia",
+        "Durazno",
+        "Flores",
+        "Río Negro",
+        "San José",
+      ],
     },
     {
       nameDepto: "Tacuarembó",
       limit: [
+        "Tacuarembó",
         "Cerro Largo",
         "Durazno",
         "Paysandú",
@@ -118,6 +174,7 @@ export class PlaceService {
     {
       nameDepto: "Treinta y Tres",
       limit: [
+        "Treinta y Tres",
         "Cerro Largo",
         "Durazno",
         "Florida",
@@ -140,12 +197,12 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces() {
-    //console.log(this.currentDpto);
     this.depto = this.databaseSvc.selectionDepto;
     this.distance = this.databaseSvc.selectionDistance;
     this.allLugares = [];
+    this.distancePlaces = [];
 
-    this.places = new BehaviorSubject<Place[]>(this.initPlace);
+    this.places = new BehaviorSubject<Place[]>(this.distancePlaces);
 
     let searchDepto: boolean = false;
 
@@ -188,19 +245,48 @@ export class PlaceService {
       });
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
-    
-      this.save_depto.forEach((dep) => {
-        let deptoDistance: boolean = false;
-        if (dep == this.depto) {
-          deptoDistance = true;
-        }
+      let deptoSearch: boolean = false;
+      setTimeout(() => {
+        this.deptoLimit.forEach((dep: any) => {
+          if (this.save_depto.length == 0) this.save_depto.push("");
+          this.save_depto.forEach((search) => {
+            if (dep.limit == search) deptoSearch = true;
+          });
 
-        if (!deptoDistance) {
-          this.places.next(this.allLugares);
-        } else if (deptoDistance) {
-          this.places.next(this.allLugares);
-        }
-      });
+          if (dep.nameDepto == this.currentDpto) {
+            dep.limit.forEach((lim: any) => {
+              if (deptoSearch) {
+                this.initPlace.forEach((init: any) => {
+                  if (init.departamento == lim) this.distancePlaces.push(init);
+                });
+                deptoSearch = false;
+              } else {
+                this.afs
+                  .collection("lugares")
+                  .ref.where("departamento", "==", lim)
+                  .where("publicado", "==", true)
+                  .orderBy("prioridad")
+                  .get()
+                  .then((querySnapshot) => {
+                    querySnapshot.forEach((item) => {
+                      const data: any = item.data();
+                      this.initPlace.push({ id: item.id, ...data });
+                      this.distancePlaces.push({ id: item.id, ...data });
+                    });
+                    this.save_depto.push(lim);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+                  .finally(() => "Fin");
+                deptoSearch = false;
+                console.log(this.distancePlaces);
+              }
+            });
+          }
+        });
+        this.places.next(this.distancePlaces);
+      }, 1100);
     }
   }
 
@@ -213,7 +299,9 @@ export class PlaceService {
 
     this.initPlace.forEach((res) => {
       if (res.id == id) {
-        res.descripcionCorta = res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) + "...";
+        res.descripcionCorta =
+          res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) +
+          "...";
         this.near_place = res;
         this.place_selected.next(res);
       }

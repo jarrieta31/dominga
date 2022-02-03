@@ -9,31 +9,50 @@
       pager="false"
       [options]="slideOpts"
     >
-    <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
-      <img class="imgSlider" src="{{item.imagen.url}}" />
-    </ion-slide>
+      <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
+      </ion-slide>
     </ion-slides>
-<!-- =========>=>=>=> Filtro =========>=>=>=> -->
+    <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
-      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label
+        *ngIf="isOpenLocation === false "
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenLocation"
+        class="open_acordeon"
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
       <img src="/assets/icon/exchange.png" alt="" />
-      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
-      <ion-label *ngIf="isOpenType" class="open_acordeon" (click)="changeFilterType()">tipo</ion-label>
+      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()"
+        >tipo</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenType"
+        class="open_acordeon"
+        (click)="changeFilterType()"
+        >tipo</ion-label
+      >
     </div>
 
     <div *ngIf="isFilterLocation || isFilterType">
       <form [formGroup]="filterForm" class="form_filter">
-  <!-- Filtro por Localidad  -->
+        <!-- Filtro por Localidad  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
             <span *ngIf="isOpenLocation === false">Localidad</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>  
+            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
             ></i>
-            <i *ngIf="isOpenLocation" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
+            <i
+              *ngIf="isOpenLocation"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
           </div>
           <div *ngIf="isOpenLocation">
             <ion-list>
@@ -51,18 +70,15 @@
                   *ngFor="let loc of location"
                 >
                   <ion-text>{{ loc.localidad }}</ion-text>
-                  <ion-radio
-                    slot="end"
-                    value="{{ loc.localidad }}"
-                  ></ion-radio>
+                  <ion-radio slot="end" value="{{ loc.localidad }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
           </div>
         </div>
-  <!-- filtro por Localidad -->
+        <!-- filtro por Localidad -->
 
-  <!-- filtro por Tipo -->
+        <!-- filtro por Tipo -->
         <div>
           <div (click)="changeType()" class="filter_name filter_type">
             <span *ngIf="isOpenType === false">Tipo</span>
@@ -71,7 +87,10 @@
               *ngIf="isOpenType === false"
               class="fi fi-rr-angle-down icon_arrow"
             ></i>
-            <i *ngIf="isOpenType" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
+            <i
+              *ngIf="isOpenType"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
           </div>
           <div *ngIf="isOpenType">
             <ion-list class="list_type">
@@ -90,16 +109,13 @@
                   *ngFor="let cry of category"
                 >
                   <ion-text>{{ cry.categoria }}</ion-text>
-                  <ion-radio
-                    slot="end"
-                    value="{{ cry.categoria }}"
-                  ></ion-radio>
+                  <ion-radio slot="end" value="{{ cry.categoria }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
           </div>
         </div>
-  <!-- Filtro por Tipo -->
+        <!-- Filtro por Tipo -->
       </form>
     </div>
   </div>
@@ -111,48 +127,50 @@
       </div>
       <i class="far fa-sad-tear icon_empty"></i>
     </div>
-    <ion-card
-      *ngFor="let item of places | filterPlaces:dataForm"
-      id="{{ item.id }}"
-      (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
-      [routerLink]="['/place-selected', item.id]"
-    >
-      <ion-card-header
-        *ngIf="item.tipo == 'Rural'"
-        color="options"
-        id="place-title"
+    <ng-container *ngFor="let item of places | filterPlaces:dataForm">
+      <ion-card
+        *ngIf="(item.distanciaNumber <= dist) || dep != null"
+        id="{{ item.id }}"
+        (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
+        [routerLink]="['/place-selected', item.id]"
       >
-        {{ item.nombre }}<span class="categoria"
-          >&nbsp;&nbsp;({{item.tipo}})</span
+        <ion-card-header
+          *ngIf="item.tipo == 'Rural'"
+          color="options"
+          id="place-title"
         >
-        <i style="float: right" class="fas fa-tractor"></i>
-      </ion-card-header>
-      <ion-card-header
-        *ngIf="item.tipo == 'Urbano'"
-        color="information"
-        id="place-title"
-      >
-        {{ item.nombre }}<span class="categoria"
-          >&nbsp;&nbsp;({{item.tipo}})</span
-        >
-        <i style="float: right" class="fas fa-city"></i>
-      </ion-card-header>
-      <ion-card-content>
-        <img
-          class="imgCard"
-          src="{{ item.imagenHome['url']}}"
-          alt="{{ item.nombre }}"
-        />
-        <div class="duracion">
-          <b class="distancia"
-            >{{item.distancia | formatDistancia }} -
-            <span *ngIf="item.hora !== '0 h'">{{ item.hora }}</span>&nbsp;<span
-              *ngIf="item.minuto !== '0 min'"
-              >{{ item.minuto }}</span
-            ></b
+          {{ item.nombre }}<span class="categoria"
+            >&nbsp;&nbsp;({{item.tipo}})</span
           >
-        </div>
-      </ion-card-content>
-    </ion-card>
+          <i style="float: right" class="fas fa-tractor"></i>
+        </ion-card-header>
+        <ion-card-header
+          *ngIf="item.tipo == 'Urbano'"
+          color="information"
+          id="place-title"
+        >
+          {{ item.nombre }}<span class="categoria"
+            >&nbsp;&nbsp;({{item.tipo}})</span
+          >
+          <i style="float: right" class="fas fa-city"></i>
+        </ion-card-header>
+        <ion-card-content>
+          <img
+            class="imgCard"
+            src="{{ item.imagenHome['url']}}"
+            alt="{{ item.nombre }}"
+          />
+          <div class="duracion">
+            <b class="distancia"
+              >{{item.distancia | formatDistancia }} -
+              <span *ngIf="item.hora !== '0 h'">{{ item.hora }}</span
+              >&nbsp;<span *ngIf="item.minuto !== '0 min'"
+                >{{ item.minuto }}</span
+              ></b
+            >
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
   </div>
 </ion-content>
