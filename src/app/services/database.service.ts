@@ -9,31 +9,6 @@ import { Subscription } from "rxjs";
 import { GeolocationService } from "./geolocation.service";
 import { tap } from "rxjs/operators";
 
-// export interface VisitaEvento {
-//   id?: string;
-//   total_visitas: number;
-//   id_evento: string;
-//   visita_xdia: DiaVisita[];
-// }
-
-// export interface VisitaPlace {
-//   id?: string;
-//   total_visitas: number;
-//   id_place: string;
-//   visita_xmes: MesVisita[];
-// }
-
-// export interface DiaVisita {
-//   dia: Date;
-//   cant_vta_xdia: number;
-// }
-
-// export interface MesVisita {
-//   mes: string;
-//   cant_vta_xmes: number;
-//   visita_xdia: DiaVisita[];
-// }
-
 @Injectable({
   providedIn: "root",
 })
@@ -216,13 +191,15 @@ export class DatabaseService {
 
   limpiarTexto( text : string) : string{
     let _txt : string;
+    let txt : string;
     _txt = text.replace(/<[^>]*>?/g, '');
-    const base64 = window.btoa(_txt);
-    console.log(base64);
-    
-    text = window.atob(base64);
-    return text;
-  }
+    /*x(?=y) Aserción anticipada: Coincide con "x" solo si "x" va seguida de "y".*/
+    /*(?<=y)x  Aserción de búsqueda inversa: coincide con "x" solo si "x" está precedida por "y". */
+    txt = _txt.replace(/(?<=&#)10;/g, '');
+    _txt = txt.replace(/(?<=&#)\d\d\d;/g, '');
+    txt = _txt.replace(/[&#]/g, '');
+    return txt;
+}
     // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
     /**
    * funcion publica. recibe los datos del controlador.
