@@ -10,7 +10,7 @@
       [options]="slideOpts"
     >
       <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
-        <img class="imgSlider" src="{{item.imagen.url}}" />
+        <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
@@ -67,10 +67,10 @@
                 <ion-item
                   class="filter_list"
                   lines="none"
-                  *ngFor="let loc of location"
+                  *ngFor="let loc of localidades"
                 >
-                  <ion-text>{{ loc.localidad }}</ion-text>
-                  <ion-radio slot="end" value="{{ loc.localidad }}"></ion-radio>
+                  <ion-text>{{ loc }}</ion-text>
+                  <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
@@ -106,10 +106,10 @@
                 <ion-item
                   class="filter_list last"
                   lines="none"
-                  *ngFor="let cry of category"
+                  *ngFor="let tipo of tipos"
                 >
-                  <ion-text>{{ cry.categoria }}</ion-text>
-                  <ion-radio slot="end" value="{{ cry.categoria }}"></ion-radio>
+                  <ion-text>{{ tipo }}</ion-text>
+                  <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
@@ -155,11 +155,7 @@
           <i style="float: right" class="fas fa-city"></i>
         </ion-card-header>
         <ion-card-content>
-          <img
-            class="imgCard"
-            src="{{ item.imagenHome['url']}}"
-            alt="{{ item.nombre }}"
-          />
+          <ion-img class="imgCard" alt="{{ item.nombre }}"  (ionImgDidLoad)="loadImage()" [src]="item.imagenHome['url']"></ion-img>
           <div class="duracion">
             <b class="distancia"
               >{{item.distancia | formatDistancia }} -

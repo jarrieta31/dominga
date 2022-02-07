@@ -5,6 +5,7 @@ import { Place } from "src/app/shared/place";
 import { DatabaseService } from "../database.service";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
+import { GeolocationService } from "../geolocation.service";
 
 @Injectable({
   providedIn: "root",
@@ -187,7 +188,8 @@ export class PlaceService {
 
   constructor(
     private databaseSvc: DatabaseService,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private geolocationSvc: GeolocationService
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
   }
@@ -197,6 +199,8 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces() {
+    let checkDepto = this.geolocationSvc.currentDepto;
+    console.log(this.save_depto);
     this.depto = this.databaseSvc.selectionDepto;
     this.distance = this.databaseSvc.selectionDistance;
     this.allLugares = [];
@@ -246,47 +250,54 @@ export class PlaceService {
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      setTimeout(() => {
-        this.deptoLimit.forEach((dep: any) => {
-          if (this.save_depto.length == 0) this.save_depto.push("");
-          this.save_depto.forEach((search) => {
-            if (dep.limit == search) deptoSearch = true;
-          });
+      let limitCurrent: String[] = [];
 
-          if (dep.nameDepto == this.currentDpto) {
-            dep.limit.forEach((lim: any) => {
-              if (deptoSearch) {
-                this.initPlace.forEach((init: any) => {
-                  if (init.departamento == lim) this.distancePlaces.push(init);
-                });
-                deptoSearch = false;
-              } else {
-                this.afs
-                  .collection("lugares")
-                  .ref.where("departamento", "==", lim)
-                  .where("publicado", "==", true)
-                  .orderBy("prioridad")
-                  .get()
-                  .then((querySnapshot) => {
-                    querySnapshot.forEach((item) => {
-                      const data: any = item.data();
-                      this.initPlace.push({ id: item.id, ...data });
-                      this.distancePlaces.push({ id: item.id, ...data });
-                    });
-                    this.save_depto.push(lim);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-                  .finally(() => "Fin");
-                deptoSearch = false;
-                console.log(this.distancePlaces);
-              }
-            });
-          }
-        });
-        this.places.next(this.distancePlaces);
-      }, 1100);
+      this.deptoLimit.forEach((res) => {
+        if (res.nameDepto == checkDepto) {
+          res.limit.forEach((dep: String) => {
+            limitCurrent.push(dep);
+          });
+        }
+      });
+
+      limitCurrent.forEach((dep: String) => {
+        if (this.save_depto.length != 0) {
+          this.save_depto.forEach((search) => {
+            if (dep == search) {
+              deptoSearch = true;
+            }
+          });
+        }
+
+        if (deptoSearch) {
+          this.initPlace.forEach((init: any) => {
+            if (init.departamento == dep) this.distancePlaces.push(init);
+          });
+          deptoSearch = false;
+        } else {
+          this.afs
+            .collection("lugares")
+            .ref.where("departamento", "==", dep)
+            .where("publicado", "==", true)
+            .orderBy("prioridad")
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((item) => {
+                const data: any = item.data();
+                this.initPlace.push({ id: item.id, ...data });
+                this.distancePlaces.push({ id: item.id, ...data });
+              });
+              if (!searchDepto) this.save_depto.push(dep);
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+            .finally(() => "Fin");
+          deptoSearch = false;
+        }
+      });
+      //console.log(this.distancePlaces);
+      this.places.next(this.distancePlaces);
     }
   }
 

@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { DatabaseService } from "src/app/services/database.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Departament } from "src/app/shared/departament";
 import { AlertController } from "@ionic/angular";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-home-menu",
@@ -18,9 +19,12 @@ export class HomeMenuPage {
   deptoSelected: any = null;
   distanceSelected: any = null;
 
-  deptos: Subscription;
-
   optionDsitance: number[] = [10, 25, 50, 75, 100, 150];
+
+  gps: any = null;
+
+  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
+  private unsubscribe$: Subject<void>;
 
   constructor(
     private dbService: DatabaseService,
@@ -54,7 +58,8 @@ export class HomeMenuPage {
 
     if (
       (this.deptoSelected == null || this.deptoSelected == undefined) &&
-      !this.depto && (this.distanceSelected == null || this.distanceSelected == undefined) &&
+      !this.depto &&
+      (this.distanceSelected == null || this.distanceSelected == undefined) &&
       !this.distance
     )
       await alert.present();
@@ -66,13 +71,13 @@ export class HomeMenuPage {
   seeDepto() {
     this.depto = !this.depto;
 
-    if(this.distance) this.distance = !this.distance;
+    if (this.distance) this.distance = !this.distance;
   }
 
   seeDistance() {
     this.distance = !this.distance;
-    
-    if(this.depto) this.depto = !this.depto;
+
+    if (this.depto) this.depto = !this.depto;
   }
 
   select(depto: string | null, distance: number | null) {
@@ -84,6 +89,7 @@ export class HomeMenuPage {
       localStorage.removeItem("distanceActivo");
       this.dbService.selectionDistance = null;
       this.distance = false;
+      this.depto = false
       this.distanceSelected = null;
     } else if (distance != null && distance != undefined) {
       this.distanceSelected = distance;
@@ -91,14 +97,25 @@ export class HomeMenuPage {
       localStorage.removeItem("deptoActivo");
       this.dbService.selectionDepto = null;
       this.depto = false;
+      this.distance = false;
       this.deptoSelected = null;
     }
   }
 
   ionViewWillEnter() {
+    this.unsubscribe$ = new Subject<void>();
+
+    this.geolocationSvc.posicion$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        console.log(res);
+        this.gps = res;
+      });
+
     setTimeout(() => {
       this.presentAlert();
     }, 2500);
+
     let deptoSave = localStorage.getItem("deptoActivo");
     let distanceSave = localStorage.getItem("distanceActivo");
 
@@ -112,12 +129,13 @@ export class HomeMenuPage {
 
     this.depto = false;
     this.dbService.getDepartamentosActivos();
-    this.deptos = this.dbService.departamentosActivos.subscribe(
-      (res) => (this.deptosActivos = res)
-    );
+    this.dbService.departamentosActivos
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => (this.deptosActivos = res));
   }
 
   ionViewDidLeave() {
-    this.deptos.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

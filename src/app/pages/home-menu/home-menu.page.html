@@ -22,12 +22,12 @@
         <ion-label
           class="distance_selected"
           (click)="seeDistance()"
-          *ngIf="distance || distanceSelected != null"
+          *ngIf="(distance || distanceSelected != null) && gps != null"
           >distancia</ion-label
         >
         <ion-label
           (click)="seeDistance()"
-          *ngIf="!distance && distanceSelected == null"
+          *ngIf="(!distance && distanceSelected == null) && gps != null"
           >distancia</ion-label
         >
       </div>
@@ -54,7 +54,7 @@
         <div class="endline">_</div>
       </ion-list>
       <ion-list *ngIf="distance" class="depto_list">
-        <ion-radio-group value="{{ distanceSelected }}">
+        <ion-radio-group value="{{ distanceSelected }}" *ngIf="gps != null">
           <ion-item
             lines="none"
             *ngFor="let dis of optionDsitance"

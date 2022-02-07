@@ -7,7 +7,6 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { timer } from "rxjs";
 import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
@@ -64,8 +63,6 @@ export class PlacePage {
   currentDepto: String = this.databaseSvc.selectionDepto;
   /**instance del spinner de carga */
   loading: any;
-  /**controla cuando descartar el spinner de carga */
-  isLoading = false;
   /**controla si se muestra o no el filtro general de lugares */
   isFilterLocation = false;
   isFilterType = false;
@@ -84,8 +81,6 @@ export class PlacePage {
     localidad: ["", Validators.required],
     tipo: ["", Validators.required],
   });
-
-  featureDepto: any[] = [];
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -139,16 +134,6 @@ export class PlacePage {
     }
   }
 
-  getLocation(lng: number, lat: number) {
-    return this.http.get(
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-        lng +
-        "," +
-        lat +
-        ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
-    );
-  }
-
   /**endpoint de mapbox para calcular distancia entra dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
@@ -179,15 +164,45 @@ export class PlacePage {
       spinner: "bubbles",
     });
 
-    this.loading.present().then(() => {
-      if (this.isLoading) {
-        this.loading.dismiss();
-      }
-    });
+    this.loading.present();
+  }
+
+  loadImage() {
+    this.loading.dismiss();
+  }
+
+  /** Devuelve una lista de localidades */
+  get localidades() {
+    const placeLoc = this.places;
+    let localidades: string[] = [];
+    if (placeLoc.length > 0) {
+      placeLoc.forEach((pl) => {
+        if (localidades.indexOf(pl.localidad) == -1) {
+          localidades.push(pl.localidad);
+        }
+      });
+    }
+    return localidades;
+  }
+
+  /** Devuelve una lista de tipos */
+  get tipos() {
+    const placeTipo = this.places;
+    let tipos: string[] = [];
+    if (placeTipo.length > 0) {
+      placeTipo.forEach((pl) => {
+        if (tipos.indexOf(pl.tipo) == -1) {
+          tipos.push(pl.tipo);
+        }
+      });
+    }
+    return tipos;
   }
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    this.show("Cargando lugares...");
+
     this.dist = this.databaseSvc.selectionDistance;
     this.dep = this.databaseSvc.selectionDepto;
 
@@ -211,141 +226,86 @@ export class PlacePage {
       });
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      this.places = [];
+      //this.places = [];
       this.places = res;
-      /**====================== localidades y categorías activas ==================================== */
-      this.location = [];
-      this.category = [];
-      this.places.forEach((loc) => {
-        let isLocation = false;
-        let isCategory = false;
-        if (this.location.length == 0) {
-          this.location.push({ localidad: loc.localidad });
-          isLocation = true;
-        } else {
-          this.location.forEach((locExist) => {
-            if (loc.localidad == locExist.localidad) isLocation = true;
-          });
-        }
-
-        if (this.category.length == 0) {
-          this.category.push({ categoria: loc.tipo });
-          isCategory = true;
-        } else {
-          this.category.forEach((catExist) => {
-            if (loc.tipo == catExist.categoria) isCategory = true;
-          });
-        }
-        if (!isLocation) this.location.push({ localidad: loc.localidad });
-        if (!isCategory) this.category.push({ categoria: loc.tipo });
-      });
-      /**============================================================================== */
-
-      this.isLoading = true;
     });
-    this.show("Cargando lugares...");
 
-    timer(1000, 3000)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.posicion$ = this.geolocationSvc.getPosicionActual$();
-        this.posicion$
-          .pipe(
-            tap((posicion) => {
-              this.getLocation(posicion.longitud, posicion.latitud)
+    setTimeout(() => {
+      if(this.places.length == 0) this.loading.dismiss();
+      this.geolocationSvc.posicion$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res) => {
+          if (res != null) {
+            this.places.forEach((calcDist) => {
+              this.getDistance(
+                res.longitud,
+                res.latitud,
+                calcDist.ubicacion.lng,
+                calcDist.ubicacion.lat
+              )
                 .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((dto: any) => {
-                  this.featureDepto = [];
-                  dto.features.forEach((res: any) => {
-                    this.featureDepto.push(res.text);
-                  });
-                
-                  let featureLen = this.featureDepto.length;
-                 
-                  let currentDepto = this.featureDepto[featureLen - 2];
-                  
-                  this.placeSvc.currentDpto = currentDepto
+                .subscribe((res) => {
+                  this.distancia = res["routes"]["0"].distance / 1000;
+
+                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
+                  this.minuto = Math.trunc(
+                    (res["routes"]["0"].duration / 60) % 60
+                  );
+
+                  let distFormat: string | number, placeDistance: string;
+                  if (this.distancia >= 1) {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
+                    placeDistance = "Estás a " + distFormat;
+                  } else {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
+                    placeDistance = "Estás a " + distFormat;
+                  }
+
+                  calcDist.distanciaNumber = this.distancia;
+                  calcDist.distancia = placeDistance;
+                  calcDist.hora = String(this.hora + " h");
+                  calcDist.minuto = String(this.minuto + " min");
                 });
-              if (posicion != null) {
-                //Subscripcion para ver la ruta
-                this.places.forEach((calcDist) => {
-                  this.getDistance(
-                    posicion.longitud,
-                    posicion.latitud,
-                    calcDist.ubicacion.lng,
-                    calcDist.ubicacion.lat
-                  )
-                    .pipe(takeUntil(this.unsubscribe$))
-                    .subscribe((res) => {
-                      this.distancia = res["routes"]["0"].distance / 1000;
+            });
 
-                      this.hora = Math.trunc(
-                        res["routes"]["0"].duration / 60 / 60
-                      );
-                      this.minuto = Math.trunc(
-                        (res["routes"]["0"].duration / 60) % 60
-                      );
+            // this.distancePlace.on("route", (e: { route: any }) => {
+            //   let routes = e.route;
+            //   //console.log(routes)
+            //   this.distancia = parseFloat(
+            //     routes.map((r: { distance: number }) => r.distance / 1000)
+            //   );
+            //   this.hora = parseFloat(
+            //     routes.map((r: { duration: number }) =>
+            //       Math.trunc(r.duration / 60 / 60)
+            //     )
+            //   );
+            //   this.minuto = parseFloat(
+            //     routes.map((r: { duration: number }) =>
+            //       Math.trunc((r.duration / 60) % 60)
+            //     )
+            //   );
 
-                      let distFormat: string | number, placeDistance: string;
-                      if (this.distancia >= 1) {
-                        distFormat = parseFloat(String(this.distancia)).toFixed(
-                          3
-                        );
-                        placeDistance = "Estás a " + distFormat;
-                      } else {
-                        distFormat = parseFloat(String(this.distancia)).toFixed(
-                          2
-                        );
-                        placeDistance = "Estás a " + distFormat;
-                      }
-
-                      calcDist.distanciaNumber = this.distancia;
-                      calcDist.distancia = placeDistance;
-                      calcDist.hora = String(this.hora + " h");
-                      calcDist.minuto = String(this.minuto + " min");
-                    });
-                });
-
-                // this.distancePlace.on("route", (e: { route: any }) => {
-                //   let routes = e.route;
-                //   //console.log(routes)
-                //   this.distancia = parseFloat(
-                //     routes.map((r: { distance: number }) => r.distance / 1000)
-                //   );
-                //   this.hora = parseFloat(
-                //     routes.map((r: { duration: number }) =>
-                //       Math.trunc(r.duration / 60 / 60)
-                //     )
-                //   );
-                //   this.minuto = parseFloat(
-                //     routes.map((r: { duration: number }) =>
-                //       Math.trunc((r.duration / 60) % 60)
-                //     )
-                //   );
-
-                //   console.log(calcDist.distancia);
-                // });
-                // let options = { units: "kilometers" };
-                // let dist = distance(
-                //   [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
-                //   [posicion.longitud, posicion.latitud],
-                //   options
-                // );
-              }
-            })
-          )
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe();
-        // this.places.forEach((calcDist) => {
-
-        // });
-      });
+            //   console.log(calcDist.distancia);
+            // });
+            // let options = { units: "kilometers" };
+            // let dist = distance(
+            //   [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
+            //   [posicion.longitud, posicion.latitud],
+            //   options
+            // );
+          }
+        });
+    }, 2000);
   }
 
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.isFilterLocation = false;
+    this.isFilterType = false;
+    this.isOpenLocation = false;
+    this.isOpenType = false;
   }
   /**Contador de visitas de Lugares */
   sumaVisitaLugar(lugar_id: string) {
