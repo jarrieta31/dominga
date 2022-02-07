@@ -45,16 +45,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/sj-events/sj-events.module').then( m => m.SjEventsPageModule)
   },
   {
-    path: 'circuits',
-    loadChildren: () => import('./pages/circuits/circuits.module').then( m => m.CircuitsPageModule)
-  },
-  {
     path: 'descripcion/:id',
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
-  },
-  {
-    path: 'Urbano',
-    loadChildren: () => import('./pages/urban-circuit/urban-circuit.module').then( m => m.UrbanCircuitPageModule)
   },
   {
     path: 'events',

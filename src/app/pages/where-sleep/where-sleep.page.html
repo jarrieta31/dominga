@@ -11,10 +11,10 @@
       class="sliderPrimero"
       scrollbar="false"
       pager="false"
-      [options]=""
+      [options]="slideOpts"
     >
-      <ion-slide >
-        <img class="imgSlider" src="" />
+      <ion-slide *ngFor="let item of sliderSleep" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
       </ion-slide>
     </ion-slides>
 

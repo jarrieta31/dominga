@@ -158,7 +158,7 @@
       <div class="info-event">
         <div class="fecha">{{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs</div>
         <div class="titulo">{{item.nombre}}</div>
-        <div class="descripcion">{{item.descripcion}}</div>
+        <div class="descripcion" [innerHTML]="item.descripcion"></div>
       </div>
     </ion-item>
   </ion-list>

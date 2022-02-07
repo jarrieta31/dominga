@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { Component, OnDestroy } from "@angular/core";
 import { DatabaseService } from "../../services/database.service";
 import { Place } from "../../shared/place";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -9,7 +8,6 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { GeolocationService } from "../../services/geolocation.service";
 import { LoadingController, ActionSheetController } from "@ionic/angular";
 import { Point } from "../../shared/point";
-import { tap } from "rxjs/operators";
 import { ModalController } from "@ionic/angular";
 import { VideoPage } from "../../pages/video/video.page";
 import { AccessibilityPage } from "../accessibility/accessibility.page";
@@ -22,7 +20,7 @@ declare var $: any;
   templateUrl: "./places.page.html",
   styleUrls: ["./places.page.scss"],
 })
-export class PlacesPage implements OnInit, OnDestroy {
+export class PlacesPage implements OnDestroy {
   items: Place[];
   sugerencias: Place[] = [];
   sug: Place[] = [];
@@ -88,226 +86,226 @@ export class PlacesPage implements OnInit, OnDestroy {
     this.par = params.get("id");
   });
 
-  su = this.database
-    .getPlaces()
-    .snapshotChanges()
-    .subscribe((data) => {
-      this.items = [];
-      this.sugerencias.length = 0;
-      data.forEach((item) => {
-        if (this.par == item.key) {
-          var num = "0";
-          let a = item.payload.toJSON();
-          a["$key"] = item.key;
-          this.items.push(a as Place);
+  // su = this.database
+  //   .getPlaces()
+  //   .snapshotChanges()
+  //   .subscribe((data) => {
+  //     this.items = [];
+  //     this.sugerencias.length = 0;
+  //     data.forEach((item) => {
+  //       if (this.par == item.key) {
+  //         var num = "0";
+  //         let a = item.payload.toJSON();
+  //         a["$key"] = item.key;
+  //         this.items.push(a as Place);
 
-          this.items[num].descripcion =
-            this.items[num].descripcion.substr(0, 140) + " ...";
-          this.items[num].descripcion = this.items[num].descripcion.replace(
-            /<\/?[^>]+(>|$)/g,
-            ""
-          );
+  //         this.items[num].descripcion =
+  //           this.items[num].descripcion.substr(0, 140) + " ...";
+  //         this.items[num].descripcion = this.items[num].descripcion.replace(
+  //           /<\/?[^>]+(>|$)/g,
+  //           ""
+  //         );
 
-          let mapped = Object.keys(this.items[num].url).map((key) => ({
-            url: this.items[num].url[key],
-          }));
+  //         let mapped = Object.keys(this.items[num].url).map((key) => ({
+  //           url: this.items[num].url[key],
+  //         }));
 
-          if (this.items[num].valoracion != undefined) {
-            this.val = 0;
-            this.totalValoracion = 0;
-            this.cantidadVotos = 0;
-            let valorar = Object.keys(this.items[num].valoracion).map(
-              (key) => ({ valor: this.items[num].valoracion[key] })
-            );
+  //         if (this.items[num].valoracion != undefined) {
+  //           this.val = 0;
+  //           this.totalValoracion = 0;
+  //           this.cantidadVotos = 0;
+  //           let valorar = Object.keys(this.items[num].valoracion).map(
+  //             (key) => ({ valor: this.items[num].valoracion[key] })
+  //           );
 
-            valorar.forEach((data) => {
-              this.val;
-              this.valoracion[this.val] = data.valor;
-              this.val++;
-            });
+  //           valorar.forEach((data) => {
+  //             this.val;
+  //             this.valoracion[this.val] = data.valor;
+  //             this.val++;
+  //           });
 
-            this.cantidadVotos = this.valoracion.length;
+  //           this.cantidadVotos = this.valoracion.length;
 
-            this.valoracion.forEach((votos) => {
-              this.totalValoracion = this.totalValoracion + votos;
-            });
+  //           this.valoracion.forEach((votos) => {
+  //             this.totalValoracion = this.totalValoracion + votos;
+  //           });
 
-            this.totalValoracion = this.totalValoracion / this.cantidadVotos;
-            this.totalValoracion = Math.round(this.totalValoracion);
-          }
+  //           this.totalValoracion = this.totalValoracion / this.cantidadVotos;
+  //           this.totalValoracion = Math.round(this.totalValoracion);
+  //         }
 
-          this.items[num].url = mapped;
+  //         this.items[num].url = mapped;
 
-          this.nombre = this.items[num].nombre;
-          this.descripcion = this.items[num].descripcion;
-          this.key = this.items[num].$key;
-          this.auto = this.items[num].auto;
-          this.bicicleta = this.items[num].bicicleta;
-          this.caminar = this.items[num].caminar;
-          this.imagenPrincipal = this.items[num].imagenPrincipal;
-          this.tipo = this.items[num].tipo;
-          this.imagenHome = this.items[num].imagenHome;
+  //         this.nombre = this.items[num].nombre;
+  //         this.descripcion = this.items[num].descripcion;
+  //         this.key = this.items[num].$key;
+  //         this.auto = this.items[num].auto;
+  //         this.bicicleta = this.items[num].bicicleta;
+  //         this.caminar = this.items[num].caminar;
+  //         this.imagenPrincipal = this.items[num].imagenPrincipal;
+  //         this.tipo = this.items[num].tipo;
+  //         this.imagenHome = this.items[num].imagenHome;
 
-          this.imagenes.length = 0;
-          this.valoracion.length = 0;
-          this.cont = 0;
+  //         this.imagenes.length = 0;
+  //         this.valoracion.length = 0;
+  //         this.cont = 0;
 
-          mapped.forEach((data) => {
-            this.cont;
-            this.imagenes[this.cont] = data.url;
-            this.cont++;
-          });
+  //         mapped.forEach((data) => {
+  //           this.cont;
+  //           this.imagenes[this.cont] = data.url;
+  //           this.cont++;
+  //         });
 
-          if (this.items[num].video != undefined) {
-            this.contVideo = 0;
+  //         if (this.items[num].video != undefined) {
+  //           this.contVideo = 0;
 
-            let vid = Object.keys(this.items[num].video).map((key) => ({
-              video: this.items[num].video[key],
-            }));
+  //           let vid = Object.keys(this.items[num].video).map((key) => ({
+  //             video: this.items[num].video[key],
+  //           }));
 
-            vid.forEach((data) => {
-              this.contVideo;
-              this.video[this.contVideo] = data.video;
-              this.contVideo++;
-            });
-          }
+  //           vid.forEach((data) => {
+  //             this.contVideo;
+  //             this.video[this.contVideo] = data.video;
+  //             this.contVideo++;
+  //           });
+  //         }
 
-          this.latitud = this.items[num].latitud;
-          this.longitud = this.items[num].longitud;
+  //         this.latitud = this.items[num].latitud;
+  //         this.longitud = this.items[num].longitud;
 
-          Mapboxgl.accessToken = environment.mapBoxToken;
-          this.mapa = new Mapboxgl.Map({
-            container: "mapaBox",
-            style: "mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz",
-            center: [this.longitud, this.latitud],
-            zoom: 13,
-          });
+  //         Mapboxgl.accessToken = environment.mapBoxToken;
+  //         this.mapa = new Mapboxgl.Map({
+  //           container: "mapaBox",
+  //           style: "mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz",
+  //           center: [this.longitud, this.latitud],
+  //           zoom: 13,
+  //         });
 
-          const marker = new Mapboxgl.Marker({
-            draggable: false,
-            color: "#ea4335",
-          })
-            .setLngLat([this.longitud, this.latitud])
-            .addTo(this.mapa);
+  //         const marker = new Mapboxgl.Marker({
+  //           draggable: false,
+  //           color: "#ea4335",
+  //         })
+  //           .setLngLat([this.longitud, this.latitud])
+  //           .addTo(this.mapa);
 
-          if (this.tipo == "Rural" && this.nombre != "Mal Abrigo") {
-            const markerMalAbrigo = new Mapboxgl.Marker({
-              draggable: false,
-              color: "#006400",
-            })
-              .setLngLat([-56.952087, -34.147616])
-              .addTo(this.mapa);
-          }
+  //         if (this.tipo == "Rural" && this.nombre != "Mal Abrigo") {
+  //           const markerMalAbrigo = new Mapboxgl.Marker({
+  //             draggable: false,
+  //             color: "#006400",
+  //           })
+  //             .setLngLat([-56.952087, -34.147616])
+  //             .addTo(this.mapa);
+  //         }
 
-          this.mapa.on("load", () => {
-            this.mapa.resize();
-          });
+  //         this.mapa.on("load", () => {
+  //           this.mapa.resize();
+  //         });
 
-          //Abre una nueva pagina con el mapa
-          this.mapa.on("click", () => {
-            //console.log('longitud: '+ this.longitud + ' latitude' + this.latitud);
-            this.abrirMapaActionSheet();
-          });
-        }
+  //         //Abre una nueva pagina con el mapa
+  //         this.mapa.on("click", () => {
+  //           //console.log('longitud: '+ this.longitud + ' latitude' + this.latitud);
+  //           this.abrirMapaActionSheet();
+  //         });
+  //       }
 
-        let b = item.payload.toJSON();
-        b["$key"] = item.key;
-        this.sugerencias.push(b as Place);
-      });
+  //       let b = item.payload.toJSON();
+  //       b["$key"] = item.key;
+  //       this.sugerencias.push(b as Place);
+  //     });
 
-      this.sugerencias.forEach((sug) => {
-        let options = { units: "kilometers" };
-        let dist = distance(
-          [this.longitud, this.latitud],
-          [sug.ubicacion.lng, sug.ubicacion.lat],
-          options
-        );
-        let red = parseFloat(dist).toFixed(2);
-        this.index;
-        this.sugerencias[this.index].distancia = red;
-        this.index++;
+  //     this.sugerencias.forEach((sug) => {
+  //       let options = { units: "kilometers" };
+  //       let dist = distance(
+  //         [this.longitud, this.latitud],
+  //         [sug.ubicacion.lng, sug.ubicacion.lat],
+  //         options
+  //       );
+  //       let red = parseFloat(dist).toFixed(2);
+  //       this.index;
+  //       this.sugerencias[this.index].distancia = red;
+  //       this.index++;
 
-        //Calcula la distancia desde casa dominga
-        if (sug.nombre == "Casa Dominga") {
-          let dist_cd = distance(
-            [this.longitud, this.latitud],
-            [sug.ubicacion.lng, sug.ubicacion.lat],
-            options
-          );
-          let red_cd;
-          this.distancia_cd;
-          if (dist_cd >= 1) {
-            red_cd = parseFloat(dist_cd).toFixed(3);
-            this.distancia_cd = "Desde C. Dominga " + red_cd;
-          } else {
-            red_cd = parseFloat(dist_cd).toFixed(2);
-            this.distancia_cd = "Desde C. Dominga " + red_cd;
-          }
-        }
+  //       //Calcula la distancia desde casa dominga
+  //       if (sug.nombre == "Casa Dominga") {
+  //         let dist_cd = distance(
+  //           [this.longitud, this.latitud],
+  //           [sug.ubicacion.lng, sug.ubicacion.lat],
+  //           options
+  //         );
+  //         let red_cd;
+  //         this.distancia_cd;
+  //         if (dist_cd >= 1) {
+  //           red_cd = parseFloat(dist_cd).toFixed(3);
+  //           this.distancia_cd = "Desde C. Dominga " + red_cd;
+  //         } else {
+  //           red_cd = parseFloat(dist_cd).toFixed(2);
+  //           this.distancia_cd = "Desde C. Dominga " + red_cd;
+  //         }
+  //       }
 
-        //Emite el valor de la distancias desde casa dominga por si no está activo el GPS
-        this.distancia$.next(this.distancia_cd);
-      });
+  //       //Emite el valor de la distancias desde casa dominga por si no está activo el GPS
+  //       this.distancia$.next(this.distancia_cd);
+  //     });
 
-      this.sugerencias.forEach((res) => {
-        var dist_num = parseFloat(res.distancia.toString());
-        res.distancia = dist_num;
-      });
+  //     this.sugerencias.forEach((res) => {
+  //       var dist_num = parseFloat(res.distancia.toString());
+  //       res.distancia = dist_num;
+  //     });
 
-      this.sugerencias.sort((a, b) =>
-        a.distancia > b.distancia
-          ? 1
-          : b.distancia > a.distancia
-          ? -1
-          : 0
-      );
-      this.sug_2[0] = this.sugerencias[1];
-      this.sug_2[1] = this.sugerencias[2];
-      this.sug_2[2] = this.sugerencias[3];
-      this.sug_2[3] = this.sugerencias[4];
-    });
+  //     this.sugerencias.sort((a, b) =>
+  //       a.distancia > b.distancia
+  //         ? 1
+  //         : b.distancia > a.distancia
+  //         ? -1
+  //         : 0
+  //     );
+  //     this.sug_2[0] = this.sugerencias[1];
+  //     this.sug_2[1] = this.sugerencias[2];
+  //     this.sug_2[2] = this.sugerencias[3];
+  //     this.sug_2[3] = this.sugerencias[4];
+  //   });
 
-  ngOnInit() {
-    this.subscripcionDistancia = this.distancia$
-      .pipe(tap((distancia) => (this.distancia = distancia)))
-      .subscribe();
+  // ngOnInit() {
+  //   this.subscripcionDistancia = this.distancia$
+  //     .pipe(tap((distancia) => (this.distancia = distancia)))
+  //     .subscribe();
 
-    this.show("Cargando datos...");
+  //   this.show("Cargando datos...");
 
-    //    if (this.platform.is('android') && this.geolocationService.gps) {
+  //   //    if (this.platform.is('android') && this.geolocationService.gps) {
 
-    this.posicion$ = this.geolocationService.getPosicionActual$();
-    this.subscripcionPosition = this.posicion$
-      .pipe(
-        tap((posicion) => {
-          if (posicion != null) {
-            let options = { units: "kilometers" };
-            let dist = distance(
-              [this.longitud, this.latitud],
-              [posicion.longitud, posicion.latitud],
-              options
-            );
-            let distFormat, distancia;
-            if (dist >= 1) {
-              distFormat = parseFloat(dist).toFixed(3);
-              distancia = "Estás a " + distFormat;
-            } else {
-              distFormat = parseFloat(dist).toFixed(2);
-              distancia = "Estás a " + distFormat;
-            }
+  //   this.posicion$ = this.geolocationService.getPosicionActual$();
+  //   this.subscripcionPosition = this.posicion$
+  //     .pipe(
+  //       tap((posicion) => {
+  //         if (posicion != null) {
+  //           let options = { units: "kilometers" };
+  //           let dist = distance(
+  //             [this.longitud, this.latitud],
+  //             [posicion.longitud, posicion.latitud],
+  //             options
+  //           );
+  //           let distFormat, distancia;
+  //           if (dist >= 1) {
+  //             distFormat = parseFloat(dist).toFixed(3);
+  //             distancia = "Estás a " + distFormat;
+  //           } else {
+  //             distFormat = parseFloat(dist).toFixed(2);
+  //             distancia = "Estás a " + distFormat;
+  //           }
 
-            // Actualiza el observable de lugares con toda la información
-            this.distancia$.next(distancia);
-          }
-        })
-      )
-      .subscribe();
-    // }
-  }
+  //           // Actualiza el observable de lugares con toda la información
+  //           this.distancia$.next(distancia);
+  //         }
+  //       })
+  //     )
+  //     .subscribe();
+  //   // }
+  // }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.su.unsubscribe();
+    // this.su.unsubscribe();
     this.subscripcionDistancia.unsubscribe();
 
     //    if(this.platform.is('android') && this.geolocationService.gps ){
@@ -329,7 +327,7 @@ export class PlacesPage implements OnInit, OnDestroy {
 
     this.loading.present().then(() => {
       this.subscription;
-      this.su;
+      // this.su;
       this.loading.dismiss();
     });
   }

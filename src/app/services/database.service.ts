@@ -4,10 +4,8 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject, Observable, Subject, timer } from "rxjs";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
-import { TwoPoints } from "src/app/shared/two-points";
 import { Subscription } from "rxjs";
 import { GeolocationService } from "./geolocation.service";
-import { tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -28,35 +26,6 @@ export class DatabaseService {
     this.position$ = this.geoService.getPosicionActual$();
     this.eventos = new Subject();
     this.getEventos();
-    // this.getLugares();
-
-    /**
-     * Calcular distancia desde ubicación del usuario a lugares
-     */
-    // this.sourceMatch$ = timer(1000, 5000).pipe(
-    //   tap(() => {
-    //console.log("distancia");
-    //console.log(this.selection);
-    // this.allLugares.forEach((res) => {
-    //   let maxmin: TwoPoints = {
-    //     longitud1: res.ubicacion.lng,
-    //     latitud1: res.ubicacion.lat,
-    //     longitud2: -56.7061826207969,
-    //     latitud2: -34.33806617025381,
-    //   };
-    //console.log(this.geoService.calculateDistance(maxmin));
-    // this.currentPosition$ = this.position$
-    // .pipe(
-    // tap((posicion) => {
-    //   if (posicion != null){
-    //     console.log(posicion);
-    //   }
-    //   else console.log(posicion)
-    // }));
-    //console.log(this.allLugares);
-    // });
-    // })
-    // );
   }
 
   eventos: Subject<Eventos[]>;
@@ -84,12 +53,11 @@ export class DatabaseService {
   /**
    * Obtener eventos desde fecha de hoy
    */
-  
   getEventos() {
     this.afs
       .collection("eventos")
       .ref
-      .where("departamento", "==", this.selectionDepto  )
+      .where("departamento", "==", this.selectionDepto)
       .where("fechaInicio", ">=", this.today)
       .orderBy("fechaInicio", "asc")
       .get()
@@ -147,46 +115,6 @@ export class DatabaseService {
         console.log(err);
       })
       .finally(() => "Finally");
-  }
-
-  listarDatos() {
-    this.appsRef = this.db.list("tipo_circuito");
-    return this.appsRef;
-  }
-
-  getPlaces() {
-    this.appsRef = this.db.list("lugar");
-    return this.appsRef;
-  }
-
-  getSleep() {
-    this.appsRef = this.db.list("donde_dormir");
-    return this.appsRef;
-  }
-
-  getEat() {
-    this.appsRef = this.db.list("donde_comer");
-    return this.appsRef;
-  }
-
-  getParty() {
-    this.appsRef = this.db.list("casa_de_fiesta");
-    return this.appsRef;
-  }
-
-  getTypeCircuits() {
-    this.appsRef = this.db.list("tipo_circuito");
-    return this.appsRef;
-  }
-
-  getSliderInfo() {
-    this.appsRef = this.db.list("slider_info");
-    return this.appsRef;
-  }
-
-  getSliderDondeComer() {
-    this.appsRef = this.db.list("slider_donde_comer");
-    return this.appsRef;
   }
 
   limpiarTexto( text : string) : string{
