@@ -232,9 +232,13 @@ ion-label {
 }
 
 ion-radio {
-  color: #fc67ff;
+  --color-checked: #fc67ff;
 }
 
 .list-md {
   padding: 0 !important;
 }
+
+ion-datatime {
+   --ion-color: #fc67ff
+ }

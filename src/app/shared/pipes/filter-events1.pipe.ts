@@ -9,13 +9,6 @@ export class FilterEvents1Pipe implements PipeTransform {
 
   transform(eventos: Eventos[], dataform: any): Eventos[] {
 
-    console.log(
-      `fechaInicio: ${typeof dataform.fecha_inicio} ${dataform.fecha_inicio}
-        fecha fin : ${typeof dataform.fecha_fin} ${dataform.fecha_fin}
-        `
-    );
-    
-  
     if ( dataform.length === 0 ) {
       return eventos;
     }
