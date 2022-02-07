@@ -1,20 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import {
-  NativeGeocoder,
-  NativeGeocoderResult,
-  NativeGeocoderOptions,
-} from "@ionic-native/native-geocoder/ngx";
 import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
-import { timer, Observable, BehaviorSubject, Subscription } from "rxjs";
+import { Observable, BehaviorSubject, Subscription } from "rxjs";
 import { Place } from "../shared/place";
 import { TwoPoints } from "../shared/two-points";
 import { Point } from "../shared/point";
-import { tap, share } from "rxjs/operators";
-import distance from "@turf/distance";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
 
@@ -41,30 +34,16 @@ export class GeolocationService {
   latCenter: number = 0;
   longCenter: number = 0;
   timetest: any;
-  sourceClock$: Observable<any>;
+  //sourceClock$: Observable<any>;
   sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
   public gps: boolean = false;
-  subscriptionClock: any;
+  //subscriptionClock: any;
   public currentDepto: String = null;
 
   featureDepto: any[] = [];
 
-  // su = this.database.getPlaces().snapshotChanges().subscribe(data => {
-  //   this.items = [];
-  //   data.forEach(item => {
-  //     let a = item.payload.toJSON();
-  //     a['$key'] = item.key;
-  //     this.items.push(a as Place);
-  //   })
-  //   this.items.forEach(place => {
-  //     let respuestaValoracion: Assessment = { placeName: place.nombre, idUser: this.user, answer: false }
-  //     this.valuationsPlaces.push(respuestaValoracion)
-  //     // console.log(respuestaValoracion.idUser, respuestaValoracion.placeName, respuestaValoracion.answer)
-  //   })
-  // })
-
-  constructor(
+  constructor( 
     private androidPermissions: AndroidPermissions,
     private http: HttpClient,
     private geolocation: Geolocation,
@@ -72,15 +51,11 @@ export class GeolocationService {
   ) {
     this.checkGPSPermission();
     //Observable que obtiene los pulsos y obtiene la posicion
-    this.sourceClock$ = timer(500, 36000).pipe(
-      tap((clock) => {
-        this.geolocation
-          .getCurrentPosition({
-            maximumAge: 0,
-            timeout: 5000,
-            enableHighAccuracy: true,
-          })
-          .then((resp) => {
+    //this.sourceClock$ = timer(500, 36000).pipe(
+      //tap((clock) => {
+        this.geolocation.watchPosition
+          ({ timeout: 30000 })
+          .subscribe((resp) => {
             this.gps = true;
             this.posicion = {
               longitud: resp.coords.longitude,
@@ -90,77 +65,90 @@ export class GeolocationService {
               longitud: resp.coords.longitude,
               latitud: resp.coords.latitude,
             });
+            if (resp != null) {
+              this.getLocation(resp.coords.longitude,  resp.coords.latitude).subscribe(
+                (dto: any) => {
+                  this.featureDepto = [];
+                  dto.features.forEach((res: any) => {
+                    this.featureDepto.push(res.text);
+                  });
+                  let featureLen = this.featureDepto.length;
+                  this.currentDepto = this.featureDepto[featureLen - 2];
+                  console.log(this.currentDepto);
+                }
+              );
+            }
             this.actualizarMarcador();
           })
-          .catch((error) => {
-            //this.posicion = environment.casaDominga;
-            this.actualizarPosicion$(null);
-            if (this.myPositionMarker != null) this.myPositionMarker.remove();
-            this.gps = false;
-            console.log("Error al obtener la ubicación" + error);
-          });
-      }),
-      share()
-    );
+          // .catch((error) => {
+          //   //this.posicion = environment.casaDominga;
+          //   this.actualizarPosicion$(null);
+          //   if (this.myPositionMarker != null) this.myPositionMarker.remove();
+          //   this.gps = false;
+          //   console.log("Error al obtener la ubicación" + error);
+          // });
+      //}),
+      //share()
+    //);
 
-    this.sourceMatch$ = timer(1000, 20000).pipe(
-      tap((clock) => {
-        let posicion = this.posicion$.value;
-        let points: TwoPoints;
-        let dist: number;
-        let options = { units: "meters" };
-        if (posicion != null) {
-          this.getLocation(posicion.longitud, posicion.latitud).subscribe(
-            (dto: any) => {
-              this.featureDepto = [];
-              dto.features.forEach((res: any) => {
-                this.featureDepto.push(res.text);
-              });
-              let featureLen = this.featureDepto.length;
-              this.currentDepto = this.featureDepto[featureLen - 2];
-              console.log(this.currentDepto);
-            }
-          );
-        }
+    // this.sourceMatch$ = timer(1000, 20000).pipe(
+    //   tap((clock) => {
+    //     let posicion = this.posicion$.value;
+    //     let points: TwoPoints;
+    //     let dist: number;
+    //     let options = { units: "meters" };
+    //     if (posicion != null) {
+    //       this.getLocation(posicion.longitud, posicion.latitud).subscribe(
+    //         (dto: any) => {
+    //           this.featureDepto = [];
+    //           dto.features.forEach((res: any) => {
+    //             this.featureDepto.push(res.text);
+    //           });
+    //           let featureLen = this.featureDepto.length;
+    //           this.currentDepto = this.featureDepto[featureLen - 2];
+    //           console.log(this.currentDepto);
+    //         }
+    //       );
+    //     }
 
-        this.items.forEach((place) => {
-          if (posicion != null) {
-            points = {
-              longitud1: posicion.longitud,
-              latitud1: posicion.latitud,
-              longitud2: +place.ubicacion.lng,
-              latitud2: +place.ubicacion.lat,
-            };
-            dist = distance(
-              [place.ubicacion.lng, place.ubicacion.lat],
-              [posicion.longitud, posicion.latitud],
-              options
-            );
-            //Verifica la distancia
-            // if (dist <= 25) {
-            //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
-            // for (var key in place.valoracion) {
-            //   //si el usuario ya valoró se termina el forech
-            //   if(this.user == key){
-            //     break
-            //   }
-            //   //si el usuario no ha valorado
-            //   if (key != this.user) {
-            //     //busca en el array de valoraciones para ver si ya dijo que no quiere valorar
-            //     this.valuationsPlaces.forEach(assessment => {
-            //       if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
-            //         assessment.answer = true;
-            //         this.lugarCercano$.next(place)
-            //       }
-            //     });
-            //   }
-            // }
-            //}
-          }
-        });
-      }),
-      share()
-    );
+    //     this.items.forEach((place) => {
+    //       if (posicion != null) {
+    //         points = {
+    //           longitud1: posicion.longitud,
+    //           latitud1: posicion.latitud,
+    //           longitud2: +place.ubicacion.lng,
+    //           latitud2: +place.ubicacion.lat,
+    //         };
+    //         dist = distance(
+    //           [place.ubicacion.lng, place.ubicacion.lat],
+    //           [posicion.longitud, posicion.latitud],
+    //           options
+    //         );
+    //         //Verifica la distancia
+    //         // if (dist <= 25) {
+    //         //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
+    //         // for (var key in place.valoracion) {
+    //         //   //si el usuario ya valoró se termina el forech
+    //         //   if(this.user == key){
+    //         //     break
+    //         //   }
+    //         //   //si el usuario no ha valorado
+    //         //   if (key != this.user) {
+    //         //     //busca en el array de valoraciones para ver si ya dijo que no quiere valorar
+    //         //     this.valuationsPlaces.forEach(assessment => {
+    //         //       if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
+    //         //         assessment.answer = true;
+    //         //         this.lugarCercano$.next(place)
+    //         //       }
+    //         //     });
+    //         //   }
+    //         // }
+    //         //}
+    //       }
+    //     });
+    //   }),
+    //   share()
+    // );
   }
 
   getLocation(lng: number, lat: number) {
@@ -178,21 +166,21 @@ export class GeolocationService {
     return this.lugarCercano$.asObservable();
   }
 
-  iniciarSubscriptionMatch() {
-    this.subscriptionMatch = this.sourceMatch$.subscribe();
-  }
+  // iniciarSubscriptionMatch() {
+  //   this.subscriptionMatch = this.sourceMatch$.subscribe();
+  // }
 
-  pararSubscriptionMatch() {
-    this.subscriptionMatch.unsubscribe();
-  }
+  // pararSubscriptionMatch() {
+  //   this.subscriptionMatch.unsubscribe();
+  // }
 
-  iniciarSubscriptionClock() {
-    this.subscriptionClock = this.sourceClock$.subscribe();
-  }
+  // iniciarSubscriptionClock() {
+  //   this.subscriptionClock = this.sourceClock$.subscribe();
+  // }
 
-  pararSubscriptionClock() {
-    this.subscriptionClock.unsubscribe();
-  }
+  // pararSubscriptionClock() {
+  //   this.subscriptionClock.unsubscribe();
+  // }
 
   actualizarMarcador() {
     if (this.myPositionMarker != null) {

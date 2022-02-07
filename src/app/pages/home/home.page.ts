@@ -47,16 +47,15 @@ export class HomePage implements OnInit, OnDestroy {
   loading: any;
 
   constructor(
-    private database: DatabaseService,
     private vpService : VisitPlaceService,
     private geolocationService: GeolocationService,
     private networkService: NetworkService,
     private loadingCtrl: LoadingController,
     private browser: InAppBrowser,
   ) {
-    this.geolocationService.iniciarSubscriptionClock();
-    this.geolocationService.iniciarSubscriptionMatch();
-    this.posicion$ = this.geolocationService.getPosicionActual$();
+    // this.geolocationService.iniciarSubscriptionClock();
+    // this.geolocationService.iniciarSubscriptionMatch();
+    // this.posicion$ = this.geolocationService.getPosicionActual$();
   }
 
   // su = this.database

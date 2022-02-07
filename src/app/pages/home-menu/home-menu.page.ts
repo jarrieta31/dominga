@@ -31,8 +31,8 @@ export class HomeMenuPage {
     private geolocationSvc: GeolocationService,
     public alertController: AlertController
   ) {
-    this.geolocationSvc.iniciarSubscriptionClock();
-    this.geolocationSvc.iniciarSubscriptionMatch();
+    // this.geolocationSvc.iniciarSubscriptionClock();
+    // this.geolocationSvc.iniciarSubscriptionMatch();
   }
 
   async presentAlert() {
