@@ -93,7 +93,7 @@
         class="sugerencia"
         (click)="getPlace(sug.id)"
         *ngFor="let sug of near"
-        href="place-selected/{{sug.id}}"
+        [routerLink]="['/place-selected',sug.id]"
       >
         <div class="sug">
           <img class="sug_img" src="{{ sug.image.url }}" alt="" />
