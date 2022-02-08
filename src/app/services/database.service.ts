@@ -123,10 +123,10 @@ export class DatabaseService {
     _txt = text.replace(/<[^>]*>?/g, '');
     /*x(?=y) Aserción anticipada: Coincide con "x" solo si "x" va seguida de "y".*/
     /*(?<=y)x  Aserción de búsqueda inversa: coincide con "x" solo si "x" está precedida por "y". */
-    txt = _txt.replace(/(?<=&#)10;/g, '');
-    _txt = txt.replace(/(?<=&#)\d\d\d;/g, '');
-    txt = _txt.replace(/[&#]/g, '');
-    return txt;
+    // txt = _txt.replace(/(?<=&#)10;/g, '');
+    // _txt = txt.replace(/(?<=&#)\d\d\d;/g, '');
+    // txt = _txt.replace(/[&#]/g, '');
+    return _txt;
 }
     // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
     /**

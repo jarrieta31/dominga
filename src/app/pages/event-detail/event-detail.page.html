@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="descripcion" id="description-event">
+    <div class="descripcion" id="description-event" [innerHTML]="descripcion">
       {{descripcion}}&nbsp;<a *ngIf="descripcion.length > 250">Ver más</a>
     </div>
   </div>
