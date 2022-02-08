@@ -273,7 +273,7 @@ export class GeolocationService {
   }
 
   //Compruebe si la aplicación tiene permiso de acceso GPS
-  checkGPSPermission() {
+  checkGPSPermission() { 
     this.androidPermissions
       .checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
       .then(

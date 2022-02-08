@@ -73,10 +73,14 @@ export class PlacePage {
   isOpenType: boolean = false;
   /**se guardan los sliders de la pantalla lugares */
   sliderPlace: Slider[] = [];
-
-  dist: number = this.databaseSvc.selectionDistance;
-  dep: String = this.databaseSvc.selectionDepto;
-
+  /**filtro seleccionado, distancia o departamento */
+  dist: number = null;
+  dep: String = null;
+  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
+  checkDistance: boolean = false;
+  /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
+  msgEmptyPlace: String = null;
+  /**formulario que obtiene datos para filtrar */
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
     tipo: ["", Validators.required],
@@ -201,19 +205,32 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    if (
+      localStorage.getItem("deptoActivo") != undefined &&
+      localStorage.getItem("deptoActivo") != null
+    ) {
+      this.dist = null;
+      this.dep = localStorage.getItem("deptoActivo");
+      this.msgEmptyPlace =
+        "No hay lugares para mostrar en el departamento de " + this.dep;
+    } else if (
+      localStorage.getItem("distanceActivo") != undefined &&
+      localStorage.getItem("distanceActivo") != null
+    ) {
+      this.dep = null;
+      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.msgEmptyPlace =
+        "No hay lugares para mostrar en el rango de " + this.dist + " km";
+    }
+
     this.show("Cargando lugares...");
 
-    this.dist = this.databaseSvc.selectionDistance;
-    this.dep = this.databaseSvc.selectionDepto;
-
-    if (this.databaseSvc.selectionDepto != this.currentDepto) {
-      this.currentDepto = this.databaseSvc.selectionDepto;
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
       this.dataForm = "";
     }
 
     this.unsubscribe$ = new Subject<void>();
-    // this.isFilterLocation = false;
-    // this.isFilterType = false;
     this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
@@ -226,12 +243,13 @@ export class PlacePage {
       });
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      //this.places = [];
       this.places = res;
     });
 
     setTimeout(() => {
-      if(this.places.length == 0) this.loading.dismiss();
+      if (this.places.length == 0) this.loading.dismiss();
+      else if (this.dep == null && this.checkDistance == false) this.loading.dismiss();
+      
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
@@ -265,6 +283,12 @@ export class PlacePage {
                   calcDist.distancia = placeDistance;
                   calcDist.hora = String(this.hora + " h");
                   calcDist.minuto = String(this.minuto + " min");
+
+                  if (this.dist != null) {
+                    if (this.dist >= calcDist.distanciaNumber) {
+                      this.checkDistance = true;
+                    }
+                  } else this.checkDistance = true;
                 });
             });
 
@@ -306,7 +330,9 @@ export class PlacePage {
     this.isFilterType = false;
     this.isOpenLocation = false;
     this.isOpenType = false;
+    this.checkDistance = false;
   }
+
   /**Contador de visitas de Lugares */
   sumaVisitaLugar(lugar_id: string) {
     this.visitPlaceSvc.contadorVistasPlace(lugar_id);

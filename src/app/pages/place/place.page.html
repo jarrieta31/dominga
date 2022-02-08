@@ -121,15 +121,15 @@
   </div>
 
   <div class="cards">
-    <div class="empty" *ngIf="places.length == 0">
+    <div class="empty" *ngIf="(checkDistance == false && dep == null) || places.length == 0">
       <div class="text_empty">
-        No hay lugares para el departamento seleccionado
+        {{ msgEmptyPlace }}
       </div>
       <i class="far fa-sad-tear icon_empty"></i>
     </div>
     <ng-container *ngFor="let item of places | filterPlaces:dataForm">
       <ion-card
-        *ngIf="(item.distanciaNumber <= dist) || dep != null"
+        *ngIf="(item.distanciaNumber <= dist || dep != null) && checkDistance"
         id="{{ item.id }}"
         (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
         [routerLink]="['/place-selected', item.id]"
