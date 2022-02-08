@@ -46,14 +46,26 @@ reproducirDescripcion( texto : string ){
     this.spUttData.text = this.limpiarTexto( texto );
 /*se suscribe al observable onend$ que emite un valor cuando es invocado por el
   evento onend(). ver SpeechSyntesis*/  
-    this.onendsuscription = this.ttsSvc.onend$.subscribe(onend => {
-      if(!onend){
-        this.speaking = onend;
-        this.paused   = onend;
-        this.eliminarSuscripcion();
-      }
-    })
+    this.onEndSuscription();
     this.ttsSvc.reproducir(this.spUttData);
+}
+/**
+ * Se suscribe al observable onend$
+ * @returns Boolean 
+ * retorna el valor de Subscription.closed 
+ */
+onEndSuscription(){
+  this.onendsuscription = this.ttsSvc.onend$.subscribe((onend:boolean) => {
+    if(!onend){
+      this.speaking = onend;
+      this.paused   = onend;
+      this.eliminarSuscripcion();
+    }
+  }, error => { console.error(`ttsComponent::onEnSuscirption::hubo un error en la suscripcion: ${error}`);
+  }, complete => {
+    console.log(complete)
+    return this.onendsuscription.closed;
+  })
 }
 /**Elimina la suscripcion al observable onend$ una vez que finaliza la 
  * reproduccion de un audio */

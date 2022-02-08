@@ -113,6 +113,16 @@ export class EventsPage {
     spaceBetween: 0,
     autoplay: true,
   };
+  /**para decodificar texto en base64 */
+  decodeDescEventos(){
+    this.eventos.forEach(ev => {
+      console.log(`descEnCode:: ${ev.descripcion}`);
+      const descripcion = atob(ev.descripcion);
+      ev.descripcion = descripcion;
+      console.log(`desc:: ${ev.descripcion}`);
+
+    })
+  }
 
   /**
    * Muestra el modal con descripción más detallada del evento seleccionado

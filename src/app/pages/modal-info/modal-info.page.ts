@@ -44,9 +44,11 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.placeSvc.place_selected.pipe(takeUntil(this.unsubscribe$)).subscribe( res => this.place = res);
+/** Funcion que se suscribe al valor de la url. Funcionalidad: TextToSpeech */
         this.urlSuscribe();
-
+        
+        this.placeSvc.place_selected.pipe(takeUntil(this.unsubscribe$)).subscribe( res => this.place = res);
+        
         if (this.place.web == null) {
             let elem: HTMLElement = document.getElementById('web');
             elem.setAttribute("style", "display:none");
@@ -98,7 +100,7 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     urlSuscribe(){
         this.urlSuscription = this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(( event ) => {
             if( event instanceof NavigationEnd ){
-                if( this.tts.enreproduccion && event.url.search('descripcion') == -1) 
+                if( this.tts.enReproduccion() && event.url.search('descripcion') == -1) 
                     this.tts.detener();
                 this.currentUrl = event.url;
                 }

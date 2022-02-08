@@ -81,7 +81,10 @@ export class TextToSpeechService  {
     }
   }
   
-  get enreproduccion(){return this.spSynt.speaking}
+  enReproduccion(){
+    console.log(this.spSynt.speaking);
+    
+    return this.spSynt.speaking}
 
   pausar(){this.spSynt.pause();}
   
