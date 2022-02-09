@@ -27,24 +27,28 @@ ion-img {
 
 ion-title {
     color: #fff;
-    font-weight: 700;
+    font-weight: 300;
+    font-family: "Poppins", sans-serif;
 }
 
 h2 {
     font-weight: 700;
-    color: #9A9A9A;
+    color: #6b6b6b;
+    font-family: "Poppins", sans-serif;
 }
 
 h3 {
-    font-weight: bold;
+  font-weight: 300;
     color: var(--ion-color-dark);
     font-size: 80%;
+    font-family: "Poppins", sans-serif;
 }
 
-span {
-    font-weight: bold;
+span, p {
+  font-weight: 300;
     color: var(--ion-color-dark);
     font-size: 90%;
+    font-family: "Poppins", sans-serif;
 }
 
 .padre {

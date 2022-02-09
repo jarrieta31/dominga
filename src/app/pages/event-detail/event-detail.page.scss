@@ -6,6 +6,11 @@
   padding: 0;
 }
 
+ion-title {
+  font-weight: 300;
+  font-family: "Poppins", sans-serif;
+}
+
 .padre {
   width: 100%;
   height: auto;
@@ -43,11 +48,14 @@
 .div-hora {
   padding-bottom: 10px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  color: #6b6b6b;
 }
 
 .div-ubicacion {
   text-decoration: underline;
   color: #1142a6;
+  font-family: "Poppins", sans-serif;
 }
 
 .fecha,
@@ -70,11 +78,13 @@
   margin-right: 15px !important;
   color: rgb(5, 153, 49);
   font-size: 1.2em;
+  font-family: "Poppins", sans-serif;
 }
 
 .dir,
 .fecha-hora_div {
   font-size: 0.8em;
+  font-family: "Poppins", sans-serif;
 }
 
 .descripcion {
@@ -87,6 +97,7 @@
   font-family: Barlow;
   font-size: 12px;
   line-height : 17px;
+  font-family: "Poppins", sans-serif;
 }
 
 .ticket {
@@ -123,16 +134,20 @@
 .entradas_div {
   font-size: 0.6em;
   margin-top: 2px;
+  font-family: "Poppins", sans-serif;
 }
 
 .precios_div {
   font-size: 1.3em;
   font-weight: bold;
+  font-family: "Poppins", sans-serif;
+  color: #6b6b6b;
 }
 
 .puntos-venta {
   color: #fff;
   font-weight: 700;
+  font-family: "Poppins", sans-serif;
 }
 
 a {
@@ -159,6 +174,7 @@ li {
   padding: 15px;
   width: 23%;
   border-radius: 10px;
+  font-family: "Poppins", sans-serif;
 }
 
 .count-bg-one {
@@ -193,4 +209,8 @@ li {
   font-size: 2.5em;
   font-weight: bold;
   color: #fff;
+}
+
+.raduis {
+  font-family: "Poppins", sans-serif;
 }

@@ -15,7 +15,8 @@ ion-img {
 
 ion-title {
   color: #fff;
-  font-weight: 700;
+  font-weight: 300;
+  font-family: "Poppins", sans-serif;
 }
 
 ion-select,
@@ -77,21 +78,26 @@ ion-chip {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-family: "Poppins", sans-serif;
 }
 
 .fecha {
   font-weight: bold;
   color: #e76c2e;
   font-size: 0.7em;
+  font-family: "Poppins", sans-serif;
 }
 
 .titulo {
   font-weight: bold;
   font-size: 1em;
+  color: #6b6b6b;
+  font-family: "Poppins", sans-serif;
 }
 
 .descripcion {
   font-size: 0.8em;
+  font-family: "Poppins", sans-serif;
 }
 
 .img-elem {
