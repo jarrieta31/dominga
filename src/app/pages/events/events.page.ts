@@ -6,7 +6,6 @@ import { DatabaseService } from "src/app/services/database.service";
 import { BehaviorSubject, Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { EventModalComponent } from "../event-modal/event-modal.component";
 import { takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
@@ -80,7 +79,8 @@ export class EventsPage {
 
     this.eventosSuscription = this.dbService
       .getObservable()
-      .subscribe((eventos) => (this.eventos = eventos));
+      .subscribe((eventos) => {(this.eventos = eventos)
+      console.log(eventos)});
 
     if (this.eventos.length > 0) {
       if (this.eventos[0].departamento != this.dbService.selectionDepto) {
@@ -138,8 +138,11 @@ export class EventsPage {
     titulo: string,
     descripcion: string,
     imagen: string,
-    lugar: string
+    lugar: string,
+    latitud: number,
+    longitud: number
   ) {
+    
     if (descripcion.length > 250) {
       var desc = descripcion.substring(0, 250) + " ...";
     } else {
@@ -161,6 +164,8 @@ export class EventsPage {
         descripcion_completa: descripcion,
         imagen: imagen,
         lugar: lugar,
+        latitud: latitud,
+        longitud: longitud
       },
     });
 
@@ -332,21 +337,6 @@ export class EventsPage {
       eventos_xlocalidad = eventos.filter((ev) => ev.localidad == localidad);
     }
     return eventos_xlocalidad;
-  }
-
-  async modalDate(event) {
-    console.log(event);
-
-    const modal = await this.modalCtrl.create({
-      component: EventModalComponent,
-      componentProps: {
-        nombre: "ramon",
-      },
-    });
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-    console.log(data);
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 }

@@ -37,14 +37,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/art-culture/art-culture.module').then( m => m.ArtCulturePageModule)
   },
   {
-    path: 'guided-visits',
-    loadChildren: () => import('./pages/guided-visits/guided-visits.module').then( m => m.GuidedVisitsPageModule)
-  },
-  {
-    path: 'sj-events',
-    loadChildren: () => import('./pages/sj-events/sj-events.module').then( m => m.SjEventsPageModule)
-  },
-  {
     path: 'descripcion/:id',
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
   },

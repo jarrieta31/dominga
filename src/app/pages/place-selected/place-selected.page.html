@@ -64,25 +64,26 @@
     <div class="divc">
       <div class="iconos">
         <div class="iconAuto" *ngIf="place.auto == true">
-          <i class="fas fa-car"></i>
+          <ion-icon name="car-sport-outline"></ion-icon>
         </div>
         <div class="iconEstilos" *ngIf="place.bicicleta == true">
-          <i class="fas fa-bicycle"></i>
+          <ion-icon name="bicycle-outline"></ion-icon>
         </div>
         <div class="iconEstilos" *ngIf="place.caminar == true">
-          <i class="fas fa-running"></i>
+          <ion-icon name="walk-outline"></ion-icon>
         </div>
         <!-- <div id="dist">
                   <div>{{ distancia | formatDistancia }}</div>                 
               </div> -->
       </div>
-      <p class="text" id="place-description">
-        {{place.descripcionCorta}}<a
-          class="verMas"
-          [routerLink]="['/descripcion', place.id]"
-          >Ver más</a
-        >
+      <p
+        class="text"
+        id="place-description"
+        [innerHTML]="place.descripcionCorta"
+      >
+        
       </p>
+      <a class="verMas" [routerLink]="['/descripcion', place.id]">Ver más</a>
     </div>
     <div class="divd">
       <div id="mapaBox"></div>

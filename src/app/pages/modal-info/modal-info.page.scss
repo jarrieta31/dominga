@@ -1,5 +1,7 @@
 .texto {
     margin: 6%;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
 }
 
 ion-grid {
@@ -33,9 +35,13 @@ ion-grid {
     padding: 3%
 }
 
-i {
+ion-icon {
     color: var(--ion-color-light) !important;
     font-size: 1.5rem !important;
+}
+
+.icon-fb {
+    border-radius: 50%;
 }
 
 .access {
@@ -43,5 +49,4 @@ i {
     margin-right: 3%;
     font-size: 1.0rem !important;
     color: var(--ion-color-back) !important;
-
   }

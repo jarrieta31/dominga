@@ -1,67 +1,77 @@
 <ion-header>
-    <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="places/{{place.id}}" color="back"></ion-back-button>
-        </ion-buttons>
-        <ion-title color="back">
-                {{ place.nombre }}
-        </ion-title>
-    </ion-toolbar>
-    
-    <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="places/{{place.id}}" color="back"></ion-back-button>
-        </ion-buttons>
-        <ion-title color="back">
-                {{ place.nombre }}
-        </ion-title>
-    </ion-toolbar>
+  <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="places/{{place.id}}"
+        color="back"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back"> {{ place.nombre }} </ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="places/{{place.id}}"
+        color="back"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back"> {{ place.nombre }} </ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <!-- Botones de reproduccion Text To Speech -->
-    <app-text-to-speech [descripcion]="place.descripcion" ></app-text-to-speech>
+  <!-- Botones de reproduccion Text To Speech -->
+  <app-text-to-speech [descripcion]="place.descripcion"></app-text-to-speech>
 
-    <ion-text>
-        <div class="texto"  [innerHTML]="place.descripcion"></div>
-    </ion-text>
+  <ion-text>
+    <div class="texto" [innerHTML]="place.descripcion"></div>
+  </ion-text>
 
-    <ion-grid>
-        <ion-row>
-            <ion-col id="web">
-                <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="place.web?.length > 0">
-                        <div (click)="openWeb()"><i class="fas fa-globe"></i></div>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col id="facebook">
-                <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="place.facebook?.length > 0">
-                        <div (click)="openFacebook()"><i class="fab fa-facebook"></i></div>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col id="instagram">
-                <div class="ion-text-center">
-                    <div class="circulo_red" *ngIf="place.instagram?.length > 0">
-                        <a href="{{ place.instagram }}"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col id="whatsapp">
-                <div class="ion-text-center" *ngIf="place.whatsapp?.length > 0">
-                    <div class="circulo_red_wpp">
-                        <a href="{{ place.whatsapp }}"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col id="phone">
-                <div class="ion-text-center" *ngIf="place.telefonos?.length > 0">
-                    <div class="circulo_red" (click)="callPhone()">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                </div>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col id="web">
+        <div class="ion-text-center">
+          <div class="circulo_red" *ngIf="place.web?.length > 0">
+            <div (click)="openWeb()">
+              <ion-icon name="globe-outline"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col id="facebook">
+        <div class="ion-text-center">
+          <div class="circulo_red" *ngIf="place.facebook?.length > 0">
+            <div (click)="openFacebook()">
+              <ion-icon class="icon-fb" name="logo-facebook"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col id="instagram">
+        <div class="ion-text-center">
+          <div class="circulo_red" *ngIf="place.instagram?.length > 0">
+            <a href="{{ place.instagram }}"
+              ><ion-icon name="logo-instagram"></ion-icon
+            ></a>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col id="whatsapp">
+        <div class="ion-text-center" *ngIf="place.whatsapp?.length > 0">
+          <div class="circulo_red_wpp">
+            <a href="{{ place.whatsapp }}"
+              ><ion-icon name="logo-whatsapp"></ion-icon
+            ></a>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col id="phone">
+        <div class="ion-text-center" *ngIf="place.telefonos?.length > 0">
+          <div class="circulo_red" (click)="callPhone()">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

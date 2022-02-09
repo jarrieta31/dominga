@@ -150,7 +150,7 @@
     <ion-item
     *ngFor="let item of eventos | filterEvents1:dataform "
       class="event"
-      (click)="openModalDetailEvent(item.id, item.fechaInicio, item.nombre, item.descripcion, item['imagen'].url, item.lugar)"
+      (click)="openModalDetailEvent(item.id, item.fechaInicio, item.nombre, item.descripcion, item['imagen'].url, item.lugar, item['ubicacion'].lat, item['ubicacion'].lng)"
     >
       <ion-avatar item-start class="image-event">
         <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>

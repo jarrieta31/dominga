@@ -16,6 +16,8 @@ export class EventDetailPage implements OnInit {
   @Input() descripcion: string;
   @Input() imagen: string;
   @Input() lugar: string;
+  @Input() latitud: number;
+  @Input() longitud: number;
 
   _second = 1000;
   _minute = this._second * 60;
@@ -67,8 +69,11 @@ export class EventDetailPage implements OnInit {
 
   openMap() {
     this.browser.create(
-      "https://www.google.com/maps/search/?api=1&query=" + this.lugar,
-      "_system"
+      "https://www.google.com/maps/search/?api=1&query=" +
+        this.latitud +
+        "," +
+        this.longitud,
+        "_system"
     );
   }
 
