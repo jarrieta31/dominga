@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { timeStamp } from 'console';
 import { Subscription } from 'rxjs';
-import { PlaceService } from 'src/app/services/database/place.service';
 import { TextToSpeechService } from 'src/app/services/text-to-speech.service';
 import { TipoSputtr } from 'src/app/shared/tipo-sputtr';
 

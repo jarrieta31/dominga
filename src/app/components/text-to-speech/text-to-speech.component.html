@@ -1,6 +1,8 @@
 
 
-<ion-grid class="ion-margin-top ion-margin-start:0px " >
+<ion-grid>
+  <p class="play" *ngIf="!speaking || paused" >Reproducir audio</p>
+  <p class="play" *ngIf="speaking && !paused" >Pausar audio</p>
   <ion-buttons *ngIf="!speaking && !paused" >
     <ion-button
       (click)=" reproducirDescripcion(descripcion);
@@ -11,7 +13,8 @@
     </ion-button>
     <ion-button>
       <i color="back"  class="fi fi-rr-file-music"></i>
-    </ion-button> <p>{{ speaking }}</p><p>{{ paused }}</p> 
+    </ion-button> 
+    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
   </ion-buttons>
 
   <ion-buttons *ngIf="speaking && !paused" >
@@ -27,7 +30,8 @@
                 paused = false; "
     >
       <i color="back"  class="fi fi-rr-stop"></i>
-    </ion-button>  <p>{{ speaking }}</p><p>{{ paused }}</p> 
+    </ion-button>  
+    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
   </ion-buttons>
 
   <ion-buttons *ngIf="speaking && paused" >
@@ -43,6 +47,7 @@
                 paused = false; "
     >
       <i color="back"  class="fi fi-rr-stop"></i>
-    </ion-button>  <p>{{ speaking }}</p><p>{{ paused }}</p> 
+    </ion-button>  
+    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
   </ion-buttons>
 </ion-grid>
