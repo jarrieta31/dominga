@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Place } from "src/app/shared/place";
-import { DatabaseService } from "../database.service";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { GeolocationService } from "../geolocation.service";
@@ -187,7 +186,6 @@ export class PlaceService {
   ];
 
   constructor(
-    private databaseSvc: DatabaseService,
     private afs: AngularFirestore,
     private geolocationSvc: GeolocationService
   ) {
@@ -199,10 +197,11 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces() {
+
     let checkDepto = this.geolocationSvc.currentDepto;
     console.log(this.save_depto);
-    this.depto = this.databaseSvc.selectionDepto;
-    this.distance = this.databaseSvc.selectionDistance;
+    this.depto = localStorage.getItem("deptoActivo");
+    this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];
     this.distancePlaces = [];
 

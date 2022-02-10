@@ -43,7 +43,7 @@ export class GeolocationService {
 
   featureDepto: any[] = [];
 
-  constructor( 
+  constructor(
     private androidPermissions: AndroidPermissions,
     private http: HttpClient,
     private geolocation: Geolocation,
@@ -52,43 +52,42 @@ export class GeolocationService {
     this.checkGPSPermission();
     //Observable que obtiene los pulsos y obtiene la posicion
     //this.sourceClock$ = timer(500, 36000).pipe(
-      //tap((clock) => {
-        this.geolocation.watchPosition
-          ({ timeout: 30000 })
-          .subscribe((resp) => {
-            this.gps = true;
-            this.posicion = {
-              longitud: resp.coords.longitude,
-              latitud: resp.coords.latitude,
-            };
-            this.actualizarPosicion$({
-              longitud: resp.coords.longitude,
-              latitud: resp.coords.latitude,
+    //tap((clock) => {
+    this.geolocation.watchPosition({ timeout: 30000 }).subscribe((resp) => {
+      console.log("mi posicion", resp.coords);
+      if (resp.coords != null && resp.coords != undefined) {
+        this.gps = true;
+        this.posicion = {
+          longitud: resp.coords.longitude,
+          latitud: resp.coords.latitude,
+        };
+        this.actualizarPosicion$({
+          longitud: resp.coords.longitude,
+          latitud: resp.coords.latitude,
+        });
+        this.getLocation(resp.coords.longitude, resp.coords.latitude).subscribe(
+          (dto: any) => {
+            this.featureDepto = [];
+            dto.features.forEach((res: any) => {
+              this.featureDepto.push(res.text);
             });
-            if (resp != null) {
-              this.getLocation(resp.coords.longitude,  resp.coords.latitude).subscribe(
-                (dto: any) => {
-                  this.featureDepto = [];
-                  dto.features.forEach((res: any) => {
-                    this.featureDepto.push(res.text);
-                  });
-                  let featureLen = this.featureDepto.length;
-                  this.currentDepto = this.featureDepto[featureLen - 2];
-                  console.log(this.currentDepto);
-                }
-              );
-            }
-            this.actualizarMarcador();
-          })
-          // .catch((error) => {
-          //   //this.posicion = environment.casaDominga;
-          //   this.actualizarPosicion$(null);
-          //   if (this.myPositionMarker != null) this.myPositionMarker.remove();
-          //   this.gps = false;
-          //   console.log("Error al obtener la ubicación" + error);
-          // });
-      //}),
-      //share()
+            let featureLen = this.featureDepto.length;
+            this.currentDepto = this.featureDepto[featureLen - 2];
+            console.log(this.currentDepto);
+          }
+        );
+      }
+      this.actualizarMarcador();
+    });
+    // .catch((error) => {
+    //   //this.posicion = environment.casaDominga;
+    //   this.actualizarPosicion$(null);
+    //   if (this.myPositionMarker != null) this.myPositionMarker.remove();
+    //   this.gps = false;
+    //   console.log("Error al obtener la ubicación" + error);
+    // });
+    //}),
+    //share()
     //);
 
     // this.sourceMatch$ = timer(1000, 20000).pipe(
@@ -273,7 +272,7 @@ export class GeolocationService {
   }
 
   //Compruebe si la aplicación tiene permiso de acceso GPS
-  checkGPSPermission() { 
+  checkGPSPermission() {
     this.androidPermissions
       .checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
       .then(

@@ -318,6 +318,7 @@ export class PlacePage {
             //   options
             // );
           }
+          else this.checkDistance = true;
         });
     }, 2000);
   }
