@@ -4,13 +4,13 @@ import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
-import { Observable, BehaviorSubject, Subscription } from "rxjs";
+import { Observable, BehaviorSubject, Subscription, timer } from "rxjs";
 import { Place } from "../shared/place";
 import { TwoPoints } from "../shared/two-points";
 import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
@@ -54,36 +54,42 @@ export class GeolocationService {
     //Observable que obtiene los pulsos y obtiene la posicion
     //this.sourceClock$ = timer(500, 36000).pipe(
     //tap((clock) => {
-    this.geolocation
-      .watchPosition({
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      }).pipe(filter(p => p.coords != undefined))
-      .subscribe((resp) => {
-          this.gps = true;
-          this.posicion = {
-            longitud: resp.coords.longitude,
-            latitud: resp.coords.latitude,
-          };
-          this.actualizarPosicion$({
-            longitud: resp.coords.longitude,
-            latitud: resp.coords.latitude,
-          });
-          this.getLocation(
-            resp.coords.longitude,
-            resp.coords.latitude
-          ).subscribe((dto: any) => {
-            this.featureDepto = [];
-            dto.features.forEach((res: any) => {
-              this.featureDepto.push(res.text);
+      this.sourceClock$ = timer(500, 36000).pipe(tap( () => {
+        this.geolocation
+        .watchPosition({
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }).pipe(filter(p => p.coords != undefined))
+        .subscribe((resp) => {
+            this.gps = true;
+            this.posicion = {
+              longitud: resp.coords.longitude,
+              latitud: resp.coords.latitude,
+            };
+            this.actualizarPosicion$({
+              longitud: resp.coords.longitude,
+              latitud: resp.coords.latitude,
             });
-            let featureLen = this.featureDepto.length;
-            this.currentDepto = this.featureDepto[featureLen - 2];
-            console.log(this.currentDepto);
-          });
-        this.actualizarMarcador();
-      });
+            this.getLocation(
+              resp.coords.longitude,
+              resp.coords.latitude
+            ).subscribe((dto: any) => {
+              this.featureDepto = [];
+              dto.features.forEach((res: any) => {
+                this.featureDepto.push(res.text);
+              });
+              let featureLen = this.featureDepto.length;
+              this.currentDepto = this.featureDepto[featureLen - 2];
+              console.log(this.currentDepto);
+            });
+          this.actualizarMarcador();
+        });
+      })
+        
+      )
+   
+    
     // .catch((error) => {
     //   //this.posicion = environment.casaDominga;
     //   this.actualizarPosicion$(null);
@@ -170,13 +176,13 @@ export class GeolocationService {
     return this.lugarCercano$.asObservable();
   }
 
-  iniciarSubscriptionMatch() {
-    this.subscriptionMatch = this.sourceMatch$.subscribe();
-  }
+  // iniciarSubscriptionMatch() {
+  //   this.subscriptionMatch = this.sourceMatch$.subscribe();
+  // }
 
-  pararSubscriptionMatch() {
-    this.subscriptionMatch.unsubscribe();
-  }
+  // pararSubscriptionMatch() {
+  //   this.subscriptionMatch.unsubscribe();
+  // }
 
   iniciarSubscriptionClock() {
     this.subscriptionClock = this.sourceClock$.subscribe();

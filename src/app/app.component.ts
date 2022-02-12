@@ -31,7 +31,6 @@ export class AppComponent implements OnInit {
   ) {
     this.initializeApp();
     this.geolocationSvc.iniciarSubscriptionClock();
-    this.geolocationSvc.iniciarSubscriptionMatch();
   }
 
   ngOnInit(): void {
