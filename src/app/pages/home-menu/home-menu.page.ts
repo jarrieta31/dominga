@@ -30,10 +30,7 @@ export class HomeMenuPage {
     private dbService: DatabaseService,
     private geolocationSvc: GeolocationService,
     public alertController: AlertController
-  ) {
-    // this.geolocationSvc.iniciarSubscriptionClock();
-    // this.geolocationSvc.iniciarSubscriptionMatch();
-  }
+  ) {}
 
   async presentAlert() {
     const alert = await this.alertController.create({
@@ -89,7 +86,7 @@ export class HomeMenuPage {
       localStorage.removeItem("distanceActivo");
       this.dbService.selectionDistance = null;
       this.distance = false;
-      this.depto = false
+      this.depto = false;
       this.distanceSelected = null;
     } else if (distance != null && distance != undefined) {
       this.distanceSelected = distance;

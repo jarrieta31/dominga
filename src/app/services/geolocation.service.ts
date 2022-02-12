@@ -10,6 +10,7 @@ import { TwoPoints } from "../shared/two-points";
 import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
@@ -34,11 +35,11 @@ export class GeolocationService {
   latCenter: number = 0;
   longCenter: number = 0;
   timetest: any;
-  //sourceClock$: Observable<any>;
+  sourceClock$: Observable<any>;
   sourceGpsSubject$ = new BehaviorSubject(null);
   observerGps: any;
   public gps: boolean = false;
-  //subscriptionClock: any;
+  subscriptionClock: any;
   public currentDepto: String = null;
 
   featureDepto: any[] = [];
@@ -53,20 +54,26 @@ export class GeolocationService {
     //Observable que obtiene los pulsos y obtiene la posicion
     //this.sourceClock$ = timer(500, 36000).pipe(
     //tap((clock) => {
-    this.geolocation.watchPosition({ timeout: 30000 }).subscribe((resp) => {
-      console.log("mi posicion", resp.coords);
-      if (resp.coords != null && resp.coords != undefined) {
-        this.gps = true;
-        this.posicion = {
-          longitud: resp.coords.longitude,
-          latitud: resp.coords.latitude,
-        };
-        this.actualizarPosicion$({
-          longitud: resp.coords.longitude,
-          latitud: resp.coords.latitude,
-        });
-        this.getLocation(resp.coords.longitude, resp.coords.latitude).subscribe(
-          (dto: any) => {
+    this.geolocation
+      .watchPosition({
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }).pipe(filter(p => p.coords != undefined))
+      .subscribe((resp) => {
+          this.gps = true;
+          this.posicion = {
+            longitud: resp.coords.longitude,
+            latitud: resp.coords.latitude,
+          };
+          this.actualizarPosicion$({
+            longitud: resp.coords.longitude,
+            latitud: resp.coords.latitude,
+          });
+          this.getLocation(
+            resp.coords.longitude,
+            resp.coords.latitude
+          ).subscribe((dto: any) => {
             this.featureDepto = [];
             dto.features.forEach((res: any) => {
               this.featureDepto.push(res.text);
@@ -74,11 +81,9 @@ export class GeolocationService {
             let featureLen = this.featureDepto.length;
             this.currentDepto = this.featureDepto[featureLen - 2];
             console.log(this.currentDepto);
-          }
-        );
-      }
-      this.actualizarMarcador();
-    });
+          });
+        this.actualizarMarcador();
+      });
     // .catch((error) => {
     //   //this.posicion = environment.casaDominga;
     //   this.actualizarPosicion$(null);
@@ -165,21 +170,21 @@ export class GeolocationService {
     return this.lugarCercano$.asObservable();
   }
 
-  // iniciarSubscriptionMatch() {
-  //   this.subscriptionMatch = this.sourceMatch$.subscribe();
-  // }
+  iniciarSubscriptionMatch() {
+    this.subscriptionMatch = this.sourceMatch$.subscribe();
+  }
 
-  // pararSubscriptionMatch() {
-  //   this.subscriptionMatch.unsubscribe();
-  // }
+  pararSubscriptionMatch() {
+    this.subscriptionMatch.unsubscribe();
+  }
 
-  // iniciarSubscriptionClock() {
-  //   this.subscriptionClock = this.sourceClock$.subscribe();
-  // }
+  iniciarSubscriptionClock() {
+    this.subscriptionClock = this.sourceClock$.subscribe();
+  }
 
-  // pararSubscriptionClock() {
-  //   this.subscriptionClock.unsubscribe();
-  // }
+  pararSubscriptionClock() {
+    this.subscriptionClock.unsubscribe();
+  }
 
   actualizarMarcador() {
     if (this.myPositionMarker != null) {
