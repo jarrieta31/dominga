@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
     private geolocationSvc: GeolocationService
   ) {
     this.initializeApp();
-    this.geolocationSvc.iniciarSubscriptionClock();
   }
 
   ngOnInit(): void {
@@ -41,6 +40,9 @@ export class AppComponent implements OnInit {
       console.log(res);
       this.gps = res;
     });
+
+    this.geolocationSvc.checkGPSPermission();
+    this.geolocationSvc.iniciarSubscriptionClock();
 
     setTimeout(() => {
         this.unsubscribe$.next();

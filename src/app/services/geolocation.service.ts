@@ -50,15 +50,14 @@ export class GeolocationService {
     private geolocation: Geolocation,
     private locationAccuracy: LocationAccuracy
   ) {
-    this.checkGPSPermission();
     //Observable que obtiene los pulsos y obtiene la posicion
     //this.sourceClock$ = timer(500, 36000).pipe(
     //tap((clock) => {
-      this.sourceClock$ = timer(500, 36000).pipe(tap( () => {
+      this.sourceClock$ = timer(3500, 36000).pipe(tap( () => {
         this.geolocation
         .watchPosition({
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 1000,
           maximumAge: 0,
         }).pipe(filter(p => p.coords != undefined))
         .subscribe((resp) => {
