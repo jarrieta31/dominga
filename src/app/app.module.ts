@@ -59,7 +59,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     ReactiveFormsModule,
     ComponentsModule,    
 

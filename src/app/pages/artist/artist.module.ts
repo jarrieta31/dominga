@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ArtistPageRoutingModule } from './artist-routing.module';
 
 import { ArtistPage } from './artist.page';
-import { FilterEventPageModule } from '../filter-event/filter-event.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({

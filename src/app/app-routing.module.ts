@@ -5,14 +5,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { path: '', redirectTo: 'home-menu', pathMatch: 'full' },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'places/:id',
-    loadChildren: () => import('./pages/places/places.module').then( m => m.PlacesPageModule)
-  },
-  {
     path: 'map/:nombre',
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
   },
@@ -21,20 +13,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/information/information.module').then( m => m.InformationPageModule)
   },
   {
-    path: 'modal-banner',
-    loadChildren: () => import('./pages/modal-banner/modal-banner.module').then( m => m.ModalBannerPageModule)
-  },
-  {
     path: 'where-sleep',
     loadChildren: () => import('./pages/where-sleep/where-sleep.module').then( m => m.WhereSleepPageModule)
   },
   {
     path: 'where-eat',
     loadChildren: () => import('./pages/where-eat/where-eat.module').then( m => m.WhereEatPageModule)
-  },
-  {
-    path: 'art-culture',
-    loadChildren: () => import('./pages/art-culture/art-culture.module').then( m => m.ArtCulturePageModule)
   },
   {
     path: 'descripcion/:id',
