@@ -32,6 +32,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     autoplay: true,
   };
 
+  videos: any[] = [];
+
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
@@ -49,6 +51,14 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
 
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
+
+      if (this.place.videos.length > 0) {
+        this.videos = this.place.videos.filter(
+          (item: any) => item.url !== null
+        );
+      }
+      console.log(this.videos);
+
       this.placeSvc.getPlaceNear();
 
       this.near_places = this.placeSvc.near_places.subscribe((res) => {
@@ -116,6 +126,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
    * @param url - URL del video que se va a ejecutar
    */
   async verVideo(url: string) {
+    console.log(url);
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: "modal-video",

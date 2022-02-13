@@ -21,22 +21,17 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-fab
-    *ngIf="place.videos?.length > 0"
-    vertical="top"
-    horizontal="start"
-    slot="fixed"
-  >
+  <ion-fab *ngIf="videos.length > 0" vertical="top" horizontal="start" slot="fixed">
     <ion-fab-button color="danger">
       <ion-icon name="logo-youtube"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="bottom" class="lista_videos">
-      <ion-fab-button class="btn_video" *ngFor="let videos of place.videos">
-        <i
-          (click)="verVideo(videos.url)"
-          class="fas fa-video"
+      <ion-fab-button class="btn_video" *ngFor="let video of videos">
+        <ion-icon
+          (click)="verVideo(video.url)"
+          name="videocam-outline"
           style="font-size: 180%"
-        ></i>
+        ></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
@@ -80,9 +75,7 @@
         class="text"
         id="place-description"
         [innerHTML]="place.descripcionCorta"
-      >
-        
-      </p>
+      ></p>
       <a class="verMas" [routerLink]="['/descripcion', place.id]">Ver más</a>
     </div>
     <div class="divd">
