@@ -7,6 +7,9 @@ export interface DondeDormir {
   telefonos: Telefono;
   imagen: Imagen;
   publicado: boolean;
+  ubicacion: Posicion;
+  distancia?: string | number;
+  distanciaNumber: number;
 }
 
 export interface Imagen {
@@ -16,4 +19,9 @@ export interface Imagen {
 
 export interface Telefono {
   numero: string;
+}
+
+export interface Posicion {
+  lng: number;
+  lat: number;
 }

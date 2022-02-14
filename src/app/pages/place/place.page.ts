@@ -138,7 +138,7 @@ export class PlacePage {
     }
   }
 
-  /**endpoint de mapbox para calcular distancia entra dos puntos teniendo en cuenta las calles */
+  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
     latUser: number,

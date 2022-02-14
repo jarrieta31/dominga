@@ -2,7 +2,7 @@
   <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
     <ion-buttons slot="start">
       <ion-back-button
-        defaultHref="home"
+        (click)="irHome()"
         color="back"
         text=""
       ></ion-back-button>
@@ -12,7 +12,7 @@
   <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
     <ion-buttons slot="start">
       <ion-back-button
-        defaultHref="home"
+      (click)="irHome()"
         color="back"
         text=""
       ></ion-back-button>

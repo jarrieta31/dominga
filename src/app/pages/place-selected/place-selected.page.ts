@@ -57,8 +57,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
           (item: any) => item.url !== null
         );
       }
-      console.log(this.videos);
-
+    
       this.placeSvc.getPlaceNear();
 
       this.near_places = this.placeSvc.near_places.subscribe((res) => {
@@ -119,6 +118,10 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
       var src = $(this).attr("src");
       $("#foto").attr("src", src);
     });
+  }
+
+  irHome() {
+    this.router.navigate(['/tabs/place']);
   }
 
   /**

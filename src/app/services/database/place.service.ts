@@ -199,7 +199,6 @@ export class PlaceService {
   getPlaces() {
 
     let checkDepto = this.geolocationSvc.currentDepto;
-    console.log(this.save_depto);
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];
@@ -295,7 +294,6 @@ export class PlaceService {
           deptoSearch = false;
         }
       });
-      //console.log(this.distancePlaces);
       this.places.next(this.distancePlaces);
     }
   }

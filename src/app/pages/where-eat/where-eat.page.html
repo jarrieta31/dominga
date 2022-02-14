@@ -16,17 +16,25 @@
         <img class="imgSlider" src="{{item.imagen.url}}" />
       </ion-slide>
     </ion-slides>
-    
+
     <!-- filtro -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
-      <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label
+        *ngIf="isOpenLocation === false "
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenLocation"
+        class="open_acordeon"
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
     </div>
 
-    
-    <div *ngIf="isFilterLocation" >
-      <form [formGroup]="filterForm" class="form_filter" >
-  <!-- Filtro por Localidad  -->
+    <div *ngIf="isFilterLocation">
+      <form [formGroup]="filterForm" class="form_filter">
+        <!-- Filtro por Localidad  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
             <span *ngIf="isOpenLocation === false">Localidad</span>
@@ -35,7 +43,10 @@
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
             ></i>
-            <i *ngIf="isOpenLocation" class="fi fi-rr-angle-up icon_arrow open_acordeon"></i>
+            <i
+              *ngIf="isOpenLocation"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
           </div>
           <div *ngIf="isOpenLocation">
             <ion-list class="list_location">
@@ -54,47 +65,47 @@
                   *ngFor="let loc of localidades"
                 >
                   <ion-text>{{ loc }}</ion-text>
-                  <ion-radio
-                    slot="end"
-                    value="{{ loc }}"
-                  ></ion-radio>
+                  <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
           </div>
         </div>
-      <!-- filtro por Localidad -->
+        <!-- filtro por Localidad -->
       </form>
     </div>
   </div>
 
-  
   <ion-list class="lista">
-    <div class="empty" *ngIf="eat.length == 0">
+    <div class="empty" *ngIf="eat.length == 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-        No hay lugares para el departamento seleccionado
+        No hay lugares para mostrar con el filtro seleccionado
       </div>
     </div>
-    <ion-item *ngFor="let item of eat | filtroDondeComer:dataForm">
-      <div class="padre">
-        <div class="imagen">
-          <ion-avatar item-start>
-            <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
-          </ion-avatar>
+    <ng-container *ngFor="let item of eat | filtroDondeComer:dataForm">
+      <ion-item
+        *ngIf="(item.mostrar && checkDistance == 'FOUND') || (checkDistance === 'OK')"
+      >
+        <div class="padre">
+          <div class="imagen">
+            <ion-avatar item-start>
+              <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+            </ion-avatar>
+          </div>
+          <div class="info">
+            <ion-label>
+              <h2 id="eat-info">{{ item.nombre }}</h2>
+              <div class="infoAbajo">
+                <h3 id="eat-info">{{ item.direccion }} ({{item.distancia | formatDistancia}})</h3>
+                <p id="eat-info" *ngFor="let tel of item.telefonos">
+                  <span id="eat-info">Tel: </span>{{ tel.numero }}
+                </p>
+              </div>
+            </ion-label>
+          </div>
         </div>
-        <div class="info">
-          <ion-label>
-            <h2 id="eat-info">{{ item.nombre }}</h2>
-            <div class="infoAbajo">
-              <h3 id="eat-info">{{ item.direccion }}</h3>
-              <p id="eat-info" *ngFor="let tel of item.telefonos">
-                <span id="eat-info">Tel: </span>{{ tel.numero }}
-              </p>
-            </div>
-          </ion-label>
-        </div>
-      </div>
-    </ion-item>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>
