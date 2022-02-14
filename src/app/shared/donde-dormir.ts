@@ -10,6 +10,9 @@ export interface DondeDormir {
   ubicacion: Posicion;
   distancia?: string | number;
   distanciaNumber: number;
+  hora: string | number;
+  minuto: string | number;
+  mostrar?: boolean;
 }
 
 export interface Imagen {

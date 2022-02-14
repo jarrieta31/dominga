@@ -10,7 +10,6 @@ import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { States } from "src/app/shared/enum/states.enum";
-import { IfStmt } from "@angular/compiler";
 
 @Component({
   selector: "app-where-eat",

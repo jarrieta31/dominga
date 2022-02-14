@@ -69,32 +69,36 @@
     </div>
   </div>
 
-  <ion-list>
-    <div class="empty" *ngIf="sleep.length == 0">
+  <ion-list class="lista">
+    <div class="empty" *ngIf="sleep.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-        No hay lugares para el departamento seleccionado
+        No hay lugares para mostrar con el filtro seleccionado
       </div>
     </div>
-    <ion-item *ngFor="let item of sleep | filtroDondeDormir:dataForm">
-      <div class="padre">
-        <div class="imagen">
-          <ion-avatar item-start>
-            <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
-          </ion-avatar>
+    <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
+      <ion-item
+        *ngIf="(item.mostrar && checkDistance === 'FOUND') || (checkDistance === 'OK')"
+      >
+        <div class="padre">
+          <div class="imagen">
+            <ion-avatar item-start>
+              <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+            </ion-avatar>
+          </div>
+          <div class="info">
+            <ion-label>
+              <h2 id="eat-info">{{ item.nombre }}</h2>
+              <div class="infoAbajo">
+                <h3 id="eat-info">{{ item.direccion }} ({{item.distancia | formatDistancia}})</h3>
+                <p id="eat-info" *ngFor="let tel of item.telefonos">
+                  <span id="eat-info">Tel: </span>{{ tel.numero }}
+                </p>
+              </div>
+            </ion-label>
+          </div>
         </div>
-        <div class="info">
-          <ion-label>
-            <h2 id="sleep-info">{{ item.nombre }}</h2>
-            <div class="infoAbajo">
-              <h3 id="sleep-info">{{ item.direccion }}</h3>
-              <p id="sleep-info" *ngFor=" let tel of item.telefonos">
-                <span id="sleep-info">Tel: </span>{{ tel.numero }}
-              </p>
-            </div>
-          </ion-label>
-        </div>
-      </div>
-    </ion-item>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>
