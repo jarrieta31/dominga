@@ -49,9 +49,7 @@ export class MapPage implements OnInit, OnDestroy {
     //this.posicion$ = this.geolocationService.getPosicionActual$();
     if (this.geolocationService.posicion$.getValue() != null) {
       this.posicion = this.geolocationService.posicion$.getValue();
-    } else {
-      this.posicion = environment.casaDominga;
-    }
+    } 
   }
 
   async presentLoading() {
@@ -172,7 +170,7 @@ export class MapPage implements OnInit, OnDestroy {
             this.createMarker(posicionUser.longitud, posicionUser.latitud);
           }
           if (posicionUser != null && this.directions != null) {
-            this.presentLoading();
+            //this.presentLoading();
             this.actualizarMarcador(
               posicionUser.longitud,
               posicionUser.latitud

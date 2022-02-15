@@ -31,6 +31,7 @@ export class GeolocationService {
   distancia: number;
   lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
   posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
+  posicionGetCurrent$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
   posicion: Point = { longitud: 0, latitud: 0 };
   latCenter: number = 0;
   longCenter: number = 0;
@@ -55,12 +56,14 @@ export class GeolocationService {
     //tap((clock) => {
       this.sourceClock$ = timer(3500, 36000).pipe(tap( () => {
         this.geolocation
-        .watchPosition({
+        .getCurrentPosition({
           enableHighAccuracy: true,
           timeout: 1000,
           maximumAge: 0,
-        }).pipe(filter(p => p.coords != undefined))
-        .subscribe((resp) => {
+        })
+        .then((resp) => {
+          //filter(p => p.coords != undefined)
+          if(resp !== null){
             this.gps = true;
             this.posicion = {
               longitud: resp.coords.longitude,
@@ -82,7 +85,8 @@ export class GeolocationService {
               this.currentDepto = this.featureDepto[featureLen - 2];
               console.log(this.currentDepto);
             });
-          this.actualizarMarcador();
+            this.actualizarMarcador();
+          }
         });
       })
         
