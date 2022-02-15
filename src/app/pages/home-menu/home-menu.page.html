@@ -11,23 +11,23 @@
       <div class="filter_button">
         <ion-label
           (click)="seeDepto()"
-          *ngIf="depto || deptoSelected != null"
+          *ngIf="deptoSave !== null"
           class="depto_selected"
-          >departamento</ion-label
+          >{{ deptoSave }}</ion-label
         >
-        <ion-label (click)="seeDepto()" *ngIf="!depto && deptoSelected == null"
+        <ion-label (click)="seeDepto()" *ngIf="deptoSave === null"
           >departamento</ion-label
         >
         <img src="/assets/icon/exchange.png" alt="">
         <ion-label
           class="distance_selected"
           (click)="seeDistance()"
-          *ngIf="(distance || distanceSelected != null) && gps != null"
-          >distancia</ion-label
+          *ngIf="distanceSave !== null"
+          >{{ distanceSave }}</ion-label
         >
         <ion-label
           (click)="seeDistance()"
-          *ngIf="(!distance && distanceSelected == null) && gps != null"
+          *ngIf="distanceSave === null && gps != null"
           >distancia</ion-label
         >
       </div>

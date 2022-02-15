@@ -198,10 +198,10 @@ export class WhereSleepPage {
                   let distFormat: string | number, placeDistance: string;
                   if (this.distancia >= 1) {
                     distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
+                    placeDistance = "A " + distFormat;
                   } else {
                     distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
+                    placeDistance = "A " + distFormat;
                   }
 
                   calcDist.distanciaNumber = this.distancia;

@@ -21,6 +21,9 @@ export class HomeMenuPage {
 
   optionDsitance: number[] = [10, 25, 50, 75, 100, 150];
 
+  deptoSave: String = null;
+  distanceSave: String = null;
+
   gps: any = null;
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -84,15 +87,19 @@ export class HomeMenuPage {
       this.deptoSelected = depto;
       localStorage.setItem("deptoActivo", depto);
       localStorage.removeItem("distanceActivo");
-      this.dbService.selectionDistance = null;
+      this.deptoSave = depto;
+      this.distanceSave = null;
+      //this.dbService.selectionDistance = null;
       this.distance = false;
       this.depto = false;
       this.distanceSelected = null;
     } else if (distance != null && distance != undefined) {
       this.distanceSelected = distance;
+      this.deptoSave = null;
       localStorage.setItem("distanceActivo", distance.toString());
       localStorage.removeItem("deptoActivo");
-      this.dbService.selectionDepto = null;
+      this.distanceSave = distance.toString() + ' km';
+      //this.dbService.selectionDepto = null;
       this.depto = false;
       this.distance = false;
       this.deptoSelected = null;
@@ -116,6 +123,11 @@ export class HomeMenuPage {
     let deptoSave = localStorage.getItem("deptoActivo");
     let distanceSave = localStorage.getItem("distanceActivo");
 
+    if(distanceSave !== null) this.distanceSave = distanceSave + ' km';
+    else this.distanceSave = null;
+
+    this.deptoSave = deptoSave;
+    
     if (deptoSave != null && deptoSave != undefined) {
       this.dbService.selectionDepto = deptoSave;
       this.deptoSelected = this.dbService.selectionDepto;

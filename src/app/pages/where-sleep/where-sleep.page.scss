@@ -64,9 +64,15 @@ span, p {
 }
 
 .info {
-    width: 75%;
+    width: 68%;
     margin-left: 5%;
     padding: 3% 2% 2% 5%;
+}
+
+#eat-info {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .img-elem{
