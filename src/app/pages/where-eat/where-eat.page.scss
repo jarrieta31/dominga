@@ -9,7 +9,7 @@
 ion-avatar,
 ion-avatar > img {
   border-radius: 15% !important;
-  height: 95%;
+  height: auto;
   width: 100%;
 }
 
@@ -65,7 +65,15 @@ p {
 }
 
 .imagen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 25%;
+}
+
+small {
+  margin-top: 5px;
 }
 
 .info {
