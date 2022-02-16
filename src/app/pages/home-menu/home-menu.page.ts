@@ -5,6 +5,7 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { Departament } from "src/app/shared/departament";
 import { AlertController } from "@ionic/angular";
 import { takeUntil } from "rxjs/operators";
+import { PlaceService } from "src/app/services/database/place.service";
 
 @Component({
   selector: "app-home-menu",
@@ -32,8 +33,11 @@ export class HomeMenuPage {
   constructor(
     private dbService: DatabaseService,
     private geolocationSvc: GeolocationService,
-    public alertController: AlertController
-  ) {}
+    public alertController: AlertController,
+    private placeSvc : PlaceService
+  ) {
+    this.placeSvc.getPlaces();
+  }
 
   async presentAlert() {
     const alert = await this.alertController.create({
