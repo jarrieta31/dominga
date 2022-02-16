@@ -34,10 +34,7 @@ export class HomeMenuPage {
     private dbService: DatabaseService,
     private geolocationSvc: GeolocationService,
     public alertController: AlertController,
-    private placeSvc : PlaceService
-  ) {
-    this.placeSvc.getPlaces();
-  }
+  ) {}
 
   async presentAlert() {
     const alert = await this.alertController.create({
