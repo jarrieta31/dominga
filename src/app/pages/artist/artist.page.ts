@@ -4,10 +4,11 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ArtistService } from "src/app/services/database/artist.service"; 
 import { Artistas } from "src/app/shared/artistas";
-import { LoadingController } from "@ionic/angular";
-import { TipoArtist } from "../../shared/tipo-artist";
+import { LoadingController, ModalController } from "@ionic/angular";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
+import { VideoPage } from "../video/video.page";
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 
 @Component({
   selector: "app-artist",
@@ -19,7 +20,9 @@ export class ArtistPage {
     private fb: FormBuilder,
     private artistSvc: ArtistService,
     private loadingCtrl: LoadingController,
-    private sliderSvc: SlidesService
+    private sliderSvc: SlidesService,
+    private modalCtrl: ModalController,
+    private browser: InAppBrowser,
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -135,6 +138,33 @@ export class ArtistPage {
     });
     return artisttipolist;
   }
+
+    /**
+   * Abre modal para reproducir video
+   * @param url - URL del video que se va a ejecutar
+   */
+     async verVideo(url: string) {
+      console.log(url);
+      const video = await this.modalCtrl.create({
+        component: VideoPage,
+        cssClass: "modal-video",
+        backdropDismiss: false,
+        showBackdrop: true,
+        componentProps: {
+          url: url,
+        },
+      });
+  
+      await video.present();
+    }
+
+    openInstagram(url: string) {
+      this.browser.create(url, "_system");
+    }
+  
+    openSpotify(url: string) {
+      this.browser.create(url, "_system");
+    }
 
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();

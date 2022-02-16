@@ -8,6 +8,7 @@ import { ArtistPageRoutingModule } from './artist-routing.module';
 
 import { ArtistPage } from './artist.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { VideoPageModule } from '../video/video.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     IonicModule,
     ArtistPageRoutingModule,
     ReactiveFormsModule,
+    VideoPageModule,
     PipesModule
   ],
   declarations: [ArtistPage]

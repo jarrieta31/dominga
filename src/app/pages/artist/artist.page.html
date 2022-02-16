@@ -115,9 +115,9 @@
         <div class="type">{{ art.categoria }}</div>
         <div class="name">{{ art.nombre }}</div>
         <div class="netArtist">
-          <img src="/assets/icon/instagram.png" alt="instagram">
-          <img src="/assets/icon/spotify.png" alt="spotify">
-          <img src="/assets/icon/youtube.png" alt="youtube">
+          <img *ngIf="art.instagram !== null" (click)="openInstagram(art.instagram)" src="/assets/icon/instagram.png" alt="instagram">
+          <img *ngIf="art.spotify !== null" (click)="openSpotify(art.spotify)" src="/assets/icon/spotify.png" alt="spotify">
+          <img *ngIf="art.youtube !== null" (click)="verVideo(art.youtube)" src="/assets/icon/youtube.png" alt="youtube">
         </div>
       </div>
     </div>
