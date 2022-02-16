@@ -1,52 +1,69 @@
-
 <ion-content>
   <div class="selling-points-title">
     <p>Puntos de venta</p>
-    <i class="fas fa-times-circle close" (click)="cancelar()"></i>
+    <ion-icon name="close-outline" (click)="cancelar()"></ion-icon>
   </div>
   <ion-grid>
-  <ion-row>
-    <ion-col size="4">
-      <a href="https://tickantel.com.uy/inicio/espectaculo/40010081/espectaculo/Uruguay%20Open?1">
-      <ion-img src="/assets/selling-point/ticket-byn.png">
-      </ion-img>
-      <ion-text>
-        <p>Tickantel</p>
-      </ion-text>
-    </a> 
-    </ion-col> 
-    <ion-col size="4">
-      <ion-img src="/assets/selling-point/wpp-color.png"></ion-img>
-      <ion-text>
-        <p>WhatsApp</p>
-      </ion-text>
-    </ion-col>
-    <ion-col size="4">
-      <ion-img src="/assets/selling-point/ig-byn.png"></ion-img>
-      <ion-text>
-        <p>Instagram</p>
-      </ion-text>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col size="4">
-      <ion-img src="/assets/selling-point/fb.svg"></ion-img>
-      <ion-text>
-        <p>Facebook</p>
-      </ion-text>
-    </ion-col>
-    <ion-col size="4">
-      <ion-img src="/assets/selling-point/abitab.png"></ion-img>
-      <ion-text>
-        <p>Abitab</p>
-      </ion-text>
-    </ion-col>
-    <ion-col size="4">
-      <ion-img src="/assets/selling-point/rp.png"></ion-img>
-      <ion-text>
-        <p>Redpagos</p>
-      </ion-text>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-img
+          *ngIf="tickAntel !== null && tickAntel !== undefined"
+          src="/assets/selling-point/ticket-color.png"
+          (click)="openTickAntel()"
+        ></ion-img>
+        <ion-img
+          *ngIf="tickAntel === null || tickAntel === undefined"
+          src="/assets/selling-point/ticket-byn.png"
+        >
+        </ion-img>
+        <ion-text>
+          <p>Tickantel</p>
+        </ion-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-img
+          *ngIf="whatsapp !== null && whatsapp !== undefined"
+          src="/assets/selling-point/wpp-color.png"
+          (click)="openWhatsapp()"
+        ></ion-img>
+        <ion-img
+          *ngIf="whatsapp === null || whatsapp === undefined"
+          src="/assets/selling-point/wpp-byn.png"
+        ></ion-img>
+        <ion-text>
+          <p>WhatsApp</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-img
+          *ngIf="instagram !== null && instagram !== undefined"
+          src="/assets/selling-point/ig.png"
+          (click)="openInstagram()"
+        ></ion-img>
+        <ion-img
+          *ngIf="instagram === null || instagram === undefined"
+          src="/assets/selling-point/ig-byn.png"
+        ></ion-img>
+        <ion-text>
+          <p>Instagram</p>
+        </ion-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-img
+          *ngIf="facebook !== null && facebook !== undefined"
+          src="/assets/selling-point/fb.svg"
+          (click)="openFacebook()"
+        ></ion-img>
+        <ion-img
+          *ngIf="facebook === null || facebook === undefined"
+          src="/assets/selling-point/fb-byn.png"
+        ></ion-img>
+        <ion-text>
+          <p>Facebook</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

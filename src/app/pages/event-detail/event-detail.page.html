@@ -52,11 +52,19 @@
     </div>
   </div>
   <div class="ticket">
-    <div class="entradas">
-      <div class="entradas_div">Ticket por persona desde</div>
-      <div class="precios_div">$ 200</div>
+    <div *ngIf="precioUnico && precio > 0" class="entradas">
+      <div class="entradas_div">Valor ticket</div>
+      <div class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
     </div>
-    <div class="precio" (click)="openModalSellingPoint()">
+    <div *ngIf="precioUnico === false && precio > 0" class="entradas">
+      <div class="entradas_div">Desde</div>
+      <div class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
+    </div>
+    <div *ngIf="precio === 0" class="entradas">
+      <div class="entradas_div">Entrada</div>
+      <div class="precios_div">Gratis</div>
+    </div>
+    <div class="precio" (click)="openModalSellingPoint(instagram, tickantel, facebook, whatsapp)">
       <div><i class="fas fa-ticket-alt mark-info"></i></div>
       <div class="puntos-venta">Ver puntos de venta</div>
     </div>

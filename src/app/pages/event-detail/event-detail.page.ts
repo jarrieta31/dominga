@@ -18,6 +18,14 @@ export class EventDetailPage implements OnInit {
   @Input() lugar: string;
   @Input() latitud: number;
   @Input() longitud: number;
+  @Input() fechaFin: string;
+  @Input() instagram: string;
+  @Input() tickAntel: string;
+  @Input() facebook: string;
+  @Input() whatsapp: string;
+  @Input() moneda: string;
+  @Input() precio: number;
+  @Input() precioUnico: boolean;
 
   _second = 1000;
   _minute = this._second * 60;
@@ -73,17 +81,24 @@ export class EventDetailPage implements OnInit {
         this.latitud +
         "," +
         this.longitud,
-        "_system"
+      "_system"
     );
   }
 
-  async openModalSellingPoint() {
+  async openModalSellingPoint(
+
+  ) {
     const modalSellingPoint = await this.modalCtrl.create({
       component: SellingPointsPage,
       cssClass: "modal-selling-point",
       backdropDismiss: false,
       showBackdrop: true,
-      componentProps: {},
+      componentProps: {
+        instagram: this.instagram,
+        tickAntel: this.tickAntel,
+        facebook: this.facebook,
+        whatsapp: this.whatsapp,
+      },
     });
 
     await modalSellingPoint.present();

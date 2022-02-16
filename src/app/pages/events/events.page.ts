@@ -50,8 +50,6 @@ export class EventsPage {
     localidad   : ["", Validators.required],
     fecha_fin   : ["", Validators.required],
     fecha_inicio: ["", Validators.required],
-    // moneda   : ["", Validators.required],
-    // precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
@@ -140,8 +138,17 @@ export class EventsPage {
     imagen: string,
     lugar: string,
     latitud: number,
-    longitud: number
-  ) {
+    longitud: number,
+    fechaFin: string,
+    instagram: string,
+    tickAntel: string,
+    facebook: string,
+    whatsapp: string,
+    moneda: string,
+    precio: number,
+    precioUnico: boolean  ) {
+
+      console.log(instagram, tickAntel, facebook, whatsapp)
     
     if (descripcion.length > 250) {
       var desc = descripcion.substring(0, 250) + " ...";
@@ -165,7 +172,16 @@ export class EventsPage {
         imagen: imagen,
         lugar: lugar,
         latitud: latitud,
-        longitud: longitud
+        longitud: longitud,
+        fechaFin: fechaFin,
+        instagram: instagram,
+        tickAntel: tickAntel,
+        facebook: facebook,
+        whatsapp: whatsapp,
+        moneda: moneda,
+        precio: precio,
+        precioUnico: precioUnico
+
       },
     });
 
