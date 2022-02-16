@@ -50,6 +50,8 @@ export class EventsPage {
     localidad   : ["", Validators.required],
     fecha_fin   : ["", Validators.required],
     fecha_inicio: ["", Validators.required],
+    // moneda   : ["", Validators.required],
+    // precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
@@ -138,17 +140,8 @@ export class EventsPage {
     imagen: string,
     lugar: string,
     latitud: number,
-    longitud: number,
-    fechaFin: string,
-    instagram: string,
-    tickAntel: string,
-    facebook: string,
-    whatsapp: string,
-    moneda: string,
-    precio: number,
-    precioUnico: boolean  ) {
-
-      console.log(instagram, tickAntel, facebook, whatsapp)
+    longitud: number
+  ) {
     
     if (descripcion.length > 250) {
       var desc = descripcion.substring(0, 250) + " ...";
@@ -172,16 +165,7 @@ export class EventsPage {
         imagen: imagen,
         lugar: lugar,
         latitud: latitud,
-        longitud: longitud,
-        fechaFin: fechaFin,
-        instagram: instagram,
-        tickAntel: tickAntel,
-        facebook: facebook,
-        whatsapp: whatsapp,
-        moneda: moneda,
-        precio: precio,
-        precioUnico: precioUnico
-
+        longitud: longitud
       },
     });
 
@@ -197,18 +181,22 @@ export class EventsPage {
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
     this.isOpenLocation = !this.isOpenLocation;
-    if (this.isFilterType) {
+    if (this.isFilterType || this.isFilterDate) {
       this.isFilterType = false;
       this.isOpenType = false;
+      this.isFilterDate = false;
+      this.isOpenDate = false;
     }
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
     this.isOpenType = !this.isOpenType;
-    if (this.isFilterLocation) {
+    if (this.isFilterLocation || this.isFilterDate) {
       this.isFilterLocation = false;
       this.isOpenLocation = false;
+      this.isFilterDate = false;
+      this.isOpenDate = false;
     }
   }
 
@@ -225,15 +213,17 @@ export class EventsPage {
 
   changeLocation() {
     this.isOpenLocation = !this.isOpenLocation;
-    if (this.isOpenType) {
+    if (this.isOpenType || this.isOpenDate) {
       this.isOpenType = false;
+      this.isOpenDate = false;
     }
   }
 
   changeType() {
     this.isOpenType = !this.isOpenType;
-    if (this.isOpenLocation) {
+    if (this.isOpenLocation || this.isOpenDate) {
       this.isOpenLocation = false;
+      this.isOpenDate = false;
     }
   }
 
