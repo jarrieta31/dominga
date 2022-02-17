@@ -96,7 +96,7 @@ export class WhereSleepPage {
 
   changeLocation() {
     this.isOpenLocation = !this.isOpenLocation;
-    if (this.isOpenLocation == false) this.isFilterLocation = false;
+    // if (this.isOpenLocation == false) this.isFilterLocation = false;
   }
 
     /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */

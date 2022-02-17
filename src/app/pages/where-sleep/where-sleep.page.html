@@ -30,8 +30,8 @@
   <!-- Filtro por Localidad  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
-            <span *ngIf="isOpenLocation === false">Localidad</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -46,7 +46,7 @@
                 class="location_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text>Todo</ion-text>
+                  <ion-text id="filters" >Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -54,7 +54,7 @@
                   lines="none"
                   *ngFor="let loc of locationActive"
                 >
-                  <ion-text>{{ loc.localidad }}</ion-text>
+                  <ion-text id="filters" >{{ loc.localidad }}</ion-text>
                   <ion-radio
                     slot="end"
                     value="{{ loc.localidad }}"
@@ -72,7 +72,7 @@
   <ion-list class="lista">
     <div class="empty" *ngIf="sleep.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
       <i class="fi fi-rr-sad icon_empty"></i>
-      <div class="text_empty">
+      <div id="eat-info" class="text_empty">
         No hay lugares para mostrar con el filtro seleccionado
       </div>
     </div>
@@ -95,6 +95,7 @@
                 <p id="eat-info" *ngFor="let tel of item.telefonos">
                   <span id="eat-info">Tel: </span>{{ tel.numero }}
                 </p>
+                <small id="eat-info" >{{item.distancia | formatDistancia}}</small>
               </div>
               <ion-icon class="contact" name="logo-instagram"></ion-icon>
               <ion-icon class="contact" name="logo-whatsapp"></ion-icon>

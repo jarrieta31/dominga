@@ -15,10 +15,10 @@
 
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
-      <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
+      <ion-label id="filters" *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
       <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
       <img src="/assets/icon/exchange.png" alt="" />
-      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
+      <ion-label id="filters" *ngIf="isOpenType === false" (click)="changeFilterType()">tipo</ion-label>
       <ion-label *ngIf="isOpenType" class="open_acordeon" (click)="changeFilterType()">tipo</ion-label>
     </div>
 
@@ -27,8 +27,8 @@
   <!-- Filtro por Nombre  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
-            <span *ngIf="isOpenLocation === false">Localidad</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -42,7 +42,7 @@
                 formControlName="localidad"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text>Todo</ion-text>
+                  <ion-text id="filters" >Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -50,7 +50,7 @@
                   lines="none"
                   *ngFor="let localidad of lista_localidad_artis"
                 >
-                  <ion-text>{{ localidad }}</ion-text>
+                  <ion-text id="filters" >{{ localidad }}</ion-text>
                   <ion-radio
                     slot="end"
                     value="{{ localidad }}"
@@ -65,8 +65,8 @@
   <!-- filtro por Tipo -->
         <div>
           <div (click)="changeType()" class="filter_name filter_type">
-            <span *ngIf="isOpenType === false">Tipo</span>
-            <span class="open_acordeon" *ngIf="isOpenType">Tipo</span>
+            <span id="filters" *ngIf="isOpenType === false">Tipo</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenType">Tipo</span>
             <i
               *ngIf="isOpenType === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -81,7 +81,7 @@
                 class="type_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text>Todo</ion-text>
+                  <ion-text id="filters" >Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -89,7 +89,7 @@
                   lines="none"
                   *ngFor="let tipo of lista_tipo_artis"
                 >
-                  <ion-text>{{ tipo }}</ion-text>
+                  <ion-text id="filters" >{{ tipo }}</ion-text>
                   <ion-radio
                     slot="end"
                     value="{{ tipo }}"
@@ -112,8 +112,8 @@
         <ion-img [src]="art.imagen.url" class="img-elem"></ion-img>
       </div>
       <div class="infoArtist">
-        <div class="type">{{ art.categoria }}</div>
-        <div class="name">{{ art.nombre }}</div>
+        <div id="info-art" class="type">{{ art.categoria }}</div>
+        <div id="info-art" class="name">{{ art.nombre }}</div>
         <div class="netArtist">
           <img *ngIf="art.instagram !== null" (click)="openInstagram(art.instagram)" src="/assets/icon/instagram.png" alt="instagram">
           <img *ngIf="art.spotify !== null" (click)="openSpotify(art.spotify)" src="/assets/icon/spotify.png" alt="spotify">
