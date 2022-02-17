@@ -59,6 +59,7 @@ export class DatabaseService {
       .ref
       .where("departamento", "==", this.selectionDepto)
       .where("fechaInicio", ">=", this.today)
+      .where("publicado", "==", true)
       .orderBy("fechaInicio", "asc")
       .get()
       .then((querySnapshot) => {
