@@ -74,9 +74,9 @@
       <p
         class="text"
         id="place-description"
+        [routerLink]="['/descripcion', place.id]"
         [innerHTML]="place.descripcionCorta"
       ></p>
-      <a class="verMas" [routerLink]="['/descripcion', place.id]">Ver más</a>
     </div>
     <div class="divd">
       <div id="mapaBox"></div>

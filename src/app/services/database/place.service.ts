@@ -309,7 +309,7 @@ export class PlaceService {
       if (res.id == id) {
         res.descripcionCorta =
           res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) +
-          "...";
+          "..." + `<a>Ver más</a>`;
         this.near_place = res;
         this.place_selected.next(res);
       }
