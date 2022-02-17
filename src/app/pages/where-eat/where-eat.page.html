@@ -94,7 +94,6 @@
             <ion-avatar item-start>
               <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
             </ion-avatar>
-            <small id="eat-info" >{{item.distancia | formatDistancia}}</small>
           </div>
           <div class="info">
             <ion-label>
@@ -104,6 +103,7 @@
                 <p id="eat-info" *ngFor="let tel of item.telefonos">
                   <span id="eat-info">Tel: </span>{{ tel.numero }}
                 </p>
+                <small id="eat-info" >{{item.distancia | formatDistancia}}</small>
               </div>
             </ion-label>
           </div>
