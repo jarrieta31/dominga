@@ -18,22 +18,26 @@
       <ion-label
         *ngIf="isOpenLocation === false "
         (click)="changeFilterLocation()"
+        id="filters"
         >localidad</ion-label
       >
       <ion-label
         *ngIf="isOpenLocation"
         class="open_acordeon"
         (click)="changeFilterLocation()"
+        id="filters"
         >localidad</ion-label
       >
       <img src="/assets/icon/exchange.png" alt="" />
       <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()"
+      id="filters"
         >tipo</ion-label
       >
       <ion-label
         *ngIf="isOpenType"
         class="open_acordeon"
         (click)="changeFilterType()"
+        id="filters"
         >tipo</ion-label
       >
     </div>
@@ -43,8 +47,8 @@
         <!-- Filtro por Localidad  -->
         <div>
           <div (click)="changeLocation()" class="filter_name">
-            <span *ngIf="isOpenLocation === false">Localidad</span>
-            <span class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
             <i
               *ngIf="isOpenLocation === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -61,7 +65,7 @@
                 formControlName="localidad"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text>Todo</ion-text>
+                  <ion-text id="filters" >Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -69,7 +73,7 @@
                   lines="none"
                   *ngFor="let loc of localidades"
                 >
-                  <ion-text>{{ loc }}</ion-text>
+                  <ion-text id="filters" >{{ loc }}</ion-text>
                   <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -81,8 +85,8 @@
         <!-- filtro por Tipo -->
         <div>
           <div (click)="changeType()" class="filter_name filter_type">
-            <span *ngIf="isOpenType === false">Tipo</span>
-            <span class="open_acordeon" *ngIf="isOpenType">Tipo</span>
+            <span id="filters"  *ngIf="isOpenType === false">Tipo</span>
+            <span id="filters"  class="open_acordeon" *ngIf="isOpenType">Tipo</span>
             <i
               *ngIf="isOpenType === false"
               class="fi fi-rr-angle-down icon_arrow"
@@ -100,7 +104,7 @@
                 class="type_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text>Todo</ion-text>
+                  <ion-text id="filters" >Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -108,7 +112,7 @@
                   lines="none"
                   *ngFor="let tipo of tipos"
                 >
-                  <ion-text>{{ tipo }}</ion-text>
+                  <ion-text id="filters" >{{ tipo }}</ion-text>
                   <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
