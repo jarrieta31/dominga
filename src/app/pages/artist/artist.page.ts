@@ -138,6 +138,11 @@ export class ArtistPage {
     });
     return artisttipolist;
   }
+  
+  /**retorna true si se selecciono Distancia como filtro principal */
+  get selectdistancia(){
+    return localStorage.getItem('distanceActivo') ? true : false;
+  }
 
     /**
    * Abre modal para reproducir video

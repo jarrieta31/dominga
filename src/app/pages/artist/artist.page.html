@@ -14,7 +14,9 @@
   <!-- </div> -->
 
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
-    <div class="filter_place">
+    <div 
+      *ngIf="!selectdistancia"
+      class="filter_place">
       <ion-label id="filters" *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">localidad</ion-label>
       <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">localidad</ion-label>
       <img src="/assets/icon/exchange.png" alt="" />
