@@ -99,6 +99,10 @@ export class WhereEatPage {
     return localidades;
   }
 
+  get selectdistancia(){
+    return localStorage.getItem('distanceActivo') ? true : false;
+  }
+
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,

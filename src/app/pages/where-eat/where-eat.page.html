@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="eat">
     <ion-img slot="start" src="/assets/icon/comida.png"></ion-img>
-    <ion-title>¿Dónde Comer?</ion-title>
+    <ion-title>¿Dónde Comer?</ion-title> 
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -18,15 +18,17 @@
     </ion-slides>
 
     <!-- filtro -->
-    <div class="filter_place">
+    <div
+      *ngIf="!selectdistancia"
+      class="filter_place" >
       <ion-label
-        *ngIf="isOpenLocation === false "
+        *ngIf="isOpenLocation === false  "
         (click)="changeFilterLocation()"
         id="filters"
         >localidad</ion-label
       >
       <ion-label
-        *ngIf="isOpenLocation"
+        *ngIf="isOpenLocation "
         class="open_acordeon"
         (click)="changeFilterLocation()"
         id="filters"
@@ -34,7 +36,7 @@
       >
     </div>
 
-    <div *ngIf="isFilterLocation">
+    <div *ngIf="isFilterLocation && !selectdistancia">
       <form [formGroup]="filterForm" class="form_filter">
         <!-- Filtro por Localidad  -->
         <div>
