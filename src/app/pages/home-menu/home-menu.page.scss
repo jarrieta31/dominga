@@ -3,6 +3,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
 @import url('https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
 
+* {
+  z-index: 0;
+}
+
 .container {
   height: 100vh;
   margin-top: 15px;
@@ -157,7 +161,10 @@ ion-button {
 .depto_list {
   margin: 10px auto;
   width: 70%;
-  border-radius: 10px !important;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+  z-index: 50;
+  position: relative;
 }
 
 .endline {
