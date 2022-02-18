@@ -21,7 +21,7 @@
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
       <ion-label
-        *ngIf="isOpenLocation === false "
+        *ngIf="isOpenLocation === false && !selectdistancia"
         (click)="changeFilterLocation()"
         >localidad</ion-label
       >
@@ -31,9 +31,13 @@
         (click)="changeFilterLocation()"
         >localidad</ion-label
       >
-      <img src="/assets/icon/exchange.png" alt="" />
-      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()"
-      id="filters"
+      <img
+        *ngIf="!selectdistancia"
+        src="/assets/icon/exchange.png" alt="" />
+      <ion-label 
+        *ngIf="isOpenType === false && !selectdistancia" 
+        (click)="changeFilterType()"
+        id="filters"
         >tipo</ion-label
       >
       <ion-label
@@ -43,7 +47,9 @@
         id="filters"
         >tipo</ion-label
       >
-      <img src="/assets/icon/exchange.png" alt="" />
+      <img
+        *ngIf="!selectdistancia"
+        src="/assets/icon/exchange.png" alt="" />
       <ion-label *ngIf="isOpenDate === false" (click)="changeFilterDate()"
       id="filters"
         >fecha</ion-label
@@ -100,7 +106,7 @@
         </div>
         <!-- Filtro por Fecha  -->
         <!-- Filtro por Localidad  -->
-        <div>
+        <div *ngIf="!selectdistancia" >
           <div (click)="changeLocation()" class="filter_name filter_type">
             <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
             <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
@@ -138,7 +144,7 @@
         <!-- filtro por Localidad -->
 
         <!-- filtro por Tipo -->
-        <div>
+        <div  *ngIf="!selectdistancia">
           <div (click)="changeType()" class="filter_name filter_type">
             <span id="filters" *ngIf="isOpenType === false">Tipo</span>
             <span id="filters" class="open_acordeon" *ngIf="isOpenType">Tipo</span>

@@ -330,6 +330,11 @@ export class EventsPage {
     return localidades_eventos;
   }
 
+  /**retorna true si se selecciono Distancia como filtro principal */
+  get selectdistancia(){
+    return localStorage.getItem('distanceActivo') ? true : false;
+  }
+  
   /**
    *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.

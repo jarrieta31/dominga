@@ -202,6 +202,10 @@ export class PlacePage {
     }
     return tipos;
   }
+  /**retorna true si se selecciono Distancia como filtro principal */
+  get selectdistancia(){
+    return localStorage.getItem('distanceActivo') ? true : false;
+  }
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
