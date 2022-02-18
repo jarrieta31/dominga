@@ -336,6 +336,19 @@ export class PlaceService {
           image: res.imagenPrincipal,
           distance: dist,
         });
+      } else if (res.id != this.near_place.id && this.distance !== null) {
+        let dist = distance(
+          [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
+          [res.ubicacion.lng, res.ubicacion.lat],
+          options
+        );
+
+        this.distance_place.push({
+          id: res.id,
+          name: res.nombre,
+          image: res.imagenPrincipal,
+          distance: dist,
+        });
       }
     });
 
