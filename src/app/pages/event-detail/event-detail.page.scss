@@ -104,8 +104,9 @@ ion-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  position: fixed;
-  bottom: 0;
+  position: sticky;
+  bottom: 0px;
+  right: 0px;
   width: 100%;
   height: 60px;
   background-color: var(--ion-color-light);
