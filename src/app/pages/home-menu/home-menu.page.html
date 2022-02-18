@@ -38,10 +38,10 @@
             *ngFor="let depto of deptosActivos"
             (click)="select(depto.nombre, null)"
           >
-            <ion-text *ngIf="deptoSelected !== depto.nombre"
+            <ion-text id="depto_list" *ngIf="deptoSelected !== depto.nombre"
               >{{ depto.nombre }}</ion-text
             >
-            <ion-text class="depto_bold" *ngIf="deptoSelected === depto.nombre"
+            <ion-text id="depto_list" class="depto_bold" *ngIf="deptoSelected === depto.nombre"
               >{{ depto.nombre }}</ion-text
             >
             <ion-radio

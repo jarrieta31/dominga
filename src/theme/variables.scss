@@ -299,6 +299,13 @@ body.dark {
   --ion-color-light-contrast-rgb: 255, 255, 255;
   --ion-color-light-shade: #1e2023;
   --ion-color-light-tint: #383a3e;
+
+  --ion-color-back: #222428;
+  --ion-color-back-rgb: 34, 36, 40;
+  --ion-color-back-contrast: #ffffff;
+  --ion-color-back-contrast-rgb: 255, 255, 255;
+  --ion-color-back-shade: #1e2023;
+  --ion-color-back-tint: #383a3e;
 }
 
 /*
@@ -410,6 +417,7 @@ body.dyslexic {
   #info-art,
   #home-menu,
   #filters,
+  #depto_list,
   .texto,
   .inicial-load,
   #place-container,
