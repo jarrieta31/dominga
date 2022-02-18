@@ -4,5 +4,20 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "cordova": {}
+  "cordova": {
+    "preferences": {
+      "AutoHideSplashScreen": "false",
+      "ScrollEnabled": "false",
+      "android-minSdkVersion": "19",
+      "android-targetSdkVersion": "29",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "0",
+      "ShowSplashScreen": "false",
+      "Orientation": "portrait"
+    }
+  }
 }
