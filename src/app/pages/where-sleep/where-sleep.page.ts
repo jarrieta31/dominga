@@ -98,6 +98,11 @@ export class WhereSleepPage {
     this.isOpenLocation = !this.isOpenLocation;
     // if (this.isOpenLocation == false) this.isFilterLocation = false;
   }
+  
+  get selectdistancia(){
+    return localStorage.getItem('distanceActivo') ? true : false;
+  }
+
 
     /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
     getDistance(

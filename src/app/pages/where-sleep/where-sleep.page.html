@@ -19,13 +19,15 @@
     </ion-slides>
 
     <!-- filtro -->
-    <div class="filter_place">
+    <div 
+      *ngIf="!selectdistancia"
+      class="filter_place">
       <ion-label *ngIf="isOpenLocation === false " (click)="changeFilterLocation()">Localidad</ion-label>
       <ion-label *ngIf="isOpenLocation" class="open_acordeon" (click)="changeFilterLocation()">Localidad</ion-label>
     </div>
 
     
-    <div *ngIf="isFilterLocation" >
+    <div *ngIf="isFilterLocation && !selectdistancia" >
       <form [formGroup]="filterForm" class="form_filter" >
   <!-- Filtro por Localidad  -->
         <div>
@@ -85,7 +87,7 @@
             <ion-avatar item-start>
               <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
             </ion-avatar>
-            <small>{{item.distancia | formatDistancia}}</small>
+            <small id="eat-info">{{item.distancia | formatDistancia}}</small>
           </div>
           <div class="info">
             <ion-label>
