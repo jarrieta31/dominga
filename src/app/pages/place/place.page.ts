@@ -89,14 +89,14 @@ export class PlacePage {
   filterPlace() {
     this.dataForm = this.filterForm.value;
 
-    if(this.isFilterLocation) this.isFilterLocation = false;
-    if(this.isFilterType) this.isFilterType = false;
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterType) this.isFilterType = false;
 
     this.optionLocation = this.dataForm.localidad;
     this.optionType = this.dataForm.tipo;
 
-    if(this.dataForm.localidad === '') this.optionLocation = 'localidad';
-    if(this.dataForm.tipo === '') this.optionType = 'tipo';
+    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
+    if (this.dataForm.tipo === "") this.optionType = "tipo";
   }
 
   pageDominga() {
@@ -110,13 +110,13 @@ export class PlacePage {
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
 
-    if(this.isFilterType) this.isFilterType = false;
+    if (this.isFilterType) this.isFilterType = false;
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
 
-    if(this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -212,9 +212,22 @@ export class PlacePage {
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
       this.dataForm = "";
-      this.optionLocation = 'localidad';
-      this.optionType = 'tipo';
+      this.optionLocation = "localidad";
+      this.optionType = "tipo";
+    }
+
+    if (
+      (localStorage.getItem("last") === "depto" &&
+        localStorage.getItem("distanceActivo") !== null) ||
+      (localStorage.getItem("last") === "distance" &&
+        localStorage.getItem("deptoActivo") !== null)
+    ) {
+      this.filterForm.reset();
+      this.dataForm = "";
+      this.optionLocation = "localidad";
+      this.optionType = "tipo";
     }
 
     this.unsubscribe$ = new Subject<void>();

@@ -11,10 +11,6 @@ export class FilterPlacesPipe implements PipeTransform {
       return places;
     }
 
-    let distanceLS= localStorage.getItem('distanceActivo');
-
-    if(distanceLS !== null && distanceLS !== undefined) data.localidad = "";
-
     if (data.localidad !== null) data.localidad = data.localidad.toLowerCase();
     else data.localidad = "";
 

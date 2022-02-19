@@ -336,11 +336,6 @@ export class EventsPage {
     return localStorage.getItem('distanceActivo') ? true : false;
   }
   
-  filterDarkMode(){
-    const localDark = localStorage.getItem('modoOscuro')
-    if(localDark)
-      document.body.classList.toggle('dark');
-  }
   /**
    *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.

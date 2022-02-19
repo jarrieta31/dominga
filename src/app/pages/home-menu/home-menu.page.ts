@@ -5,7 +5,6 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { Departament } from "src/app/shared/departament";
 import { AlertController } from "@ionic/angular";
 import { takeUntil } from "rxjs/operators";
-import { PlaceService } from "src/app/services/database/place.service";
 
 @Component({
   selector: "app-home-menu",
@@ -71,18 +70,19 @@ export class HomeMenuPage {
 
   seeDepto() {
     this.depto = !this.depto;
-
     if (this.distance) this.distance = !this.distance;
   }
 
   seeDistance() {
     this.distance = !this.distance;
-
     if (this.depto) this.depto = !this.depto;
   }
 
   select(depto: string | null, distance: number | null) {
     this.dbService.getSelectMenu(depto, distance);
+
+    if(localStorage.getItem('deptoActivo') !== null) localStorage.setItem("last", "depto");
+    if(localStorage.getItem('distanceActivo') !== null) localStorage.setItem("last", "distance");
 
     if (depto != null && depto != undefined) {
       this.deptoSelected = depto;
