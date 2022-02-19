@@ -82,12 +82,21 @@ export class PlacePage {
   /**control la apertura de filtros */
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
+  /**guardan filtos seleccionados */
+  optionLocation: String = null;
+  optionType: String = null;
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
 
     if(this.isFilterLocation) this.isFilterLocation = false;
     if(this.isFilterType) this.isFilterType = false;
+
+    this.optionLocation = this.dataForm.localidad;
+    this.optionType = this.dataForm.tipo;
+
+    if(this.dataForm.localidad === '') this.optionLocation = 'localidad';
+    if(this.dataForm.tipo === '') this.optionType = 'tipo';
   }
 
   pageDominga() {

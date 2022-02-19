@@ -16,31 +16,31 @@
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
       <ion-label
-        *ngIf="isFilterLocation === false && !selectdistancia"
+        *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
         (click)="changeFilterLocation()"
         id="filters"
         >localidad</ion-label
       >
       <ion-label
-        *ngIf="isFilterLocation"
+        *ngIf="optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== ''"
         class="open_filter"
         (click)="changeFilterLocation()"
         id="filters"
-        >localidad</ion-label
+        >{{ optionLocation }}</ion-label
       >
       <img *ngIf="!selectdistancia" src="/assets/icon/exchange.png" alt="" />
       <ion-label
-        *ngIf="isFilterType === false"
+        *ngIf="optionType === null || optionType === 'tipo' || optionType === ''"
         (click)="changeFilterType()"
         id="filters"
         >tipo</ion-label
       >
       <ion-label
-        *ngIf="isFilterType"
+        *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''"
         class="open_filter"
         (click)="changeFilterType()"
         id="filters"
-        >tipo</ion-label
+        >{{ optionType }}</ion-label
       >
     </div>
 
@@ -52,7 +52,7 @@
             <span id="filters">Localidad</span>
           </div>
           <div>
-            <ion-list  class="list_type">
+            <ion-list class="list_type">
               <ion-radio-group
                 (ionChange)="filterPlace()"
                 formControlName="localidad"
