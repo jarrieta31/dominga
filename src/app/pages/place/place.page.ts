@@ -312,6 +312,8 @@ export class PlacePage {
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.isFilterLocation = false;
+    this.isFilterType = false;
     this.checkDistance = false;
   }
 
