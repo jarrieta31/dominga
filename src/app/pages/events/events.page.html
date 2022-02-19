@@ -17,7 +17,7 @@
         <img class="imgSlider" src="{{item.imagen.url}}" />
       </ion-slide>
     </ion-slides>
-
+    {{ darkmode }}
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
       <ion-label
@@ -35,7 +35,7 @@
         *ngIf="!selectdistancia"
         src="/assets/icon/exchange.png" alt="" />
       <ion-label 
-        *ngIf="isOpenType === false && !selectdistancia" 
+        *ngIf="isOpenType === false" 
         (click)="changeFilterType()"
         id="filters"
         >tipo</ion-label
@@ -48,7 +48,6 @@
         >tipo</ion-label
       >
       <img
-        *ngIf="!selectdistancia"
         src="/assets/icon/exchange.png" alt="" />
       <ion-label *ngIf="isOpenDate === false" (click)="changeFilterDate()"
       id="filters"
@@ -144,7 +143,7 @@
         <!-- filtro por Localidad -->
 
         <!-- filtro por Tipo -->
-        <div  *ngIf="!selectdistancia">
+        <div>
           <div (click)="changeType()" class="filter_name filter_type">
             <span id="filters" *ngIf="isOpenType === false">Tipo</span>
             <span id="filters" class="open_acordeon" *ngIf="isOpenType">Tipo</span>

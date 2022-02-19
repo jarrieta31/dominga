@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
+import { JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-events",
@@ -335,6 +336,12 @@ export class EventsPage {
     return localStorage.getItem('distanceActivo') ? true : false;
   }
   
+  get darkmode(){
+    const localDark = localStorage.getItem('modoOscuro')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    console.log(localDark);
+    return 
+  }
   /**
    *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
