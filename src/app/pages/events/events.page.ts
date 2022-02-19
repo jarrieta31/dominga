@@ -336,11 +336,10 @@ export class EventsPage {
     return localStorage.getItem('distanceActivo') ? true : false;
   }
   
-  get darkmode(){
+  filterDarkMode(){
     const localDark = localStorage.getItem('modoOscuro')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    console.log(localDark);
-    return 
+    if(localDark)
+      document.body.classList.toggle('dark');
   }
   /**
    *
