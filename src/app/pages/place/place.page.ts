@@ -213,6 +213,8 @@ export class PlacePage {
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
       this.dataForm = "";
+      this.optionLocation = 'localidad';
+      this.optionType = 'tipo';
     }
 
     this.unsubscribe$ = new Subject<void>();

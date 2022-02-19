@@ -5,10 +5,15 @@ import { Place } from "../place";
   name: "filterPlaces",
 })
 export class FilterPlacesPipe implements PipeTransform {
+
   transform(places: Place[], data: any): Place[] {
     if (data.length === 0) {
       return places;
     }
+
+    let distanceLS= localStorage.getItem('distanceActivo');
+
+    if(distanceLS !== null && distanceLS !== undefined) data.localidad = "";
 
     if (data.localidad !== null) data.localidad = data.localidad.toLowerCase();
     else data.localidad = "";

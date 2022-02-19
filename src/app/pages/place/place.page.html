@@ -48,7 +48,7 @@
       <form [formGroup]="filterForm" class="form_filter">
         <!-- Filtro por Localidad  -->
         <div *ngIf="isFilterLocation">
-          <div (click)="changeLocation()" class="filter_name">
+          <div class="filter_name">
             <span id="filters">Localidad</span>
           </div>
           <div>
@@ -78,7 +78,7 @@
 
         <!-- filtro por Tipo -->
         <div *ngIf="isFilterType">
-          <div (click)="changeType()" class="filter_name">
+          <div class="filter_name">
             <span id="filters">Tipo</span>
           </div>
           <div>
