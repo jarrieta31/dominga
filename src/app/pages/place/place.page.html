@@ -22,7 +22,7 @@
         >localidad</ion-label
       >
       <ion-label
-        *ngIf="optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== ''"
+        *ngIf=" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
         class="open_filter"
         (click)="changeFilterLocation()"
         id="filters"
