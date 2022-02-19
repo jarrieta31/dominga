@@ -14,65 +14,52 @@
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
-    <div 
-      
-      class="filter_place">
+    <div class="filter_place">
       <ion-label
-        *ngIf="isOpenLocation === false && !selectdistancia"
+        *ngIf="isFilterLocation === false && !selectdistancia"
         (click)="changeFilterLocation()"
         id="filters"
         >localidad</ion-label
       >
       <ion-label
-        *ngIf="isOpenLocation"
-        class="open_acordeon"
+        *ngIf="isFilterLocation"
+        class="open_filter"
         (click)="changeFilterLocation()"
         id="filters"
         >localidad</ion-label
       >
-      <img 
-        *ngIf="!selectdistancia"
-        src="/assets/icon/exchange.png" alt="" />
-      <ion-label *ngIf="isOpenType === false" (click)="changeFilterType()"
-      id="filters"
+      <img *ngIf="!selectdistancia" src="/assets/icon/exchange.png" alt="" />
+      <ion-label
+        *ngIf="isFilterType === false"
+        (click)="changeFilterType()"
+        id="filters"
         >tipo</ion-label
       >
       <ion-label
-        *ngIf="isOpenType"
-        class="open_acordeon"
+        *ngIf="isFilterType"
+        class="open_filter"
         (click)="changeFilterType()"
         id="filters"
         >tipo</ion-label
       >
     </div>
 
-    <div *ngIf="isFilterLocation || isFilterType">
+    <div>
       <form [formGroup]="filterForm" class="form_filter">
         <!-- Filtro por Localidad  -->
-        <div>
-          <div 
-            *ngIf="!selectdistancia"
-            (click)="changeLocation()" 
-            class="filter_name">
-            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
-            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
-            <i
-              *ngIf="isOpenLocation === false"
-              class="fi fi-rr-angle-down icon_arrow"
-            ></i>
-            <i
-              *ngIf="isOpenLocation"
-              class="fi fi-rr-angle-up icon_arrow open_acordeon"
-            ></i>
+        <div *ngIf="isFilterLocation">
+          <div (click)="changeLocation()" class="filter_name">
+            <span id="filters">Localidad</span>
           </div>
-          <div *ngIf="isOpenLocation">
-            <ion-list>
+          <div>
+            <ion-list  class="list_type">
               <ion-radio-group
                 (ionChange)="filterPlace()"
                 formControlName="localidad"
+                class="type_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text id="filters" >Todo</ion-text>
+                  <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -80,7 +67,7 @@
                   lines="none"
                   *ngFor="let loc of localidades"
                 >
-                  <ion-text id="filters" >{{ loc }}</ion-text>
+                  <ion-text id="filters">{{ loc }}</ion-text>
                   <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -90,20 +77,11 @@
         <!-- filtro por Localidad -->
 
         <!-- filtro por Tipo -->
-        <div>
-          <div (click)="changeType()" class="filter_name filter_type">
-            <span id="filters"  *ngIf="isOpenType === false">Tipo</span>
-            <span id="filters"  class="open_acordeon" *ngIf="isOpenType">Tipo</span>
-            <i
-              *ngIf="isOpenType === false"
-              class="fi fi-rr-angle-down icon_arrow"
-            ></i>
-            <i
-              *ngIf="isOpenType"
-              class="fi fi-rr-angle-up icon_arrow open_acordeon"
-            ></i>
+        <div *ngIf="isFilterType">
+          <div (click)="changeType()" class="filter_name">
+            <span id="filters">Tipo</span>
           </div>
-          <div *ngIf="isOpenType">
+          <div>
             <ion-list class="list_type">
               <ion-radio-group
                 (ionChange)="filterPlace()"
@@ -111,7 +89,7 @@
                 class="type_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text id="filters" >Todo</ion-text>
+                  <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -119,7 +97,7 @@
                   lines="none"
                   *ngFor="let tipo of tipos"
                 >
-                  <ion-text id="filters" >{{ tipo }}</ion-text>
+                  <ion-text id="filters">{{ tipo }}</ion-text>
                   <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -132,10 +110,11 @@
   </div>
 
   <div class="cards">
-    <div class="empty" *ngIf="(checkDistance == false && dep == null) || places.length == 0">
-      <div class="text_empty">
-        {{ msgEmptyPlace }}
-      </div>
+    <div
+      class="empty"
+      *ngIf="(checkDistance == false && dep == null) || places.length == 0"
+    >
+      <div class="text_empty">{{ msgEmptyPlace }}</div>
       <i class="far fa-sad-tear icon_empty"></i>
     </div>
     <ng-container *ngFor="let item of places | filterPlaces:dataForm">
@@ -166,7 +145,12 @@
           <i style="float: right" class="fas fa-city"></i>
         </ion-card-header>
         <ion-card-content>
-          <ion-img class="imgCard" alt="{{ item.nombre }}"  (ionImgDidLoad)="loadImage()" [src]="item.imagenHome['url']"></ion-img>
+          <ion-img
+            class="imgCard"
+            alt="{{ item.nombre }}"
+            (ionImgDidLoad)="loadImage()"
+            [src]="item.imagenHome['url']"
+          ></ion-img>
           <div class="duracion">
             <b class="distancia"
               >{{item.distancia | formatDistancia }} -

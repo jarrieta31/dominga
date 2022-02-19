@@ -170,16 +170,6 @@ ion-label {
   color: rgba(116, 108, 108, 0.75);
 }
 
-.filter_type {
-  border-top: 2px solid #ddd;
-  width: 100%;
-}
-
-.icon_arrow {
-  float: right;
-  margin-right: 15px;
-}
-
 .type_border > .last:last-child {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
@@ -190,7 +180,7 @@ ion-label {
   border-bottom-right-radius: 16px !important;
 }
 
-.open_acordeon {
+.open_filter {
   color: #fc67ff
 }
 

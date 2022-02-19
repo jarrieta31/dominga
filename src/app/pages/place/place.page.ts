@@ -63,14 +63,8 @@ export class PlacePage {
   currentDepto: String = this.databaseSvc.selectionDepto;
   /**instance del spinner de carga */
   loading: any;
-  /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
-  isFilterType = false;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  isOpenType: boolean = false;
   /**se guardan los sliders de la pantalla lugares */
   sliderPlace: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
@@ -85,9 +79,15 @@ export class PlacePage {
     localidad: ["", Validators.required],
     tipo: ["", Validators.required],
   });
+  /**control la apertura de filtros */
+  isFilterLocation: boolean = false;
+  isFilterType: boolean = false;
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
+
+    if(this.isFilterLocation) this.isFilterLocation = false;
+    if(this.isFilterType) this.isFilterType = false;
   }
 
   pageDominga() {
@@ -100,42 +100,14 @@ export class PlacePage {
 
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isFilterType) {
-      this.isFilterType = false;
-      this.isOpenType = false;
-    }
 
-    if (this.isOpenType) this.isOpenType = false;
+    if(this.isFilterType) this.isFilterType = false;
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
-    this.isOpenType = !this.isOpenType;
-    if (this.isFilterLocation) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-    }
 
-    if (this.isOpenLocation) this.isOpenLocation = false;
-  }
-
-  changeLocation() {
-    this.isOpenLocation = !this.isOpenLocation;
-    this.isFilterLocation = !this.isFilterLocation;
-    if (this.isOpenType) {
-      this.isOpenType = false;
-      this.isFilterType = false;
-    }
-  }
-
-  changeType() {
-    this.isOpenType = !this.isOpenType;
-    this.isFilterType = !this.isFilterType;
-    if (this.isOpenLocation) {
-      this.isOpenLocation = false;
-      this.isFilterLocation = false;
-    }
+    if(this.isFilterLocation) this.isFilterLocation = false;
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -203,8 +175,8 @@ export class PlacePage {
     return tipos;
   }
   /**retorna true si se selecciono Distancia como filtro principal */
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
 
   /**se ejecuta cada vez que se ingresa a la tab */
@@ -252,8 +224,9 @@ export class PlacePage {
 
     setTimeout(() => {
       if (this.places.length == 0) this.loading.dismiss();
-      else if (this.dep == null && this.checkDistance == false) this.loading.dismiss();
-      
+      else if (this.dep == null && this.checkDistance == false)
+        this.loading.dismiss();
+
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
@@ -321,8 +294,7 @@ export class PlacePage {
             //   [posicion.longitud, posicion.latitud],
             //   options
             // );
-          }
-          else this.checkDistance = true;
+          } else this.checkDistance = true;
         });
     }, 2000);
   }
@@ -331,10 +303,6 @@ export class PlacePage {
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.isFilterLocation = false;
-    this.isFilterType = false;
-    this.isOpenLocation = false;
-    this.isOpenType = false;
     this.checkDistance = false;
   }
 
