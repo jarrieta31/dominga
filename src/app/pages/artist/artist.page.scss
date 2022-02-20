@@ -100,10 +100,12 @@ ion-label {
 
 .filter_name {
   padding: 15px 0 15px 15px;
-  font-weight: bold;
-  width: 100%;
   font-size: 0.95em;
   font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.filter_name > span {
   font-weight: 700;
 }
 
@@ -139,7 +141,7 @@ ion-label {
   border-bottom-right-radius: 16px !important;
 }
 
-.open_acordeon {
+.open_filter {
   color: #fc67ff
 }
 

@@ -5,7 +5,7 @@ import { takeUntil, tap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
-import distance from "@turf/distance";
+//import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -181,6 +181,7 @@ export class PlacePage {
     }
     return tipos;
   }
+
   /**retorna true si se selecciono Distancia como filtro principal */
   get selectdistancia() {
     return localStorage.getItem("distanceActivo") ? true : false;

@@ -10,6 +10,7 @@ import { takeUntil } from "rxjs/operators";
 import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
+import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
   selector: "app-where-sleep",
@@ -30,6 +31,12 @@ export class WhereSleepPage {
   hora: string | number;
   /**cantidad de minutos para llegar a cada lugar */
   minuto: string | number;
+  /**control la apertura de filtros */
+  isFilterLocation: boolean = false;
+  /**guardan filtos seleccionados */
+  optionLocation: String = null;
+  /**departamente seleccionado actualmente */
+  currentDepto: String = this.databaseSvc.selectionDepto;
 
   sleep: DondeDormir[] = [];
   loading: any;
@@ -38,12 +45,7 @@ export class WhereSleepPage {
   locationActive: any[] = [];
 
   /**captura los datos del formulario de filtros */
-  dataForm: string = "";
-
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
+  dataForm: any = "";
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -68,6 +70,7 @@ export class WhereSleepPage {
     private sliderSvc: SlidesService,
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -87,42 +90,38 @@ export class WhereSleepPage {
 
   filterSleep() {
     this.dataForm = this.filterForm.value;
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    this.optionLocation = this.dataForm.localidad;
+    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
   }
 
-  changeFilterLocation() {
+  changeFilterSleep() {
     this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
   }
 
-  changeLocation() {
-    this.isOpenLocation = !this.isOpenLocation;
-    // if (this.isOpenLocation == false) this.isFilterLocation = false;
-  }
-  
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
 
-
-    /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
-    getDistance(
-      lngUser: number,
-      latUser: number,
-      lngPlace: number,
-      latPlace: number
-    ) {
-      return this.http.get(
-        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-          lngUser +
-          "," +
-          latUser +
-          ";" +
-          lngPlace +
-          "," +
-          latPlace +
-          "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
-      );
-    }
+  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
+  getDistance(
+    lngUser: number,
+    latUser: number,
+    lngPlace: number,
+    latPlace: number
+  ) {
+    return this.http.get(
+      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        lngUser +
+        "," +
+        latUser +
+        ";" +
+        lngPlace +
+        "," +
+        latPlace +
+        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
+  }
 
   ionViewWillEnter() {
     this.checkDistance = States.DEFAULT;
@@ -139,6 +138,13 @@ export class WhereSleepPage {
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    }
+
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataForm = "";
+      this.optionLocation = "localidad";
     }
 
     this.unsubscribe$ = new Subject<void>();
@@ -224,7 +230,6 @@ export class WhereSleepPage {
             });
           }
         });
-      console.log(this.sleep);
     }, 2000);
   }
 

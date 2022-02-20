@@ -2,13 +2,14 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { ArtistService } from "src/app/services/database/artist.service"; 
+import { ArtistService } from "src/app/services/database/artist.service";
 import { Artistas } from "src/app/shared/artistas";
 import { LoadingController, ModalController } from "@ionic/angular";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { VideoPage } from "../video/video.page";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
   selector: "app-artist",
@@ -23,6 +24,7 @@ export class ArtistPage {
     private sliderSvc: SlidesService,
     private modalCtrl: ModalController,
     private browser: InAppBrowser,
+    private databaseSvc: DatabaseService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -46,16 +48,23 @@ export class ArtistPage {
 
   loading: any;
 
-  /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
-  isFilterType = false;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  isOpenType: boolean = false;
   /**se guardan los sliders de la pantalla artistas */
   sliderArtist: Slider[] = [];
+  /**control la apertura de filtros */
+  isFilterLocation: boolean = false;
+  isFilterType: boolean = false;
+  /**guardan filtos seleccionados */
+  optionLocation: String = null;
+  optionType: String = null;
+  /**departamente seleccionado actualmente */
+  currentDepto: String = this.databaseSvc.selectionDepto;
+  /**filtro seleccionado, distancia o departamento */
+  dist: number = null;
+  dep: String = null;
+  /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
+  msgEmptyPlace: String = null;
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -64,46 +73,15 @@ export class ArtistPage {
 
   filterArtist() {
     this.dataForm = this.filterForm.value;
-  }
 
-  changeFilterLocation() {
-    this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isFilterType) {
-      this.isFilterType = false;
-      this.isOpenType = false;
-    }
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterType) this.isFilterType = false;
 
-    if(this.isOpenType) this.isOpenType = false;
-  }
+    this.optionLocation = this.dataForm.localidad;
+    this.optionType = this.dataForm.categoria;
 
-  changeFilterType() {
-    this.isFilterType = !this.isFilterType;
-    this.isOpenType = !this.isOpenType;
-    if (this.isFilterLocation) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-    }
-
-    if(this.isOpenLocation) this.isOpenLocation = false;
-  }
-
-  changeLocation() {  
-    this.isOpenLocation = !this.isOpenLocation;
-    this.isFilterLocation = !this.isFilterLocation;
-    if (this.isOpenType) {
-      this.isOpenType = false;
-      this.isFilterType = false;
-    }
-  }
-
-  changeType() {
-    this.isOpenType = !this.isOpenType;
-    this.isFilterType = !this.isFilterType;
-    if (this.isOpenLocation) {
-      this.isOpenLocation = false;
-      this.isFilterLocation = false;
-    }
+    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
+    if (this.dataForm.categoria === "") this.optionType = "tipo";
   }
 
   async show(message: string) {
@@ -115,6 +93,16 @@ export class ArtistPage {
     this.loading.present().then(() => {
       this.loading.dismiss();
     });
+  }
+
+  changeFilterLocation() {
+    this.isFilterLocation = !this.isFilterLocation;
+    if (this.isFilterType) this.isFilterType = false;
+  }
+
+  changeFilterType() {
+    this.isFilterType = !this.isFilterType;
+    if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
   get lista_localidad_artis() {
@@ -138,40 +126,66 @@ export class ArtistPage {
     });
     return artisttipolist;
   }
-  
+
   /**retorna true si se selecciono Distancia como filtro principal */
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
 
-    /**
+  /**
    * Abre modal para reproducir video
    * @param url - URL del video que se va a ejecutar
    */
-     async verVideo(url: string) {
-      console.log(url);
-      const video = await this.modalCtrl.create({
-        component: VideoPage,
-        cssClass: "modal-video",
-        backdropDismiss: false,
-        showBackdrop: true,
-        componentProps: {
-          url: url,
-        },
-      });
-  
-      await video.present();
-    }
+  async verVideo(url: string) {
+    console.log(url);
+    const video = await this.modalCtrl.create({
+      component: VideoPage,
+      cssClass: "modal-video",
+      backdropDismiss: false,
+      showBackdrop: true,
+      componentProps: {
+        url: url,
+      },
+    });
 
-    openInstagram(url: string) {
-      this.browser.create(url, "_system");
-    }
-  
-    openSpotify(url: string) {
-      this.browser.create(url, "_system");
-    }
+    await video.present();
+  }
+
+  openInstagram(url: string) {
+    this.browser.create(url, "_system");
+  }
+
+  openSpotify(url: string) {
+    this.browser.create(url, "_system");
+  }
 
   ionViewWillEnter() {
+    if (
+      localStorage.getItem("deptoActivo") != undefined &&
+      localStorage.getItem("deptoActivo") != null
+    ) {
+      this.dist = null;
+      this.dep = localStorage.getItem("deptoActivo");
+      this.msgEmptyPlace =
+        "No hay lugares para mostrar en el departamento de " + this.dep;
+    } else if (
+      localStorage.getItem("distanceActivo") != undefined &&
+      localStorage.getItem("distanceActivo") != null
+    ) {
+      this.dep = null;
+      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.msgEmptyPlace =
+        "No hay lugares para mostrar en el rango de " + this.dist + " km";
+    }
+
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataForm = "";
+      this.optionLocation = "localidad";
+      this.optionType = "tipo";
+    }
+
     this.unsubscribe$ = new Subject<void>();
 
     this.sliderSvc.getSliders();

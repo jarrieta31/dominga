@@ -239,7 +239,6 @@ export class WhereEatPage {
             });
           }
         });
-      console.log(this.eat);
     }, 2000);
   }
 
