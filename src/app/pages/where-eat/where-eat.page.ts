@@ -10,6 +10,7 @@ import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { States } from "src/app/shared/enum/states.enum";
+import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
   selector: "app-where-eat",
@@ -21,7 +22,7 @@ export class WhereEatPage {
   private unsubscribe$: Subject<void>;
 
   /**captura los datos del formulario de filtros */
-  dataForm: string = "";
+  dataForm: any = "";
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -46,10 +47,6 @@ export class WhereEatPage {
   location: any[] = [];
   /**controla cuando descartar el spinner de carga */
   isLoading = false;
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
   /**se guardan los sliders de la pantalla donde_comer */
   sliderEat: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
@@ -63,6 +60,12 @@ export class WhereEatPage {
   hora: string | number;
   /**cantidad de minutos para llegar a cada lugar */
   minuto: string | number;
+  /**control la apertura de filtros */
+  isFilterLocation: boolean = false;
+  /**guardan filtos seleccionados */
+  optionLocation: String = null;
+  /**departamente seleccionado actualmente */
+  currentDepto: String = this.databaseSvc.selectionDepto;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -70,7 +73,8 @@ export class WhereEatPage {
     private fb: FormBuilder,
     private sliderSvc: SlidesService,
     private http: HttpClient,
-    private geolocationSvc: GeolocationService
+    private geolocationSvc: GeolocationService,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -99,8 +103,8 @@ export class WhereEatPage {
     return localidades;
   }
 
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -125,16 +129,13 @@ export class WhereEatPage {
 
   filterEat() {
     this.dataForm = this.filterForm.value;
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    this.optionLocation = this.dataForm.localidad;
+    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
   }
 
-  changeFilterLocation() {
+  changeFilterEat() {
     this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
-  }
-
-  changeLocation() {
-    this.isOpenLocation = !this.isOpenLocation;
-    // if (this.isOpenLocation == false) this.isFilterLocation = false;
   }
 
   ionViewWillEnter() {
@@ -152,6 +153,13 @@ export class WhereEatPage {
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    }
+
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataForm = "";
+      this.optionLocation = "localidad";
     }
 
     this.unsubscribe$ = new Subject<void>();
@@ -185,10 +193,6 @@ export class WhereEatPage {
     });
 
     setTimeout(() => {
-      //if (this.eat.length == 0) this.loading.dismiss();
-      // else if (this.dep == null && this.checkDistance == false)
-      //   this.loading.dismiss();
-
       if (this.dep != null) this.checkDistance = States.OK;
 
       this.geolocationSvc.posicion$
@@ -235,7 +239,7 @@ export class WhereEatPage {
             });
           }
         });
-        console.log(this.eat)
+      console.log(this.eat);
     }, 2000);
   }
 

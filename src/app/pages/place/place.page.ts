@@ -109,13 +109,11 @@ export class PlacePage {
 
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
-
     if (this.isFilterType) this.isFilterType = false;
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
-
     if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
@@ -212,18 +210,6 @@ export class PlacePage {
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
-      this.filterForm.reset();
-      this.dataForm = "";
-      this.optionLocation = "localidad";
-      this.optionType = "tipo";
-    }
-
-    if (
-      (localStorage.getItem("last") === "depto" &&
-        localStorage.getItem("distanceActivo") !== null) ||
-      (localStorage.getItem("last") === "distance" &&
-        localStorage.getItem("deptoActivo") !== null)
-    ) {
       this.filterForm.reset();
       this.dataForm = "";
       this.optionLocation = "localidad";

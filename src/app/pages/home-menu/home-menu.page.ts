@@ -81,16 +81,12 @@ export class HomeMenuPage {
   select(depto: string | null, distance: number | null) {
     this.dbService.getSelectMenu(depto, distance);
 
-    if(localStorage.getItem('deptoActivo') !== null) localStorage.setItem("last", "depto");
-    if(localStorage.getItem('distanceActivo') !== null) localStorage.setItem("last", "distance");
-
     if (depto != null && depto != undefined) {
       this.deptoSelected = depto;
       localStorage.setItem("deptoActivo", depto);
       localStorage.removeItem("distanceActivo");
       this.deptoSave = depto;
       this.distanceSave = null;
-      //this.dbService.selectionDistance = null;
       this.distance = false;
       this.depto = false;
       this.distanceSelected = null;
@@ -100,7 +96,6 @@ export class HomeMenuPage {
       localStorage.setItem("distanceActivo", distance.toString());
       localStorage.removeItem("deptoActivo");
       this.distanceSave = distance.toString() + ' km';
-      //this.dbService.selectionDepto = null;
       this.depto = false;
       this.distance = false;
       this.deptoSelected = null;

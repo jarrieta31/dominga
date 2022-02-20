@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="eat">
     <ion-img slot="start" src="/assets/icon/comida.png"></ion-img>
-    <ion-title>¿Dónde Comer?</ion-title> 
+    <ion-title>¿Dónde Comer?</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -19,48 +19,36 @@
 
     <!-- filtro -->
     <div
-      *ngIf="!selectdistancia"
-      class="filter_place" >
-      <ion-label
-        *ngIf="isOpenLocation === false  "
-        (click)="changeFilterLocation()"
-        id="filters"
-        >localidad</ion-label
-      >
-      <ion-label
-        *ngIf="isOpenLocation "
-        class="open_acordeon"
-        (click)="changeFilterLocation()"
-        id="filters"
-        >localidad</ion-label
+      *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
+      class="filter_place"
+    >
+      <ion-label (click)="changeFilterEat()" id="filters">localidad</ion-label>
+    </div>
+    <div
+      *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
+      class="filter_place"
+    >
+      <ion-label (click)="changeFilterEat()" id="filters" class="open_filter"
+        >{{ optionLocation }}</ion-label
       >
     </div>
 
-    <div *ngIf="isFilterLocation && !selectdistancia">
+    <div>
       <form [formGroup]="filterForm" class="form_filter">
         <!-- Filtro por Localidad  -->
-        <div>
-          <div (click)="changeLocation()" class="filter_name">
-            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
-            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
-            <i
-              *ngIf="isOpenLocation === false"
-              class="fi fi-rr-angle-down icon_arrow"
-            ></i>
-            <i
-              *ngIf="isOpenLocation"
-              class="fi fi-rr-angle-up icon_arrow open_acordeon"
-            ></i>
+        <div  *ngIf="isFilterLocation">
+          <div class="filter_name">
+            <span id="filters">Localidad</span>
           </div>
-          <div *ngIf="isOpenLocation">
-            <ion-list class="list_location">
+          <div>
+            <ion-list class="list_location" (click)="changeFilterEat()">
               <ion-radio-group
                 (ionChange)="filterEat()"
                 formControlName="localidad"
                 class="location_border"
               >
                 <ion-item class="filter_list" lines="none">
-                  <ion-text id="filters" >Todo</ion-text>
+                  <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
@@ -68,7 +56,7 @@
                   lines="none"
                   *ngFor="let loc of localidades"
                 >
-                  <ion-text id="filters" >{{ loc }}</ion-text>
+                  <ion-text id="filters">{{ loc }}</ion-text>
                   <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
@@ -81,7 +69,10 @@
   </div>
 
   <ion-list class="lista">
-    <div class="empty" *ngIf="eat.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
+    <div
+      class="empty"
+      *ngIf="eat.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')"
+    >
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
         No hay lugares para mostrar con el filtro seleccionado
@@ -96,7 +87,7 @@
             <ion-avatar item-start>
               <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
             </ion-avatar>
-            <small id="eat-info" >{{item.distancia | formatDistancia}}</small>
+            <small id="eat-info">{{item.distancia | formatDistancia}}</small>
           </div>
           <div class="info">
             <ion-label>
