@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-            <ion-back-button [routerLink]="['/places', id]"></ion-back-button>
+            <ion-back-button (click)="volver()"></ion-back-button>
     </ion-buttons>
 
     <ion-title>Ir a {{ nombre }}</ion-title>

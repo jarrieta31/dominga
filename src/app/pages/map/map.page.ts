@@ -8,7 +8,7 @@ import { GeolocationService } from "../../services/geolocation.service";
 import { Observable, Subject, Subscription } from "rxjs";
 import * as Mapboxgl from "mapbox-gl";
 import { takeUntil, tap } from "rxjs/operators";
-import { ActionSheetController, LoadingController } from "@ionic/angular";
+import { ActionSheetController, LoadingController, NavController } from "@ionic/angular";
 
 @Component({
   selector: "app-map",
@@ -41,6 +41,7 @@ export class MapPage implements OnInit, OnDestroy {
     private geolocationService: GeolocationService,
     private router: Router,
     private loadingController: LoadingController,
+    private navControler: NavController,
     public actionSheetController: ActionSheetController
   ) {
     // this.geolocationService.iniciarSubscriptionClock();
@@ -244,4 +245,9 @@ export class MapPage implements OnInit, OnDestroy {
       this.directions.setDestination([this.longitud, this.latitud]);
     }
   }
+
+  volver(){
+    this.navControler.back();
+  }
 }
+

@@ -65,38 +65,6 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
         this.near = res;
       });
 
-      Mapboxgl.accessToken = environment.mapBoxToken;
-      this.mapa = new Mapboxgl.Map({
-        container: "mapaBox",
-        style: "mapbox://styles/casadominga/ck9m4w6x10dd61iql4bh7jinz",
-        center: [res.ubicacion.lng, res.ubicacion.lat],
-        zoom: 13,
-      });
-
-      const marker = new Mapboxgl.Marker({
-        draggable: false,
-        color: "#ea4335",
-      })
-        .setLngLat([res.ubicacion.lng, res.ubicacion.lat])
-        .addTo(this.mapa);
-
-      if (res.tipo == "Rural" && res.nombre != "Mal Abrigo") {
-        const markerMalAbrigo = new Mapboxgl.Marker({
-          draggable: false,
-          color: "#006400",
-        })
-          .setLngLat([-56.952087, -34.147616])
-          .addTo(this.mapa);
-      }
-
-      this.mapa.on("load", () => {
-        this.mapa.resize();
-      });
-
-      //Abre una nueva pagina con el mapa
-      this.mapa.on("click", () => {
-        this.abrirMapaActionSheet();
-      });
     });
   }
 

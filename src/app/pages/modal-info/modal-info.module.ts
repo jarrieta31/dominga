@@ -17,7 +17,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     FormsModule,
     IonicModule,
     ModalInfoPageRoutingModule,
-    ComponentsModule,ComponentsModule
+    ComponentsModule,
   ],
   declarations: [ModalInfoPage]
 })
