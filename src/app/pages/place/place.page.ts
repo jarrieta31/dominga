@@ -85,6 +85,8 @@ export class PlacePage {
   /**guardan filtos seleccionados */
   optionLocation: String = null;
   optionType: String = null;
+  /**url load  */
+  preloadImage: String = "/assets/load.gif"
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -141,18 +143,18 @@ export class PlacePage {
    * Spinner de carga
    * @param message - mensaje de spinner
    */
-  async show(message: string) {
-    this.loading = await this.loadingCtrl.create({
-      message,
-      spinner: "bubbles",
-    });
+  // async show(message: string) {
+  //   this.loading = await this.loadingCtrl.create({
+  //     message,
+  //     spinner: "bubbles",
+  //   });
 
-    this.loading.present();
-  }
+  //   this.loading.present();
+  // }
 
-  loadImage() {
-    this.loading.dismiss();
-  }
+  // loadImage() {
+  //   this.loading.dismiss();
+  // }
 
   /** Devuelve una lista de localidades */
   get localidades() {
@@ -207,7 +209,7 @@ export class PlacePage {
         "No hay lugares para mostrar en el rango de " + this.dist + " km";
     }
 
-    this.show("Cargando lugares...");
+    // this.show("Cargando lugares...");
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
@@ -234,9 +236,9 @@ export class PlacePage {
     });
 
     setTimeout(() => {
-      if (this.places.length == 0) this.loading.dismiss();
-      else if (this.dep == null && this.checkDistance == false)
-        this.loading.dismiss();
+      // if (this.places.length == 0) this.loading.dismiss();
+      // else if (this.dep == null && this.checkDistance == false)
+      //   this.loading.dismiss();
 
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))

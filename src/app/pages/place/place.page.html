@@ -13,7 +13,7 @@
         <!-- 
         <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
         -->
-        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="/assets/casaDominga.jpeg"></app-preload>
+        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="preloadImage"></app-preload>
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
@@ -148,12 +148,7 @@
           <i style="float: right" class="fas fa-city"></i>
         </ion-card-header>
         <ion-card-content>
-          <ion-img
-            class="imgCard"
-            alt="{{ item.nombre }}"
-            (ionImgDidLoad)="loadImage()"
-            [src]="item.imagenHome['url']"
-          ></ion-img>
+          <app-preload class="imgCard" [url]="item.imagenHome['url']" [alt]="item.nombre" [urlPreload]="preloadImage"></app-preload>
           <div class="duracion">
             <b class="distancia"
               >{{item.distancia | formatDistancia }} -
