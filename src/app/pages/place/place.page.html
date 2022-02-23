@@ -10,7 +10,10 @@
       [options]="slideOpts"
     >
       <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
+        <!-- 
         <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
+        -->
+        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="/assets/casaDominga.jpeg"></app-preload>
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->

@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { MenuComponent } from './menu/menu.component';
 import { TextToSpeechComponent } from './text-to-speech/text-to-speech.component';
 import { MinimapaComponent } from './minimapa/minimapa.component';
+import { PreloadComponent } from './preload/preload.component';
 
 
 @NgModule({
@@ -13,12 +14,14 @@ import { MinimapaComponent } from './minimapa/minimapa.component';
     MenuComponent,
     TextToSpeechComponent,
     MinimapaComponent,
+    PreloadComponent,
   ],
   declarations: [
     RatingComponent,
     MenuComponent,
     TextToSpeechComponent,
     MinimapaComponent,
+    PreloadComponent,
   ],
   imports: [
     CommonModule, 
