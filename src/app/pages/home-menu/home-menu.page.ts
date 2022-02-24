@@ -32,7 +32,7 @@ export class HomeMenuPage {
   constructor(
     private dbService: DatabaseService,
     private geolocationSvc: GeolocationService,
-    public alertController: AlertController,
+    public alertController: AlertController
   ) {}
 
   async presentAlert() {
@@ -95,7 +95,7 @@ export class HomeMenuPage {
       this.deptoSave = null;
       localStorage.setItem("distanceActivo", distance.toString());
       localStorage.removeItem("deptoActivo");
-      this.distanceSave = distance.toString() + ' km';
+      this.distanceSave = distance.toString() + " km";
       this.depto = false;
       this.distance = false;
       this.deptoSelected = null;
@@ -119,11 +119,11 @@ export class HomeMenuPage {
     let deptoSave = localStorage.getItem("deptoActivo");
     let distanceSave = localStorage.getItem("distanceActivo");
 
-    if(distanceSave !== null) this.distanceSave = distanceSave + ' km';
+    if (distanceSave !== null) this.distanceSave = distanceSave + " km";
     else this.distanceSave = null;
 
     this.deptoSave = deptoSave;
-    
+
     if (deptoSave != null && deptoSave != undefined) {
       this.dbService.selectionDepto = deptoSave;
       this.deptoSelected = this.dbService.selectionDepto;
