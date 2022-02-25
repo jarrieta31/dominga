@@ -19,6 +19,7 @@ export class SlidesService {
     //private db: DatabaseService
     ) 
     {
+      this.getSliders();
     this.slider = new BehaviorSubject<Slider[]>(this.init_slider);
   }
 

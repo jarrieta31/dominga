@@ -22,16 +22,13 @@ export class DatabaseService {
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(
-    private db: AngularFireDatabase,
     private afs: AngularFirestore,
     private geoService: GeolocationService
   ) {
-    this.position$ = this.geoService.getPosicionActual$();
-    this.eventos = new Subject();
-    this.getEventos();
+
   }
 
-  eventos: Subject<Eventos[]>;
+  eventos: BehaviorSubject<Eventos[]>;
   allEvents: Eventos[] = [];
 
   currentPosition$: Subscription;
@@ -232,6 +229,7 @@ export class DatabaseService {
     }
 
     if (this.depto != null && !searchDepto) {
+      console.log("depto no encontrado")
       this.afs
         .collection("eventos")
         .ref.where("departamento", "==", this.selectionDepto)
@@ -247,6 +245,7 @@ export class DatabaseService {
           });
 
           this.allEvents = arrEvents;
+          console.log(this.allEvents)
           this.eventos.next(this.allEvents);
           this.allEvents.forEach((f) => {
             f.fechaInicio = new Date(f.fechaInicio["seconds"] * 1000);
@@ -257,6 +256,7 @@ export class DatabaseService {
         })
         .finally(() => "Finally");
     } else if (this.depto != null && searchDepto) {
+      console.log("depto encontrado")
       this.initPlace.forEach((res) => {
         if (res.departamento == this.depto) {
           this.allEvents.push(res);
@@ -264,6 +264,7 @@ export class DatabaseService {
       });
       this.eventos.next(this.allEvents);
     } else if (this.distance != null) {
+      console.log("distance")
       let deptoSearch: boolean = false;
       let limitCurrent: String[] = [];
 
@@ -292,7 +293,7 @@ export class DatabaseService {
         } else {
           this.afs
             .collection("eventos")
-            .ref.where("departamento", "==", this.selectionDepto)
+            .ref.where("departamento", "==", dep)
             .where("fechaInicio", ">=", this.today)
             .where("publicado", "==", true)
             .orderBy("fechaInicio", "asc")
@@ -314,14 +315,6 @@ export class DatabaseService {
       });
       this.eventos.next(this.distanceEvents);
     }
-  }
-
-  getObservable(): Observable<Eventos[]> {
-    return this.eventos.asObservable();
-  }
-
-  getEventsLocal() {
-    this.eventos.next(this.allEvents);
   }
 
   allDepartament: Departament[] = [];

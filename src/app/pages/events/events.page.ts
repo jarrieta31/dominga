@@ -1,15 +1,14 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { BehaviorSubject, Subject, Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
-import { JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-events",
@@ -30,7 +29,7 @@ export class EventsPage {
   eventosSuscription: Subscription;
   dpto_select: String;
   /**captura los datos del formulario de filtros */
-  dataform: string = "";
+  dataform: any = "";
   /**controla si se muestra o no el filtro general de lugares */
   isFilterLocation = false;
   isFilterType = false;
@@ -41,15 +40,19 @@ export class EventsPage {
   isOpenDate: boolean = false;
   /**varibles de filtro por fecha */
   fecha_inicio: Date = new Date();
-  fecha_fin   : Date = new Date(this.fecha_inicio.getDate()+90);
+  fecha_fin: Date = new Date(this.fecha_inicio.getDate() + 90);
+  /**guardan filtos seleccionados */
+  optionLocation: string = null;
+  optionType: string = null;
+  optionDate: string = null;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
 
   filterForm: FormGroup = this.fb.group({
-    tipo        : ["", Validators.required],
-    localidad   : ["", Validators.required],
-    fecha_fin   : ["", Validators.required],
+    tipo: ["", Validators.required],
+    localidad: ["", Validators.required],
+    fecha_fin: ["", Validators.required],
     fecha_inicio: ["", Validators.required],
     // moneda   : ["", Validators.required],
     // precio: [, Validators.required],
@@ -62,13 +65,12 @@ export class EventsPage {
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
     private sliderSvc: SlidesService,
-    private        fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
-
-    this.sliderSvc.getSliders();
+    this.dbService.getEventos();
 
     this.sliderSvc.slider
       .pipe(takeUntil(this.unsubscribe$))
@@ -78,30 +80,17 @@ export class EventsPage {
         });
       });
 
-    this.eventosSuscription = this.dbService
-      .getObservable()
-      .subscribe((eventos) => {(this.eventos = eventos)
-      console.log(eventos)});
-
-    if (this.eventos.length > 0) {
-      if (this.eventos[0].departamento != this.dbService.selectionDepto) {
-        this.dbService.getEventos();
-      }
-    } else {
-      this.dbService.getEventos();
-    }
-    /**Se suscribe al array de eventos, si se genera cambios al estar en la pantalla
-     * se van a actulizar
-     */
-
-    /** */
-    this.dbService.getEventsLocal();
-    /** Actualizo el dpto seleccionado */
-    this.dpto_select = this.dbService.selectionDepto;
+    this.dbService.eventos
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((eventos) => {
+        this.eventos = eventos;
+        this.eventos.forEach((res) => console.log(res.fechaInicio));
+      });
   }
 
   ionViewDidLeave() {
-    this.eventosSuscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   /**
@@ -115,14 +104,13 @@ export class EventsPage {
     autoplay: true,
   };
   /**para decodificar texto en base64 */
-  decodeDescEventos(){
-    this.eventos.forEach(ev => {
+  decodeDescEventos() {
+    this.eventos.forEach((ev) => {
       console.log(`descEnCode:: ${ev.descripcion}`);
       const descripcion = atob(ev.descripcion);
       ev.descripcion = descripcion;
       console.log(`desc:: ${ev.descripcion}`);
-
-    })
+    });
   }
 
   /**
@@ -151,7 +139,6 @@ export class EventsPage {
     precio: number,
     precioUnico: boolean
   ) {
-    
     if (descripcion.length > 250) {
       var desc = descripcion.substring(0, 250) + " ...";
     } else {
@@ -182,13 +169,12 @@ export class EventsPage {
         whatsapp: whatsapp,
         moneda: moneda,
         precio: precio,
-        precioUnico: precioUnico
+        precioUnico: precioUnico,
       },
     });
 
     await modal.present();
   }
-
 
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
@@ -197,60 +183,25 @@ export class EventsPage {
   /** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isFilterType || this.isFilterDate) {
-      this.isFilterType = false;
-      this.isOpenType = false;
-      this.isFilterDate = false;
-      this.isOpenDate = false;
-    }
+
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterDate) this.isFilterDate = false;
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
-    this.isOpenType = !this.isOpenType;
-    if (this.isFilterLocation || this.isFilterDate) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-      this.isFilterDate = false;
-      this.isOpenDate = false;
-    }
+
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterDate) this.isFilterDate = false;
   }
 
   changeFilterDate() {
     this.isFilterDate = !this.isFilterDate;
-    this.isOpenDate = !this.isOpenDate;
-    if (this.isFilterLocation || this.isFilterType) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-      this.isFilterType = false;
-      this.isOpenType = false;
-    }
+
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
-  changeLocation() {
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isOpenType || this.isOpenDate) {
-      this.isOpenType = false;
-      this.isOpenDate = false;
-    }
-  }
-
-  changeType() {
-    this.isOpenType = !this.isOpenType;
-    if (this.isOpenLocation || this.isOpenDate) {
-      this.isOpenLocation = false;
-      this.isOpenDate = false;
-    }
-  }
-
-  changeDate() {
-    this.isOpenDate = !this.isOpenDate;
-    if (this.isOpenLocation || this.isOpenType) {
-      this.isOpenLocation = false;
-      this.isOpenType = false;
-    }
-  }
   /**
    * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
    * @param tipoEventos Arreglo de tipos de eventos. String
@@ -268,11 +219,23 @@ export class EventsPage {
   filterEvento() {
     this.dataform = this.filterForm.value;
     this.actualizarFechas();
+
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterDate) this.isFilterDate = false;
+
+    this.optionLocation = this.dataform.localidad;
+    this.optionType = this.dataform.tipo;
+    this.optionDate = this.dataform.fecha_inicio;
+
+    if (this.dataform.localidad === "") this.optionLocation = "localidad";
+    if (this.dataform.tipo === "") this.optionType = "tipo";
+    if (this.dataform.fecha_inicio === "" && this.dataform.fecha_fin === "") this.optionDate = "fecha";
   }
 
-  actualizarFechas(){
+  actualizarFechas() {
     this.fecha_inicio = this.filterForm.get("fecha_inicio").value;
-    this.fecha_fin    = this.filterForm.get("fecha_fin").value;
+    this.fecha_fin = this.filterForm.get("fecha_fin").value;
   }
 
   /**Ordeno los eventos alfabeticamente por el "Tipo"
@@ -332,10 +295,10 @@ export class EventsPage {
   }
 
   /**retorna true si se selecciono Distancia como filtro principal */
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
-  
+
   /**
    *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
