@@ -236,5 +236,7 @@ export class WhereSleepPage {
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
   }
 }

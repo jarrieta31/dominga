@@ -245,5 +245,7 @@ export class WhereEatPage {
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
   }
 }

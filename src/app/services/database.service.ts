@@ -16,7 +16,7 @@ export class DatabaseService {
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allLugares: Eventos[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
-  initPlace: Eventos[] = [];
+  initEvents: Eventos[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
   save_depto: String[] = [];
 
@@ -24,9 +24,7 @@ export class DatabaseService {
   constructor(
     private afs: AngularFirestore,
     private geoService: GeolocationService
-  ) {
-
-  }
+  ) {}
 
   eventos: BehaviorSubject<Eventos[]>;
   allEvents: Eventos[] = [];
@@ -213,7 +211,7 @@ export class DatabaseService {
     let checkDepto = this.geoService.currentDepto;
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
-    this.allLugares = [];
+    this.allEvents = [];
     this.distanceEvents = [];
 
     this.eventos = new BehaviorSubject<Eventos[]>(this.distanceEvents);
@@ -229,7 +227,6 @@ export class DatabaseService {
     }
 
     if (this.depto != null && !searchDepto) {
-      console.log("depto no encontrado")
       this.afs
         .collection("eventos")
         .ref.where("departamento", "==", this.selectionDepto)
@@ -241,30 +238,26 @@ export class DatabaseService {
           const arrEvents: any[] = [];
           querySnapshot.forEach((item) => {
             const data: any = item.data();
+            data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
             arrEvents.push({ id: item.id, ...data });
+            this.initEvents.push({ id: item.id, ...data });
           });
 
           this.allEvents = arrEvents;
-          console.log(this.allEvents)
           this.eventos.next(this.allEvents);
-          this.allEvents.forEach((f) => {
-            f.fechaInicio = new Date(f.fechaInicio["seconds"] * 1000);
-          });
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => "Finally");
     } else if (this.depto != null && searchDepto) {
-      console.log("depto encontrado")
-      this.initPlace.forEach((res) => {
+      this.initEvents.forEach((res) => {
         if (res.departamento == this.depto) {
           this.allEvents.push(res);
         }
       });
       this.eventos.next(this.allEvents);
     } else if (this.distance != null) {
-      console.log("distance")
       let deptoSearch: boolean = false;
       let limitCurrent: String[] = [];
 
@@ -286,7 +279,7 @@ export class DatabaseService {
         }
 
         if (deptoSearch) {
-          this.initPlace.forEach((init: any) => {
+          this.initEvents.forEach((init: any) => {
             if (init.departamento == dep) this.distanceEvents.push(init);
           });
           deptoSearch = false;
@@ -301,7 +294,8 @@ export class DatabaseService {
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
-                this.initPlace.push({ id: item.id, ...data });
+                data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
+                this.initEvents.push({ id: item.id, ...data });
                 this.distanceEvents.push({ id: item.id, ...data });
               });
               if (!searchDepto) this.save_depto.push(dep);

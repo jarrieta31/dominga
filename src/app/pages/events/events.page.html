@@ -46,17 +46,23 @@
       >
       <img src="/assets/icon/exchange.png" alt="" />
       <ion-label
-        *ngIf="(optionDate === null || optionDate === 'fecha' || optionDate === '')"
+        *ngIf="((optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '') && (optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === ''))"
         (click)="changeFilterDate()"
         id="filters"
         >fecha</ion-label
       >
       <ion-label
-        *ngIf="(optionDate !== null && optionDate !== 'fecha' && optionDate !== '')"
+        *ngIf="((optionDateStart !== null && optionDateStart !== 'fecha' && optionDateStart !== '') || (optionDateEnd !== null && optionDateEnd !== 'fecha' && optionDateEnd !== ''))"
         (click)="changeFilterDate()"
         id="filters"
-        class="open_acordeon"
-        >{{ optionDate | date:'dd.MM' }}</ion-label
+        class="open_acordeon date_filter"
+      >
+        <span *ngIf="optionDateStart !== null && optionDateStart !== ''"
+          >desde {{ optionDateStart | date:'dd.MM' }}</span
+        ><br />
+        <span *ngIf="optionDateEnd !== null && optionDateEnd !== ''"
+          >hasta {{ optionDateEnd | date:'dd.MM' }}</span
+        ></ion-label
       >
     </div>
 
@@ -99,7 +105,7 @@
             <span id="filters" class="open_acordeon">Localidad</span>
           </div>
           <div>
-            <ion-list>
+            <ion-list class="list_type">
               <ion-radio-group
                 (ionChange)="filterEvento()"
                 formControlName="localidad"
@@ -139,7 +145,7 @@
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
                 <ion-item
-                  class="filter_list last"
+                  class="filter_list"
                   lines="none"
                   *ngFor="let cry of lista_tipos_eventos"
                 >
@@ -158,10 +164,11 @@
   <!-- =========<=<=<=< Filtro =========<=<=<=< -->
 
   <ion-list>
-    <ion-item
-      *ngFor="let item of eventos | filterEvents1:dataform "
-      class="event"
-      (click)="openModalDetailEvent(
+    <ng-container *ngFor="let item of eventos | filterEvents1:dataform">
+      <ion-item
+        *ngIf="(item.distanciaNumber <= dist || dpto_select != null)"
+        class="event"
+        (click)="openModalDetailEvent(
         item.id, 
         item.fechaInicio, 
         item.nombre, 
@@ -178,17 +185,21 @@
         item.moneda, 
         item.precio, 
         item.precioUnico)"
-    >
-      <ion-avatar item-start class="image-event">
-        <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
-      </ion-avatar>
-      <div class="info-event">
-        <!-- <div id="filters" class="fecha">
-          {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs
-        </div> -->
-        <div id="filters" class="titulo">{{item.nombre}}</div>
-        <div id="filters" class="descripcion">{{ item.descripcion }}</div>
-      </div>
-    </ion-item>
+      >
+        <ion-avatar item-start class="image-event">
+          <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+        </ion-avatar>
+        <div class="info-event">
+          <div id="filters" class="fecha">
+            {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs
+          </div>
+          <div id="filters" class="titulo">{{item.nombre}}</div>
+          <div id="filters" class="descripcion">{{ item.descripcion }}</div>
+          <div id="filters" class="descripcion">
+            {{ item.distancia | formatDistancia}}
+          </div>
+        </div>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>

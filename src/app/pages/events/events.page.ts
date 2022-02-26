@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
+import { GeolocationService } from "src/app/services/geolocation.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-events",
@@ -27,24 +29,31 @@ export class EventsPage {
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
-  dpto_select: String;
+  dpto_select: string = null;
   /**captura los datos del formulario de filtros */
   dataform: any = "";
   /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
-  isFilterType = false;
-  isFilterDate = false;
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  isOpenType: boolean = false;
-  isOpenDate: boolean = false;
+  isFilterLocation: boolean = false;
+  isFilterType: boolean = false;
+  isFilterDate: boolean = false;
   /**varibles de filtro por fecha */
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date(this.fecha_inicio.getDate() + 90);
   /**guardan filtos seleccionados */
   optionLocation: string = null;
   optionType: string = null;
-  optionDate: string = null;
+  optionDateStart: string = null;
+  optionDateEnd: string = null;
+  /**guarda la distancia del usuario a cada lugar en tiempo real */
+  distancia: string | number;
+  /**cantidad de horas para llegar a cada lugar */
+  hora: string | number;
+  /**cantidad de minutos para llegar a cada lugar */
+  minuto: string | number;
+  /**filtro seleccionado distancia*/
+  dist: number = null;
+  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
+  checkDistance: boolean = false;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
@@ -65,11 +74,37 @@ export class EventsPage {
     private modalCtrl: ModalController,
     private dbService: DatabaseService,
     private sliderSvc: SlidesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private geolocationSvc: GeolocationService,
+    private http: HttpClient
   ) {}
+
+  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
+  getDistance(
+    lngUser: number,
+    latUser: number,
+    lngPlace: number,
+    latPlace: number
+  ) {
+    return this.http.get(
+      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        lngUser +
+        "," +
+        latUser +
+        ";" +
+        lngPlace +
+        "," +
+        latPlace +
+        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
+  }
 
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
+
+    this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    this.dpto_select = localStorage.getItem("deptoActivo");
+
     this.dbService.getEventos();
 
     this.sliderSvc.slider
@@ -78,19 +113,74 @@ export class EventsPage {
         res.forEach((item) => {
           if (item.pantalla == "eventos") this.sliderEvents.push(item);
         });
-      });
 
-    this.dbService.eventos
+        this.dbService.eventos
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((eventos) => {
         this.eventos = eventos;
-        this.eventos.forEach((res) => console.log(res.fechaInicio));
+      });
+
+        setTimeout(() => {
+          this.geolocationSvc.posicion$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((res) => {
+              if (res != null) {
+                this.eventos.forEach((calcDist) => {
+                  this.getDistance(
+                    res.longitud,
+                    res.latitud,
+                    calcDist.ubicacion.lng,
+                    calcDist.ubicacion.lat
+                  )
+                    .pipe(takeUntil(this.unsubscribe$))
+                    .subscribe((res) => {
+                      this.distancia = res["routes"]["0"].distance / 1000;
+
+                      this.hora = Math.trunc(
+                        res["routes"]["0"].duration / 60 / 60
+                      );
+                      this.minuto = Math.trunc(
+                        (res["routes"]["0"].duration / 60) % 60
+                      );
+
+                      let distFormat: string | number, placeDistance: string;
+                      if (this.distancia >= 1) {
+                        distFormat = parseFloat(String(this.distancia)).toFixed(
+                          3
+                        );
+                        placeDistance = "Estás a " + distFormat;
+                      } else {
+                        distFormat = parseFloat(String(this.distancia)).toFixed(
+                          2
+                        );
+                        placeDistance = "Estás a " + distFormat;
+                      }
+
+                      calcDist.distanciaNumber = this.distancia;
+                      calcDist.distancia = placeDistance;
+                      calcDist.hora = String(this.hora + " h");
+                      calcDist.minuto = String(this.minuto + " min");
+
+                      if (this.dist != null) {
+                        if (this.dist >= calcDist.distanciaNumber) {
+                          this.checkDistance = true;
+                        }
+                      } else this.checkDistance = true;
+                    });
+                });
+              } else this.checkDistance = true;
+            });
+        }, 2000);
       });
   }
 
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
+    this.isFilterType = false;
+    this.isFilterDate = false;
   }
 
   /**
@@ -226,11 +316,11 @@ export class EventsPage {
 
     this.optionLocation = this.dataform.localidad;
     this.optionType = this.dataform.tipo;
-    this.optionDate = this.dataform.fecha_inicio;
+    this.optionDateStart = this.dataform.fecha_inicio;
+    this.optionDateEnd = this.dataform.fecha_fin;
 
     if (this.dataform.localidad === "") this.optionLocation = "localidad";
     if (this.dataform.tipo === "") this.optionType = "tipo";
-    if (this.dataform.fecha_inicio === "" && this.dataform.fecha_fin === "") this.optionDate = "fecha";
   }
 
   actualizarFechas() {

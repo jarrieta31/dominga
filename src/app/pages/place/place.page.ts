@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { Observable, Subject } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
 //import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
@@ -24,7 +23,6 @@ export class PlacePage {
   constructor(
     private geolocationSvc: GeolocationService,
     private visitPlaceSvc: VisitPlaceService,
-    private loadingCtrl: LoadingController,
     private databaseSvc: DatabaseService,
     private placeSvc: PlaceService,
     private browser: InAppBrowser,
@@ -61,8 +59,6 @@ export class PlacePage {
   posicion$: Observable<Point>;
   /**departamente seleccionado actualmente */
   currentDepto: String = this.databaseSvc.selectionDepto;
-  /**instance del spinner de carga */
-  loading: any;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
   /**se guardan los sliders de la pantalla lugares */
@@ -138,23 +134,6 @@ export class PlacePage {
         "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
     );
   }
-
-  /**
-   * Spinner de carga
-   * @param message - mensaje de spinner
-   */
-  // async show(message: string) {
-  //   this.loading = await this.loadingCtrl.create({
-  //     message,
-  //     spinner: "bubbles",
-  //   });
-
-  //   this.loading.present();
-  // }
-
-  // loadImage() {
-  //   this.loading.dismiss();
-  // }
 
   /** Devuelve una lista de localidades */
   get localidades() {
@@ -236,10 +215,6 @@ export class PlacePage {
     });
 
     setTimeout(() => {
-      // if (this.places.length == 0) this.loading.dismiss();
-      // else if (this.dep == null && this.checkDistance == false)
-      //   this.loading.dismiss();
-
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
@@ -281,32 +256,6 @@ export class PlacePage {
                   } else this.checkDistance = true;
                 });
             });
-
-            // this.distancePlace.on("route", (e: { route: any }) => {
-            //   let routes = e.route;
-            //   //console.log(routes)
-            //   this.distancia = parseFloat(
-            //     routes.map((r: { distance: number }) => r.distance / 1000)
-            //   );
-            //   this.hora = parseFloat(
-            //     routes.map((r: { duration: number }) =>
-            //       Math.trunc(r.duration / 60 / 60)
-            //     )
-            //   );
-            //   this.minuto = parseFloat(
-            //     routes.map((r: { duration: number }) =>
-            //       Math.trunc((r.duration / 60) % 60)
-            //     )
-            //   );
-
-            //   console.log(calcDist.distancia);
-            // });
-            // let options = { units: "kilometers" };
-            // let dist = distance(
-            //   [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
-            //   [posicion.longitud, posicion.latitud],
-            //   options
-            // );
           } else this.checkDistance = true;
         });
     }, 2000);

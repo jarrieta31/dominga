@@ -210,5 +210,8 @@ export class ArtistPage {
   ionViewDidLeave() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
+    this.isFilterType = false;
   }
 }
