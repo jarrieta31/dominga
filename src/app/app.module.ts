@@ -45,6 +45,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -82,7 +83,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     Network,
     Keyboard,
     CallNumber,
-    InAppBrowser
+    InAppBrowser,
+    TextToSpeech,
   ],
   bootstrap: [AppComponent]
 })
