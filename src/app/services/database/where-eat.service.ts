@@ -188,6 +188,7 @@ export class WhereEatService {
         .collection("donde_comer")
         .ref.where("departamento", "==", this.depto)
         .where("publicado", "==", true)
+        .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
           const arrDondeComer: DondeComer[] = [];
