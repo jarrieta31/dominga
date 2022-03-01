@@ -36,6 +36,14 @@
   padding-left: 25px;
 }
 
+#info-art:nth-child(1) {
+  font-weight: bold;
+ }
+
+ #info-art:nth-child(2) {
+  color: rgb(29, 29, 29);
+ }
+
 .img-elem {
   border-top-left-radius: 5px !important;
   border-bottom-left-radius: 5px !important;
