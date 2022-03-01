@@ -1,10 +1,10 @@
-<div>
-    <ion-icon class="custom" (click)="stopTextToSpeech()" name="stop-circle-sharp"></ion-icon>
-    <ion-icon class="custom" (click)="playTextToSpeech()" name="play-circle-sharp"></ion-icon>
-
-    <ion-fab vertical="top" horizontal="end" slot="fixed">
-        <ion-fab-button>
-            <ion-icon class="hecho" name="play-circle-sharp"></ion-icon>
+    <ion-fab vertical="bottom" color="red" horizontal="end" edge slot="fixed" [style.display]="viewImage == false ? 'flex': 'none'">
+        <ion-fab-button color="circuits">
+            <ion-icon  color="light" name="stop" (click)="stopTextToSpeech()"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-</div>
+    <ion-fab vertical="bottom" horizontal="end" edge slot="fixed" [style.display]="viewImage == true ? 'flex': 'none'">
+        <ion-fab-button color="circuits">
+            <ion-icon color="light" class="hecho" name="play" (click)="playTextToSpeech()" ></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
