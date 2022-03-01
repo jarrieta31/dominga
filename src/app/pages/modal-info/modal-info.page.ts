@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
@@ -7,19 +7,19 @@ import { TipoSputtr } from "src/app/shared/tipo-sputtr";
 import { PlaceService } from "src/app/services/database/place.service";
 import { takeUntil } from "rxjs/operators";
 import { Place } from "src/app/shared/place";
-import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 
 @Component({
   selector: "app-modal-info",
   templateUrl: "./modal-info.page.html",
   styleUrls: ["./modal-info.page.scss"],
 })
-export class ModalInfoPage implements OnInit, OnDestroy {
+export class ModalInfoPage implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Funcionalidad: Texto a Audio (TextToSpeech)
    * Variables globales
    */
   currentUrl: string;
+  descripcionText: string;
   urlSuscription: Subscription;
   speaking: boolean = false;
   paused: boolean = false;
@@ -34,14 +34,14 @@ export class ModalInfoPage implements OnInit, OnDestroy {
 
   place: Place = null;
   callTel: string = null;
+  @ViewChild('descripcion', { static: true }) descripcionHtml: ElementRef;
 
   constructor(
     private router: Router,
     private callNumber: CallNumber,
     private browser: InAppBrowser,
-    private tts: TextToSpeech,
-    private placeSvc: PlaceService
-  ) {}
+    private placeSvc: PlaceService,
+  ) { }
 
   ngOnInit() {
     this.placeSvc.place_selected
@@ -82,11 +82,13 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.descripcionText = this.descripcionHtml.nativeElement.innerText
+  }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-
-    this.stop();
   }
 
   callPhone() {
@@ -103,39 +105,4 @@ export class ModalInfoPage implements OnInit, OnDestroy {
   openFacebook() {
     this.browser.create(this.place.facebook, "_system");
   }
-
-  limpiarTexto(text: string): string {
-    let _txt: string;
-    _txt = text.replace(/<[^>]*>?/g, "");
-    return _txt;
-  }
-
-  convertTextToSpeech(text: string)  {
-    this.tts.speak({
-      text: text,
-      locale: 'es-AR',
-      rate: 1
-  })
-  .then(() => 
-    console.log('Done')
-  )
-  .catch((reason: any) => 
-    console.log(reason)
-  );
-  
-}
-
-stop() {
-  this.tts.speak({
-    text: "",
-    locale: 'es-AR',
-    rate: 1
-})
-.then(() => 
-  console.log('Done')
-)
-.catch((reason: any) => 
-  console.log(reason)
-);
-}
 }

@@ -21,11 +21,10 @@
 </ion-header>
 <ion-content>
   <!-- Botones de reproduccion Text To Speech -->
-  <!-- <app-text-to-speech [descripcion]="place.descripcion"></app-text-to-speech> -->
-<div (click)="convertTextToSpeech(place.descripcion)">Audio</div><br><br>
-<div (click)="stop()">Stop</div>
+  <app-text-to-speech [texto]="descripcionText"></app-text-to-speech> 
+
   <ion-text>
-    <div class="texto" [innerHTML]="place.descripcion"></div>
+    <div #descripcion class="texto" [innerHTML]="place.descripcion"></div>
   </ion-text>
 
   <ion-grid>

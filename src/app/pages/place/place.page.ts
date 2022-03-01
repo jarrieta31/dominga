@@ -218,6 +218,7 @@ export class PlacePage {
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
+          console.log(res)
           if (res != null) {
             this.places.forEach((calcDist) => {
               this.getDistance(
@@ -227,7 +228,7 @@ export class PlacePage {
                 calcDist.ubicacion.lat
               )
                 .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
+                .subscribe(res => {
                   this.distancia = res["routes"]["0"].distance / 1000;
 
                   this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
@@ -254,7 +255,9 @@ export class PlacePage {
                       this.checkDistance = true;
                     }
                   } else this.checkDistance = true;
-                });
+                },
+                err => { console.log("Error calculo distancia", err )}
+                ) ;
             });
           } else this.checkDistance = true;
         });

@@ -1,53 +1,10 @@
+<div>
+    <ion-icon class="custom" (click)="stopTextToSpeech()" name="stop-circle-sharp"></ion-icon>
+    <ion-icon class="custom" (click)="playTextToSpeech()" name="play-circle-sharp"></ion-icon>
 
-
-<ion-grid>
-  <p class="play" *ngIf="!speaking || paused" >Reproducir audio</p>
-  <p class="play" *ngIf="speaking && !paused" >Pausar audio</p>
-  <ion-buttons *ngIf="!speaking && !paused" >
-    <ion-button
-      (click)=" reproducirDescripcion(descripcion);
-                speaking = !speaking "
-    >
-      <i color="back"  class="fi fi-rr-play"></i>
-      <!-- <img src="/assets/icon/text-to-speech1" alt="text-to-speech"> -->
-    </ion-button>
-    <ion-button>
-      <i color="back"  class="fi fi-rr-file-music"></i>
-    </ion-button> 
-    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
-  </ion-buttons>
-
-  <ion-buttons *ngIf="speaking && !paused" >
-    <ion-button
-      (click)=" pausarReproduccion();
-                paused = !paused; "
-    >
-    <i class="fi fi-rr-pause"></i>
-    </ion-button>
-    <ion-button
-      (click)=" detenerReproduccion();
-                speaking = false; 
-                paused = false; "
-    >
-      <i color="back"  class="fi fi-rr-stop"></i>
-    </ion-button>  
-    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
-  </ion-buttons>
-
-  <ion-buttons *ngIf="speaking && paused" >
-    <ion-button
-      (click)=" reanudarReproduccion();
-                paused = !paused; "
-    >
-    <i class="fi fi-rr-play"></i>
-    </ion-button>
-    <ion-button
-      (click)=" detenerReproduccion();
-                speaking = false; 
-                paused = false; "
-    >
-      <i color="back"  class="fi fi-rr-stop"></i>
-    </ion-button>  
-    <!-- <p>{{ speaking }}</p><p>{{ paused }}</p>  -->
-  </ion-buttons>
-</ion-grid>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon class="hecho" name="play-circle-sharp"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</div>

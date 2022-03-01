@@ -1,28 +1,12 @@
-* {
-    margin: 0;
+div {
+    padding: 15px 0 0 6%; 
 }
 
-.play {
-    font-family: "Poppins", sans-serif;
-    font-size: 0.8em;
+.custom {
+    font-size: 38pt;
+    color: var(--ion-color-primary)
 }
 
-ion-grid {
-    width: 100%;
-    text-align: center;
-}
+.hecho {
 
-ion-buttons {
-    width: 100%;
-}
-
-ion-button {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.sc-ion-buttons-md-h {
-    display: inline !important;
 }
