@@ -71,7 +71,7 @@
         <div *ngIf="isFilterDate">
           <!-- Filtro por Fecha  -->
           <div class="filter_name">
-            <span id="filters" class="open_acordeon">Fecha</span>
+            <span id="filters">Fecha</span>
           </div>
           <div>
             <div class="filter_list">
@@ -79,6 +79,12 @@
                 (ionChange)="filterEvento()"
                 mode="ios"
                 placeholder="desde"
+                doneText="Sleeccionar"
+                cancelText="Cancelar"
+                monthShortNames="{{monthShortNames}}"
+                min="{{ fullDay }}"
+                displayFormat="DD MMM YYYY"
+                yearValues="{{ customYearValues }}"
                 formControlName="fecha_inicio"
                 id="filters"
               >
@@ -90,6 +96,12 @@
                 (ionChange)="filterEvento()"
                 mode="ios"
                 placeholder="hasta"
+                doneText="Sleeccionar"
+                cancelText="Cancelar"
+                monthShortNames="{{monthShortNames}}"
+                min="{{ fullDay }}"
+                displayFormat="DD MMM YYYY"
+                yearValues="{{ customYearValues }}"
                 formControlName="fecha_fin"
                 id="filters"
               >
@@ -102,7 +114,7 @@
         <!-- Filtro por Localidad  -->
         <div *ngIf="!selectdistancia && isFilterLocation">
           <div class="filter_name filter_type">
-            <span id="filters" class="open_acordeon">Localidad</span>
+            <span id="filters">Localidad</span>
           </div>
           <div>
             <ion-list class="list_type">
@@ -131,7 +143,7 @@
         <!-- filtro por Tipo -->
         <div *ngIf="isFilterType">
           <div class="filter_name filter_type">
-            <span id="filters" class="open_acordeon">Tipo</span>
+            <span id="filters">Tipo</span>
           </div>
           <div>
             <ion-list class="list_type">
@@ -162,7 +174,6 @@
   </div>
 
   <!-- =========<=<=<=< Filtro =========<=<=<=< -->
-
   <ion-list>
     <ng-container *ngFor="let item of eventos | filterEvents1:dataform">
       <ion-item

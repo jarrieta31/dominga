@@ -19,8 +19,8 @@
   flex-direction: row;
   margin: 0 3%;
   height: 75%;
-  position: relative;
-  z-index: 50;
+  // position: relative;
+  // z-index: 50;
 }
 
 .div__menu {
@@ -120,16 +120,17 @@
 }
 /************************************************************************/
 .slider_filter {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
   padding-top: 2%;
-  height: 25%;
+  //height: 25%;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 100 !important;
   background-color: #fff;
+  margin-bottom: 4%;
 }
 
 .option {
@@ -149,6 +150,7 @@
 
 .slider_filter-title {
   padding: 4% 0 0 20px;
+  margin-bottom: 4%;
 }
 
 span {
@@ -214,11 +216,11 @@ ion-button {
 }
 
 .depto_list {
-  margin: 10px auto;
+  margin: 0 auto;
   width: 70%;
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
-  z-index: 150 !important;
+  z-index: 100 !important;
   position: relative;
 }
 

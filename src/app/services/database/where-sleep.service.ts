@@ -199,6 +199,7 @@ export class WhereSleepService {
         .collection("donde_dormir")
         .ref.where("departamento", "==", this.depto)
         .where("publicado", "==", true)
+        .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
           const arrPlaces: DondeDormir[] = [];

@@ -101,7 +101,48 @@ export class EventsPage {
     );
   }
 
+  anioActual: number = 0;
+  customYearValues = [];
+  customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  monthShortNames = [
+    "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic",
+  ];
+  month: number = 0;
+  day: string;
+  fullDay: string = "";
+  month_aux: string = "";
+
   ionViewWillEnter() {
+    this.anioActual = new Date().getFullYear();
+    this.month = this.today.getMonth() + 1;
+    this.day = this.today.getDate().toString();
+
+    if (this.day.length === 1) {
+      this.day = ("0" + this.today.getDate()).toString();
+    } else {
+      this.day = this.today.getDate().toString();
+    }
+
+    if (this.month < 10) {
+      this.month_aux = ("0" + (this.today.getMonth() + 1)).toString();
+    } else {
+      this.month_aux = (this.today.getMonth() + 1).toString();
+    }
+
+    this.fullDay = (
+      this.anioActual +
+      "-" +
+      this.month_aux +
+      "-" +
+      this.day
+    ).toString();
+
+    this.customYearValues = [];
+    for (let i = 0; i < 3; i++) {
+      this.customYearValues.push(this.anioActual);
+      this.anioActual = this.anioActual + 1;
+    }
+
     this.unsubscribe$ = new Subject<void>();
 
     this.dist = parseInt(localStorage.getItem("distanceActivo"));
