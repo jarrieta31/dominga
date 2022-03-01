@@ -46,22 +46,16 @@ export class TextToSpeechComponent implements OnInit {
     async playTextToSpeech() {
         this.presentLoading();
         this.viewImage = false;
-        let arrText = this.texto.split('.');
-        //console.log(arrText)
-
         this.tts.speak({ text: this.texto, locale: 'es-AR', rate: this.rate })
-            .then(() => { this.stopTextToSpeech() })
-            .catch((reason: any) =>
-                // this.loading.dismiss()
-                console.log(reason)
-            );
+            .then(() => { this.viewImage = true })
+            .catch((reason: any) => console.log(reason));
     }
 
     stopTextToSpeech() {
-        //        this.loading.dismiss();
         this.viewImage = true;
         this.tts.speak({ text: "", locale: 'es-AR', rate: 1 })
             .then(() => console.log('Done'))
             .catch((reason: any) => console.log(reason));
     }
+
 }
