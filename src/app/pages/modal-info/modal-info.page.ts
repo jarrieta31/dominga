@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } fr
 import { Router } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { Subject, Subscription } from "rxjs";
-import { TipoSputtr } from "src/app/shared/tipo-sputtr";
+import { Subject } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { takeUntil } from "rxjs/operators";
 import { Place } from "src/app/shared/place";
@@ -13,31 +12,15 @@ import { Place } from "src/app/shared/place";
   templateUrl: "./modal-info.page.html",
   styleUrls: ["./modal-info.page.scss"],
 })
-export class ModalInfoPage implements OnInit, OnDestroy, AfterViewInit {
-  /**
-   * Funcionalidad: Texto a Audio (TextToSpeech)
-   * Variables globales
-   */
-  currentUrl: string;
-  descripcionText: string;
-  urlSuscription: Subscription;
-  speaking: boolean = false;
-  paused: boolean = false;
-  escuchar: boolean = false;
-  vr: string[] = ["1", "1.5", "2"]; //representa las velocidades de reproduccion
-  spUttData: TipoSputtr = {
-    rate: "1", //  Velocidad de Reproduccion: Rango 0.1 - 10, xDefecto 1
-    text: "", // Texto a convertir a audio
-  };
-
+export class ModalInfoPage implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
+  descripcionText: string;
   place: Place = null;
   callTel: string = null;
   @ViewChild('descripcion', { static: true }) descripcionHtml: ElementRef;
 
   constructor(
-    private router: Router,
     private callNumber: CallNumber,
     private browser: InAppBrowser,
     private placeSvc: PlaceService,

@@ -54,6 +54,8 @@ export class EventsPage {
   dist: number = null;
   /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
   checkDistance: boolean = false;
+  /**departamente seleccionado actualmente */
+  currentDepto: String = this.dbService.selectionDepto;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
@@ -105,6 +107,16 @@ export class EventsPage {
     this.dist = parseInt(localStorage.getItem("distanceActivo"));
     this.dpto_select = localStorage.getItem("deptoActivo");
 
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataform = "";
+      this.optionLocation = "localidad";
+      this.optionDateEnd = "";
+      this.optionDateStart = "";
+      this.optionType = "tipo";
+    }
+
     this.dbService.getEventos();
 
     this.sliderSvc.slider
@@ -115,10 +127,10 @@ export class EventsPage {
         });
 
         this.dbService.eventos
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((eventos) => {
-        this.eventos = eventos;
-      });
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((eventos) => {
+            this.eventos = eventos;
+          });
 
         setTimeout(() => {
           this.geolocationSvc.posicion$
@@ -193,15 +205,6 @@ export class EventsPage {
     spaceBetween: 0,
     autoplay: true,
   };
-  /**para decodificar texto en base64 */
-  decodeDescEventos() {
-    this.eventos.forEach((ev) => {
-      console.log(`descEnCode:: ${ev.descripcion}`);
-      const descripcion = atob(ev.descripcion);
-      ev.descripcion = descripcion;
-      console.log(`desc:: ${ev.descripcion}`);
-    });
-  }
 
   /**
    * Muestra el modal con descripción más detallada del evento seleccionado
