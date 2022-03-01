@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit, OnDestroy } from "@angular/core"; 
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { Subject, Subscription } from "rxjs";
-import { TipoSputtr } from "src/app/shared/tipo-sputtr";
+import { Subject } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { takeUntil } from "rxjs/operators";
 import { Place } from "src/app/shared/place";
-import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { TextToSpeech } from "@ionic-native/text-to-speech/ngx";
 
 @Component({
   selector: "app-modal-info",
@@ -15,28 +13,12 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
   styleUrls: ["./modal-info.page.scss"],
 })
 export class ModalInfoPage implements OnInit, OnDestroy {
-  /**
-   * Funcionalidad: Texto a Audio (TextToSpeech)
-   * Variables globales
-   */
-  currentUrl: string;
-  urlSuscription: Subscription;
-  speaking: boolean = false;
-  paused: boolean = false;
-  escuchar: boolean = false;
-  vr: string[] = ["1", "1.5", "2"]; //representa las velocidades de reproduccion
-  spUttData: TipoSputtr = {
-    rate: "1", //  Velocidad de Reproduccion: Rango 0.1 - 10, xDefecto 1
-    text: "", // Texto a convertir a audio
-  };
-
   private unsubscribe$ = new Subject<void>();
 
   place: Place = null;
   callTel: string = null;
 
   constructor(
-    private router: Router,
     private callNumber: CallNumber,
     private browser: InAppBrowser,
     private tts: TextToSpeech,
@@ -110,32 +92,25 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     return _txt;
   }
 
-  convertTextToSpeech(text: string)  {
-    this.tts.speak({
-      text: text,
-      locale: 'es-AR',
-      rate: 1
-  })
-  .then(() => 
-    console.log('Done')
-  )
-  .catch((reason: any) => 
-    console.log(reason)
-  );
-  
-}
+  convertTextToSpeech(text: string) {
+    this.tts
+      .speak({
+        text: text,
+        locale: "es-AR",
+        rate: 1.4,
+      })
+      .then(() => console.log("Done"))
+      .catch((reason: any) => console.log(reason));
+  }
 
-stop() {
-  this.tts.speak({
-    text: "",
-    locale: 'es-AR',
-    rate: 1
-})
-.then(() => 
-  console.log('Done')
-)
-.catch((reason: any) => 
-  console.log(reason)
-);
-}
+  stop() {
+    this.tts
+      .speak({
+        text: "",
+        locale: "es-AR",
+        rate: 1,
+      })
+      .then(() => console.log("Done"))
+      .catch((reason: any) => console.log(reason));
+  }
 }

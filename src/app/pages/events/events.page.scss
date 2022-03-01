@@ -66,15 +66,22 @@ ion-chip {
 .image-event {
   width: 42%;
   height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .info-event {
   width: 55%;
-  margin-left: 3%;
+  // margin-left: 2%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  // align-items: flex-start;
 }
 
 .info-event > div {
-  margin: 0 0 2% 3%;
+  margin: 0 0 2% 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -101,9 +108,7 @@ ion-chip {
 }
 
 .img-elem {
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
+  width: 85%;
   border-radius: 5%;
   margin: 0px;
   -webkit-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
