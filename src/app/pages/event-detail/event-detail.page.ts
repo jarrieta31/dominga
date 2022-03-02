@@ -10,22 +10,23 @@ import { SellingPointsPage } from "../selling-points/selling-points.page";
   styleUrls: ["./event-detail.page.scss"],
 })
 export class EventDetailPage implements OnInit {
-  @Input() id: number;
-  @Input() fecha: string;
-  @Input() titulo: string;
-  @Input() descripcion: string;
-  @Input() imagen: string;
-  @Input() lugar: string;
-  @Input() latitud: number;
-  @Input() longitud: number;
-  @Input() fechaFin: string;
-  @Input() instagram: string;
-  @Input() tickAntel: string;
-  @Input() facebook: string;
-  @Input() whatsapp: string;
-  @Input() moneda: string;
-  @Input() precio: number;
-  @Input() precioUnico: boolean;
+  @Input("id") id: number;
+  @Input("fecha") fecha: string;
+  @Input("titulo") titulo: string;
+  @Input("descripcion") descripcion: string;
+  @Input("imagen") imagen: string;
+  @Input("lugar") lugar: string;
+  @Input("latitud") latitud: number;
+  @Input("longitud") longitud: number;
+  @Input("fechaFin") fechaFin: string;
+  @Input("instagram") instagram: string;
+  @Input("tickAntel") tickAntel: string;
+  @Input("facebook") facebook: string;
+  @Input("whatsapp") whatsapp: string;
+  @Input("moneda") moneda: string;
+  @Input("precio") precio: number;
+  @Input("precioUnico") precioUnico: boolean;
+  @Input("direccion") direccion: boolean;
 
   _second = 1000;
   _minute = this._second * 60;

@@ -29,21 +29,20 @@
     <div class="ubicacion">
       <div id="event-detail-container" class="dir">
         <div id="event-detail-container" class="div-ubicacion" (click)="openMap()">{{ lugar }}</div>
-        <i class="fas fa-map-marker-alt mark-info"></i>529, 18 de Julio, San
-        José de Mayo
+        <i class="fi fi-rr-map-marker mark-info"></i>{{ direccion }}
       </div>
     </div>
     <div class="fecha-hora">
       <div class="fecha">
         <div id="event-detail-container"  class="div-fecha">Fecha</div>
         <div class="fecha-hora_div">
-          <i id="event-detail-container" class="fas fa-calendar-alt mark-info"></i>{{fecha | date: 'dd.MM.yyyy'}}
+          <ion-icon name="calendar-outline" class="mark-info"></ion-icon>{{fecha | date: 'dd.MM.yyyy'}}
         </div>
       </div>
       <div  class="hora">
         <div id="event-detail-container" class="div-hora">Hora</div>
         <div  class="fecha-hora_div">
-          <i id="event-detail-container" class="fas fa-clock mark-info"></i>{{fecha | date:'HH:mm'}}
+          <ion-icon name="time-outline" class="mark-info"></ion-icon>{{fecha | date:'HH:mm'}}
         </div>
       </div>
     </div>

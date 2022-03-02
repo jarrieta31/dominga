@@ -271,7 +271,8 @@ export class EventsPage {
     whatsapp: string,
     moneda: string,
     precio: number,
-    precioUnico: boolean
+    precioUnico: boolean,
+    direccion: string
   ) {
     if (descripcion.length > 250) {
       var desc = descripcion.substring(0, 250) + " ...";
@@ -304,6 +305,7 @@ export class EventsPage {
         moneda: moneda,
         precio: precio,
         precioUnico: precioUnico,
+        direccion: direccion
       },
     });
 
