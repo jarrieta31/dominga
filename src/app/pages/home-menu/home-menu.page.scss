@@ -19,8 +19,6 @@
   flex-direction: row;
   margin: 0 3%;
   height: 75%;
-  // position: relative;
-  // z-index: 50;
 }
 
 .div__menu {
@@ -120,11 +118,7 @@
 }
 /************************************************************************/
 .slider_filter {
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: space-between;
   padding-top: 2%;
-  //height: 25%;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -220,8 +214,10 @@ ion-button {
   width: 70%;
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
-  z-index: 100 !important;
-  position: relative;
+  z-index: 1001 !important;
+  position: fixed;
+  left: 0;
+  right: 0;
 }
 
 .endline {
