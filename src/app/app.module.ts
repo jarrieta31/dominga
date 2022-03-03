@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -40,12 +40,16 @@ import { Platform } from '@ionic/angular';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
-import { Vibration } from '@ionic-native/vibration/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { GpsProvider } from './providers/gps-provider.service';
+
+export function gpsProviderFactory(provider: GpsProvider){
+  return () => provider.getUbicacionInicial();
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -68,23 +72,20 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
     
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
-    Geolocation,
-    LocationAccuracy,
-    Platform,
+    {provide: APP_INITIALIZER, useFactory: gpsProviderFactory, deps: [GpsProvider], multi: true},
     AndroidPermissions,
-    ScreenOrientation,
-    Vibration,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    // AuthService,
-    // AngularFireAuth,
-    // AngularFirestore
-    Network,
-    Keyboard,
     CallNumber,
+    Geolocation,
     InAppBrowser,
+    Keyboard,
+    LocationAccuracy,
+    Network,
+    Platform,
+    ScreenOrientation,
+    SplashScreen,
+    StatusBar,
     TextToSpeech,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent]
 })

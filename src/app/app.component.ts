@@ -41,13 +41,14 @@ export class AppComponent implements OnInit {
       this.gps = res;
     });
 
-    this.geolocationSvc.checkGPSPermission();
-    this.geolocationSvc.iniciarSubscriptionClock();
+//    this.geolocationSvc.checkGPSPermission();
+//    this.geolocationSvc.iniciarSubscriptionClock();
 
-    setTimeout(() => {
+/*    setTimeout(() => {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }, 5000)
+*/
   }
 
   initializeApp() {
