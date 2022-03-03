@@ -245,7 +245,7 @@ export class EventsPage {
    */
   slideOpts = {
     initialSlide: 0,
-    speed: 600,
+    speed: 2000,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,

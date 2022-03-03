@@ -40,7 +40,7 @@ export class ArtistPage {
    */
   slideOpts = {
     initialSlide: 0,
-    speed: 600,
+    speed: 2000,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,
@@ -162,8 +162,6 @@ export class ArtistPage {
   }
 
   ionViewWillEnter() {
-    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
-
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null

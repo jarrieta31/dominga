@@ -39,7 +39,7 @@ export class PlacePage {
   /**Configuración de slider mini galeria */
   slideOpts = {
     initialSlide: 0,
-    speed: 600,
+    speed: 2000,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,
