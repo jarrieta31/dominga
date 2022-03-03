@@ -11,7 +11,6 @@ import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { DatabaseService } from "src/app/services/database.service";
-import { MeasuresService } from "src/app/services/measures.service";
 
 @Component({
   selector: "app-where-sleep",
@@ -72,7 +71,6 @@ export class WhereSleepPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private databaseSvc: DatabaseService,
-    private measures: MeasuresService
   ) {}
 
   async show(message: string) {
@@ -126,8 +124,6 @@ export class WhereSleepPage {
   }
 
   ionViewWillEnter() {
-    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
-
     this.checkDistance = States.DEFAULT;
 
     if (

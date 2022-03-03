@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -25,65 +25,69 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow&display=swap");
 //@import "~@fortawesome/fontawesome-free/css/all.css"; // desabilitar
 //@import "~@flaticon/flaticon-uicons/css/all/all.css";
-@import url('https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url("https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css");
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 
 .personalizar-modal .modal-wrapper {
-   height: 85%;
-   display: block; 
-   margin-left: 4%;
-   margin-right: 4%;
+  height: 85%;
+  display: block;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 
 .modal-video .modal-wrapper {
-   height: 359px;
-   display: block; 
-   margin-left: 4%;
-   margin-right: 4%;
+  height: 359px;
+  display: block;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 
 .modal-accessibility .modal-wrapper {
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-   height: 40%;
-   margin-left: 4%;
-   margin-right: 4%;
-   //border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40%;
+  margin-left: 4%;
+  margin-right: 4%;
+  //border-radius: 10px;
 }
 
 .modal-event .modal-wrapper {
-   //height: 95vh;
-   display: block; 
-   //margin-left: 4%;
-   //margin-right: 4%;
-   //border-radius: 10px;
+  //height: 95vh;
+  display: block;
+  //margin-left: 4%;
+  //margin-right: 4%;
+  //border-radius: 10px;
 }
 
 .filterModal .modal-wrapper {
-   height: 75%;
-   margin: auto 4%;
-   border-radius: 10px;
+  height: 75%;
+  margin: auto 4%;
+  border-radius: 10px;
 }
 
-.filterModal .modal-wrapper{
-   ion-backdrop {
-     --backdrop-opacity: 0.5;
-   }
- }
+.filterModal .modal-wrapper {
+  ion-backdrop {
+    --backdrop-opacity: 0.5;
+  }
+}
 
- .modal-inclusive .modal-wrapper{
-    height: 300px;
-    margin: auto 4%;
- }
+.modal-inclusive .modal-wrapper {
+  height: 300px;
+  margin: auto 4%;
+}
 
- .modal-selling-point .modal-wrapper{
-    height: 250px;
-    margin: auto 4%;
-    border-radius: 10px;
-    padding: 0;
- }
+.modal-selling-point .modal-wrapper {
+  height: 250px;
+  margin: auto 4%;
+  border-radius: 10px;
+  padding: 0;
+}
+
+#setHeight {
+  min-height: calc(100vw / 1.7);
+}

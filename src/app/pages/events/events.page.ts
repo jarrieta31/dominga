@@ -11,7 +11,6 @@ import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { HttpClient } from "@angular/common/http";
-import { MeasuresService } from "src/app/services/measures.service";
 
 @Component({
   selector: "app-events",
@@ -80,7 +79,6 @@ export class EventsPage {
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
-    private measures: MeasuresService
   ) {}
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -115,8 +113,6 @@ export class EventsPage {
   month_aux: string = "";
 
   ionViewWillEnter() {
-    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
-
     this.anioActual = new Date().getFullYear();
     this.month = this.today.getMonth() + 1;
     this.day = this.today.getDate().toString();

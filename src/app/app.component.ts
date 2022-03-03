@@ -7,7 +7,6 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Subject, timer } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeolocationService } from "./services/geolocation.service";
-import { MeasuresService } from "./services/measures.service";
 
 @Component({
   selector: "app-root",
@@ -29,7 +28,6 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private geolocationSvc: GeolocationService,
-    private measures: MeasuresService
   ) {
     this.initializeApp();
   }

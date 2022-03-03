@@ -10,7 +10,6 @@ import { Slider } from "src/app/shared/slider";
 import { VideoPage } from "../video/video.page";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { DatabaseService } from "src/app/services/database.service";
-import { MeasuresService } from "src/app/services/measures.service";
 
 @Component({
   selector: "app-artist",
@@ -26,7 +25,6 @@ export class ArtistPage {
     private modalCtrl: ModalController,
     private browser: InAppBrowser,
     private databaseSvc: DatabaseService,
-    private measures: MeasuresService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -162,8 +160,6 @@ export class ArtistPage {
   }
 
   ionViewWillEnter() {
-    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
-    
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
