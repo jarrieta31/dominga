@@ -13,6 +13,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
+import { MeasuresService } from "src/app/services/measures.service";
 
 @Component({
   selector: "app-place",
@@ -28,7 +29,8 @@ export class PlacePage {
     private browser: InAppBrowser,
     private http: HttpClient,
     private fb: FormBuilder,
-    private sliderSvc: SlidesService
+    private sliderSvc: SlidesService,
+    private measures: MeasuresService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -170,6 +172,8 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
+
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null

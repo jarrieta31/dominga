@@ -11,6 +11,7 @@ import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { States } from "src/app/shared/enum/states.enum";
 import { DatabaseService } from "src/app/services/database.service";
+import { MeasuresService } from "src/app/services/measures.service";
 
 @Component({
   selector: "app-where-eat",
@@ -74,7 +75,8 @@ export class WhereEatPage {
     private sliderSvc: SlidesService,
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService
+    private databaseSvc: DatabaseService,
+    private measures: MeasuresService
   ) {}
 
   async show(message: string) {
@@ -139,6 +141,8 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
+    document.querySelector("ion-slides").style.minHeight = this.measures.screenHeightSliderPX;
+
     this.checkDistance = States.DEFAULT;
 
     if (
