@@ -3,7 +3,6 @@ import { ActionSheetController, ModalController } from "@ionic/angular";
 import { Subscription } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { Place } from "src/app/shared/place";
-import { environment } from "src/environments/environment";
 import { VideoPage } from "../video/video.page";
 import * as Mapboxgl from "mapbox-gl";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -54,7 +53,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
 
       if (this.place.videos.length > 0) {
         this.videos = this.place.videos.filter(
-          (item: any) => item.url !== null
+          (item: any) => (item.url !== null && item.url !== '' && item.url !== undefined)
         );
       }
     

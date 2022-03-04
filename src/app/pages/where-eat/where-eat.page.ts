@@ -9,7 +9,7 @@ import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
-import { States } from "src/app/shared/enum/states.enum";
+// import { States } from "src/app/shared/enum/states.enum";
 import { DatabaseService } from "src/app/services/database.service";
 
 @Component({
@@ -52,8 +52,8 @@ export class WhereEatPage {
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: String = null;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: States = States.DEFAULT;
+  // /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
+  // checkDistance: States = States.DEFAULT;
   /**guarda la distancia del usuario a cada lugar en tiempo real */
   distancia: string | number;
   /**cantidad de horas para llegar a cada lugar */
@@ -66,6 +66,8 @@ export class WhereEatPage {
   optionLocation: String = null;
   /**departamente seleccionado actualmente */
   currentDepto: String = this.databaseSvc.selectionDepto;
+  /**controla si hay elementos para mostrar */
+  isVisible: boolean;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -74,7 +76,7 @@ export class WhereEatPage {
     private sliderSvc: SlidesService,
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -139,7 +141,8 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
-    this.checkDistance = States.DEFAULT;
+    // this.checkDistance = States.DEFAULT;
+    // if (this.dep != null) this.checkDistance = States.OK;
 
     if (
       localStorage.getItem("deptoActivo") != undefined &&
@@ -177,6 +180,13 @@ export class WhereEatPage {
 
     this.afs.donde_comer.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.eat = res;
+
+      if (this.eat.length > 0) {
+        this.isVisible = true;
+      } else {
+        this.isVisible = false;
+      }
+
       this.locationActive = [];
       this.eat.forEach((loc) => {
         let isLocation = false;
@@ -193,8 +203,6 @@ export class WhereEatPage {
     });
 
     setTimeout(() => {
-      if (this.dep != null) this.checkDistance = States.OK;
-
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
@@ -232,7 +240,7 @@ export class WhereEatPage {
                   if (this.dist != null) {
                     if (this.dist >= calcDist.distanciaNumber) {
                       calcDist.mostrar = true;
-                      this.checkDistance = States.FOUND;
+                      //this.checkDistance = States.FOUND;
                     } else calcDist.mostrar = false;
                   }
                 });

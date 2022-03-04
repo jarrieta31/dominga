@@ -7,7 +7,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { takeUntil } from "rxjs/operators";
-import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { DatabaseService } from "src/app/services/database.service";
@@ -20,8 +19,6 @@ import { DatabaseService } from "src/app/services/database.service";
 export class WhereSleepPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: States = States.DEFAULT;
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: String = null;
@@ -37,6 +34,8 @@ export class WhereSleepPage {
   optionLocation: String = null;
   /**departamente seleccionado actualmente */
   currentDepto: String = this.databaseSvc.selectionDepto;
+  /**controla si hay elementos para mostrar */
+  isVisible: boolean;
 
   sleep: DondeDormir[] = [];
   loading: any;
@@ -70,7 +69,7 @@ export class WhereSleepPage {
     private sliderSvc: SlidesService,
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
-    private databaseSvc: DatabaseService,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -124,8 +123,6 @@ export class WhereSleepPage {
   }
 
   ionViewWillEnter() {
-    this.checkDistance = States.DEFAULT;
-
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -162,7 +159,17 @@ export class WhereSleepPage {
     this.sleepSvc.donde_dormir
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        this.sleep = res;
+console.log(res)
+        if (res.length > 0) {
+          console.log("tiene dato")
+          this.sleep = res;
+          this.isVisible = true;
+        } else {
+          console.log("vacio")
+          this.isVisible = false;
+        }
+
+        console.log(this.isVisible)
 
         this.locationActive = [];
 
@@ -184,8 +191,6 @@ export class WhereSleepPage {
     this.show("Cargando lugares...");
 
     setTimeout(() => {
-      if (this.dep != null) this.checkDistance = States.OK;
-
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
@@ -223,7 +228,6 @@ export class WhereSleepPage {
                   if (this.dist != null) {
                     if (this.dist >= calcDist.distanciaNumber) {
                       calcDist.mostrar = true;
-                      this.checkDistance = States.FOUND;
                     } else calcDist.mostrar = false;
                   }
                 });

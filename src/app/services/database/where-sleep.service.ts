@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject } from "rxjs";
 import { DondeDormir } from "src/app/shared/donde-dormir";
-import { DatabaseService } from "../database.service";
 import { GeolocationService } from "../geolocation.service";
 
 @Injectable({
@@ -175,7 +174,9 @@ export class WhereSleepService {
   constructor(
     private afs: AngularFirestore,
     private geolocationSvc: GeolocationService
-  ) {}
+  ) {
+    this.donde_dormir = new BehaviorSubject<DondeDormir[]>(this.distanceSleep);
+  }
 
   getDondeDormir() {
     let checkDepto = this.geolocationSvc.currentDepto;
@@ -183,9 +184,7 @@ export class WhereSleepService {
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];
 
-    this.donde_dormir = new BehaviorSubject<DondeDormir[]>(
-      this.init_dondedormir
-    );
+    //this.donde_dormir.next(this.distanceSleep);
 
     let searchDepto: boolean = false;
     this.save_depto.forEach((search) => {
@@ -253,16 +252,16 @@ export class WhereSleepService {
           deptoSearch = false;
         } else {
           this.afs
-          .collection("donde_dormir")
-          .ref.where("departamento", "==", dep)
-          .where("publicado", "==", true)
-          .get()
+            .collection("donde_dormir")
+            .ref.where("departamento", "==", dep)
+            .where("publicado", "==", true)
+            .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
                 this.init_dondedormir.push({ id: item.id, ...data });
                 this.distanceSleep.push({ id: item.id, ...data });
-              });      
+              });
               if (!searchDepto) this.save_depto.push(dep);
             })
             .catch((err) => {
