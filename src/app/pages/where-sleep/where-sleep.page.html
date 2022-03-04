@@ -24,9 +24,7 @@
       *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
       class="filter_place"
     >
-      <ion-label (click)="changeFilterSleep()" id="filters"
-        >localidad</ion-label
-      >
+      <ion-label (click)="changeFilterSleep()" id="filters">localidad</ion-label>
     </div>
     <div
       *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
@@ -40,7 +38,7 @@
     <div>
       <form [formGroup]="filterForm" class="form_filter">
         <!-- Filtro por Localidad  -->
-        <div *ngIf="isFilterLocation">
+        <div  *ngIf="isFilterLocation">
           <div class="filter_name">
             <span id="filters">Localidad</span>
           </div>
@@ -73,8 +71,16 @@
   </div>
 
   <ion-list class="lista">
-    <ng-container *ngIf="isVisible == true else noVisible">
-      <ion-item *ngFor="let item of sleep | filtroDondeComer:dataForm">
+    <div class="empty" *ngIf="sleep.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div id="eat-info" class="text_empty">
+        No hay lugares para mostrar con el filtro seleccionado
+      </div>
+    </div>
+    <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
+      <ion-item
+        *ngIf="(item.mostrar && checkDistance === 'FOUND') || (checkDistance === 'OK')"
+      >
         <div class="padre">
           <div class="imagen">
             <ion-avatar item-start>
@@ -98,13 +104,5 @@
         </div>
       </ion-item>
     </ng-container>
-    <ng-template #noVisible>
-      <div class="empty">
-        <i class="fi fi-rr-sad icon_empty"></i>
-        <div class="text_empty">
-          No hay lugares para mostrar con el filtro seleccionado
-        </div>
-      </div>
-    </ng-template>
   </ion-list>
 </ion-content>
