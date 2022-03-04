@@ -204,7 +204,7 @@ export class PlaceService {
     this.allLugares = [];
     this.distancePlaces = [];
 
-    this.places = new BehaviorSubject<Place[]>(this.distancePlaces);
+    this.places.next(this.distancePlaces);
 
     let searchDepto: boolean = false;
 

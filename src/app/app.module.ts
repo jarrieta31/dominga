@@ -34,7 +34,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AngularFireStorageModule } from '@angular/fire/storage';
 //Permisos
-import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+//import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 //Plataforma
 import { Platform } from '@ionic/angular';
 
@@ -46,6 +46,9 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { GpsProvider } from './providers/gps-provider.service';
+
+//Plugins Awesome-cordova
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
 export function gpsProviderFactory(provider: GpsProvider){
   return () => provider.getUbicacionInicial();
@@ -85,6 +88,7 @@ export function gpsProviderFactory(provider: GpsProvider){
     SplashScreen,
     StatusBar,
     TextToSpeech,
+    AndroidPermissions,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent]
