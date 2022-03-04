@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
-import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
+//import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
+//import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 //import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Geolocation , Geoposition, PositionError} from '@awesome-cordova-plugins/geolocation/ngx';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
 import { Observable, BehaviorSubject, Subscription, timer } from "rxjs";
@@ -71,7 +74,7 @@ export class GeolocationService {
         return this.geolocation.getCurrentPosition()
     }
 
-    watchingThePsition(): Observable<Geoposition> {
+    watchingThePsition(): Observable<Geoposition | PositionError> {
         return this.geolocation.watchPosition();
     }
 

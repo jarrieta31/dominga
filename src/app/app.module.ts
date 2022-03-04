@@ -17,8 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
 // Importas para geolocalización
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+//import { Geolocation } from '@ionic-native/geolocation/ngx';
+//import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -49,6 +49,8 @@ import { GpsProvider } from './providers/gps-provider.service';
 
 //Plugins Awesome-cordova
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
 export function gpsProviderFactory(provider: GpsProvider){
   return () => provider.getUbicacionInicial();

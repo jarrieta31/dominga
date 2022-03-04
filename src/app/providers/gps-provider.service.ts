@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
+//import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { GeolocationService } from '../services/geolocation.service';
-import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
 @Injectable({

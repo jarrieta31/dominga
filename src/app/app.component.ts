@@ -7,8 +7,11 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Subject, timer } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeolocationService } from "./services/geolocation.service";
-import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
+//import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Geolocation, Geoposition, PositionError } from '@awesome-cordova-plugins/geolocation/ngx';
+
 
 @Component({
     selector: "app-root",
@@ -33,6 +36,7 @@ export class AppComponent implements OnInit {
         private androidPermissions: AndroidPermissions,
         private locationAccuracy: LocationAccuracy,
         public alertController: AlertController,
+        private geolocation: Geolocation,
     ) {
         this.initializeApp();
     }
@@ -59,18 +63,19 @@ export class AppComponent implements OnInit {
     async initializeApp() {
         this.checkReady()
     }
-    
+
     checkReady = async () => {
         try {
             await this.platform.ready();
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            await this.checkGPSPermissionAsync();
+            //await this.checkGPSPermissionAsync();
+            await this.requestGPSPermissionAsync();
             timer(3000).subscribe(() => (this.showSplash = false));
             this.checkDarkMode();
             this.modeDyslexic();
         } catch (error) {
-           console.log("Error de Platform Ready: ", error) 
+            console.log("Error de Platform Ready: ", error)
         }
     }
 
@@ -94,28 +99,6 @@ export class AppComponent implements OnInit {
         }
     }
 
-
-    //Compruebe si la aplicación tiene permiso de acceso GPS
-//    checkGPSPermission() {
-//        return this.androidPermissions
-//            .checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-//            .then(
-//                (result) => {
-//                    if (result.hasPermission) {
-//                        //Si tiene permiso, muestre el diálogo 'Activar GPS'
-//                        this.geolocationSvc.gps = true;
-//                        this.askToTurnOnGPS();
-//                    } else {
-//                        //Si no tiene permiso pida permiso
-//                        this.requestGPSPermission();
-//                    }
-//                },
-//                (err) => {
-//                    console.log("Error checkGPS: ", err);
-//                }
-//            );
-//    }
-
     /**
      * Función que inicia el proceso de comprobar el acceso al gps
      */
@@ -135,23 +118,6 @@ export class AppComponent implements OnInit {
         }
     }
 
-    //Pide los permisos para el GPS julio
-    //    async requestGPSPermission() {
-    //        return await this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-    //            if (canRequest) {
-    //                console.log("canRequest", canRequest);
-    //            } else {
-    //                //Mostrar el diálogo 'Solicitud de permiso de GPS'
-    //                this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
-    //                    // método de llamada para encender el GPS
-    //                    () => { this.askToTurnOnGPS(); },
-    //                    //Mostrar alerta si el usuario hace clic en "No, gracias"
-    //                    (error) => { console.log("requestPermission. Error al solicitar permisos de ubicación ", error); }
-    //                );
-    //            }
-    //        });
-    //    }
-
     /**
      * 
      */
@@ -162,7 +128,11 @@ export class AppComponent implements OnInit {
                 console.log("Ya tiene el permiso: ", consultaPermiso)
                 this.geolocationSvc.gps = true;
             } else {
-              await this.askToTurnOnGPSAsync()
+                await this.askToTurnOnGPSAsync();
+                this.geolocationSvc.gps = true;
+                const posicion = await this.getPosicionActual();
+                this.geolocationSvc.posicion = { longitud: posicion.coords.longitude, latitud: posicion.coords.longitude };
+                this.geolocationSvc.posicion$.next(this.geolocationSvc.posicion)
             }
         } catch (error) {
             console.log("Error en requestGPSPermissionAsync: ", error);
@@ -178,16 +148,6 @@ export class AppComponent implements OnInit {
         }
     }
 
-    /*    async askToTurnOnGPS() {
-            return await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                () => {
-    
-                    this.geolocationSvc.gps = true;
-                }, // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas
-                (error) => { ; }
-            );
-        }
-    */
     askToTurnOnGPSAsync = async () => {
         try {
             const pidePermiso = await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
@@ -195,6 +155,14 @@ export class AppComponent implements OnInit {
             // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas
         } catch (error) {
             console.log("Error al solicitar permisos de ubicación " + JSON.stringify(error));
+        }
+    }
+
+    getPosicionActual = async () => {
+        try {
+            return await this.geolocation.getCurrentPosition();
+        } catch (error) {
+            console.log("Error para obtener la posicion: ", error);
         }
     }
 
