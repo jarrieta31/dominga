@@ -3,14 +3,16 @@ import { Component, OnInit } from "@angular/core";
 import { AlertController, Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Subject, timer } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeolocationService } from "./services/geolocation.service";
 //import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
-import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { AndroidPermissions, AndroidPermissionResponse } from '@awesome-cordova-plugins/android-permissions/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
-import { Geolocation, Geoposition, PositionError } from '@awesome-cordova-plugins/geolocation/ngx';
+//import { Geolocation, Geoposition, PositionError } from '@awesome-cordova-plugins/geolocation/ngx';
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx';
+import { isThisISOWeek } from "date-fns";
 
 
 @Component({
@@ -37,27 +39,12 @@ export class AppComponent implements OnInit {
         private locationAccuracy: LocationAccuracy,
         public alertController: AlertController,
         private geolocation: Geolocation,
+        private diagnostic: Diagnostic,
     ) {
         this.initializeApp();
     }
 
     ngOnInit(): void {
-        this.unsubscribe$ = new Subject<void>();
-        this.geolocationSvc.posicion$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((res) => {
-                console.log(res);
-                this.gps = res;
-            });
-
-        //    this.geolocationSvc.checkGPSPermission();
-        //    this.geolocationSvc.iniciarSubscriptionClock();
-
-        /*    setTimeout(() => {
-                this.unsubscribe$.next();
-                this.unsubscribe$.complete();
-            }, 5000)
-        */
     }
 
     async initializeApp() {
@@ -70,6 +57,7 @@ export class AppComponent implements OnInit {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             //await this.checkGPSPermissionAsync();
+            this.verEstadoGps()
             await this.requestGPSPermissionAsync();
             timer(3000).subscribe(() => (this.showSplash = false));
             this.checkDarkMode();
@@ -100,6 +88,40 @@ export class AppComponent implements OnInit {
     }
 
     /**
+     * Funcion que muestra si el GPS está activo, debe estar en 'high_accuracy'
+     */
+    verEstadoGps = async () => {
+        try {
+            let gpsStatus = await this.diagnostic.getLocationMode(); //
+            console.log('Estado: ' + gpsStatus)
+            if(gpsStatus !== 'high_accuracy'){//si está apagdo
+                //Lanza el popup de google para encender el GPS
+                await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+                gpsStatus = await this.diagnostic.getLocationMode();
+                if(gpsStatus === 'high_accuracy'){
+                    const pos = await this.geolocation.getCurrentPosition();
+                    this.geolocationSvc.posicion = {latitud: pos.coords.latitude, longitud: pos.coords.longitude};
+                    this.geolocationSvc.posicion$.next(this.geolocationSvc.posicion)
+                }
+            }
+        } catch (error) {
+            console.log('Error, verPermiso:', error)
+        }
+    }
+
+    /**
+     * Funcion que muestra el estado del permiso para el uso del GPS, debe estar en 'GRANTED'
+     */
+    verPermisoGps = async () => {
+        try {
+            const estado = await this.diagnostic.getLocationAuthorizationStatus()
+            console.log('LocationAuthorization: ' + estado);
+        } catch (error) {
+            console.log('Error, verPermiso:', error)
+        }
+    }
+
+    /**
      * Función que inicia el proceso de comprobar el acceso al gps
      */
     checkGPSPermissionAsync = async () => {
@@ -125,7 +147,7 @@ export class AppComponent implements OnInit {
         try {
             const consultaPermiso = await this.locationAccuracy.canRequest();
             if (consultaPermiso) {
-                console.log("Ya tiene el permiso: ", consultaPermiso)
+                alert("LocationAccuracy permiso: " + consultaPermiso)
                 this.geolocationSvc.gps = true;
             } else {
                 await this.askToTurnOnGPSAsync();
@@ -166,7 +188,15 @@ export class AppComponent implements OnInit {
         }
     }
 
-
+    async presentAlert() {
+        const alert = await this.alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Notificacion',
+            subHeader: 'Subtitle',
+            message: 'La apliaci.',
+            buttons: ['OK'],
+        });
+    }
     // if (localStorage.getItem("modoOscuro"))
     //     try {
     //       this.modo = JSON.parse(localStorage.getItem("modoOscuro"));

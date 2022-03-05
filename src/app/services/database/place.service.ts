@@ -190,6 +190,7 @@ export class PlaceService {
     private geolocationSvc: GeolocationService
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
+    this.geolocationSvc.startGeolocation()
   }
 
   /**
