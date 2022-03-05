@@ -24,8 +24,8 @@ export class PreloadComponent implements AfterViewInit {
   ngAfterViewInit(): void {}
 
   mostrarImagen() {
-    console.log("carga finalizada");
+    //console.log("carga finalizada");
     this.viewImage = true;
-    console.log(this.viewImage);
+    //console.log(this.viewImage);
   }
 }

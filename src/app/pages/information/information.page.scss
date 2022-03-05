@@ -5,11 +5,11 @@
     margin-bottom: 2px;
 }
 
-.iconInfo {
-    color: #fff;
-    width: 12%;
+ion-icon {
+    font-size: 1.5rem;
     margin-right: 8%;
-}
+    color: var(--ion-color-back);
+  }
 
 .item-accordion {
     background-color: grey !important;

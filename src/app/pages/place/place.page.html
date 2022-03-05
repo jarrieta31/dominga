@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar> </ion-toolbar>
+  <ion-toolbar color="party"> </ion-toolbar>
 </ion-header>
 <ion-content>
   <div id="alto" class="slider">
@@ -114,13 +114,14 @@
   </div>
 
   <div class="cards">
-    <div
+    <ion-list>
+    <!-- <div
       class="empty"
       *ngIf="(checkDistance == false && dep == null) || places.length == 0"
     >
       <div class="text_empty">{{ msgEmptyPlace }}</div>
       <i class="far fa-sad-tear icon_empty"></i>
-    </div>
+    </div> -->
     <ng-container *ngFor="let item of places | filterPlaces:dataForm">
       <ion-card
         *ngIf="(item.distanciaNumber <= dist || dep != null) && checkDistance"
@@ -129,24 +130,12 @@
         [routerLink]="['/place-selected', item.id]"
       >
         <ion-card-header
-          *ngIf="item.tipo == 'Rural'"
-          color="options"
+          color="party"
           id="place-title"
         >
           {{ item.nombre }}<span class="categoria"
             >&nbsp;&nbsp;({{item.tipo}})</span
           >
-          <i style="float: right" class="fas fa-tractor"></i>
-        </ion-card-header>
-        <ion-card-header
-          *ngIf="item.tipo == 'Urbano'"
-          color="information"
-          id="place-title"
-        >
-          {{ item.nombre }}<span class="categoria"
-            >&nbsp;&nbsp;({{item.tipo}})</span
-          >
-          <i style="float: right" class="fas fa-city"></i>
         </ion-card-header>
         <ion-card-content>
           <app-preload class="imgCard" [url]="item.imagenHome['url']" [alt]="item.nombre" [urlPreload]="preloadImage"></app-preload>
@@ -162,5 +151,6 @@
         </ion-card-content>
       </ion-card>
     </ng-container>
+  </ion-list>
   </div>
 </ion-content>

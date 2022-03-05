@@ -166,13 +166,14 @@ export class WhereEatService {
   /**se guardan los lugares recibidos desde el filtro distancia */
   distanceEat: DondeComer[] = [];
 
-  constructor(private afs: AngularFirestore, private geolocationSvc: GeolocationService) {}
+  constructor(private afs: AngularFirestore, private geolocationSvc: GeolocationService) {
+    this.donde_comer = new BehaviorSubject<DondeComer[]>(this.init_dondecomer);
+  }
 
   getDondeComer() {
     let checkDepto = this.geolocationSvc.currentDepto;
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
-    this.donde_comer = new BehaviorSubject<DondeComer[]>(this.init_dondecomer);
     this.allDondeComer = [];
     this.distanceEat = [];
 

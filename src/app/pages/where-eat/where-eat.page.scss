@@ -24,13 +24,14 @@ ion-item {
   margin-top: 4%;
 }
 
-ion-img {
-  width: 12%;
+ion-icon {
+  font-size: 1.5rem;
   margin-left: 8%;
+  color: var(--ion-color-back);
 }
 
 ion-title {
-  color: #fff;
+  color: var(--ion-color-back);
   font-weight: 300;
   font-family: "Poppins", sans-serif;
 }
