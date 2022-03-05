@@ -193,11 +193,15 @@ ion-button {
 .filter_button {
   display: flex;
   flex-direction: row;
-  border: 2px solid #888;
+  justify-content: space-around;
+  align-items: center;
   margin: auto;
-  width: 85%;
-  border-radius: 10px;
-  padding: 1% 2.5px 0.5% 2.5px;
+  position: relative;
+  z-index: 50;
+  width: 90%;
+  background-color: var(--ion-color-light);
+  padding: 16px;
+  border-radius: 60px;
 }
 
 .filter_button > i {
