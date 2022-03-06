@@ -5,6 +5,7 @@ import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { GeolocationService } from "../geolocation.service";
+import { GpsProvider } from '../../providers/gps-provider.service';
 
 @Injectable({
   providedIn: "root",
@@ -187,10 +188,10 @@ export class PlaceService {
 
   constructor(
     private afs: AngularFirestore,
-    private geolocationSvc: GeolocationService
+    private geolocationSvc: GeolocationService,
   ) {
+    console.log("place.server")
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
-    this.geolocationSvc.startGeolocation()
   }
 
   /**
@@ -198,8 +199,8 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces() {
-
     let checkDepto = this.geolocationSvc.currentDepto;
+    console.log('places.service ', checkDepto)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];

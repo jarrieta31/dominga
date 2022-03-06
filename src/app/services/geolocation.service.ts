@@ -9,13 +9,14 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
-import { Observable, BehaviorSubject, Subscription, timer } from "rxjs";
+import { Observable, BehaviorSubject, Subscription, timer, Subject } from "rxjs";
 import { Place } from "../shared/place";
 import { TwoPoints } from "../shared/two-points";
 import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
-import { filter, tap } from 'rxjs/operators';
+import { filter, tap, takeUntil } from 'rxjs/operators';
+import { GpsProvider } from '../providers/gps-provider.service';
 
 
 @Injectable({
@@ -27,10 +28,10 @@ export class GeolocationService {
     mapa: Mapboxgl.Map;
     myPositionMarker: any = null;
     points: Point[];
-
+    private unsubscribeGPS$: Subject<void>;
     isWatching: boolean;
     distancia: number;
-    posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
+    posicion$: BehaviorSubject<Point>;
     posicion: Point = { longitud: 0, latitud: 0 };
     latCenter: number = 0;
     longCenter: number = 0;
@@ -39,46 +40,58 @@ export class GeolocationService {
     sourceGpsSubject$ = new BehaviorSubject(null);
     public gps: boolean = false;
     subscriptionClock: any;
-    public currentDepto: String = null;
+    public currentDepto: string = null;
     watch$: Observable<Geoposition>;
     subscriptionWatch$: Subscription;
     featureDepto: any[] = [];
-    obsGelocation$:Observable<Geoposition | PositionError>
+    obsGelocation$: Observable<Geoposition>
     constructor(
         private androidPermissions: AndroidPermissions,
         private http: HttpClient,
         private geolocation: Geolocation,
-        private locationAccuracy: LocationAccuracy
+        private locationAccuracy: LocationAccuracy,
+        private gpsProvider: GpsProvider,
     ) {
-
-        //            this.geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 1000, maximumAge: 0, })
-        //                .then((resp) => {
-        //                    if (resp !== null) {
-        //                        this.gps = true;
-        //                        this.posicion = { longitud: resp.coords.longitude, latitud: resp.coords.latitude };
-        //                        this.actualizarPosicion$({ longitud: resp.coords.longitude, latitud: resp.coords.latitude });
-        //                        this.getLocation(resp.coords.longitude, resp.coords.latitude).subscribe((dto: any) => {
-        //                            this.featureDepto = [];
-        //                            dto.features.forEach((res: any) => {
-        //                                this.featureDepto.push(res.text);
-        //                            });
-        //                            let featureLen = this.featureDepto.length;
-        //                            this.currentDepto = this.featureDepto[featureLen - 2];
-        //                            console.log(this.currentDepto);
-        //                        });
-        //                        this.actualizarMarcador();
-        //                    }
-        //                });
-        //
+        console.log("geolocation server")
+        this.unsubscribeGPS$ = new Subject<void>();
+        this.gps = this.gpsProvider.gps;
+        this.posicion = this.gpsProvider.posicion;
+        if (this.gps) {
+            this.posicion$ = new BehaviorSubject<Point>(this.posicion);
+        } else {
+            this.posicion$ = new BehaviorSubject<Point>(null);
+        }
+        //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
     }
 
     startGeolocation() {
-        this.obsGelocation$ = this.geolocation.watchPosition();
-        this.subscriptionWatch$ = this.obsGelocation$
-            .pipe(filter( p => p.coords !== undefined ))
-            .subscribe(position => {
-                console.log(position)
+        if (this.gps) {
+            this.obsGelocation$ = this.geolocation.watchPosition();
+            this.obsGelocation$.pipe(
+                takeUntil(this.unsubscribeGPS$),
+                filter(p => p.coords !== undefined)
+            ).subscribe(p => {
+                this.posicion = { longitud: p.coords.longitude, latitud: p.coords.latitude };
+                this.posicion$.next(this.posicion);
+                this.actualizarPosicion$({ longitud: p.coords.longitude, latitud: p.coords.latitude });
+                this.getLocation(p.coords.longitude, p.coords.latitude).pipe(takeUntil(this.unsubscribeGPS$))
+                    .subscribe((dto: any) => {
+                        this.featureDepto = [];
+                        dto.features.forEach((res: any) => {
+                            this.featureDepto.push(res.text);
+                        });
+                        let featureLen = this.featureDepto.length;
+                        this.currentDepto = this.featureDepto[featureLen - 2];
+                        console.log(this.currentDepto);
+                    });
+                this.actualizarMarcador();
             });
+        }
+    }
+
+    stopGeolocation() {
+        this.unsubscribeGPS$.next();
+        this.unsubscribeGPS$.complete();
     }
 
     getLocation(lng: number, lat: number) {
@@ -347,7 +360,7 @@ export class GeolocationService {
         return zoom;
     }
 
-    getPosicionActual$(): Observable<Point> {
+    getObsPosicion$(): Observable<Point> {
         return this.posicion$.asObservable();
     }
 

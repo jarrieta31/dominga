@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AlertController, Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -12,7 +12,7 @@ import { AndroidPermissions, AndroidPermissionResponse } from '@awesome-cordova-
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 //import { Geolocation, Geoposition, PositionError } from '@awesome-cordova-plugins/geolocation/ngx';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx';
-import { isThisISOWeek } from "date-fns";
+
 
 
 @Component({
@@ -20,7 +20,7 @@ import { isThisISOWeek } from "date-fns";
     templateUrl: "app.component.html",
     styleUrls: ["app.component.scss"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit,OnDestroy {
     showSplash = true;
     modo: boolean;
     dyslexic: boolean;
@@ -45,6 +45,11 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.geolocationSvc.startGeolocation();
+    }
+
+    ngOnDestroy(): void {
+        this.geolocationSvc.stopGeolocation();
     }
 
     async initializeApp() {
@@ -53,12 +58,13 @@ export class AppComponent implements OnInit {
 
     checkReady = async () => {
         try {
+            console.log('checkReady')
             await this.platform.ready();
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             //await this.checkGPSPermissionAsync();
-            this.verEstadoGps()
-            await this.requestGPSPermissionAsync();
+    //        this.verEstadoGps()
+     //       await this.requestGPSPermissionAsync();
             timer(3000).subscribe(() => (this.showSplash = false));
             this.checkDarkMode();
             this.modeDyslexic();
