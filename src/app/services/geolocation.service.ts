@@ -74,17 +74,17 @@ export class GeolocationService {
                 this.posicion = { longitud: p.coords.longitude, latitud: p.coords.latitude };
                 this.posicion$.next(this.posicion);
                 this.actualizarPosicion$({ longitud: p.coords.longitude, latitud: p.coords.latitude });
-                this.getLocation(p.coords.longitude, p.coords.latitude).pipe(takeUntil(this.unsubscribeGPS$))
-                    .subscribe((dto: any) => {
-                        this.featureDepto = [];
-                        dto.features.forEach((res: any) => {
-                            this.featureDepto.push(res.text);
-                        });
-                        let featureLen = this.featureDepto.length;
-                        this.currentDepto = this.featureDepto[featureLen - 2];
-                        console.log(this.currentDepto);
-                    });
                 this.actualizarMarcador();
+//                this.getLocation(p.coords.longitude, p.coords.latitude).pipe(takeUntil(this.unsubscribeGPS$))
+//                    .subscribe((dto: any) => {
+//                        this.featureDepto = [];
+//                        dto.features.forEach((res: any) => {
+//                            this.featureDepto.push(res.text);
+//                        });
+//                        let featureLen = this.featureDepto.length;
+//                        this.currentDepto = this.featureDepto[featureLen - 2];
+//                        console.log(this.currentDepto);
+//                    });
             });
         }
     }
@@ -94,15 +94,6 @@ export class GeolocationService {
         this.unsubscribeGPS$.complete();
     }
 
-    getLocation(lng: number, lat: number) {
-        return this.http.get(
-            "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-            lng +
-            "," +
-            lat +
-            ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
-        );
-    }
 
     actualizarMarcador() {
         if (this.myPositionMarker != null) {
