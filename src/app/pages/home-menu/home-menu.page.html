@@ -17,11 +17,11 @@
         <ion-label (click)="seeDepto()" *ngIf="deptoSave === null"
           >departamento</ion-label
         >
-        <img src="/assets/icon/exchange.png" alt="" />
+        <img *ngIf="gps != null" src="/assets/icon/exchange.png" alt="" />
         <ion-label
           class="distance_selected"
           (click)="seeDistance()"
-          *ngIf="distanceSave !== null"
+          *ngIf="distanceSave !== null && gps != null"
           >{{ distanceSave }}</ion-label
         >
         <ion-label

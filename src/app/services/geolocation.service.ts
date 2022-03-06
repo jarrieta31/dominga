@@ -87,7 +87,10 @@ export class GeolocationService {
             });
             this.actualizarMarcador();
           }
-        });
+        })
+        .catch((err) => {
+          console.error(err);
+      });
       })
         
       )

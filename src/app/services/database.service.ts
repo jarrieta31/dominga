@@ -24,7 +24,9 @@ export class DatabaseService {
   constructor(
     private afs: AngularFirestore,
     private geoService: GeolocationService
-  ) {}
+  ) {
+    this.eventos = new BehaviorSubject<Eventos[]>(this.distanceEvents);
+  }
 
   eventos: BehaviorSubject<Eventos[]>;
   allEvents: Eventos[] = [];
@@ -214,8 +216,6 @@ export class DatabaseService {
     this.allEvents = [];
     this.distanceEvents = [];
 
-    this.eventos = new BehaviorSubject<Eventos[]>(this.distanceEvents);
-
     let searchDepto: boolean = false;
 
     if (this.depto != null) {
@@ -242,7 +242,7 @@ export class DatabaseService {
             arrEvents.push({ id: item.id, ...data });
             this.initEvents.push({ id: item.id, ...data });
           });
-
+          this.save_depto.push(this.depto);
           this.allEvents = arrEvents;
           this.eventos.next(this.allEvents);
         })

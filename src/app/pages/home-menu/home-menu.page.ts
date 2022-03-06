@@ -105,12 +105,14 @@ export class HomeMenuPage {
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
 
-    this.geolocationSvc.posicion$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((res) => {
-        console.log(res);
+    this.geolocationSvc.posicion$.pipe(takeUntil(this.unsubscribe$)).subscribe(
+      (res) => {
         this.gps = res;
-      });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
     setTimeout(() => {
       this.presentAlert();

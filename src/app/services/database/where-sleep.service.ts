@@ -256,6 +256,7 @@ export class WhereSleepService {
           .collection("donde_dormir")
           .ref.where("departamento", "==", dep)
           .where("publicado", "==", true)
+          .orderBy("nombre")
           .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {

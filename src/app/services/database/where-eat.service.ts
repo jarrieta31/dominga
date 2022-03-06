@@ -246,6 +246,7 @@ export class WhereEatService {
           .collection("donde_comer")
           .ref.where("departamento", "==", dep)
           .where("publicado", "==", true)
+          .orderBy("nombre")
           .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
