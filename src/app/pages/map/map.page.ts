@@ -71,7 +71,7 @@ export class MapPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     //Obtiene el observable con la posicion del usuario
-    this.posicion$ = this.geolocationService.getPosicionActual$();
+    this.posicion$ = this.geolocationService.getObsPosicion$();
     Mapboxgl.accessToken = environment.mapBoxToken;
 
     //Datos recibidos desde places
