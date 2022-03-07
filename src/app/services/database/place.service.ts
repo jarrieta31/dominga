@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { GeolocationService } from "../geolocation.service";
-import { GpsProvider } from '../../providers/gps-provider.service';
+import { takeUntil } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -186,12 +185,13 @@ export class PlaceService {
     },
   ];
 
+  private unsubscribePlaces$: Subject<void>;
+
   constructor(
     private afs: AngularFirestore,
-    private geolocationSvc: GeolocationService,
   ) {
-    console.log("place.server")
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
+    this.unsubscribePlaces$ = new Subject<void>();
   }
 
   /**
@@ -300,7 +300,14 @@ export class PlaceService {
   }
 
   getObsPlaces():Observable<Place[]>{
-    return  this.places.asObservable();
+    return this.places.asObservable().pipe(
+      takeUntil(this.unsubscribePlaces$)
+    );
+  }
+
+  stopObs() {
+    this.unsubscribePlaces$.next();
+    this.unsubscribePlaces$.complete();
   }
 
   /**Devuelve un lugar específico

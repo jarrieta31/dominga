@@ -140,6 +140,7 @@ export class PlacePage {
   getLocation(lng: number, lat: number) {
     return this.http.get<Papa>(`${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`)
     .pipe(
+      takeUntil(this.unsubscribe$),
       map(depto => ({ dpto: depto.features[depto.features.length - 2].text })),
     )
   }
@@ -149,6 +150,7 @@ export class PlacePage {
     return this.http.get(
       `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
     ).pipe(
+     takeUntil(this.unsubscribe$),
      pluck('routes'),
      map((routes:RequestDist) => ({ distance:(routes[0].distance/1000), hora:(routes[0].duration/3600), minuto:((routes[0].duration/60)%60)} )),
     )
@@ -252,6 +254,7 @@ export class PlacePage {
       concatMap(place => this.getDistance(this.posicion.longitud, this.posicion.latitud,place.ubicacion.lng, place.ubicacion.lat)),
       tap(console.log),
       catchError(error => of(error)),
+      takeUntil(this.unsubscribe$),
     ).subscribe()
 
 
@@ -304,6 +307,7 @@ export class PlacePage {
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
     this.geolocationSvc.stopGeolocation();
+    this.placeSvc.stopObs();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.isFilterLocation = false;
