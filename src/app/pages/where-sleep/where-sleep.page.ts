@@ -6,7 +6,7 @@ import { Subject } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
-import { takeUntil } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
@@ -70,7 +70,7 @@ export class WhereSleepPage {
     private sliderSvc: SlidesService,
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
-    private databaseSvc: DatabaseService,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -152,12 +152,14 @@ export class WhereSleepPage {
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "donde_dormir")),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "donde_comer") this.sliderSleep.push(item);
-        });
+        this.sliderSleep = res;
       });
+
     this.sleepSvc.getDondeDormir();
     this.sleepSvc.donde_dormir
       .pipe(takeUntil(this.unsubscribe$))

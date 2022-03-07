@@ -20,7 +20,6 @@ export class ArtistService {
 
   getArtist() {
     this.depto = this.db.selectionDepto;
-    this.artist = new BehaviorSubject<Artistas[]>(this.init_artist);
     this.allArtist = [];
 
     let searchDepto: boolean = false;

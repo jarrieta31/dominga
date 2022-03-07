@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, filter, tap, map, concatMap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -28,7 +28,7 @@ export class PlacePage {
     private browser: InAppBrowser,
     private http: HttpClient,
     private fb: FormBuilder,
-    private sliderSvc: SlidesService,
+    private sliderSvc: SlidesService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -82,7 +82,7 @@ export class PlacePage {
   optionLocation: String = null;
   optionType: String = null;
   /**url load  */
-  preloadImage: String = "/assets/load.gif"
+  preloadImage: String = "/assets/load.gif";
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -202,12 +202,15 @@ export class PlacePage {
     this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
+
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map(slider => slider.filter(s => s.pantalla === "lugares")),
+        takeUntil(this.unsubscribe$),
+        tap(console.log)
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "lugares") this.sliderPlace.push(item);
-        });
+        this.sliderPlace = res;
       });
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
@@ -218,7 +221,7 @@ export class PlacePage {
       this.geolocationSvc.posicion$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
-          console.log(res)
+          console.log(res);
           if (res != null) {
             this.places.forEach((calcDist) => {
               this.getDistance(
@@ -228,36 +231,45 @@ export class PlacePage {
                 calcDist.ubicacion.lat
               )
                 .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(res => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
+                .subscribe(
+                  (res) => {
+                    this.distancia = res["routes"]["0"].distance / 1000;
 
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
+                    this.hora = Math.trunc(
+                      res["routes"]["0"].duration / 60 / 60
+                    );
+                    this.minuto = Math.trunc(
+                      (res["routes"]["0"].duration / 60) % 60
+                    );
 
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      this.checkDistance = true;
+                    let distFormat: string | number, placeDistance: string;
+                    if (this.distancia >= 1) {
+                      distFormat = parseFloat(String(this.distancia)).toFixed(
+                        3
+                      );
+                      placeDistance = "Estás a " + distFormat;
+                    } else {
+                      distFormat = parseFloat(String(this.distancia)).toFixed(
+                        2
+                      );
+                      placeDistance = "Estás a " + distFormat;
                     }
-                  } else this.checkDistance = true;
-                },
-                err => { console.log("Error calculo distancia", err )}
-                ) ;
+
+                    calcDist.distanciaNumber = this.distancia;
+                    calcDist.distancia = placeDistance;
+                    calcDist.hora = String(this.hora + " h");
+                    calcDist.minuto = String(this.minuto + " min");
+
+                    if (this.dist != null) {
+                      if (this.dist >= calcDist.distanciaNumber) {
+                        this.checkDistance = true;
+                      }
+                    } else this.checkDistance = true;
+                  },
+                  (err) => {
+                    console.log("Error calculo distancia", err);
+                  }
+                );
             });
           } else this.checkDistance = true;
         });

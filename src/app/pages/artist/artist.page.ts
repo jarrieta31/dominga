@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { ArtistService } from "src/app/services/database/artist.service";
 import { Artistas } from "src/app/shared/artistas";
 import { LoadingController, ModalController } from "@ionic/angular";
@@ -24,7 +24,7 @@ export class ArtistPage {
     private sliderSvc: SlidesService,
     private modalCtrl: ModalController,
     private browser: InAppBrowser,
-    private databaseSvc: DatabaseService,
+    private databaseSvc: DatabaseService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -190,11 +190,12 @@ export class ArtistPage {
 
     this.sliderSvc.getSliders();
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "artistas")),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "artistas") this.sliderArtist.push(item);
-        });
+        this.sliderArtist = res;
       });
 
     this.artistSvc.getArtist();

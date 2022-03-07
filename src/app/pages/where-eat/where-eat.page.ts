@@ -4,7 +4,7 @@ import { WhereEatService } from "src/app/services/database/where-eat.service";
 import { LoadingController } from "@ionic/angular";
 import { Subject } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { takeUntil } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
@@ -74,7 +74,7 @@ export class WhereEatPage {
     private sliderSvc: SlidesService,
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService,
+    private databaseSvc: DatabaseService
   ) {}
 
   async show(message: string) {
@@ -168,11 +168,12 @@ export class WhereEatPage {
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "donde_comer")),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "donde_comer") this.sliderEat.push(item);
-        });
+        this.sliderEat = res;
       });
 
     this.afs.donde_comer.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {

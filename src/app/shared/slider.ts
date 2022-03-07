@@ -1,7 +1,7 @@
 export interface Slider {
-    link: String,
-    linkTipo: String,
-    pantalla: String,
+    link: string,
+    linkTipo: string,
+    pantalla: string,
     publicado: boolean,
     imagen: Imagen
 }

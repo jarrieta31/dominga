@@ -6,7 +6,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { takeUntil } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { GeolocationService } from "src/app/services/geolocation.service";
@@ -78,7 +78,7 @@ export class EventsPage {
     private sliderSvc: SlidesService,
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -161,70 +161,65 @@ export class EventsPage {
     this.dbService.getEventos();
 
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "eventos")),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "eventos") this.sliderEvents.push(item);
-        });
-
-        this.dbService.eventos
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((eventos) => {
-            this.eventos = eventos;
-          });
-
-        setTimeout(() => {
-          this.geolocationSvc.posicion$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((res) => {
-              if (res != null) {
-                this.eventos.forEach((calcDist) => {
-                  this.getDistance(
-                    res.longitud,
-                    res.latitud,
-                    calcDist.ubicacion.lng,
-                    calcDist.ubicacion.lat
-                  )
-                    .pipe(takeUntil(this.unsubscribe$))
-                    .subscribe((res) => {
-                      this.distancia = res["routes"]["0"].distance / 1000;
-
-                      this.hora = Math.trunc(
-                        res["routes"]["0"].duration / 60 / 60
-                      );
-                      this.minuto = Math.trunc(
-                        (res["routes"]["0"].duration / 60) % 60
-                      );
-
-                      let distFormat: string | number, placeDistance: string;
-                      if (this.distancia >= 1) {
-                        distFormat = parseFloat(String(this.distancia)).toFixed(
-                          3
-                        );
-                        placeDistance = "Estás a " + distFormat;
-                      } else {
-                        distFormat = parseFloat(String(this.distancia)).toFixed(
-                          2
-                        );
-                        placeDistance = "Estás a " + distFormat;
-                      }
-
-                      calcDist.distanciaNumber = this.distancia;
-                      calcDist.distancia = placeDistance;
-                      calcDist.hora = String(this.hora + " h");
-                      calcDist.minuto = String(this.minuto + " min");
-
-                      if (this.dist != null) {
-                        if (this.dist >= calcDist.distanciaNumber) {
-                          this.checkDistance = true;
-                        }
-                      } else this.checkDistance = true;
-                    });
-                });
-              } else this.checkDistance = true;
-            });
-        }, 2000);
+        this.sliderEvents = res;
       });
+
+    this.dbService.eventos
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((eventos) => {
+        this.eventos = eventos;
+      });
+
+    setTimeout(() => {
+      this.geolocationSvc.posicion$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res) => {
+          if (res != null) {
+            this.eventos.forEach((calcDist) => {
+              this.getDistance(
+                res.longitud,
+                res.latitud,
+                calcDist.ubicacion.lng,
+                calcDist.ubicacion.lat
+              )
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe((res) => {
+                  this.distancia = res["routes"]["0"].distance / 1000;
+
+                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
+                  this.minuto = Math.trunc(
+                    (res["routes"]["0"].duration / 60) % 60
+                  );
+
+                  let distFormat: string | number, placeDistance: string;
+                  if (this.distancia >= 1) {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
+                    placeDistance = "Estás a " + distFormat;
+                  } else {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
+                    placeDistance = "Estás a " + distFormat;
+                  }
+
+                  calcDist.distanciaNumber = this.distancia;
+                  calcDist.distancia = placeDistance;
+                  calcDist.hora = String(this.hora + " h");
+                  calcDist.minuto = String(this.minuto + " min");
+
+                  if (this.dist != null) {
+                    if (this.dist >= calcDist.distanciaNumber) {
+                      this.checkDistance = true;
+                    }
+                  } else this.checkDistance = true;
+                });
+            });
+          } else this.checkDistance = true;
+        });
+    }, 2000);
   }
 
   ionViewDidLeave() {
@@ -305,7 +300,7 @@ export class EventsPage {
         moneda: moneda,
         precio: precio,
         precioUnico: precioUnico,
-        direccion: direccion
+        direccion: direccion,
       },
     });
 

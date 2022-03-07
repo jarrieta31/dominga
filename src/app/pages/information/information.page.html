@@ -1,21 +1,26 @@
 <ion-header>
-    <ion-toolbar color="information">
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="home-menu" color="back"></ion-back-button>
-        </ion-buttons>
-        <ion-icon name="information-outline" class="iconInfo" slot="end"></ion-icon>
-    </ion-toolbar>
+  <ion-toolbar color="information">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home-menu" color="back"></ion-back-button>
+    </ion-buttons>
+    <ion-icon name="information-outline" class="iconInfo" slot="end"></ion-icon>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    
-    <div id="alto" class="slider">
-        <ion-slides class="sliderPrimero" scrollbar="false" pager="false" [options]="slideOpts">
-            <ion-slide *ngFor="let imagen of imagesSliderInfo" class="sliderHijo"> 
-                <img class="imgSlider" src="{{imagen.imagen}}" />                
-            </ion-slide>            
-        </ion-slides>
-    </div>
-    <!-- <div class="lista">
+  <div id="alto" class="slider">
+    <ion-slides
+      class="sliderPrimero"
+      id="setHeight"
+      scrollbar="false"
+      pager="false"
+      [options]="slideOpts"
+    >
+      <ion-slide *ngFor="let item of sliderInfo" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <!-- <div class="lista">
         <ion-list *ngFor="let item of information | filtroInformacion:textoBuscar; let i = index" class="accordion-list" lines="none" detail="false" no-padding>
             <ion-item tappable (click)="toggleSection(i)" [ngClass]="{'section-active': item.open, 'section': !item.open}" class="item-accordion" color="acorddion">
                 <ion-icon class="info-name" slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>
@@ -39,6 +44,4 @@
             <p *ngIf="item.children.length == 0 && item.open" text-center class="no-exist">No existen números aquí</p>
         </ion-list>
     </div> -->
-    
-    
 </ion-content>
