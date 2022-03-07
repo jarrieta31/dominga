@@ -124,7 +124,7 @@
     </div> -->
     <ng-container *ngFor="let item of places | filterPlaces:dataForm">
       <ion-card
-        *ngIf="(item.distanciaNumber <= dist || dep != null) && checkDistance"
+        *ngIf="(item.distanciaNumber <= dist || dep != null) "
         id="{{ item.id }}"
         (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
         [routerLink]="['/place-selected', item.id]"

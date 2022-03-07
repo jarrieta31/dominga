@@ -198,8 +198,7 @@ export class PlaceService {
    * Devuelve los lugares del departamento seleccionado por el usuario
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
-  getPlaces() {
-    let checkDepto = this.geolocationSvc.currentDepto;
+  getPlaces(checkDepto: string) {
     console.log('places.service ', checkDepto)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
@@ -298,6 +297,10 @@ export class PlaceService {
       });
       this.places.next(this.distancePlaces);
     }
+  }
+
+  getObsPlaces():Observable<Place[]>{
+    return  this.places.asObservable();
   }
 
   /**Devuelve un lugar específico

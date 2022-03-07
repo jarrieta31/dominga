@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { Observable, Subject } from "rxjs";
-import { concatMap, map, takeUntil, tap } from 'rxjs/operators';
+import { from, Observable, of, Subject, zip } from "rxjs";
+import { catchError, concatMap, map, mergeAll, pluck, takeUntil, tap } from 'rxjs/operators';
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -13,16 +13,22 @@ import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
+import { Posicion } from '../../shared/donde-comer';
+import { environment } from 'src/environments/environment'
 
-export interface Papa{
+export interface Papa {
   type: string;
   query: string[];
   features: Texto[];
   attribution: string;
 }
 
-export interface Texto{
+export interface Texto {
   text: string;
+}
+
+export interface RequestDist{
+  weight_name: string; weight: number; duration: number; distance: number
 }
 
 @Component({
@@ -56,6 +62,8 @@ export class PlacePage {
     autoplay: true,
   };
 
+  departamento: string;
+  posicion: Point;
   /**guarda los lugares activos en la subscription del servicio */
   places: Place[] = [];
   /**guarda las localidades con lugares publicados */
@@ -92,11 +100,11 @@ export class PlacePage {
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
   /**guardan filtos seleccionados */
-  optionLocation: String = null;
-  optionType: String = null;
+  optionLocation: string = null;
+  optionType: string = null;
   /**url load  */
   preloadImage: String = "/assets/load.gif"
-  largo:number
+  largo: number
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -130,32 +138,19 @@ export class PlacePage {
   }
 
   getLocation(lng: number, lat: number) {
-    return this.http.get<Papa>(
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-      lng +
-      "," +
-      lat +
-      ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
-    );
+    return this.http.get<Papa>(`${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`)
+    .pipe(
+      map(depto => ({ dpto: depto.features[depto.features.length - 2].text })),
+    )
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
-  getDistance(
-    lngUser: number,
-    latUser: number,
-    lngPlace: number,
-    latPlace: number
-  ) {
+  getDistance(lngUser: number, latUser: number, lngPlace: number, latPlace: number) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-      lngUser +
-      "," +
-      latUser +
-      ";" +
-      lngPlace +
-      "," +
-      latPlace +
-      "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+      `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
+    ).pipe(
+     pluck('routes'),
+     map((routes:RequestDist) => ({ distance:(routes[0].distance/1000), hora:(routes[0].duration/3600), minuto:((routes[0].duration/60)%60)} )),
     )
   }
 
@@ -223,7 +218,7 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    this.placeSvc.getPlaces();
+    //this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
@@ -234,54 +229,75 @@ export class PlacePage {
 
 
     this.geolocationSvc.posicion$.pipe(
-      concatMap(pos => this.getLocation( pos.longitud, pos.latitud )),
-      tap(res => console.log(res.features.length)),
-      map( depto => ({ features: depto.features[depto.features.length -2 ].text })),
-      tap( console.log) 
+      tap(pos => this.posicion = { longitud: pos.longitud, latitud: pos.latitud }),
+      concatMap(pos => this.getLocation(pos.longitud, pos.latitud)),
+      tap(depto => this.departamento = depto.dpto),
+      concatMap(res => {
+        this.placeSvc.getPlaces(this.departamento);
+        return this.placeSvc.getObsPlaces();
+      }),
+     // mergeAll(),
+      //      map(places => {
+      //        let calculo;
+      //        places.forEach(place => {
+      //          calculo = this.getDistance(this.posicion.longitud, this.posicion.latitud, place.ubicacion.lng, place.ubicacion.lat);
+      //          
+      //        })
+      //      }),
+      //tap(res => this.places = res),
+      map(res => {         
+        return from(res)
+      }),
+      mergeAll(),
+      concatMap(place => this.getDistance(this.posicion.longitud, this.posicion.latitud,place.ubicacion.lng, place.ubicacion.lat)),
+      tap(console.log),
+      catchError(error => of(error)),
     ).subscribe()
 
-//    this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((lugares) => {
-//      this.places = lugares;
-//      //***  */
-//      console.log("lugares:", lugares)
-//      this.geolocationSvc.posicion$.pipe(takeUntil(this.unsubscribe$))
-//        .subscribe((pos) => {
-//          console.log(pos)
-//          if (pos != null) {
-//            this.places.forEach((calcDist) => {
-//              console.log('res', pos.longitud, pos.latitud, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
-//              this.getDistance(pos.longitud, pos.latitud, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
-//                .pipe(takeUntil(this.unsubscribe$))
-//                .subscribe(res => {
-//                  //console.log('res',res, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
-//                  this.distancia = res["routes"]["0"].distance / 1000;
-//                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-//                  this.minuto = Math.trunc((res["routes"]["0"].duration / 60) % 60);
-//                  let distFormat: string | number, placeDistance: string;
-//                  if (this.distancia >= 1) {
-//                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-//                    placeDistance = "Estás a " + distFormat;
-//                  } else {
-//                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-//                    placeDistance = "Estás a " + distFormat;
-//                  }
-//                  calcDist.distanciaNumber = this.distancia;
-//                  calcDist.distancia = placeDistance;
-//                  calcDist.hora = String(this.hora + " h");
-//                  calcDist.minuto = String(this.minuto + " min");
-//
-//                  if (this.dist != null) {
-//                    if (this.dist >= calcDist.distanciaNumber) {
-//                      this.checkDistance = true;
-//                    }
-//                  } else this.checkDistance = true;
-//                },
-//                  err => { console.log("Error calculo distancia", err) }
-//                );
-//            });
-//          } else this.checkDistance = true;
-//        });
-//    });
+
+
+    //    this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((lugares) => {
+    //      this.places = lugares;
+    //      //***  */
+    //      console.log("lugares:", lugares)
+    //      this.geolocationSvc.posicion$.pipe(takeUntil(this.unsubscribe$))
+    //        .subscribe((pos) => {
+    //          console.log(pos)
+    //          if (pos != null) {
+    //            this.places.forEach((calcDist) => {
+    //              console.log('res', pos.longitud, pos.latitud, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
+    //              this.getDistance(pos.longitud, pos.latitud, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
+    //                .pipe(takeUntil(this.unsubscribe$))
+    //                .subscribe(res => {
+    //                  //console.log('res',res, calcDist.ubicacion.lng, calcDist.ubicacion.lat)
+    //                  this.distancia = res["routes"]["0"].distance / 1000;
+    //                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
+    //                  this.minuto = Math.trunc((res["routes"]["0"].duration / 60) % 60);
+    //                  let distFormat: string | number, placeDistance: string;
+    //                  if (this.distancia >= 1) {
+    //                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
+    //                    placeDistance = "Estás a " + distFormat;
+    //                  } else {
+    //                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
+    //                    placeDistance = "Estás a " + distFormat;
+    //                  }
+    //                  calcDist.distanciaNumber = this.distancia;
+    //                  calcDist.distancia = placeDistance;
+    //                  calcDist.hora = String(this.hora + " h");
+    //                  calcDist.minuto = String(this.minuto + " min");
+    //
+    //                  if (this.dist != null) {
+    //                    if (this.dist >= calcDist.distanciaNumber) {
+    //                      this.checkDistance = true;
+    //                    }
+    //                  } else this.checkDistance = true;
+    //                },
+    //                  err => { console.log("Error calculo distancia", err) }
+    //                );
+    //            });
+    //          } else this.checkDistance = true;
+    //        });
+    //    });
 
   }
 
