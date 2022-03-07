@@ -10,6 +10,8 @@ import { FilterEventsPipe } from './filter-events.pipe';
 import { FilterPlacesPipe } from './filter-places.pipe';
 import { FilterEvents1Pipe } from './filter-events1.pipe';
 import { FilterArtistPipe } from './filter-artist.pipe';
+import { HourPipe } from './hour.pipe';
+import { MinutePipe } from './minute.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { FilterArtistPipe } from './filter-artist.pipe';
     FilterPlacesPipe,
     FilterEvents1Pipe,
     FilterArtistPipe,
+    HourPipe,
+    MinutePipe,
   ],
   exports: [
     FiltroPipe, 
@@ -36,7 +40,9 @@ import { FilterArtistPipe } from './filter-artist.pipe';
     FilterEventsPipe,
     FilterPlacesPipe,
     FilterEvents1Pipe,
-    FilterArtistPipe
+    FilterArtistPipe,
+    HourPipe,
+    MinutePipe
   ]
 })
 

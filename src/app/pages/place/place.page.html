@@ -142,9 +142,9 @@
           <div class="duracion">
             <b class="distancia"
               >{{item.distancia | formatDistancia }} -
-              <span *ngIf="item.hora !== '0 h'">{{ item.hora }}</span
-              >&nbsp;<span *ngIf="item.minuto !== '0 min'"
-                >{{ item.minuto }}</span
+              <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
+              >&nbsp;<span *ngIf="item.minuto > 1"
+                >{{ item.minuto | minute }}</span
               ></b
             >
           </div>
