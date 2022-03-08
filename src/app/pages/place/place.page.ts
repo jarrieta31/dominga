@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { from, Observable, of, Subject, zip } from "rxjs";
+import { forkJoin, from, Observable, of, Subject, zip } from "rxjs";
 import { catchError, concatMap, map, mergeAll, pluck, takeUntil, tap } from 'rxjs/operators';
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
@@ -27,8 +27,14 @@ export interface Texto {
   text: string;
 }
 
-export interface RequestDist{
+export interface RequestDist {
   weight_name: string; weight: number; duration: number; distance: number
+}
+
+export interface DataDist {
+  distance: number;
+  hora:  number;
+  miniuto: number;
 }
 
 @Component({
@@ -139,21 +145,22 @@ export class PlacePage {
 
   getLocation(lng: number, lat: number) {
     return this.http.get<Papa>(`${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`)
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      map(depto => ({ dpto: depto.features[depto.features.length - 2].text })),
-    )
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        map(depto => (depto.features[depto.features.length - 2].text)),
+      )
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
-  getDistance(lngUser: number, latUser: number, lngPlace: number, latPlace: number) {
-    return this.http.get(
+  async getDistance(lngUser: number, latUser: number, lngPlace: number, latPlace: number) {
+    return await this.http.get(
       `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
     ).pipe(
-     takeUntil(this.unsubscribe$),
-     pluck('routes'),
-     map((routes:RequestDist) => ({ distance:(routes[0].distance/1000), hora:(routes[0].duration/3600), minuto:((routes[0].duration/60)%60)} )),
-    )
+      takeUntil(this.unsubscribe$),
+      pluck('routes'),
+      map((routes: RequestDist) => ({ distance: (routes[0].distance / 1000), hora: (routes[0].duration / 3600), minuto: ((routes[0].duration / 60) % 60) })),
+      pluck('')
+    ).toPromise()
   }
 
   /** Devuelve una lista de localidades */
@@ -191,6 +198,8 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    //  this.departamento$ = this.getLocation(this.geolocationSvc.posicion.longitud, this.geolocationSvc.posicion.latitud);
+    //  this.ubicacion$ = this.geolocationSvc.posicion$.asObservable();
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -233,29 +242,20 @@ export class PlacePage {
     this.geolocationSvc.posicion$.pipe(
       tap(pos => this.posicion = { longitud: pos.longitud, latitud: pos.latitud }),
       concatMap(pos => this.getLocation(pos.longitud, pos.latitud)),
-      tap(depto => this.departamento = depto.dpto),
+      tap(depto => this.departamento = depto),
       concatMap(res => {
         this.placeSvc.getPlaces(this.departamento);
         return this.placeSvc.getObsPlaces();
       }),
-     // mergeAll(),
-      //      map(places => {
-      //        let calculo;
-      //        places.forEach(place => {
-      //          calculo = this.getDistance(this.posicion.longitud, this.posicion.latitud, place.ubicacion.lng, place.ubicacion.lat);
-      //          
-      //        })
-      //      }),
-      //tap(res => this.places = res),
-      map(res => {         
-        return from(res)
-      }),
-      mergeAll(),
-      concatMap(place => this.getDistance(this.posicion.longitud, this.posicion.latitud,place.ubicacion.lng, place.ubicacion.lat)),
-      tap(console.log),
+      // tap(console.log),
       catchError(error => of(error)),
       takeUntil(this.unsubscribe$),
-    ).subscribe()
+    ).subscribe(places => {
+      places.forEach((place: Place) => {
+        let distancia = this.getDistance(this.posicion.longitud, this.posicion.latitud, place.ubicacion.lng, place.ubicacion.lat)
+        console.log(distancia)
+      });
+    })
 
 
 
