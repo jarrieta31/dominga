@@ -297,12 +297,15 @@ export class PlaceService {
       });
       this.places.next(this.distancePlaces);
     }
+
+    return this.places;
   }
 
   getObsPlaces():Observable<Place[]>{
-    return this.places.asObservable().pipe(
-      takeUntil(this.unsubscribePlaces$)
-    );
+    return this.places.asObservable()
+    // .pipe(
+    //   takeUntil(this.unsubscribePlaces$)
+    // );
   }
 
   stopObs() {
