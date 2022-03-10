@@ -1,7 +1,26 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import { Observable, Subject } from "rxjs";
-import { takeUntil, filter, tap, map, concatMap } from "rxjs/operators";
+import {
+  concat,
+  forkJoin,
+  from,
+  Observable,
+  ObservableInput,
+  of,
+  Subject,
+  zip,
+} from "rxjs";
+import {
+  catchError,
+  concatMap,
+  map,
+  mergeAll,
+  mergeMap,
+  pluck,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -13,6 +32,32 @@ import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
+import { Posicion } from "../../shared/donde-comer";
+import { environment } from "src/environments/environment";
+
+export interface Papa {
+  type: string;
+  query: string[];
+  features: Texto[];
+  attribution: string;
+}
+
+export interface Texto {
+  text: string;
+}
+
+export interface RequestDist {
+  weight_name: string;
+  weight: number;
+  duration: number;
+  distance: number;
+}
+
+export interface DataDist {
+  distance: number;
+  hora: number;
+  minuto: number;
+}
 
 @Component({
   selector: "app-place",
@@ -29,7 +74,9 @@ export class PlacePage {
     private http: HttpClient,
     private fb: FormBuilder,
     private sliderSvc: SlidesService
-  ) {}
+  ) {
+    this.geolocationSvc.startGeolocation();
+  }
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -43,6 +90,8 @@ export class PlacePage {
     autoplay: true,
   };
 
+  departamento: string;
+  posicion: Point;
   /**guarda los lugares activos en la subscription del servicio */
   places: Place[] = [];
   /**guarda las localidades con lugares publicados */
@@ -79,10 +128,13 @@ export class PlacePage {
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
   /**guardan filtos seleccionados */
-  optionLocation: String = null;
-  optionType: String = null;
+  optionLocation: string = null;
+  optionType: string = null;
   /**url load  */
   preloadImage: String = "/assets/load.gif";
+  largo: number;
+
+  obs$: Observable<any>;
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -115,6 +167,17 @@ export class PlacePage {
     if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
@@ -123,16 +186,17 @@ export class PlacePage {
     latPlace: number
   ) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        lngUser +
-        "," +
-        latUser +
-        ";" +
-        lngPlace +
-        "," +
-        latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+      `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
     );
+    // .pipe(
+    //   takeUntil(this.unsubscribe$),
+    //   pluck("routes"),
+    //   map((routes: RequestDist) => ({
+    //     distance: routes[0].distance / 1000,
+    //     hora: routes[0].duration / 3600,
+    //     minuto: (routes[0].duration / 60) % 60,
+    //   }))
+    // );
   }
 
   /** Devuelve una lista de localidades */
@@ -189,7 +253,7 @@ export class PlacePage {
     }
 
     // this.show("Cargando lugares...");
-
+    console.log("dist", this.dist, "dep", this.dep);
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
       this.filterForm.reset();
@@ -199,7 +263,7 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    this.placeSvc.getPlaces();
+    //this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
 
@@ -213,71 +277,53 @@ export class PlacePage {
         this.sliderPlace = res;
       });
 
-    this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      this.places = res;
-    });
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
 
-    setTimeout(() => {
-      this.geolocationSvc.posicion$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res) => {
-          console.log(res);
-          if (res != null) {
-            this.places.forEach((calcDist) => {
-              this.getDistance(
-                res.longitud,
-                res.latitud,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(
-                  (res) => {
-                    this.distancia = res["routes"]["0"].distance / 1000;
+    let dto = posDep.pipe(
+      switchMap((res) => this.placeSvc.getPlaces(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
 
-                    this.hora = Math.trunc(
-                      res["routes"]["0"].duration / 60 / 60
-                    );
-                    this.minuto = Math.trunc(
-                      (res["routes"]["0"].duration / 60) % 60
-                    );
-
-                    let distFormat: string | number, placeDistance: string;
-                    if (this.distancia >= 1) {
-                      distFormat = parseFloat(String(this.distancia)).toFixed(
-                        3
-                      );
-                      placeDistance = "Estás a " + distFormat;
-                    } else {
-                      distFormat = parseFloat(String(this.distancia)).toFixed(
-                        2
-                      );
-                      placeDistance = "Estás a " + distFormat;
-                    }
-
-                    calcDist.distanciaNumber = this.distancia;
-                    calcDist.distancia = placeDistance;
-                    calcDist.hora = String(this.hora + " h");
-                    calcDist.minuto = String(this.minuto + " min");
-
-                    if (this.dist != null) {
-                      if (this.dist >= calcDist.distanciaNumber) {
-                        this.checkDistance = true;
-                      }
-                    } else this.checkDistance = true;
-                  },
-                  (err) => {
-                    console.log("Error calculo distancia", err);
-                  }
-                );
-            });
-          } else this.checkDistance = true;
-        });
-    }, 2000);
+    dto
+      .pipe(
+        switchMap((lg: Place[]) => {
+          return forkJoin(
+            lg.map((pl: Place) => {
+              return this.getDistance(
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+                pl.ubicacion.lng,
+                pl.ubicacion.lat
+              ).pipe(
+                map((re: any) => {
+                  let distPl = re.routes[0].distance;
+                  let hourPl = re.routes[0].duration;
+                  pl.distancia = distPl / 1000;
+                  pl.distanciaNumber = distPl / 1000;
+                  pl.hora = hourPl / 3200;
+                  pl.minuto = (hourPl / 60) % 60;
+                  return pl;
+                })
+              );
+            })
+          );
+        }),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((res) => (this.places = res));
+    /************************************************************************************ */
   }
 
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
+    //this.geolocationSvc.stopGeolocation();
+    this.placeSvc.stopObs();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.isFilterLocation = false;

@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { GeolocationService } from "../geolocation.service";
+import { takeUntil } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -185,26 +185,27 @@ export class PlaceService {
     },
   ];
 
+  private unsubscribePlaces$: Subject<void>;
+
   constructor(
     private afs: AngularFirestore,
-    private geolocationSvc: GeolocationService
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
+    this.unsubscribePlaces$ = new Subject<void>();
   }
 
   /**
    * Devuelve los lugares del departamento seleccionado por el usuario
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
-  getPlaces() {
-
-    let checkDepto = this.geolocationSvc.currentDepto;
+  getPlaces(checkDepto: string) {
+    console.log('places.service ', checkDepto)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];
     this.distancePlaces = [];
 
-    this.places = new BehaviorSubject<Place[]>(this.distancePlaces);
+    this.places.next(this.distancePlaces);
 
     let searchDepto: boolean = false;
 
@@ -296,6 +297,20 @@ export class PlaceService {
       });
       this.places.next(this.distancePlaces);
     }
+
+    return this.places;
+  }
+
+  getObsPlaces():Observable<Place[]>{
+    return this.places.asObservable()
+    // .pipe(
+    //   takeUntil(this.unsubscribePlaces$)
+    // );
+  }
+
+  stopObs() {
+    this.unsubscribePlaces$.next();
+    this.unsubscribePlaces$.complete();
   }
 
   /**Devuelve un lugar específico
