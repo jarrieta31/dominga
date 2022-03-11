@@ -1,12 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Geolocation, Geoposition, PositionError } from "@ionic-native/geolocation/ngx";
-//import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
-//import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
-
-import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
-//import { Geolocation, Geoposition, PositionError } from '@awesome-cordova-plugins/geolocation/ngx';
-import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
-
+import { Geolocation, Geoposition, PositionError, GeolocationOptions } from "@ionic-native/geolocation/ngx";
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
 import { Observable, BehaviorSubject, Subscription, timer, Subject } from "rxjs";
@@ -36,7 +29,7 @@ export class GeolocationService {
     latCenter: number = 0;
     longCenter: number = 0;
     timetest: any;
-    sourceClock$: Observable<any>;
+    sourceClock$: Observable<any> = timer(0, 36000);
     sourceGpsSubject$ = new BehaviorSubject(null);
     public gps: boolean = false;
     subscriptionClock: any;
@@ -44,15 +37,13 @@ export class GeolocationService {
     watch$: Observable<Geoposition>;
     subscriptionWatch$: Subscription;
     featureDepto: any[] = [];
-    obsGelocation$: Observable<Geoposition>
+    obsGelocation$: Observable<Geoposition>;
+    options: GeolocationOptions = { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 };
     constructor(
-        private androidPermissions: AndroidPermissions,
         private http: HttpClient,
         private geolocation: Geolocation,
-        private locationAccuracy: LocationAccuracy,
         private gpsProvider: GpsProvider,
     ) {
-        console.log("geolocation server")
         this.unsubscribeGPS$ = new Subject<void>();
         this.gps = this.gpsProvider.gps;
         this.posicion = this.gpsProvider.posicion;
@@ -62,30 +53,33 @@ export class GeolocationService {
             this.posicion$ = new BehaviorSubject<Point>(null);
         }
         //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
+        console.log("geolocation server: ", this.posicion$.value)
     }
 
     startGeolocation() {
         if (this.gps) {
-            this.obsGelocation$ = this.geolocation.watchPosition();
-            this.obsGelocation$.pipe(
+            //Observable que obtiene los pulsos y obtiene la posicion
+            this.sourceClock$.pipe(
                 takeUntil(this.unsubscribeGPS$),
-                filter(p => p.coords !== undefined)
-            ).subscribe(p => {
-                this.posicion = { longitud: p.coords.longitude, latitud: p.coords.latitude };
-                this.posicion$.next(this.posicion);
-                this.actualizarPosicion$({ longitud: p.coords.longitude, latitud: p.coords.latitude });
-                this.actualizarMarcador();
-//                this.getLocation(p.coords.longitude, p.coords.latitude).pipe(takeUntil(this.unsubscribeGPS$))
-//                    .subscribe((dto: any) => {
-//                        this.featureDepto = [];
-//                        dto.features.forEach((res: any) => {
-//                            this.featureDepto.push(res.text);
-//                        });
-//                        let featureLen = this.featureDepto.length;
-//                        this.currentDepto = this.featureDepto[featureLen - 2];
-//                        console.log(this.currentDepto);
-//                    });
+            ).subscribe((res) => {
+                console.log(res)
+                this.geolocation.getCurrentPosition(this.options)
+                    .then((p) => {
+                        if (p !== null) {
+                            this.posicion = { longitud: p.coords.longitude, latitud: p.coords.latitude };
+                            this.posicion$.next(this.posicion);
+                            this.actualizarMarcador();
+                        }
+                    })
+                    .catch((error) => {
+                        //this.posicion = environment.casaDominga;
+                        this.actualizarPosicion$(null);
+                        if (this.myPositionMarker != null) this.myPositionMarker.remove();
+                        this.gps = false;
+                        console.log("Error al obtener la ubicación" + error);
+                    });
             });
+
         }
     }
 
@@ -93,7 +87,6 @@ export class GeolocationService {
         this.unsubscribeGPS$.next();
         this.unsubscribeGPS$.complete();
     }
-
 
     actualizarMarcador() {
         if (this.myPositionMarker != null) {
@@ -185,70 +178,6 @@ export class GeolocationService {
         this.mapa.setZoom(zoom);
     }
 
-    //Compruebe si la aplicación tiene permiso de acceso GPS
-    checkGPSPermission() {
-        return this.androidPermissions
-            .checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-            .then(
-                (result) => {
-                    if (result.hasPermission) {
-                        //Si tiene permiso, muestre el diálogo 'Activar GPS'
-                        this.gps = true;
-                        this.askToTurnOnGPS();
-                    } else {
-                        //Si no tiene permiso pida permiso
-                        this.requestGPSPermission();
-                    }
-                },
-                (err) => {
-                    console.log("Error checkGPS: ", err);
-                }
-            );
-    }
-
-    //Pide los permisos para el GPS julio
-    async requestGPSPermission() {
-        return this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-            if (canRequest) {
-                console.log("canRequest", canRequest);
-            } else {
-                //Mostrar el diálogo 'Solicitud de permiso de GPS'
-                this.androidPermissions
-                    .requestPermission(
-                        this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
-                    )
-                    .then(
-                        () => {
-                            // método de llamada para encender el GPS
-                            this.askToTurnOnGPS();
-                        },
-                        (error) => {
-                            //Mostrar alerta si el usuario hace clic en "No, gracias"
-                            console.log(
-                                "requestPermission. Error al solicitar permisos de ubicación ",
-                                error
-                            );
-                        }
-                    );
-            }
-        });
-    }
-
-    askToTurnOnGPS() {
-        return this.locationAccuracy
-            .request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-            .then(
-                () => {
-                    // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas
-                    this.gps = true;
-                },
-                (error) => {
-                    console.log(
-                        "Error al solicitar permisos de ubicación " + JSON.stringify(error)
-                    );
-                }
-            );
-    }
 
     // Recibe 2 Puntos y obtiene el centro retornando un Point
     getCenterPoints(Points: TwoPoints): Point {

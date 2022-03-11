@@ -1,26 +1,7 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
-import {
-  concat,
-  forkJoin,
-  from,
-  Observable,
-  ObservableInput,
-  of,
-  Subject,
-  zip,
-} from "rxjs";
-import {
-  catchError,
-  concatMap,
-  map,
-  mergeAll,
-  mergeMap,
-  pluck,
-  switchMap,
-  takeUntil,
-  tap,
-} from "rxjs/operators";
+import { forkJoin, Observable, of, Subject } from "rxjs";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
