@@ -18,13 +18,9 @@ import { environment } from '../environments/environment';
 
 // Importas para geolocalización
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-//import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 //import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-
-// Almacenamiento de datos 
-//import { IonicStorageModule } from '@ionic/storage';
 
 // Imports para firebase
 import { AngularFireModule } from '@angular/fire';
@@ -33,11 +29,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AngularFireStorageModule } from '@angular/fire/storage';
-//Permisos
-//import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-//Plataforma
 import { Platform } from '@ionic/angular';
-
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
 import { Network } from '@ionic-native/network/ngx';
@@ -47,11 +39,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { GpsProvider } from './providers/gps-provider.service';
 
-//Plugins Awesome-cordova
-import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
-import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
-//import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
-import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx';
 
 export function gpsProviderFactory(provider: GpsProvider){
   return () => provider.getUbicacionInicial();
@@ -73,26 +60,21 @@ export function gpsProviderFactory(provider: GpsProvider){
     AngularFirestoreModule.enablePersistence(),
     ReactiveFormsModule,
     ComponentsModule,    
-
     //IonicStorageModule.forRoot()
     
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: gpsProviderFactory, deps: [GpsProvider], multi: true},
-    AndroidPermissions,
     CallNumber,
     Geolocation,
     InAppBrowser,
     Keyboard,
-    LocationAccuracy,
     Network,
     Platform,
     ScreenOrientation,
     SplashScreen,
     StatusBar,
     TextToSpeech,
-    AndroidPermissions,
-    Diagnostic,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent]

@@ -23,6 +23,7 @@
     <preference name="SplashScreenDelay" value="0" />
     <preference name="ShowSplashScreen" value="false" />
     <preference name="Orientation" value="portrait" />
+    <preference name="cordova.plugins.diagnostic.modules" value="LOCATION" />
     <platform name="android">
         <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/uses-permission" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
