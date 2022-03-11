@@ -29,7 +29,7 @@ export class InformationPage {
     autoplay: true,
   };
 
-  /**se guardan los sliders de la pantalla donde_comer */
+  /**se guardan los sliders de la pantalla información */
   sliderInfo: Slider[] = [];
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -42,6 +42,7 @@ export class InformationPage {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
+        console.log("este es el res", res)
         this.sliderInfo = res;
       });
   }

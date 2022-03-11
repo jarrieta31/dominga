@@ -19,21 +19,10 @@ export class InformationService {
     private afs: AngularFirestore, 
   ) { 
     this.info = new BehaviorSubject<any[]>(this.information);
-    this.getInfo();
   }
 
   getInfo() {
-    // this.depto = this.db.selectionDepto;
-   
     this.allInfo = [];
-
-    // let searchDepto: boolean = false;
-    // this.save_depto.forEach((search) => {
-    //   if (search == this.depto) {
-    //     searchDepto = true;
-    //   }
-    // });
-    // if (this.init_info.length == 0) {
       this.afs
         .collection("informacion")
         .ref.where("departamento", "==", this.depto)
@@ -50,21 +39,10 @@ export class InformationService {
 
           this.allInfo = arrSlider;
           this.info.next(this.allInfo);
-          // this.save_depto.push(this.depto);
-          // searchDepto = false;
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => "Fin");
-    // } else {
-      // if (searchDepto) {
-      //   this.init_slider.forEach((res) => {
-      //     if (res.departamento == this.depto) {
-      //       this.allSlider.push(res);
-      //     }
-      //   });
-      // this.info.next(this.init_info);
-    // }
   }
 }
