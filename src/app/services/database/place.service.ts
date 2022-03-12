@@ -199,13 +199,12 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces(checkDepto: string) {
-    console.log('places.service ', checkDepto)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];
     this.distancePlaces = [];
 
-    this.places.next(this.distancePlaces);
+    //this.places.next(this.distancePlaces);
 
     let searchDepto: boolean = false;
 
@@ -299,18 +298,6 @@ export class PlaceService {
     }
 
     return this.places;
-  }
-
-  getObsPlaces():Observable<Place[]>{
-    return this.places.asObservable()
-    // .pipe(
-    //   takeUntil(this.unsubscribePlaces$)
-    // );
-  }
-
-  stopObs() {
-    this.unsubscribePlaces$.next();
-    this.unsubscribePlaces$.complete();
   }
 
   /**Devuelve un lugar específico

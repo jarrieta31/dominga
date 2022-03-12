@@ -170,8 +170,7 @@ export class WhereEatService {
     this.donde_comer = new BehaviorSubject<DondeComer[]>(this.init_dondecomer);
   }
 
-  getDondeComer() {
-    let checkDepto = this.geolocationSvc.currentDepto;
+  getDondeComer(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allDondeComer = [];
@@ -265,5 +264,7 @@ export class WhereEatService {
       });
       this.donde_comer.next(this.distanceEat);
     }
+
+    return this.donde_comer;
   }
 }

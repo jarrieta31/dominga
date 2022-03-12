@@ -34,11 +34,11 @@ export class AppComponent implements OnInit,OnDestroy {
     }
 
     ngOnInit(): void {
-        this.geolocationSvc.startGeolocation();
+        //this.geolocationSvc.startGeolocation();
     }
 
     ngOnDestroy(): void {
-        this.geolocationSvc.stopGeolocation();
+        //this.geolocationSvc.stopGeolocation();
     }
 
     async initializeApp() {

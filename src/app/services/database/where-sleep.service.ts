@@ -174,11 +174,9 @@ export class WhereSleepService {
 
   constructor(
     private afs: AngularFirestore,
-    private geolocationSvc: GeolocationService
   ) {}
 
-  getDondeDormir() {
-    let checkDepto = this.geolocationSvc.currentDepto;
+  getDondeDormir(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];
@@ -275,5 +273,7 @@ export class WhereSleepService {
       });
       this.donde_dormir.next(this.distanceSleep);
     }
+
+    return this.donde_dormir;
   }
 }

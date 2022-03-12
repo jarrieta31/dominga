@@ -70,18 +70,18 @@
   </div>
 
   <ion-list class="lista">
-    <div
+    <!-- <div
       class="empty"
-      *ngIf="eat.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')"
+      *ngIf="eat.length === 0"
     >
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
         No hay lugares para mostrar con el filtro seleccionado
       </div>
-    </div>
+    </div> -->
     <ng-container *ngFor="let item of eat | filtroDondeComer:dataForm">
       <ion-item
-        *ngIf="(item.mostrar && checkDistance === 'FOUND') || (checkDistance === 'OK')"
+        *ngIf="(item.distanciaNumber <= dist || dep != null)"
       >
         <div class="padre">
           <div class="imagen">

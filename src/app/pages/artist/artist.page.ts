@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Subject } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { forkJoin, of, Subject } from "rxjs";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { ArtistService } from "src/app/services/database/artist.service";
 import { Artistas } from "src/app/shared/artistas";
 import { LoadingController, ModalController } from "@ionic/angular";
@@ -10,6 +10,10 @@ import { Slider } from "src/app/shared/slider";
 import { VideoPage } from "../video/video.page";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { DatabaseService } from "src/app/services/database.service";
+import { Point } from "src/app/shared/point";
+import { GeolocationService } from "src/app/services/geolocation.service";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-artist",
@@ -24,7 +28,9 @@ export class ArtistPage {
     private sliderSvc: SlidesService,
     private modalCtrl: ModalController,
     private browser: InAppBrowser,
-    private databaseSvc: DatabaseService
+    private databaseSvc: DatabaseService,
+    private geolocationSvc: GeolocationService,
+    private http: HttpClient
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -159,6 +165,17 @@ export class ArtistPage {
     this.browser.create(url, "_system");
   }
 
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
   ionViewWillEnter() {
     if (
       localStorage.getItem("deptoActivo") != undefined &&
@@ -198,13 +215,21 @@ export class ArtistPage {
         this.sliderArtist = res;
       });
 
-    this.artistSvc.getArtist();
-    this.artistSvc.artist
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((res) => {
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    posDep.pipe(
+      switchMap((res) => this.artistSvc.getArtist(res[1])),
+      takeUntil(this.unsubscribe$)
+    ).subscribe((res) => {
         this.artists = res;
       });
-    this.show("Cargando lugares...");
+    /************************************************************************************ */
   }
 
   /**se ejecuta cada vez que se sale de la tab */

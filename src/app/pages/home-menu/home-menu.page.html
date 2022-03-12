@@ -17,16 +17,16 @@
         <ion-label (click)="seeDepto()" *ngIf="deptoSave === null"
           >departamento</ion-label
         >
-        <img *ngIf="gps != null" src="/assets/icon/exchange.png" alt="" />
+        <img *ngIf="gps" src="/assets/icon/exchange.png" alt="" />
         <ion-label
           class="distance_selected"
           (click)="seeDistance()"
-          *ngIf="distanceSave !== null && gps != null"
+          *ngIf="distanceSave !== null && gps"
           >{{ distanceSave }}</ion-label
         >
         <ion-label
           (click)="seeDistance()"
-          *ngIf="distanceSave === null && gps != null"
+          *ngIf="distanceSave === null && gps"
           >distancia</ion-label
         >
       </div>
@@ -57,7 +57,7 @@
         <div class="endline">_</div>
       </ion-list>
       <ion-list *ngIf="distance" class="depto_list">
-        <ion-radio-group value="{{ distanceSelected }}" *ngIf="gps != null">
+        <ion-radio-group value="{{ distanceSelected }}" *ngIf="gps">
           <ion-item
             lines="none"
             *ngFor="let dis of optionDsitance"

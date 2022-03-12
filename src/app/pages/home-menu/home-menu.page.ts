@@ -24,7 +24,7 @@ export class HomeMenuPage {
   deptoSave: String = null;
   distanceSave: String = null;
 
-  gps: any = null;
+  gps: boolean = false;
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -105,14 +105,7 @@ export class HomeMenuPage {
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
 
-    this.geolocationSvc.posicion$.pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (res) => {
-        this.gps = res;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.gps = this.geolocationSvc.gps;
 
     setTimeout(() => {
       this.presentAlert();

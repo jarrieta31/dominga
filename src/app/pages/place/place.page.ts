@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { forkJoin, Observable, of, Subject } from "rxjs";
-import { map, switchMap, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -13,7 +13,6 @@ import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
-import { Posicion } from "../../shared/donde-comer";
 import { environment } from "src/environments/environment";
 
 export interface Papa {
@@ -247,10 +246,9 @@ export class PlacePage {
     //this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
-
     this.sliderSvc.slider
       .pipe(
-        map(slider => slider.filter(s => s.pantalla === "lugares")),
+        map((slider) => slider.filter((s) => s.pantalla === "lugares")),
         takeUntil(this.unsubscribe$),
         tap(console.log)
       )
@@ -297,14 +295,15 @@ export class PlacePage {
         }),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((res) => (this.places = res));
+      .subscribe((res) => {
+        this.places = res;
+      });
     /************************************************************************************ */
   }
 
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
-    //this.geolocationSvc.stopGeolocation();
-    this.placeSvc.stopObs();
+    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.isFilterLocation = false;

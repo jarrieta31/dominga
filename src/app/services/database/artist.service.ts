@@ -18,8 +18,8 @@ export class ArtistService {
     this.artist = new BehaviorSubject<Artistas[]>(this.init_artist);
   }
 
-  getArtist() {
-    this.depto = this.db.selectionDepto;
+  getArtist(checkDepto: string) {
+    this.depto = localStorage.getItem("deptoActivo");
     this.allArtist = [];
 
     let searchDepto: boolean = false;
@@ -29,10 +29,34 @@ export class ArtistService {
       }
     });
 
-    if (this.depto != null && !searchDepto) {
-      this.afs
+    if (!searchDepto) {
+      if (this.depto !== null) {
+        this.afs
+          .collection("artistas")
+          .ref.where("departamento", "==", this.depto)
+          .where("publicado", "==", true)
+          .get()
+          .then((querySnapshot) => {
+            const arrArtist: Artistas[] = [];
+            querySnapshot.forEach((item) => {
+              const data: any = item.data();
+              arrArtist.push({ id: item.id, ...data });
+              this.init_artist.push({ id: item.id, ...data });
+            });
+
+            this.allArtist = arrArtist;
+            this.artist.next(this.allArtist);
+            this.save_depto.push(this.depto);
+            searchDepto = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => "Fin");
+      } else {
+        this.afs
         .collection("artistas")
-        .ref.where("departamento", "==", this.depto)
+        .ref.where("departamento", "==", checkDepto)
         .where("publicado", "==", true)
         .get()
         .then((querySnapshot) => {
@@ -52,6 +76,7 @@ export class ArtistService {
           console.log(err);
         })
         .finally(() => "Fin");
+      }
     } else if (searchDepto) {
       this.init_artist.forEach((res) => {
         if (res.departamento == this.depto) {
@@ -60,5 +85,7 @@ export class ArtistService {
       });
       this.artist.next(this.allArtist);
     }
+
+    return this.artist;
   }
 }

@@ -2,15 +2,17 @@ import { Component } from "@angular/core";
 import { DondeDormir } from "../../shared/donde-dormir";
 import { LoadingController } from "@ionic/angular";
 import { WhereSleepService } from "src/app/services/database/where-sleep.service";
-import { Subject } from "rxjs";
+import { forkJoin, of, Subject } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
-import { map, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { DatabaseService } from "src/app/services/database.service";
+import { Point } from "src/app/shared/point";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-where-sleep",
@@ -71,7 +73,9 @@ export class WhereSleepPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private databaseSvc: DatabaseService
-  ) {}
+  ) {
+    this.geolocationSvc.startGeolocation();
+  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -103,6 +107,17 @@ export class WhereSleepPage {
     return localStorage.getItem("distanceActivo") ? true : false;
   }
 
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
@@ -123,9 +138,22 @@ export class WhereSleepPage {
     );
   }
 
-  ionViewWillEnter() {
-    this.checkDistance = States.DEFAULT;
+    /** =====>=>=>=> Metodos Filtro localidad <============== */
+  /** Devuelve una lista de localidades */
+  get localidades() {
+    const wsleep = this.sleep;
+    let localidades: string[] = [];
+    if (wsleep.length > 0) {
+      wsleep.forEach((we) => {
+        if (localidades.indexOf(we.localidad) == -1) {
+          localidades.push(we.localidad);
+        }
+      });
+    }
+    return localidades;
+  }
 
+  ionViewWillEnter() {
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -160,82 +188,55 @@ export class WhereSleepPage {
         this.sliderSleep = res;
       });
 
-    this.sleepSvc.getDondeDormir();
-    this.sleepSvc.donde_dormir
-      .pipe(takeUntil(this.unsubscribe$))
+      /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    let dto = posDep.pipe(
+      switchMap((res) => this.sleepSvc.getDondeDormir(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
+
+    dto
+      .pipe(
+        switchMap((sp: DondeDormir[]) => {
+          return forkJoin(
+            sp.map((sl: DondeDormir) => {
+              return this.getDistance(
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+                sl.ubicacion.lng,
+                sl.ubicacion.lat
+              ).pipe(
+                map((re: any) => {
+                  let distPl = re.routes[0].distance;
+                  let hourPl = re.routes[0].duration;
+                  sl.distancia = distPl / 1000;
+                  sl.distanciaNumber = distPl / 1000;
+                  sl.hora = hourPl / 3200;
+                  sl.minuto = (hourPl / 60) % 60;
+                  return sl;
+                })
+              );
+            })
+          );
+        }),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((res) => {
         this.sleep = res;
-
-        this.locationActive = [];
-
-        this.sleep.forEach((loc) => {
-          let isLocation: boolean = false;
-
-          if (this.locationActive.length == 0) {
-            this.locationActive.push({ localidad: loc.localidad });
-            isLocation = true;
-          } else {
-            this.locationActive.forEach((locExist) => {
-              if (loc.localidad == locExist.localidad) isLocation = true;
-            });
-          }
-          if (!isLocation)
-            this.locationActive.push({ localidad: loc.localidad });
-        });
       });
-    this.show("Cargando lugares...");
+    /************************************************************************************ */
 
-    setTimeout(() => {
-      if (this.dep != null) this.checkDistance = States.OK;
-
-      this.geolocationSvc.posicion$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res) => {
-          if (res != null) {
-            this.sleep.forEach((calcDist) => {
-              this.getDistance(
-                res.longitud,
-                res.latitud,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
-
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
-
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "A " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "A " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      calcDist.mostrar = true;
-                      this.checkDistance = States.FOUND;
-                    } else calcDist.mostrar = false;
-                  }
-                });
-            });
-          }
-        });
-    }, 2000);
+    
   }
 
   ionViewDidLeave() {
+    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
 

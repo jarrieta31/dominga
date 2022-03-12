@@ -2,15 +2,17 @@ import { Component } from "@angular/core";
 import { DondeComer } from "../../shared/donde-comer";
 import { WhereEatService } from "src/app/services/database/where-eat.service";
 import { LoadingController } from "@ionic/angular";
-import { Subject } from "rxjs";
+import { forkJoin, of, Subject } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { States } from "src/app/shared/enum/states.enum";
 import { DatabaseService } from "src/app/services/database.service";
+import { Point } from "src/app/shared/point";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-where-eat",
@@ -69,13 +71,15 @@ export class WhereEatPage {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private afs: WhereEatService,
+    private eatSvc: WhereEatService,
     private fb: FormBuilder,
     private sliderSvc: SlidesService,
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService
-  ) {}
+  ) {
+    this.geolocationSvc.startGeolocation();
+  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -105,6 +109,17 @@ export class WhereEatPage {
 
   get selectdistancia() {
     return localStorage.getItem("distanceActivo") ? true : false;
+  }
+
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
   }
 
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
@@ -164,7 +179,6 @@ export class WhereEatPage {
 
     this.unsubscribe$ = new Subject<void>();
 
-    this.afs.getDondeComer();
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider
@@ -176,74 +190,54 @@ export class WhereEatPage {
         this.sliderEat = res;
       });
 
-    this.afs.donde_comer.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      this.eat = res;
-      this.locationActive = [];
-      this.eat.forEach((loc) => {
-        let isLocation = false;
-        if (this.locationActive.length == 0) {
-          this.locationActive.push({ localidad: loc.localidad });
-          isLocation = true;
-        } else {
-          this.locationActive.forEach((locExist) => {
-            if (loc.localidad == locExist.localidad) isLocation = true;
-          });
-        }
-        if (!isLocation) this.locationActive.push({ localidad: loc.localidad });
+     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+     let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    let dto = posDep.pipe(
+      switchMap((res) => this.eatSvc.getDondeComer(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
+
+    dto
+      .pipe(
+        switchMap((lg: DondeComer[]) => {
+          return forkJoin(
+            lg.map((pl: DondeComer) => {
+              return this.getDistance(
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+                pl.ubicacion.lng,
+                pl.ubicacion.lat
+              ).pipe(
+                map((re: any) => {
+                  let distPl = re.routes[0].distance;
+                  let hourPl = re.routes[0].duration;
+                  pl.distancia = distPl / 1000;
+                  pl.distanciaNumber = distPl / 1000;
+                  pl.hora = hourPl / 3200;
+                  pl.minuto = (hourPl / 60) % 60;
+                  return pl;
+                })
+              );
+            })
+          );
+        }),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((res) => {
+        console.log(res)
+        this.eat = res;
       });
-    });
-
-    setTimeout(() => {
-      if (this.dep != null) this.checkDistance = States.OK;
-
-      this.geolocationSvc.posicion$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res) => {
-          if (res != null) {
-            this.eat.forEach((calcDist) => {
-              this.getDistance(
-                res.longitud,
-                res.latitud,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
-
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
-
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "A " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "A " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      calcDist.mostrar = true;
-                      this.checkDistance = States.FOUND;
-                    } else calcDist.mostrar = false;
-                  }
-                });
-            });
-          }
-        });
-    }, 2000);
+    /************************************************************************************ */
   }
 
   ionViewDidLeave() {
+    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
 

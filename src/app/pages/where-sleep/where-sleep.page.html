@@ -56,10 +56,10 @@
                 <ion-item
                   class="filter_list last"
                   lines="none"
-                  *ngFor="let loc of locationActive"
+                  *ngFor="let loc of localidades"
                 >
-                  <ion-text id="filters">{{ loc.localidad }}</ion-text>
-                  <ion-radio slot="end" value="{{ loc.localidad }}"></ion-radio>
+                  <ion-text id="filters">{{ loc }}</ion-text>
+                  <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
               </ion-radio-group>
             </ion-list>
@@ -71,15 +71,15 @@
   </div>
 
   <ion-list class="lista">
-    <div class="empty" *ngIf="sleep.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
+    <!-- <div class="empty" *ngIf="sleep.length === 0">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div id="eat-info" class="text_empty">
         No hay lugares para mostrar con el filtro seleccionado
       </div>
-    </div>
+    </div> -->
     <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
       <ion-item
-        *ngIf="(item.mostrar && checkDistance === 'FOUND') || (checkDistance === 'OK')"
+        *ngIf="(item.distanciaNumber <= dist || dep != null)"
       >
         <div class="padre">
           <div class="imagen">

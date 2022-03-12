@@ -20,10 +20,10 @@ export interface Eventos{
     tipo:string;
     ubicacion: Posicion;
     whatsapp?: string; 
-    distancia: string;
+    distancia: string | number;
     distanciaNumber: number;
-    hora: string;
-    minuto: string
+    hora: string | number;
+    minuto: string | number;
     } 
 
     export interface Posicion{

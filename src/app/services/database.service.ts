@@ -209,8 +209,7 @@ export class DatabaseService {
   /**
    * Obtener eventos desde fecha de hoy
    */
-  getEventos() {
-    let checkDepto = this.geoService.currentDepto;
+  getEventos(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allEvents = [];
@@ -309,6 +308,8 @@ export class DatabaseService {
       });
       this.eventos.next(this.distanceEvents);
     }
+
+    return this.eventos;
   }
 
   allDepartament: Departament[] = [];

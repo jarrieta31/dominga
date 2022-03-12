@@ -3,14 +3,16 @@ import { ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { Subject, Subscription } from "rxjs";
+import { forkJoin, of, Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { HttpClient } from "@angular/common/http";
+import { Point } from "src/app/shared/point";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-events",
@@ -79,26 +81,8 @@ export class EventsPage {
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
     private http: HttpClient
-  ) {}
-
-  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
-  getDistance(
-    lngUser: number,
-    latUser: number,
-    lngPlace: number,
-    latPlace: number
   ) {
-    return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        lngUser +
-        "," +
-        latUser +
-        ";" +
-        lngPlace +
-        "," +
-        latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
-    );
+    this.geolocationSvc.startGeolocation();
   }
 
   anioActual: number = 0;
@@ -111,126 +95,6 @@ export class EventsPage {
   day: string;
   fullDay: string = "";
   month_aux: string = "";
-
-  ionViewWillEnter() {
-    this.anioActual = new Date().getFullYear();
-    this.month = this.today.getMonth() + 1;
-    this.day = this.today.getDate().toString();
-
-    if (this.day.length === 1) {
-      this.day = ("0" + this.today.getDate()).toString();
-    } else {
-      this.day = this.today.getDate().toString();
-    }
-
-    if (this.month < 10) {
-      this.month_aux = ("0" + (this.today.getMonth() + 1)).toString();
-    } else {
-      this.month_aux = (this.today.getMonth() + 1).toString();
-    }
-
-    this.fullDay = (
-      this.anioActual +
-      "-" +
-      this.month_aux +
-      "-" +
-      this.day
-    ).toString();
-
-    this.customYearValues = [];
-    for (let i = 0; i < 3; i++) {
-      this.customYearValues.push(this.anioActual);
-      this.anioActual = this.anioActual + 1;
-    }
-
-    this.unsubscribe$ = new Subject<void>();
-
-    this.dist = parseInt(localStorage.getItem("distanceActivo"));
-    this.dpto_select = localStorage.getItem("deptoActivo");
-
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-      this.currentDepto = localStorage.getItem("deptoActivo");
-      this.filterForm.reset();
-      this.dataform = "";
-      this.optionLocation = "localidad";
-      this.optionDateEnd = "";
-      this.optionDateStart = "";
-      this.optionType = "tipo";
-    }
-
-    this.dbService.getEventos();
-
-    this.sliderSvc.slider
-      .pipe(
-        map((slider) => slider.filter((s) => s.pantalla === "eventos")),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((res) => {
-        console.log("este es res", res)
-        this.sliderEvents = res;
-      });
-
-    this.dbService.eventos
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((eventos) => {
-        this.eventos = eventos;
-      });
-
-    setTimeout(() => {
-      this.geolocationSvc.posicion$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res) => {
-          if (res != null) {
-            this.eventos.forEach((calcDist) => {
-              this.getDistance(
-                res.longitud,
-                res.latitud,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
-
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
-
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      this.checkDistance = true;
-                    }
-                  } else this.checkDistance = true;
-                });
-            });
-          } else this.checkDistance = true;
-        });
-    }, 2000);
-  }
-
-  ionViewDidLeave() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-
-    this.isFilterLocation = false;
-    this.isFilterType = false;
-    this.isFilterDate = false;
-  }
 
   /**
    * Slide
@@ -310,6 +174,37 @@ export class EventsPage {
 
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
+  }
+
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
+  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
+  getDistance(
+    lngUser: number,
+    latUser: number,
+    lngPlace: number,
+    latPlace: number
+  ) {
+    return this.http.get(
+      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        lngUser +
+        "," +
+        latUser +
+        ";" +
+        lngPlace +
+        "," +
+        latPlace +
+        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
   }
 
   /** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/
@@ -462,4 +357,114 @@ export class EventsPage {
     return eventos_xlocalidad;
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
+
+  ionViewWillEnter() {
+    this.anioActual = new Date().getFullYear();
+    this.month = this.today.getMonth() + 1;
+    this.day = this.today.getDate().toString();
+
+    if (this.day.length === 1) {
+      this.day = ("0" + this.today.getDate()).toString();
+    } else {
+      this.day = this.today.getDate().toString();
+    }
+
+    if (this.month < 10) {
+      this.month_aux = ("0" + (this.today.getMonth() + 1)).toString();
+    } else {
+      this.month_aux = (this.today.getMonth() + 1).toString();
+    }
+
+    this.fullDay = (
+      this.anioActual +
+      "-" +
+      this.month_aux +
+      "-" +
+      this.day
+    ).toString();
+
+    this.customYearValues = [];
+    for (let i = 0; i < 3; i++) {
+      this.customYearValues.push(this.anioActual);
+      this.anioActual = this.anioActual + 1;
+    }
+
+    this.unsubscribe$ = new Subject<void>();
+
+    this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    this.dpto_select = localStorage.getItem("deptoActivo");
+
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataform = "";
+      this.optionLocation = "localidad";
+      this.optionDateEnd = "";
+      this.optionDateStart = "";
+      this.optionType = "tipo";
+    }
+
+    this.sliderSvc.slider
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "eventos")),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((res) => {
+        this.sliderEvents = res;
+      });
+
+        /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+        let posDep = this.geolocationSvc.posicion$.pipe(
+          switchMap((pos: Point) => {
+            return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+          }),
+          takeUntil(this.unsubscribe$)
+        );
+    
+        let dto = posDep.pipe(
+          switchMap((res) => this.dbService.getEventos(res[1])),
+          takeUntil(this.unsubscribe$)
+        );
+    
+        dto
+          .pipe(
+            switchMap((ev: Eventos[]) => {
+              return forkJoin(
+                ev.map((et: Eventos) => {
+                  return this.getDistance(
+                    this.geolocationSvc.posicion.longitud,
+                    this.geolocationSvc.posicion.latitud,
+                    et.ubicacion.lng,
+                    et.ubicacion.lat
+                  ).pipe(
+                    map((re: any) => {
+                      let distPl = re.routes[0].distance;
+                      let hourPl = re.routes[0].duration;
+                      et.distancia = distPl / 1000;
+                      et.distanciaNumber = distPl / 1000;
+                      et.hora = hourPl / 3200;
+                      et.minuto = (hourPl / 60) % 60;
+                      return et;
+                    })
+                  );
+                })
+              );
+            }),
+            takeUntil(this.unsubscribe$)
+          )
+          .subscribe((res) => {
+            this.eventos = res;
+          });
+        /************************************************************************************ */
+  }
+
+  ionViewDidLeave() {
+    this.geolocationSvc.stopGeolocation();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
+    this.isFilterType = false;
+    this.isFilterDate = false;
+  }
 }
