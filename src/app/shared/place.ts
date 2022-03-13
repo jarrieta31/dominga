@@ -1,7 +1,7 @@
     export interface Place {
     id: string;
     distancia?: string | number,
-    distanciaNumber: number,
+    distanciaNumber: number | string,
     hora: string | number,
     minuto: string | number,
     nombre: string,
