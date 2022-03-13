@@ -54,9 +54,7 @@ export class PlacePage {
     private http: HttpClient,
     private fb: FormBuilder,
     private sliderSvc: SlidesService
-  ) {
-    this.geolocationSvc.startGeolocation();
-   }
+  ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -311,7 +309,6 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se sale de la tab */
   ionViewDidLeave() {
-    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.isFilterLocation = false;

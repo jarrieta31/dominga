@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject } from "rxjs";
 import { DondeComer } from "src/app/shared/donde-comer";
+import distance from "@turf/distance";
 import { GeolocationService } from "../geolocation.service";
 
 @Injectable({
@@ -166,7 +167,10 @@ export class WhereEatService {
   /**se guardan los lugares recibidos desde el filtro distancia */
   distanceEat: DondeComer[] = [];
 
-  constructor(private afs: AngularFirestore, private geolocationSvc: GeolocationService) {
+  constructor(
+    private afs: AngularFirestore,
+    private geolocationSvc: GeolocationService
+  ) {
     this.donde_comer = new BehaviorSubject<DondeComer[]>(this.init_dondecomer);
   }
 
@@ -175,6 +179,8 @@ export class WhereEatService {
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allDondeComer = [];
     this.distanceEat = [];
+
+    const options = { units: "kilometers" };
 
     let searchDepto: boolean = false;
     this.save_depto.forEach((search) => {
@@ -199,6 +205,20 @@ export class WhereEatService {
           });
 
           this.allDondeComer = arrDondeComer;
+
+          this.allDondeComer.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
+
           this.donde_comer.next(this.allDondeComer);
           this.save_depto.push(this.depto);
           searchDepto = false;
@@ -213,6 +233,20 @@ export class WhereEatService {
           this.allDondeComer.push(res);
         }
       });
+
+      this.allDondeComer.forEach((dist) => {
+        let calcDist = distance(
+          [
+            this.geolocationSvc.posicion.longitud,
+            this.geolocationSvc.posicion.latitud,
+          ],
+          [dist.ubicacion.lng, dist.ubicacion.lat],
+          options
+        );
+        dist.distancia = calcDist;
+        dist.distanciaNumber = calcDist;
+      });
+
       this.donde_comer.next(this.allDondeComer);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
@@ -239,20 +273,46 @@ export class WhereEatService {
           this.init_dondecomer.forEach((init: any) => {
             if (init.departamento == dep) this.distanceEat.push(init);
           });
+          this.distanceEat.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
           deptoSearch = false;
         } else {
           this.afs
-          .collection("donde_comer")
-          .ref.where("departamento", "==", dep)
-          .where("publicado", "==", true)
-          .orderBy("nombre")
-          .get()
+            .collection("donde_comer")
+            .ref.where("departamento", "==", dep)
+            .where("publicado", "==", true)
+            .orderBy("nombre")
+            .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
                 this.init_dondecomer.push({ id: item.id, ...data });
                 this.distanceEat.push({ id: item.id, ...data });
-              });      
+              });
+
+              this.distanceEat.forEach((dist) => {
+                let calcDist = distance(
+                  [
+                    this.geolocationSvc.posicion.longitud,
+                    this.geolocationSvc.posicion.latitud,
+                  ],
+                  [dist.ubicacion.lng, dist.ubicacion.lat],
+                  options
+                );
+                dist.distancia = calcDist;
+                dist.distanciaNumber = calcDist;
+              });
+
               if (!searchDepto) this.save_depto.push(dep);
             })
             .catch((err) => {

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { BehaviorSubject } from "rxjs";
 import { DondeDormir } from "src/app/shared/donde-dormir";
-import { DatabaseService } from "../database.service";
+import distance from "@turf/distance";
 import { GeolocationService } from "../geolocation.service";
 
 @Injectable({
@@ -174,12 +174,15 @@ export class WhereSleepService {
 
   constructor(
     private afs: AngularFirestore,
+    private geolocationSvc: GeolocationService
   ) {}
 
   getDondeDormir(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];
+
+    const options = { units: "kilometers" };
 
     this.donde_dormir = new BehaviorSubject<DondeDormir[]>(
       this.init_dondedormir
@@ -207,6 +210,19 @@ export class WhereSleepService {
             this.init_dondedormir.push({ id: item.id, ...data });
           });
           this.allLugares = arrPlaces;
+
+          this.allLugares.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
           this.donde_dormir.next(this.allLugares);
           this.save_depto.push(this.depto);
           searchDepto = false;
@@ -221,6 +237,18 @@ export class WhereSleepService {
         if (res.departamento == this.depto) {
           this.allLugares.push(res);
         }
+      });
+      this.allLugares.forEach((dist) => {
+        let calcDist = distance(
+          [
+            this.geolocationSvc.posicion.longitud,
+            this.geolocationSvc.posicion.latitud,
+          ],
+          [dist.ubicacion.lng, dist.ubicacion.lat],
+          options
+        );
+        dist.distancia = calcDist;
+        dist.distanciaNumber = calcDist;
       });
       this.donde_dormir.next(this.allLugares);
     } else if (this.distance != null) {
@@ -248,20 +276,45 @@ export class WhereSleepService {
           this.init_dondedormir.forEach((init: any) => {
             if (init.departamento == dep) this.distanceSleep.push(init);
           });
+          this.distanceSleep.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
           deptoSearch = false;
         } else {
           this.afs
-          .collection("donde_dormir")
-          .ref.where("departamento", "==", dep)
-          .where("publicado", "==", true)
-          .orderBy("nombre")
-          .get()
+            .collection("donde_dormir")
+            .ref.where("departamento", "==", dep)
+            .where("publicado", "==", true)
+            .orderBy("nombre")
+            .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
                 this.init_dondedormir.push({ id: item.id, ...data });
                 this.distanceSleep.push({ id: item.id, ...data });
-              });      
+              });
+              this.distanceSleep.forEach((dist) => {
+                let calcDist = distance(
+                  [
+                    this.geolocationSvc.posicion.longitud,
+                    this.geolocationSvc.posicion.latitud,
+                  ],
+                  [dist.ubicacion.lng, dist.ubicacion.lat],
+                  options
+                );
+                dist.distancia = calcDist;
+                dist.distanciaNumber = calcDist;
+              });
+
               if (!searchDepto) this.save_depto.push(dep);
             })
             .catch((err) => {

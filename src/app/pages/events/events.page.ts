@@ -81,9 +81,7 @@ export class EventsPage {
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
     private http: HttpClient
-  ) {
-    this.geolocationSvc.startGeolocation();
-  }
+  ) {}
 
   anioActual: number = 0;
   customYearValues = [];
@@ -429,28 +427,28 @@ export class EventsPage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          switchMap((ev: Eventos[]) => {
-            return forkJoin(
-              ev.map((et: Eventos) => {
-                return this.getDistance(
-                  this.geolocationSvc.posicion.longitud,
-                  this.geolocationSvc.posicion.latitud,
-                  et.ubicacion.lng,
-                  et.ubicacion.lat
-                ).pipe(
-                  map((re: any) => {
-                    let distPl = re.routes[0].distance;
-                    let hourPl = re.routes[0].duration;
-                    et.distancia = distPl / 1000;
-                    et.distanciaNumber = distPl / 1000;
-                    et.hora = hourPl / 3200;
-                    et.minuto = (hourPl / 60) % 60;
-                    return et;
-                  })
-                );
-              })
-            );
-          }),
+          // switchMap((ev: Eventos[]) => {
+          //   return forkJoin(
+          //     ev.map((et: Eventos) => {
+          //       return this.getDistance(
+          //         this.geolocationSvc.posicion.longitud,
+          //         this.geolocationSvc.posicion.latitud,
+          //         et.ubicacion.lng,
+          //         et.ubicacion.lat
+          //       ).pipe(
+          //         map((re: any) => {
+          //           let distPl = re.routes[0].distance;
+          //           let hourPl = re.routes[0].duration;
+          //           et.distancia = distPl / 1000;
+          //           et.distanciaNumber = distPl / 1000;
+          //           et.hora = hourPl / 3200;
+          //           et.minuto = (hourPl / 60) % 60;
+          //           return et;
+          //         })
+          //       );
+          //     })
+          //   );
+          // }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
@@ -465,7 +463,6 @@ export class EventsPage {
   }
 
   ionViewDidLeave() {
-    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
 

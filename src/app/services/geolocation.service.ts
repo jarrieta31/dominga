@@ -64,6 +64,8 @@ export class GeolocationService {
     }
     //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
     console.log("geolocation server: ", this.posicion$.value);
+
+    this.startGeolocation();
   }
 
   startGeolocation() {

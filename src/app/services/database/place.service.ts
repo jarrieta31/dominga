@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { takeUntil } from "rxjs/operators";
 import { GeolocationService } from "../geolocation.service";
 
 @Injectable({

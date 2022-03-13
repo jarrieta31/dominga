@@ -77,9 +77,7 @@ export class WhereEatPage {
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService
-  ) {
-    this.geolocationSvc.startGeolocation();
-  }
+  ) {}
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -206,28 +204,28 @@ export class WhereEatPage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          switchMap((lg: DondeComer[]) => {
-            return forkJoin(
-              lg.map((pl: DondeComer) => {
-                return this.getDistance(
-                  this.geolocationSvc.posicion.longitud,
-                  this.geolocationSvc.posicion.latitud,
-                  pl.ubicacion.lng,
-                  pl.ubicacion.lat
-                ).pipe(
-                  map((re: any) => {
-                    let distPl = re.routes[0].distance;
-                    let hourPl = re.routes[0].duration;
-                    pl.distancia = distPl / 1000;
-                    pl.distanciaNumber = distPl / 1000;
-                    pl.hora = hourPl / 3200;
-                    pl.minuto = (hourPl / 60) % 60;
-                    return pl;
-                  })
-                );
-              })
-            );
-          }),
+          // switchMap((lg: DondeComer[]) => {
+          //   return forkJoin(
+          //     lg.map((pl: DondeComer) => {
+          //       return this.getDistance(
+          //         this.geolocationSvc.posicion.longitud,
+          //         this.geolocationSvc.posicion.latitud,
+          //         pl.ubicacion.lng,
+          //         pl.ubicacion.lat
+          //       ).pipe(
+          //         map((re: any) => {
+          //           let distPl = re.routes[0].distance;
+          //           let hourPl = re.routes[0].duration;
+          //           pl.distancia = distPl / 1000;
+          //           pl.distanciaNumber = distPl / 1000;
+          //           pl.hora = hourPl / 3200;
+          //           pl.minuto = (hourPl / 60) % 60;
+          //           return pl;
+          //         })
+          //       );
+          //     })
+          //   );
+          // }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
@@ -242,7 +240,6 @@ export class WhereEatPage {
   }
 
   ionViewDidLeave() {
-    this.geolocationSvc.stopGeolocation();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
 

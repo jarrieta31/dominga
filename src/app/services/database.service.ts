@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Eventos } from "../shared/eventos";
 import { Departament } from "../shared/departament";
 import { Subscription } from "rxjs";
+import distance from "@turf/distance";
 import { GeolocationService } from "./geolocation.service";
 
 @Injectable({
@@ -12,9 +12,6 @@ import { GeolocationService } from "./geolocation.service";
 })
 export class DatabaseService {
   today: Date = new Date();
-
-  /**Guarda todos los lugares del departamento seleccionado actualmente*/
-  allLugares: Eventos[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   initEvents: Eventos[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
@@ -23,7 +20,7 @@ export class DatabaseService {
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(
     private afs: AngularFirestore,
-    private geoService: GeolocationService
+    private geolocationSvc: GeolocationService
   ) {
     this.eventos = new BehaviorSubject<Eventos[]>(this.distanceEvents);
   }
@@ -217,6 +214,8 @@ export class DatabaseService {
 
     let searchDepto: boolean = false;
 
+    const options = { units: "kilometers" };
+
     if (this.depto != null) {
       this.save_depto.forEach((search) => {
         if (search == this.depto) {
@@ -243,6 +242,20 @@ export class DatabaseService {
           });
           this.save_depto.push(this.depto);
           this.allEvents = arrEvents;
+
+          this.allEvents.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
+
           this.eventos.next(this.allEvents);
         })
         .catch((err) => {
@@ -255,6 +268,20 @@ export class DatabaseService {
           this.allEvents.push(res);
         }
       });
+
+      this.allEvents.forEach((dist) => {
+        let calcDist = distance(
+          [
+            this.geolocationSvc.posicion.longitud,
+            this.geolocationSvc.posicion.latitud,
+          ],
+          [dist.ubicacion.lng, dist.ubicacion.lat],
+          options
+        );
+        dist.distancia = calcDist;
+        dist.distanciaNumber = calcDist;
+      });
+
       this.eventos.next(this.allEvents);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
@@ -281,6 +308,20 @@ export class DatabaseService {
           this.initEvents.forEach((init: any) => {
             if (init.departamento == dep) this.distanceEvents.push(init);
           });
+
+          this.distanceEvents.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
+
           deptoSearch = false;
         } else {
           this.afs
@@ -297,6 +338,19 @@ export class DatabaseService {
                 this.initEvents.push({ id: item.id, ...data });
                 this.distanceEvents.push({ id: item.id, ...data });
               });
+              this.distanceEvents.forEach((dist) => {
+                let calcDist = distance(
+                  [
+                    this.geolocationSvc.posicion.longitud,
+                    this.geolocationSvc.posicion.latitud,
+                  ],
+                  [dist.ubicacion.lng, dist.ubicacion.lat],
+                  options
+                );
+                dist.distancia = calcDist;
+                dist.distanciaNumber = calcDist;
+              });
+
               if (!searchDepto) this.save_depto.push(dep);
             })
             .catch((err) => {
