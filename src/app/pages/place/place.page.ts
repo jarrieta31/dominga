@@ -5,7 +5,7 @@ import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
-import distance from "@turf/distance";
+//import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
@@ -56,7 +56,7 @@ export class PlacePage {
     private sliderSvc: SlidesService
   ) {
     this.geolocationSvc.startGeolocation();
-  }
+   }
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -272,51 +272,32 @@ export class PlacePage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          // switchMap((lg: Place[]) => {
-          //   return forkJoin(
-          //     lg.map((pl: Place) => {
-          //       return this.getDistance(
-          //         this.geolocationSvc.posicion.longitud,
-          //         this.geolocationSvc.posicion.latitud,
-          //         pl.ubicacion.lng,
-          //         pl.ubicacion.lat
-          //       ).pipe(
-          //         map((re: any) => {
-          //           let distPl = re.routes[0].distance;
-          //           let hourPl = re.routes[0].duration;
-          //           pl.distancia = distPl / 1000;
-          //           pl.distanciaNumber = distPl / 1000;
-          //           pl.hora = hourPl / 3200;
-          //           pl.minuto = (hourPl / 60) % 60;
-          //           return pl;
-          //         })
-          //       );
-          //     })
-          //   );
-          // }),
+          switchMap((lg: Place[]) => {
+            return forkJoin(
+              lg.map((pl: Place) => {
+                return this.getDistance(
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                  pl.ubicacion.lng,
+                  pl.ubicacion.lat
+                ).pipe(
+                  map((re: any) => {
+                    let distPl = re.routes[0].distance;
+                    let hourPl = re.routes[0].duration;
+                    pl.distancia = distPl / 1000;
+                    pl.distanciaNumber = distPl / 1000;
+                    pl.hora = hourPl / 3200;
+                    pl.minuto = (hourPl / 60) % 60;
+                    return pl;
+                  })
+                );
+              })
+            );
+          }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
           this.places = res;
-          
-          this.places.forEach((pl) => {
-            this.getDistance(
-              this.geolocationSvc.posicion.longitud,
-              this.geolocationSvc.posicion.latitud,
-              pl.ubicacion.lng,
-              pl.ubicacion.lat
-            ).pipe(
-              map((re: any) => {
-                let distPl = re.routes[0].distance;
-                let hourPl = re.routes[0].duration;
-                pl.distancia = distPl / 1000;
-                pl.distanciaNumber = distPl / 1000;
-                pl.hora = hourPl / 3200;
-                pl.minuto = (hourPl / 60) % 60;
-              }),
-              takeUntil(this.unsubscribe$)
-            ).subscribe();
-          });
         });
     } else {
       this.placeSvc.getPlaces(this.dep).subscribe((res) => {
