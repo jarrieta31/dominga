@@ -141,11 +141,12 @@
           <app-preload class="imgCard" [url]="item.imagenHome['url']" [alt]="item.nombre" [urlPreload]="preloadImage"></app-preload>
           <div class="duracion">
             <b class="distancia"
-              >{{item.distancia | formatDistancia }} -
-              <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
+              >{{item.distancia | formatDistancia }}
+              <!-- <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
               >&nbsp;<span *ngIf="item.minuto > 1"
                 >{{ item.minuto | minute }}</span
-              ></b
+              > -->
+              </b
             >
           </div>
         </ion-card-content>

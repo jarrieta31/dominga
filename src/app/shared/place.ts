@@ -2,8 +2,8 @@
     id: string;
     distancia?: string | number,
     distanciaNumber: number | string,
-    hora: string | number,
-    minuto: string | number,
+    //hora: string | number,
+    //minuto: string | number,
     nombre: string,
     prioridad: number,
     publicado: boolean,

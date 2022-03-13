@@ -36,7 +36,7 @@ export class GeolocationService {
   latCenter: number = 0;
   longCenter: number = 0;
   timetest: any;
-  sourceClock$: Observable<any> = timer(1500, 36000);
+  sourceClock$: Observable<any> = timer(0, 36000);
   sourceGpsSubject$ = new BehaviorSubject(null);
   public gps: boolean = false;
   subscriptionClock: any;

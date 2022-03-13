@@ -5,6 +5,7 @@ import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { takeUntil } from "rxjs/operators";
+import { GeolocationService } from "../geolocation.service";
 
 @Injectable({
   providedIn: "root",
@@ -185,13 +186,11 @@ export class PlaceService {
     },
   ];
 
-  private unsubscribePlaces$: Subject<void>;
-
   constructor(
     private afs: AngularFirestore,
+    private geolocationSvc: GeolocationService
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
-    this.unsubscribePlaces$ = new Subject<void>();
   }
 
   /**
@@ -207,6 +206,8 @@ export class PlaceService {
     //this.places.next(this.distancePlaces);
 
     let searchDepto: boolean = false;
+
+    const options = { units: "kilometers" };
 
     if (this.depto != null) {
       this.save_depto.forEach((search) => {
@@ -231,6 +232,19 @@ export class PlaceService {
             this.initPlace.push({ id: item.id, ...data });
           });
           this.allLugares = arrPlaces;
+
+          this.allLugares.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
           this.places.next(this.allLugares);
           this.save_depto.push(this.depto);
           searchDepto = false;
@@ -244,6 +258,18 @@ export class PlaceService {
         if (res.departamento == this.depto) {
           this.allLugares.push(res);
         }
+      });
+      this.allLugares.forEach((dist) => {
+        let calcDist = distance(
+          [
+            this.geolocationSvc.posicion.longitud,
+            this.geolocationSvc.posicion.latitud,
+          ],
+          [dist.ubicacion.lng, dist.ubicacion.lat],
+          options
+        );
+        dist.distancia = calcDist;
+        dist.distanciaNumber = calcDist;
       });
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
@@ -271,6 +297,18 @@ export class PlaceService {
           this.initPlace.forEach((init: any) => {
             if (init.departamento == dep) this.distancePlaces.push(init);
           });
+          this.distancePlaces.forEach((dist) => {
+            let calcDist = distance(
+              [
+                this.geolocationSvc.posicion.longitud,
+                this.geolocationSvc.posicion.latitud,
+              ],
+              [dist.ubicacion.lng, dist.ubicacion.lat],
+              options
+            );
+            dist.distancia = calcDist;
+            dist.distanciaNumber = calcDist;
+          });
           deptoSearch = false;
         } else {
           this.afs
@@ -284,6 +322,19 @@ export class PlaceService {
                 const data: any = item.data();
                 this.initPlace.push({ id: item.id, ...data });
                 this.distancePlaces.push({ id: item.id, ...data });
+              });
+
+              this.distancePlaces.forEach((dist) => {
+                let calcDist = distance(
+                  [
+                    this.geolocationSvc.posicion.longitud,
+                    this.geolocationSvc.posicion.latitud,
+                  ],
+                  [dist.ubicacion.lng, dist.ubicacion.lat],
+                  options
+                );
+                dist.distancia = calcDist;
+                dist.distanciaNumber = calcDist;
               });
               if (!searchDepto) this.save_depto.push(dep);
             })
@@ -311,7 +362,8 @@ export class PlaceService {
       if (res.id == id) {
         res.descripcionCorta =
           res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) +
-          "..." + `<a>Ver más</a>`;
+          "..." +
+          `<a>Ver más</a>`;
         this.near_place = res;
         this.place_selected.next(res);
       }
