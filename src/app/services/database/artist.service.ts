@@ -24,8 +24,14 @@ export class ArtistService {
 
     let searchDepto: boolean = false;
     this.save_depto.forEach((search) => {
-      if (search == this.depto) {
-        searchDepto = true;
+      if (this.depto !== null) {
+        if (search == this.depto) {
+          searchDepto = true;
+        }
+      } else {
+        if (search == checkDepto) {
+          searchDepto = true;
+        }
       }
     });
 
@@ -55,34 +61,43 @@ export class ArtistService {
           .finally(() => "Fin");
       } else {
         this.afs
-        .collection("artistas")
-        .ref.where("departamento", "==", checkDepto)
-        .where("publicado", "==", true)
-        .get()
-        .then((querySnapshot) => {
-          const arrArtist: Artistas[] = [];
-          querySnapshot.forEach((item) => {
-            const data: any = item.data();
-            arrArtist.push({ id: item.id, ...data });
-            this.init_artist.push({ id: item.id, ...data });
-          });
+          .collection("artistas")
+          .ref.where("departamento", "==", checkDepto)
+          .where("publicado", "==", true)
+          .get()
+          .then((querySnapshot) => {
+            const arrArtist: Artistas[] = [];
+            querySnapshot.forEach((item) => {
+              const data: any = item.data();
+              arrArtist.push({ id: item.id, ...data });
+              this.init_artist.push({ id: item.id, ...data });
+            });
 
-          this.allArtist = arrArtist;
-          this.artist.next(this.allArtist);
-          this.save_depto.push(this.depto);
-          searchDepto = false;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => "Fin");
+            this.allArtist = arrArtist;
+            this.artist.next(this.allArtist);
+            this.save_depto.push(checkDepto);
+            searchDepto = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => "Fin");
       }
     } else if (searchDepto) {
-      this.init_artist.forEach((res) => {
-        if (res.departamento == this.depto) {
-          this.allArtist.push(res);
-        }
-      });
+      if (this.depto !== null) {
+        this.init_artist.forEach((res) => {
+          if (res.departamento == this.depto) {
+            this.allArtist.push(res);
+          }
+        });
+      } else {
+        this.init_artist.forEach((res) => {
+          if (res.departamento === checkDepto) {
+            this.allArtist.push(res);
+          }
+        });
+      }
+
       this.artist.next(this.allArtist);
     }
 

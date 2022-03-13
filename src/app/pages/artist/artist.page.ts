@@ -143,7 +143,6 @@ export class ArtistPage {
    * @param url - URL del video que se va a ejecutar
    */
   async verVideo(url: string) {
-    console.log(url);
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: "modal-video",
