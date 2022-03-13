@@ -68,7 +68,7 @@ export class ArtistPage {
   currentDepto: String = this.databaseSvc.selectionDepto;
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
-  dep: String = null;
+  dep: string = null;
   /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
   msgEmptyPlace: String = null;
 
@@ -223,12 +223,20 @@ export class ArtistPage {
       takeUntil(this.unsubscribe$)
     );
 
-    posDep.pipe(
-      switchMap((res) => this.artistSvc.getArtist(res[1])),
-      takeUntil(this.unsubscribe$)
-    ).subscribe((res) => {
+    if (this.geolocationSvc.posicion$.value !== null) {
+      posDep
+        .pipe(
+          switchMap((res) => this.artistSvc.getArtist(res[1])),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((res) => {
+          this.artists = res;
+        });
+    } else {
+      this.artistSvc.getArtist(this.dep).subscribe((res) => {
         this.artists = res;
       });
+    }
     /************************************************************************************ */
   }
 

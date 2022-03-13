@@ -94,7 +94,7 @@ export class PlacePage {
   sliderPlace: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
-  dep: String = null;
+  dep: string = null;
   /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
   checkDistance: boolean = false;
   /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
@@ -269,35 +269,42 @@ export class PlacePage {
       takeUntil(this.unsubscribe$)
     );
 
-    dto
-      .pipe(
-        switchMap((lg: Place[]) => {
-          return forkJoin(
-            lg.map((pl: Place) => {
-              return this.getDistance(
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-                pl.ubicacion.lng,
-                pl.ubicacion.lat
-              ).pipe(
-                map((re: any) => {
-                  let distPl = re.routes[0].distance;
-                  let hourPl = re.routes[0].duration;
-                  pl.distancia = distPl / 1000;
-                  pl.distanciaNumber = distPl / 1000;
-                  pl.hora = hourPl / 3200;
-                  pl.minuto = (hourPl / 60) % 60;
-                  return pl;
-                })
-              );
-            })
-          );
-        }),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((res) => {
+    if (this.geolocationSvc.posicion$.value !== null) {
+      dto
+        .pipe(
+          switchMap((lg: Place[]) => {
+            return forkJoin(
+              lg.map((pl: Place) => {
+                return this.getDistance(
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                  pl.ubicacion.lng,
+                  pl.ubicacion.lat
+                ).pipe(
+                  map((re: any) => {
+                    let distPl = re.routes[0].distance;
+                    let hourPl = re.routes[0].duration;
+                    pl.distancia = distPl / 1000;
+                    pl.distanciaNumber = distPl / 1000;
+                    pl.hora = hourPl / 3200;
+                    pl.minuto = (hourPl / 60) % 60;
+                    return pl;
+                  })
+                );
+              })
+            );
+          }),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((res) => {
+          this.places = res;
+        });
+    } else {
+      this.placeSvc.getPlaces(this.dep).subscribe((res) => {
         this.places = res;
       });
+    }
+
     /************************************************************************************ */
   }
 

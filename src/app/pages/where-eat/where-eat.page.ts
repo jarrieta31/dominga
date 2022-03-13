@@ -53,7 +53,7 @@ export class WhereEatPage {
   sliderEat: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
-  dep: String = null;
+  dep: string = null;
   /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
   checkDistance: States = States.DEFAULT;
   /**guarda la distancia del usuario a cada lugar en tiempo real */
@@ -190,8 +190,8 @@ export class WhereEatPage {
         this.sliderEat = res;
       });
 
-     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-     let posDep = this.geolocationSvc.posicion$.pipe(
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
       switchMap((pos: Point) => {
         return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
       }),
@@ -203,36 +203,42 @@ export class WhereEatPage {
       takeUntil(this.unsubscribe$)
     );
 
-    dto
-      .pipe(
-        switchMap((lg: DondeComer[]) => {
-          return forkJoin(
-            lg.map((pl: DondeComer) => {
-              return this.getDistance(
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-                pl.ubicacion.lng,
-                pl.ubicacion.lat
-              ).pipe(
-                map((re: any) => {
-                  let distPl = re.routes[0].distance;
-                  let hourPl = re.routes[0].duration;
-                  pl.distancia = distPl / 1000;
-                  pl.distanciaNumber = distPl / 1000;
-                  pl.hora = hourPl / 3200;
-                  pl.minuto = (hourPl / 60) % 60;
-                  return pl;
-                })
-              );
-            })
-          );
-        }),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((res) => {
-        console.log(res)
+    if (this.geolocationSvc.posicion$.value !== null) {
+      dto
+        .pipe(
+          switchMap((lg: DondeComer[]) => {
+            return forkJoin(
+              lg.map((pl: DondeComer) => {
+                return this.getDistance(
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                  pl.ubicacion.lng,
+                  pl.ubicacion.lat
+                ).pipe(
+                  map((re: any) => {
+                    let distPl = re.routes[0].distance;
+                    let hourPl = re.routes[0].duration;
+                    pl.distancia = distPl / 1000;
+                    pl.distanciaNumber = distPl / 1000;
+                    pl.hora = hourPl / 3200;
+                    pl.minuto = (hourPl / 60) % 60;
+                    return pl;
+                  })
+                );
+              })
+            );
+          }),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((res) => {
+          console.log(res);
+          this.eat = res;
+        });
+    } else {
+      this.eatSvc.getDondeComer(this.dep).subscribe((res) => {
         this.eat = res;
       });
+    }
     /************************************************************************************ */
   }
 

@@ -413,49 +413,55 @@ export class EventsPage {
         this.sliderEvents = res;
       });
 
-        /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-        let posDep = this.geolocationSvc.posicion$.pipe(
-          switchMap((pos: Point) => {
-            return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    let dto = posDep.pipe(
+      switchMap((res) => this.dbService.getEventos(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
+
+    if (this.geolocationSvc.posicion$.value !== null) {
+      dto
+        .pipe(
+          switchMap((ev: Eventos[]) => {
+            return forkJoin(
+              ev.map((et: Eventos) => {
+                return this.getDistance(
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                  et.ubicacion.lng,
+                  et.ubicacion.lat
+                ).pipe(
+                  map((re: any) => {
+                    let distPl = re.routes[0].distance;
+                    let hourPl = re.routes[0].duration;
+                    et.distancia = distPl / 1000;
+                    et.distanciaNumber = distPl / 1000;
+                    et.hora = hourPl / 3200;
+                    et.minuto = (hourPl / 60) % 60;
+                    return et;
+                  })
+                );
+              })
+            );
           }),
           takeUntil(this.unsubscribe$)
-        );
-    
-        let dto = posDep.pipe(
-          switchMap((res) => this.dbService.getEventos(res[1])),
-          takeUntil(this.unsubscribe$)
-        );
-    
-        dto
-          .pipe(
-            switchMap((ev: Eventos[]) => {
-              return forkJoin(
-                ev.map((et: Eventos) => {
-                  return this.getDistance(
-                    this.geolocationSvc.posicion.longitud,
-                    this.geolocationSvc.posicion.latitud,
-                    et.ubicacion.lng,
-                    et.ubicacion.lat
-                  ).pipe(
-                    map((re: any) => {
-                      let distPl = re.routes[0].distance;
-                      let hourPl = re.routes[0].duration;
-                      et.distancia = distPl / 1000;
-                      et.distanciaNumber = distPl / 1000;
-                      et.hora = hourPl / 3200;
-                      et.minuto = (hourPl / 60) % 60;
-                      return et;
-                    })
-                  );
-                })
-              );
-            }),
-            takeUntil(this.unsubscribe$)
-          )
-          .subscribe((res) => {
-            this.eventos = res;
-          });
-        /************************************************************************************ */
+        )
+        .subscribe((res) => {
+          this.eventos = res;
+        });
+    } else {
+      this.dbService.getEventos(this.dpto_select).subscribe((res) => {
+        this.eventos = res;
+      });
+    }
+    /************************************************************************************ */
   }
 
   ionViewDidLeave() {
