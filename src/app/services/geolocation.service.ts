@@ -16,7 +16,6 @@ import {
 import { Place } from "../shared/place";
 import { TwoPoints } from "../shared/two-points";
 import { Point } from "../shared/point";
-import { HttpClient } from "@angular/common/http";
 import { takeUntil } from "rxjs/operators";
 import { GpsProvider } from "../providers/gps-provider.service";
 
@@ -37,7 +36,7 @@ export class GeolocationService {
   latCenter: number = 0;
   longCenter: number = 0;
   timetest: any;
-  sourceClock$: Observable<any> = timer(0, 36000);
+  sourceClock$: Observable<any> = timer(1500, 36000);
   sourceGpsSubject$ = new BehaviorSubject(null);
   public gps: boolean = false;
   subscriptionClock: any;
@@ -52,7 +51,6 @@ export class GeolocationService {
     maximumAge: 60000,
   };
   constructor(
-    private http: HttpClient,
     private geolocation: Geolocation,
     private gpsProvider: GpsProvider
   ) {
@@ -64,8 +62,6 @@ export class GeolocationService {
     } else {
       this.posicion$ = new BehaviorSubject<Point>(null);
     }
-
-    this.startGeolocation();
     //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
     console.log("geolocation server: ", this.posicion$.value);
   }

@@ -54,7 +54,10 @@ export class PlacePage {
     private http: HttpClient,
     private fb: FormBuilder,
     private sliderSvc: SlidesService
-  ) {}
+  ) {
+    this.geolocationSvc.startGeolocation();
+  }
+
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;

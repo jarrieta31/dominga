@@ -73,7 +73,9 @@ export class WhereSleepPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private databaseSvc: DatabaseService
-  ) {}
+  ) {
+    this.geolocationSvc.startGeolocation();
+  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
