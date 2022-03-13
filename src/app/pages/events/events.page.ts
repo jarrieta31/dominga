@@ -81,9 +81,7 @@ export class EventsPage {
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
     private http: HttpClient
-  ) {
-    this.geolocationSvc.startGeolocation();
-  }
+  ) {}
 
   anioActual: number = 0;
   customYearValues = [];

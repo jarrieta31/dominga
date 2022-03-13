@@ -77,9 +77,7 @@ export class WhereEatPage {
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService
-  ) {
-    this.geolocationSvc.startGeolocation();
-  }
+  ) {}
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({

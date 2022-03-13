@@ -37,7 +37,7 @@ export class GeolocationService {
   latCenter: number = 0;
   longCenter: number = 0;
   timetest: any;
-  sourceClock$: Observable<any> = timer(1000, 36000);
+  sourceClock$: Observable<any> = timer(0, 36000);
   sourceGpsSubject$ = new BehaviorSubject(null);
   public gps: boolean = false;
   subscriptionClock: any;
@@ -64,6 +64,8 @@ export class GeolocationService {
     } else {
       this.posicion$ = new BehaviorSubject<Point>(null);
     }
+
+    this.startGeolocation();
     //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
     console.log("geolocation server: ", this.posicion$.value);
   }

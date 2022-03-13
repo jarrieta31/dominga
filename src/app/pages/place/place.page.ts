@@ -54,7 +54,7 @@ export class PlacePage {
     private http: HttpClient,
     private fb: FormBuilder,
     private sliderSvc: SlidesService
-  ) { }
+  ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -111,8 +111,6 @@ export class PlacePage {
   /**url load  */
   preloadImage: String = "/assets/load.gif";
   largo: number;
-
-  control: boolean = false;
 
   obs$: Observable<any>;
 
@@ -258,11 +256,6 @@ export class PlacePage {
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
-      tap((r) => {
-        if(!this.control) {
-          this.geolocationSvc.startGeolocation();
-        }
-      }),
       switchMap((pos: Point) => {
         return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
       }),
@@ -303,7 +296,6 @@ export class PlacePage {
         )
         .subscribe((res) => {
           this.places = res;
-          this.control = true;
         });
     } else {
       this.placeSvc.getPlaces(this.dep).subscribe((res) => {
