@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
+  <ion-toolbar color="information">
     <ion-buttons slot="start">
       <ion-back-button
         (click)="irHome()"
@@ -9,19 +9,14 @@
     </ion-buttons>
     <ion-title color="back" id="nombre">{{place.nombre}}</ion-title>
   </ion-toolbar>
-  <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
-    <ion-buttons slot="start">
-      <ion-back-button
-      (click)="irHome()"
-        color="back"
-        text=""
-      ></ion-back-button>
-    </ion-buttons>
-    <ion-title color="back" id="nombre">{{place.nombre}}</ion-title>
-  </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-fab *ngIf="videos.length > 0" vertical="top" horizontal="start" slot="fixed">
+  <ion-fab
+    *ngIf="videos.length > 0"
+    vertical="top"
+    horizontal="start"
+    slot="fixed"
+  >
     <ion-fab-button color="danger">
       <ion-icon name="logo-youtube"></ion-icon>
     </ion-fab-button>
@@ -37,11 +32,13 @@
   </ion-fab>
   <div class="padre" id="place-container">
     <div class="diva">
-      <img
+      <app-preload
         class="imgPrincipal"
         id="foto"
-        src="{{ place.imagenPrincipal.url }}"
-      />
+        [url]="place.imagenPrincipal.url"
+        [alt]="place.nombre"
+        [urlPreload]="preloadImage"
+      ></app-preload>
     </div>
     <div class="divb">
       <ion-slides class="slidePadre" pager="false" [options]="slideOpts">

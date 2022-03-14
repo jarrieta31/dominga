@@ -91,3 +91,7 @@
 #setHeight {
   min-height: calc(100vw / 1.7);
 }
+
+.diva {
+  min-height: calc((100vw - (100vw * 0.06)) /1.33);
+}

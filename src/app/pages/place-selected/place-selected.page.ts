@@ -34,6 +34,9 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
 
   videos: any[] = [];
 
+  /**url load  */
+  preloadImage: String = "/assets/load.gif";
+
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
@@ -57,14 +60,13 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
           (item: any) => item.url !== null
         );
       }
-    
+
       this.placeSvc.getPlaceNear();
 
       this.near_places = this.placeSvc.near_places.subscribe((res) => {
         this.near = [];
         this.near = res;
       });
-
     });
   }
 
@@ -89,7 +91,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   irHome() {
-    this.router.navigate(['/tabs/place']);
+    this.router.navigate(["/tabs/place"]);
   }
 
   /**

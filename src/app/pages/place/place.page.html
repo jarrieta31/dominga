@@ -14,7 +14,11 @@
         <!-- 
         <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
         -->
-        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="preloadImage"></app-preload>
+        <app-preload
+          [url]="item.imagen.url"
+          [alt]="item.imagen.name"
+          [urlPreload]="preloadImage"
+        ></app-preload>
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
@@ -115,43 +119,51 @@
 
   <div class="cards">
     <ion-list>
-    <!-- <div
-      class="empty"
-      *ngIf="(checkDistance == false && dep == null) || places.length == 0"
-    >
-      <div class="text_empty">{{ msgEmptyPlace }}</div>
-      <i class="far fa-sad-tear icon_empty"></i>
-    </div> -->
-    <ng-container *ngFor="let item of places | filterPlaces:dataForm">
-      <ion-card
-        *ngIf="(item.distanciaNumber <= dist || dep != null) "
-        id="{{ item.id }}"
-        (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
-        [routerLink]="['/place-selected', item.id]"
-      >
-        <ion-card-header
-          color="party"
-          id="place-title"
+      <ng-container *ngFor="let item of places | filterPlaces:dataForm">
+        <ion-card
+          *ngIf="(item.distanciaNumber <= dist || dep != null) "
+          id="{{ item.id }}"
+          (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
+          [routerLink]="['/place-selected', item.id]"
         >
-          {{ item.nombre }}<span class="categoria"
-            >&nbsp;&nbsp;({{item.tipo}})</span
-          >
-        </ion-card-header>
-        <ion-card-content>
-          <app-preload class="imgCard" [url]="item.imagenHome['url']" [alt]="item.nombre" [urlPreload]="preloadImage"></app-preload>
-          <div class="duracion">
-            <b class="distancia"
-              >{{item.distancia | formatDistancia }}
-              <!-- <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
+          <ion-card-header color="party" id="place-title">
+            {{ item.nombre }}<span class="categoria"
+              >&nbsp;&nbsp;({{item.tipo}})</span
+            >
+          </ion-card-header>
+          <ion-card-content>
+            <app-preload
+              class="imgCard"
+              [url]="item.imagenHome['url']"
+              [alt]="item.nombre"
+              [urlPreload]="preloadImage"
+            ></app-preload>
+            <div class="duracion">
+              <b class="distancia"
+                >{{item.distancia | formatDistancia }}
+                <!-- <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
               >&nbsp;<span *ngIf="item.minuto > 1"
                 >{{ item.minuto | minute }}</span
               > -->
-              </b
-            >
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </ng-container>
-  </ion-list>
+              </b>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+    </ion-list>
+
+    <ion-list *ngIf="places.length === 0">
+      <ng-container *ngFor="let item of [1,2,3]">
+        <ion-card>
+          <ion-card-header>
+            <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-img src="/assets/img/img-skeleton.svg"></ion-img>
+            <ion-skeleton-text animated style="width:30%; margin: 5px 0 5px 10px"></ion-skeleton-text>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+    </ion-list>
   </div>
 </ion-content>

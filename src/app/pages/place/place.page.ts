@@ -294,7 +294,8 @@ export class PlacePage {
           // }),
           takeUntil(this.unsubscribe$)
         )
-        .subscribe((res) => {
+        .subscribe(
+          (res) => {
           console.log("soy reeeeees", res);
           this.places = res;
         });

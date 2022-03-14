@@ -99,7 +99,6 @@ export class GeolocationService {
   }
 
   stopGeolocation() {
-    console.log("terminando sub");
     this.unsubscribeGPS$.next();
     this.unsubscribeGPS$.complete();
   }

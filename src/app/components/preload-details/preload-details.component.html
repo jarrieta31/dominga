@@ -1,0 +1,4 @@
+<div>
+  <img [style.display]="viewImage == true ? 'block': 'none'" [src]="url" (load)="mostrarImagen()" class="img_load_details">
+  <img [style.display]="viewImage == true ? 'none': 'block'" [src]="urlPreload" class="img_load_details">
+</div>
