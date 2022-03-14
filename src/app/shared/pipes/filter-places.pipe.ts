@@ -6,7 +6,7 @@ import { Place } from "../place";
 })
 export class FilterPlacesPipe implements PipeTransform {
 
-  transform(places: Place[], data: any): Place[] {
+  transform(places: Place[], data: any): Place[] | null{
     if (data.length === 0) {
       return places;
     }
@@ -17,11 +17,15 @@ export class FilterPlacesPipe implements PipeTransform {
     if (data.tipo !== null) data.tipo = data.tipo.toLowerCase();
     else data.tipo = "";
 
-    return places.filter((item) => {
+    const pl = places.filter((item) => {
       return (
         item.localidad.toLowerCase().includes(data.localidad) &&
         item.tipo.toLowerCase().includes(data.tipo)
       );
     });
+
+    if(pl.length === 0) {
+      return null;
+    } else return pl;
   }
 }

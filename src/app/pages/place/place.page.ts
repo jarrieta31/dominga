@@ -296,7 +296,6 @@ export class PlacePage {
         )
         .subscribe(
           (res) => {
-          console.log("soy reeeeees", res);
           this.places = res;
         });
     } else {
