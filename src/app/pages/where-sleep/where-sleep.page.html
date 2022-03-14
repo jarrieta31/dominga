@@ -101,7 +101,7 @@
       </ng-container>
     </ion-list>
 
-    <ion-list *ngIf="sleep.length === 0">
+    <ion-list *ngIf="sleep.length === 0 && emptyData === false">
       <ng-container *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
         <ion-item>
           <ion-thumbnail slot="start">
@@ -121,5 +121,12 @@
         </ion-item>
       </ng-container>
     </ion-list>
+
+    <div *ngIf="emptyData" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">
+       No existen lugares para su selección
+      </div>
+    </div>
   </div>
 </ion-content>

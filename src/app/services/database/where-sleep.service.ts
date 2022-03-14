@@ -20,6 +20,8 @@ export class WhereSleepService {
   init_dondedormir: DondeDormir[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
   save_depto: String[] = [];
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
 
   deptoLimit: any[] = [
     { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
@@ -203,6 +205,7 @@ export class WhereSleepService {
         .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
+          console.log("querySnap", querySnapshot.size);
           const arrPlaces: DondeDormir[] = [];
           querySnapshot.forEach((item) => {
             const data: any = item.data();
@@ -224,7 +227,10 @@ export class WhereSleepService {
             dist.distanciaNumber = calcDist;
           });
           this.donde_dormir.next(this.allLugares);
-          this.save_depto.push(this.depto);
+          if (querySnapshot.size !== 0) {
+            this.save_depto.push(this.depto);
+            this.noData = false;
+          } else this.noData = true;
           searchDepto = false;
         })
         .catch((err) => {
@@ -264,7 +270,7 @@ export class WhereSleepService {
       });
 
       limitCurrent.forEach((dep: String) => {
-        if (this.save_depto.length != 0) {
+        if (this.save_depto.length !== 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
               deptoSearch = true;
@@ -315,7 +321,11 @@ export class WhereSleepService {
                 dist.distanciaNumber = calcDist;
               });
 
-              if (!searchDepto) this.save_depto.push(dep);
+              if (!searchDepto && querySnapshot.size !== 0)
+                this.save_depto.push(dep);
+
+              if (querySnapshot.size !== 0) this.noData = false;
+              else this.noData = true;
             })
             .catch((err) => {
               console.log(err);

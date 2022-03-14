@@ -49,6 +49,8 @@ export class WhereSleepPage {
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
 
+  emptyData: boolean = false;
+
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
     tipo: ["", Validators.required],
@@ -228,10 +230,14 @@ export class WhereSleepPage {
         )
         .subscribe((res) => {
           this.sleep = res;
+          this.emptyData = this.sleepSvc.noData;
+          console.log("emptyData", this.emptyData);
         });
     } else {
       this.sleepSvc.getDondeDormir(this.dep).subscribe((res) => {
         this.sleep = res;
+        this.emptyData = this.sleepSvc.noData;
+        console.log("emptyData", this.emptyData);
       });
     }
     /************************************************************************************ */
