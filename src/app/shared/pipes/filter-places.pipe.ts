@@ -5,8 +5,8 @@ import { Place } from "../place";
   name: "filterPlaces",
 })
 export class FilterPlacesPipe implements PipeTransform {
-
-  transform(places: Place[], data: any): Place[] | null{
+  
+  transform(places: Place[], data: any): Place[] | any[]{
     if (data.length === 0) {
       return places;
     }
@@ -24,8 +24,12 @@ export class FilterPlacesPipe implements PipeTransform {
       );
     });
 
+    const vacio: any[] = [ {
+      "vacio": 1
+    }];
+
     if(pl.length === 0) {
-      return null;
+      return vacio;
     } else return pl;
   }
 }

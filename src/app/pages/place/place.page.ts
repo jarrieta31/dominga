@@ -93,10 +93,6 @@ export class PlacePage {
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: string = null;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: boolean = false;
-  /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
-  msgEmptyPlace: String = null;
   /**formulario que obtiene datos para filtrar */
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -110,9 +106,6 @@ export class PlacePage {
   optionType: string = null;
   /**url load  */
   preloadImage: String = "/assets/load.gif";
-  largo: number;
-
-  obs$: Observable<any>;
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -166,15 +159,6 @@ export class PlacePage {
     return this.http.get(
       `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
     );
-    // .pipe(
-    //   takeUntil(this.unsubscribe$),
-    //   pluck("routes"),
-    //   map((routes: RequestDist) => ({
-    //     distance: routes[0].distance / 1000,
-    //     hora: routes[0].duration / 3600,
-    //     minuto: (routes[0].duration / 60) % 60,
-    //   }))
-    // );
   }
 
   /** Devuelve una lista de localidades */
@@ -218,19 +202,14 @@ export class PlacePage {
     ) {
       this.dist = null;
       this.dep = localStorage.getItem("deptoActivo");
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el departamento de " + this.dep;
     } else if (
       localStorage.getItem("distanceActivo") != undefined &&
       localStorage.getItem("distanceActivo") != null
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el rango de " + this.dist + " km";
     }
 
-    // this.show("Cargando lugares...");
     console.log("dist", this.dist, "dep", this.dep);
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
@@ -241,7 +220,6 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    //this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider
@@ -270,28 +248,6 @@ export class PlacePage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          // switchMap((lg: Place[]) => {
-          //   return forkJoin(
-          //     lg.map((pl: Place) => {
-          //       return this.getDistance(
-          //         this.geolocationSvc.posicion.longitud,
-          //         this.geolocationSvc.posicion.latitud,
-          //         pl.ubicacion.lng,
-          //         pl.ubicacion.lat
-          //       ).pipe(
-          //         map((re: any) => {
-          //           let distPl = re.routes[0].distance;
-          //           let hourPl = re.routes[0].duration;
-          //           pl.distancia = distPl / 1000;
-          //           pl.distanciaNumber = distPl / 1000;
-          //           pl.hora = hourPl / 3200;
-          //           pl.minuto = (hourPl / 60) % 60;
-          //           return pl;
-          //         })
-          //       );
-          //     })
-          //   );
-          // }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe(
@@ -313,7 +269,6 @@ export class PlacePage {
     this.unsubscribe$.complete();
     this.isFilterLocation = false;
     this.isFilterType = false;
-    this.checkDistance = false;
   }
 
   /**Contador de visitas de Lugares */

@@ -120,35 +120,40 @@
   <div class="cards">
     <ion-list>
       <ng-container *ngFor="let item of places | filterPlaces:dataForm">
-        <ion-card
-          *ngIf="(item.distanciaNumber <= dist || dep != null)"
-          id="{{ item.id }}"
-          (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
-          [routerLink]="['/place-selected', item.id]"
-        >
-          <ion-card-header color="party" id="place-title">
-            {{ item.nombre }}<span class="categoria"
-              >&nbsp;&nbsp;({{item.tipo}})</span
-            >
-          </ion-card-header>
-          <ion-card-content>
-            <app-preload
-              class="imgCard"
-              [url]="item.imagenHome['url']"
-              [alt]="item.nombre"
-              [urlPreload]="preloadImage"
-            ></app-preload>
-            <div class="duracion">
-              <b class="distancia"
-                >{{item.distancia | formatDistancia }}
-                <!-- <span *ngIf="item.hora > 1">{{ item.hora | hour }}</span
-              >&nbsp;<span *ngIf="item.minuto > 1"
-                >{{ item.minuto | minute }}</span
-              > -->
-              </b>
+        <ng-container *ngIf="item.vacio !== 1">
+          <ion-card
+            *ngIf="(item.distanciaNumber <= dist || dep != null)"
+            id="{{ item.id }}"
+            (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
+            [routerLink]="['/place-selected', item.id]"
+          >
+            <ion-card-header color="party" id="place-title">
+              {{ item.nombre }}<span class="categoria"
+                >&nbsp;&nbsp;({{item.tipo}})</span
+              >
+            </ion-card-header>
+            <ion-card-content>
+              <app-preload
+                class="imgCard"
+                [url]="item.imagenHome['url']"
+                [alt]="item.nombre"
+                [urlPreload]="preloadImage"
+              ></app-preload>
+              <div class="duracion">
+                <b class="distancia">{{item.distancia | formatDistancia }} </b>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+
+        <ng-container *ngIf="item.vacio === 1">
+          <div class="empty">
+            <i class="fi fi-rr-sad icon_empty"></i>
+            <div class="text_empty">
+              No hay lugares para mostrar con el filtro seleccionado
             </div>
-          </ion-card-content>
-        </ion-card>
+          </div>
+        </ng-container>
       </ng-container>
     </ion-list>
 
@@ -156,11 +161,14 @@
       <ng-container *ngFor="let item of [1,2,3]">
         <ion-card>
           <ion-card-header>
-            <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
           </ion-card-header>
           <ion-card-content>
             <ion-img src="/assets/img/img-skeleton.svg"></ion-img>
-            <ion-skeleton-text animated style="width:30%; margin: 5px 0 5px 10px"></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 30%; margin: 5px 0 5px 10px"
+            ></ion-skeleton-text>
           </ion-card-content>
         </ion-card>
       </ng-container>
