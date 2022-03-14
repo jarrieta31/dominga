@@ -105,6 +105,12 @@ export class HomeMenuPage {
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
 
+    this.depto = false;
+    this.dbService.getDepartamentosActivos();
+    this.dbService.departamentosActivos
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => (this.deptosActivos = res));
+
     this.gps = this.geolocationSvc.gps;
 
     setTimeout(() => {
@@ -126,12 +132,6 @@ export class HomeMenuPage {
       this.dbService.selectionDistance = parseInt(distanceSave);
       this.distanceSelected = this.dbService.selectionDistance;
     }
-
-    this.depto = false;
-    this.dbService.getDepartamentosActivos();
-    this.dbService.departamentosActivos
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((res) => (this.deptosActivos = res));
   }
 
   ionViewDidLeave() {
