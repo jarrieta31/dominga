@@ -28,6 +28,8 @@ export class EventsPage {
   textoBuscar = "";
   today: Date = new Date();
 
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
@@ -57,7 +59,7 @@ export class EventsPage {
   /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
   checkDistance: boolean = false;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.dbService.selectionDepto;
+  currentDepto: string = this.dbService.selectionDepto;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
@@ -357,6 +359,7 @@ export class EventsPage {
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 
   ionViewWillEnter() {
+    this.sliderSvc.getSliders();
     this.anioActual = new Date().getFullYear();
     this.month = this.today.getMonth() + 1;
     this.day = this.today.getDate().toString();
@@ -408,6 +411,7 @@ export class EventsPage {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
+        console.log(res)
         this.sliderEvents = res;
       });
 

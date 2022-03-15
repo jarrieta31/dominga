@@ -85,7 +85,7 @@ export class PlacePage {
   /**guarda la posición actual del usuario */
   posicion$: Observable<Point>;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.databaseSvc.selectionDepto;
+  currentDepto: string = this.databaseSvc.selectionDepto;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
   /**se guardan los sliders de la pantalla lugares */
@@ -105,7 +105,7 @@ export class PlacePage {
   optionLocation: string = null;
   optionType: string = null;
   /**url load  */
-  preloadImage: String = "/assets/load.gif";
+  preloadImage: string = "/assets/load.gif";
 
   filterPlace() {
     this.dataForm = this.filterForm.value;

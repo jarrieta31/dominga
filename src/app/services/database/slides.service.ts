@@ -32,7 +32,7 @@ export class SlidesService {
             arrSlider.push({ id: item.id, ...data });
             this.init_slider.push({ id: item.id, ...data });
           });
-
+          console.log(arrSlider)
           this.allSlider = arrSlider;
           this.slider.next(this.allSlider);
         })

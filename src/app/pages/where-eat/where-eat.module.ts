@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { WhereEatPageRoutingModule } from './where-eat-routing.module';
 
 import { WhereEatPage } from './where-eat.page';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { WhereEatPage } from './where-eat.page';
     ReactiveFormsModule,
     IonicModule,
     PipesModule,
-    WhereEatPageRoutingModule
+    WhereEatPageRoutingModule,
+    ComponentsModule,
   ],
   declarations: [WhereEatPage]
 })

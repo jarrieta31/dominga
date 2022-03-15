@@ -12,14 +12,14 @@ export class WhereSleepService {
   /**Se guardan los lugares del departamento seleccionado */
   donde_dormir: BehaviorSubject<DondeDormir[]>;
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = null;
+  depto: string = null;
   distance: number = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allDormir: DondeDormir[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   init_dondedormir: DondeDormir[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
-  save_depto: String[] = [];
+  save_depto: string[] = [];
   /**controla si la base devuelve datos */
   noData: boolean = false;
   /**controla que existen lugares en el rango de distancia */
@@ -268,17 +268,17 @@ export class WhereSleepService {
       this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length !== 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {

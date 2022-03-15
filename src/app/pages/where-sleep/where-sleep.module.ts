@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { WhereSleepPageRoutingModule } from './where-sleep-routing.module';
 
 import { WhereSleepPage } from './where-sleep.page';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { WhereSleepPage } from './where-sleep.page';
     ReactiveFormsModule,
     IonicModule,
     PipesModule,
-    WhereSleepPageRoutingModule
+    WhereSleepPageRoutingModule,
+    ComponentsModule,
   ],
   declarations: [WhereSleepPage]
 })
