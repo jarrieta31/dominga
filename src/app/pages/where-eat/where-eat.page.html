@@ -72,15 +72,23 @@
     </div>
   </div>
 
-  <div> 
+  <div>
     <ion-list class="lista">
       <ng-container *ngFor="let item of eat | filtroDondeComer:dataForm">
-        <ion-item *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.eatSvc.noData && item.departamento === dep))">
+        <ion-item
+          *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.eatSvc.noData && item.departamento === dep))"
+        >
           <div class="padre">
             <div class="imagen">
-              <ion-avatar item-start>
-                <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
-              </ion-avatar>
+                <ion-avatar item-start>
+                  <app-preload-list
+                    class="img-elem"
+                    id="foto"
+                    [url]="item.imagen.url"
+                    [alt]="item.nombre"
+                    [urlPreload]="preloadImage_list"
+                  ></app-preload-list>
+                </ion-avatar>
               <small id="eat-info">{{item.distancia | formatDistancia}}</small>
             </div>
             <div class="info">
@@ -133,15 +141,13 @@
 
     <div *ngIf="this.eatSvc.noData && dist === null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
-      <div class="text_empty">
-       No existen lugares en {{ dep }}
-      </div>
+      <div class="text_empty">No existen lugares en {{ dep }}</div>
     </div>
 
     <div *ngIf="!this.eatSvc.controlDistance && dist !== null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-       No existen lugares en el rango de {{ dist }} km
+        No existen lugares en el rango de {{ dist }} km
       </div>
     </div>
   </div>

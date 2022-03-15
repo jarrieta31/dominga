@@ -6,6 +6,8 @@ import { MenuComponent } from './menu/menu.component';
 import { TextToSpeechComponent } from './text-to-speech/text-to-speech.component';
 import { MinimapaComponent } from './minimapa/minimapa.component';
 import { PreloadComponent } from './preload/preload.component';
+import { PreloadListComponent } from './preload-list/preload-list.component';
+import { PreloadDetailsComponent } from './preload-details/preload-details.component';
 
 
 @NgModule({
@@ -15,6 +17,8 @@ import { PreloadComponent } from './preload/preload.component';
     TextToSpeechComponent,
     MinimapaComponent,
     PreloadComponent,
+    PreloadListComponent,
+    PreloadDetailsComponent
   ],
   declarations: [
     RatingComponent,
@@ -22,6 +26,8 @@ import { PreloadComponent } from './preload/preload.component';
     TextToSpeechComponent,
     MinimapaComponent,
     PreloadComponent,
+    PreloadListComponent,
+    PreloadDetailsComponent
   ],
   imports: [
     CommonModule, 

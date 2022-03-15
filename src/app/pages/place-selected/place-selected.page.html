@@ -32,13 +32,13 @@
   </ion-fab>
   <div class="padre" id="place-container">
     <div class="diva">
-      <app-preload
+      <app-preload-details
         class="imgPrincipal"
         id="foto"
         [url]="place.imagenPrincipal.url"
         [alt]="place.nombre"
         [urlPreload]="preloadImage"
-      ></app-preload>
+      ></app-preload-details>
     </div>
     <div class="divb">
       <ion-slides class="slidePadre" pager="false" [options]="slideOpts">

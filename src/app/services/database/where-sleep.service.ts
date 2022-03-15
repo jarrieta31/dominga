@@ -235,9 +235,7 @@ export class WhereSleepService {
             this.save_depto.push(this.depto);
             this.noData = false;
           } else {
-            console.log("antes de else", this.noData)
             this.noData = true;
-            console.log("despues de else", this.noData)
           }
 
           this.donde_dormir.next(this.allDormir);

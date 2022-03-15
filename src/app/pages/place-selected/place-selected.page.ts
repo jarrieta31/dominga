@@ -35,7 +35,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   videos: any[] = [];
 
   /**url load  */
-  preloadImage: String = "/assets/load.gif";
+  preloadImage: String = "/assets/load_1.30.gif";
 
   constructor(
     private placeSvc: PlaceService,

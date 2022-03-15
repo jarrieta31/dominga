@@ -68,6 +68,8 @@ export class WhereEatPage {
   currentDepto: string = this.databaseSvc.selectionDepto;
   /**url load  */
   preloadImage: string = "/assets/load.gif";
+  /**url load  */
+  preloadImage_list: String = "/assets/load_square.gif";
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -152,7 +154,6 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
-
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -201,13 +202,9 @@ export class WhereEatPage {
     );
 
     if (this.geolocationSvc.posicion$.value !== null) {
-      dto
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe((res) => {
-          this.eat = res;
-        });
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eat = res;
+      });
     } else {
       this.eatSvc.getDondeComer(this.dep).subscribe((res) => {
         this.eat = res;

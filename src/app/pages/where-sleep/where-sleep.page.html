@@ -78,11 +78,19 @@
   <div>
     <ion-list class="lista">
       <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
-        <ion-item *ngIf="(item.distanciaNumber <= dist || (dep !== null && !this.sleepSvc.noData && item.departamento === dep))">
+        <ion-item
+          *ngIf="(item.distanciaNumber <= dist || (dep !== null && !this.sleepSvc.noData && item.departamento === dep))"
+        >
           <div class="padre">
             <div class="imagen">
               <ion-avatar item-start>
-                <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+                <app-preload-list
+                  class="img-elem"
+                  id="foto"
+                  [url]="item.imagen.url"
+                  [alt]="item.nombre"
+                  [urlPreload]="preloadImage_list"
+                ></app-preload-list>
               </ion-avatar>
               <small id="eat-info">{{item.distancia | formatDistancia}}</small>
             </div>
@@ -112,13 +120,22 @@
           </ion-thumbnail>
           <ion-label>
             <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+              <ion-skeleton-text
+                animated
+                style="width: 80%"
+              ></ion-skeleton-text>
             </h3>
             <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+              <ion-skeleton-text
+                animated
+                style="width: 60%"
+              ></ion-skeleton-text>
             </p>
             <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+              <ion-skeleton-text
+                animated
+                style="width: 30%"
+              ></ion-skeleton-text>
             </p>
           </ion-label>
         </ion-item>
@@ -127,15 +144,13 @@
 
     <div *ngIf="this.sleepSvc.noData && dist === null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
-      <div class="text_empty">
-       No existen lugares en {{ dep }}
-      </div>
+      <div class="text_empty">No existen lugares en {{ dep }}</div>
     </div>
 
     <div *ngIf="!this.sleepSvc.controlDistance && dist !== null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-       No existen lugares en el rango de {{ dist }} km
+        No existen lugares en el rango de {{ dist }} km
       </div>
     </div>
   </div>

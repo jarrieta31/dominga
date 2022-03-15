@@ -6,7 +6,7 @@
 </ion-header>
 
 <ion-content>
-  <div  class="slider">
+  <div class="slider">
     <ion-slides
       class="sliderPrimero setHeight"
       scrollbar="false"
@@ -215,6 +215,27 @@
             {{ item.distancia | formatDistancia}}
           </div>
         </div>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+
+  <ion-list *ngIf="eventos.length === 0">
+    <ng-container *ngFor="let item of [1,2,3,4,5,6]">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
       </ion-item>
     </ng-container>
   </ion-list>
