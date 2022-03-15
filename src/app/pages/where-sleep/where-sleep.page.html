@@ -125,7 +125,14 @@
     <div *ngIf="emptyData" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-       No existen lugares para su selección
+       No existen lugares para su selección 1
+      </div>
+    </div>
+
+    <div *ngIf="!this.sleepSvc.controlDistance && dist !== null" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">
+       No existen lugares para su selección 2
       </div>
     </div>
   </div>

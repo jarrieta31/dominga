@@ -15,13 +15,15 @@ export class WhereSleepService {
   depto: String = null;
   distance: number = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
-  allLugares: DondeDormir[] = [];
+  allDormir: DondeDormir[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   init_dondedormir: DondeDormir[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
   save_depto: String[] = [];
   /**controla si la base devuelve datos */
   noData: boolean = false;
+  /**controla que existen lugares en el rango de distancia */
+  controlDistance: boolean = false;
 
   deptoLimit: any[] = [
     { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
@@ -184,6 +186,8 @@ export class WhereSleepService {
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];
 
+    this.controlDistance = false;
+
     const options = { units: "kilometers" };
 
     this.donde_dormir = new BehaviorSubject<DondeDormir[]>(
@@ -205,16 +209,15 @@ export class WhereSleepService {
         .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
-          console.log("querySnap", querySnapshot.size);
-          const arrPlaces: DondeDormir[] = [];
+          const arrSleep: DondeDormir[] = [];
           querySnapshot.forEach((item) => {
             const data: any = item.data();
-            arrPlaces.push({ id: item.id, ...data });
+            arrSleep.push({ id: item.id, ...data });
             this.init_dondedormir.push({ id: item.id, ...data });
           });
-          this.allLugares = arrPlaces;
+          this.allDormir = arrSleep;
 
-          this.allLugares.forEach((dist) => {
+          this.allDormir.forEach((dist) => {
             let calcDist = distance(
               [
                 this.geolocationSvc.posicion.longitud,
@@ -226,11 +229,14 @@ export class WhereSleepService {
             dist.distancia = calcDist;
             dist.distanciaNumber = calcDist;
           });
-          this.donde_dormir.next(this.allLugares);
+
           if (querySnapshot.size !== 0) {
             this.save_depto.push(this.depto);
             this.noData = false;
           } else this.noData = true;
+
+          this.donde_dormir.next(this.allDormir);
+
           searchDepto = false;
         })
         .catch((err) => {
@@ -238,13 +244,13 @@ export class WhereSleepService {
         })
         .finally(() => "Fin");
     } else if (searchDepto) {
-      this.allLugares = [];
+      this.allDormir = [];
       this.init_dondedormir.forEach((res) => {
         if (res.departamento == this.depto) {
-          this.allLugares.push(res);
+          this.allDormir.push(res);
         }
       });
-      this.allLugares.forEach((dist) => {
+      this.allDormir.forEach((dist) => {
         let calcDist = distance(
           [
             this.geolocationSvc.posicion.longitud,
@@ -256,7 +262,7 @@ export class WhereSleepService {
         dist.distancia = calcDist;
         dist.distanciaNumber = calcDist;
       });
-      this.donde_dormir.next(this.allLugares);
+      this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
       let limitCurrent: String[] = [];
@@ -319,13 +325,17 @@ export class WhereSleepService {
                 );
                 dist.distancia = calcDist;
                 dist.distanciaNumber = calcDist;
+
+                if(calcDist <= this.distance) {
+                  this.controlDistance = true;
+                  console.log("dentro de if ",this.controlDistance)
+                }
               });
+
+              
 
               if (!searchDepto && querySnapshot.size !== 0)
                 this.save_depto.push(dep);
-
-              if (querySnapshot.size !== 0) this.noData = false;
-              else this.noData = true;
             })
             .catch((err) => {
               console.log(err);
@@ -334,6 +344,11 @@ export class WhereSleepService {
           deptoSearch = false;
         }
       });
+
+      if (this.distanceSleep.length !== 0) this.noData = false;
+      else this.noData = true;
+
+      console.log("lug", this.distanceSleep)
       this.donde_dormir.next(this.distanceSleep);
     }
 

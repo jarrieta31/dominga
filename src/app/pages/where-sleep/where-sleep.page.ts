@@ -204,40 +204,16 @@ export class WhereSleepPage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          // switchMap((sp: DondeDormir[]) => {
-          //   return forkJoin(
-          //     sp.map((sl: DondeDormir) => {
-          //       return this.getDistance(
-          //         this.geolocationSvc.posicion.longitud,
-          //         this.geolocationSvc.posicion.latitud,
-          //         sl.ubicacion.lng,
-          //         sl.ubicacion.lat
-          //       ).pipe(
-          //         map((re: any) => {
-          //           let distPl = re.routes[0].distance;
-          //           let hourPl = re.routes[0].duration;
-          //           sl.distancia = distPl / 1000;
-          //           sl.distanciaNumber = distPl / 1000;
-          //           sl.hora = hourPl / 3200;
-          //           sl.minuto = (hourPl / 60) % 60;
-          //           return sl;
-          //         })
-          //       );
-          //     })
-          //   );
-          // }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
           this.sleep = res;
           this.emptyData = this.sleepSvc.noData;
-          console.log("emptyData", this.emptyData);
         });
     } else {
       this.sleepSvc.getDondeDormir(this.dep).subscribe((res) => {
         this.sleep = res;
         this.emptyData = this.sleepSvc.noData;
-        console.log("emptyData", this.emptyData);
       });
     }
     /************************************************************************************ */
