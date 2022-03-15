@@ -182,6 +182,7 @@ export class WhereSleepService {
   ) {}
 
   getDondeDormir(checkDepto: string) {
+    console.log(this.noData)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];
@@ -233,7 +234,11 @@ export class WhereSleepService {
           if (querySnapshot.size !== 0) {
             this.save_depto.push(this.depto);
             this.noData = false;
-          } else this.noData = true;
+          } else {
+            console.log("antes de else", this.noData)
+            this.noData = true;
+            console.log("despues de else", this.noData)
+          }
 
           this.donde_dormir.next(this.allDormir);
 
@@ -268,17 +273,17 @@ export class WhereSleepService {
       this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length !== 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
@@ -302,6 +307,10 @@ export class WhereSleepService {
             );
             dist.distancia = calcDist;
             dist.distanciaNumber = calcDist;
+
+            if(calcDist <= this.distance) {
+              this.controlDistance = true;
+            }
           });
           deptoSearch = false;
         } else {
@@ -331,11 +340,8 @@ export class WhereSleepService {
 
                 if(calcDist <= this.distance) {
                   this.controlDistance = true;
-                  console.log("dentro de if ",this.controlDistance)
                 }
               });
-
-              
 
               if (!searchDepto && querySnapshot.size !== 0)
                 this.save_depto.push(dep);
@@ -350,7 +356,6 @@ export class WhereSleepService {
 
       this.distanceSleep.length !== 0 ? this.noData = false : this.noData;
       
-      console.log("lug", this.distanceSleep)
       this.donde_dormir.next(this.distanceSleep);
     }
 

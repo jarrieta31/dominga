@@ -31,7 +31,7 @@ export class DatabaseService {
   currentPosition$: Subscription;
   position$: Observable<any>;
 
-  selectionDepto: String | null = null;
+  selectionDepto: string | null = null;
   selectionDistance: number | null = null;
 
   /**Nombre del departamento seleccionado actualmente*/
@@ -193,7 +193,7 @@ export class DatabaseService {
   /**
    * Departamento o distancia seleeccionado en la pantalla inicial
    */
-  getSelectMenu(depto: String | null, distance: number | null) {
+  getSelectMenu(depto: string | null, distance: number | null) {
     if (depto == null) {
       this.selectionDistance = distance;
       this.selectionDepto = null;

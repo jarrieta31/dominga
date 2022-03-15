@@ -167,6 +167,11 @@ export class WhereEatService {
   /**se guardan los lugares recibidos desde el filtro distancia */
   distanceEat: DondeComer[] = [];
 
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
+  /**controla que existen lugares en el rango de distancia */
+  controlDistance: boolean = false;
+
   constructor(
     private afs: AngularFirestore,
     private geolocationSvc: GeolocationService
@@ -179,6 +184,8 @@ export class WhereEatService {
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allDondeComer = [];
     this.distanceEat = [];
+
+    this.controlDistance = false;
 
     const options = { units: "kilometers" };
 
@@ -219,8 +226,13 @@ export class WhereEatService {
             dist.distanciaNumber = calcDist;
           });
 
+          if (querySnapshot.size !== 0) {
+            this.save_depto.push(this.depto);
+            this.noData = false;
+          } else this.noData = true;
+
           this.donde_comer.next(this.allDondeComer);
-          this.save_depto.push(this.depto);
+
           searchDepto = false;
         })
         .catch((err) => {
@@ -247,20 +259,22 @@ export class WhereEatService {
         dist.distanciaNumber = calcDist;
       });
 
+      this.allDondeComer.length !== 0 ? (this.noData = false) : this.noData;
+
       this.donde_comer.next(this.allDondeComer);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length != 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
@@ -284,6 +298,10 @@ export class WhereEatService {
             );
             dist.distancia = calcDist;
             dist.distanciaNumber = calcDist;
+
+            if(calcDist <= this.distance) {
+              this.controlDistance = true;
+            }
           });
           deptoSearch = false;
         } else {
@@ -311,9 +329,13 @@ export class WhereEatService {
                 );
                 dist.distancia = calcDist;
                 dist.distanciaNumber = calcDist;
+                if (calcDist <= this.distance) {
+                  this.controlDistance = true;
+                }
               });
 
-              if (!searchDepto) this.save_depto.push(dep);
+              if (!searchDepto && querySnapshot.size !== 0)
+                this.save_depto.push(dep);
             })
             .catch((err) => {
               console.log(err);
@@ -322,6 +344,9 @@ export class WhereEatService {
           deptoSearch = false;
         }
       });
+
+      this.distanceEat.length !== 0 ? (this.noData = false) : this.noData;
+
       this.donde_comer.next(this.distanceEat);
     }
 

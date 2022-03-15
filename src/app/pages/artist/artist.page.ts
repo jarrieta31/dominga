@@ -62,15 +62,15 @@ export class ArtistPage {
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
   /**guardan filtos seleccionados */
-  optionLocation: String = null;
-  optionType: String = null;
+  optionLocation: string = null;
+  optionType: string = null;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.databaseSvc.selectionDepto;
+  currentDepto: string = this.databaseSvc.selectionDepto;
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: string = null;
   /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
-  msgEmptyPlace: String = null;
+  msgEmptyPlace: string = null;
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],

@@ -75,7 +75,7 @@
   <div>
     <ion-list class="lista">
       <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
-        <ion-item *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.sleepSvc.noData))">
+        <ion-item *ngIf="(item.distanciaNumber <= dist || (dep !== null && !this.sleepSvc.noData && item.departamento === dep))">
           <div class="padre">
             <div class="imagen">
               <ion-avatar item-start>
@@ -136,4 +136,5 @@
       </div>
     </div>
   </div>
+  {{ this.sleepSvc.noData }}
 </ion-content>
