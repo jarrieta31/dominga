@@ -101,7 +101,7 @@
       </ng-container>
     </ion-list>
 
-    <ion-list *ngIf="sleep.length === 0 && emptyData === false">
+    <ion-list *ngIf="sleep.length === 0 && !this.sleepSvc.noData">
       <ng-container *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
         <ion-item>
           <ion-thumbnail slot="start">
@@ -122,17 +122,17 @@
       </ng-container>
     </ion-list>
 
-    <div *ngIf="emptyData" class="empty">
+    <div *ngIf="this.sleepSvc.noData && dist === null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-       No existen lugares para su selección 1
+       No existen lugares en {{ dep }}
       </div>
     </div>
 
     <div *ngIf="!this.sleepSvc.controlDistance && dist !== null" class="empty">
       <i class="fi fi-rr-sad icon_empty"></i>
       <div class="text_empty">
-       No existen lugares para su selección 2
+       No existen lugares en el rango de {{ dist }} km
       </div>
     </div>
   </div>

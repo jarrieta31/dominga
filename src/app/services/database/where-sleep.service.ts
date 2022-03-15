@@ -345,9 +345,8 @@ export class WhereSleepService {
         }
       });
 
-      if (this.distanceSleep.length !== 0) this.noData = false;
-      else this.noData = true;
-
+      this.distanceSleep.length !== 0 ? this.noData = false : this.noData;
+      
       console.log("lug", this.distanceSleep)
       this.donde_dormir.next(this.distanceSleep);
     }
