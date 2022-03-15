@@ -35,7 +35,7 @@ export class DatabaseService {
   selectionDistance: number | null = null;
 
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = null;
+  depto: string = null;
   /**Distancia seleccionada actualmente */
   distance: number = null;
 

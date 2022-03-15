@@ -54,6 +54,8 @@ export class ArtistPage {
 
   loading: any;
 
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
   /**se guardan los sliders de la pantalla artistas */

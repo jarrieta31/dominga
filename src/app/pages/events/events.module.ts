@@ -10,6 +10,7 @@ import { EventsPage } from './events.page';
 import { EventDetailPage } from '../event-detail/event-detail.page';
 import { EventDetailPageModule } from '../event-detail/event-detail.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     EventsPageRoutingModule,
     EventDetailPageModule,
     PipesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule,
   ],
   declarations: [EventsPage],
   entryComponents: [

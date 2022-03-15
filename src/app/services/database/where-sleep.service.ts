@@ -12,14 +12,14 @@ export class WhereSleepService {
   /**Se guardan los lugares del departamento seleccionado */
   donde_dormir: BehaviorSubject<DondeDormir[]>;
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = null;
+  depto: string = null;
   distance: number = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allDormir: DondeDormir[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   init_dondedormir: DondeDormir[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
-  save_depto: String[] = [];
+  save_depto: string[] = [];
   /**controla si la base devuelve datos */
   noData: boolean = false;
   /**controla que existen lugares en el rango de distancia */

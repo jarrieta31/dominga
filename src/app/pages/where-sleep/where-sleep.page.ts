@@ -36,10 +36,11 @@ export class WhereSleepPage {
   /**control la apertura de filtros */
   isFilterLocation: boolean = false;
   /**guardan filtos seleccionados */
-  optionLocation: String = null;
+  optionLocation: string = null;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.databaseSvc.selectionDepto;
-
+  currentDepto: string = this.databaseSvc.selectionDepto;
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
   sleep: DondeDormir[] = [];
   loading: any;
   textoBuscar = "";

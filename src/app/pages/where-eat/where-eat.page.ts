@@ -54,8 +54,6 @@ export class WhereEatPage {
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: string = null;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: States = States.DEFAULT;
   /**guarda la distancia del usuario a cada lugar en tiempo real */
   distancia: string | number;
   /**cantidad de horas para llegar a cada lugar */
@@ -65,9 +63,11 @@ export class WhereEatPage {
   /**control la apertura de filtros */
   isFilterLocation: boolean = false;
   /**guardan filtos seleccionados */
-  optionLocation: String = null;
+  optionLocation: string = null;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.databaseSvc.selectionDepto;
+  currentDepto: string = this.databaseSvc.selectionDepto;
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -152,7 +152,6 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
-    this.checkDistance = States.DEFAULT;
 
     if (
       localStorage.getItem("deptoActivo") != undefined &&
@@ -204,28 +203,6 @@ export class WhereEatPage {
     if (this.geolocationSvc.posicion$.value !== null) {
       dto
         .pipe(
-          // switchMap((lg: DondeComer[]) => {
-          //   return forkJoin(
-          //     lg.map((pl: DondeComer) => {
-          //       return this.getDistance(
-          //         this.geolocationSvc.posicion.longitud,
-          //         this.geolocationSvc.posicion.latitud,
-          //         pl.ubicacion.lng,
-          //         pl.ubicacion.lat
-          //       ).pipe(
-          //         map((re: any) => {
-          //           let distPl = re.routes[0].distance;
-          //           let hourPl = re.routes[0].duration;
-          //           pl.distancia = distPl / 1000;
-          //           pl.distanciaNumber = distPl / 1000;
-          //           pl.hora = hourPl / 3200;
-          //           pl.minuto = (hourPl / 60) % 60;
-          //           return pl;
-          //         })
-          //       );
-          //     })
-          //   );
-          // }),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {

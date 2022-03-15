@@ -9,6 +9,7 @@ import { ArtistPageRoutingModule } from './artist-routing.module';
 import { ArtistPage } from './artist.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { VideoPageModule } from '../video/video.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { VideoPageModule } from '../video/video.module';
     ArtistPageRoutingModule,
     ReactiveFormsModule,
     VideoPageModule,
-    PipesModule
+    PipesModule,
+    ComponentsModule,
   ],
   declarations: [ArtistPage]
 })

@@ -5,16 +5,19 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div id="alto" class="slider">
+  <div class="slider">
     <ion-slides
-      class="sliderPrimero"
-      id="setHeight"
+      class="sliderPrimero setHeight"
       scrollbar="false"
       pager="false"
       [options]="slideOpts"
     >
       <ion-slide *ngFor="let item of sliderEat" class="sliderHijo">
-        <img class="imgSlider" src="{{item.imagen.url}}" />
+        <app-preload
+          [url]="item.imagen.url"
+          [alt]="item.imagen.name"
+          [urlPreload]="preloadImage"
+        ></app-preload>
       </ion-slide>
     </ion-slides>
 
