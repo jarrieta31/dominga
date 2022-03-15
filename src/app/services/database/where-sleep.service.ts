@@ -262,6 +262,9 @@ export class WhereSleepService {
         dist.distancia = calcDist;
         dist.distanciaNumber = calcDist;
       });
+
+      this.allDormir.length !== 0 ? this.noData = false : this.noData;
+
       this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
