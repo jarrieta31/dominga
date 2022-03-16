@@ -43,7 +43,8 @@ ion-title {
 
 .image-event {
   width: 42%;
-  height: auto;
+  min-height: calc(100vw / 4.5);
+  /*height: auto;*/
   display: flex;
   justify-content: center;
   align-items: center;

@@ -32,7 +32,8 @@
 
 .imgArtist {
   width: 35%;
-  height: auto;
+  /*height: auto; */
+  min-height: calc(100vw / 3);
 }
 
 .infoArtist {

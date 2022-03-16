@@ -203,7 +203,14 @@
         item.direccion)"
       >
         <ion-avatar item-start class="image-event">
+          <!-- 
           <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+          -->
+          <app-preload-list [url]="item.imagen.url"
+                            [urlPreload]="preloadImageList"
+                            [alt]="item.nombre"
+                            [ngClass]="['img-elem', 'imagen-event']" >
+          </app-preload-list>
         </ion-avatar>
         <div class="info-event">
           <div id="filters" class="fecha">
