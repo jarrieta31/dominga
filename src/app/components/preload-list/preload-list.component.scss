@@ -1,12 +1,34 @@
-/*
+
 div {
   width: 100%;
   height: 100%;
 }
 
-.img_load_list {
+.img-comer {
   border-radius: 15% !important;
   height: auto;
   width: 100%;
 }
-*/
+
+.img-dormir {
+  border-radius: 15% !important;
+  height: auto;
+  width: 100%;
+}
+
+.img-artista {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  overflow: hidden;
+}
+
+
+.img-evento {
+  width: 85%;
+  //min-height: calc((((100vw) * 0.42) * 0.85 ) / 1.3333);
+  border-radius: 5%;
+  margin: 0px;
+  -webkit-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+  -moz-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+  box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
+}

@@ -31,7 +31,12 @@ export class EventsPage {
   /**url load  */
   preloadImage: string = "/assets/load.gif";
   /**url load preload para lista de ventos  */
-  preloadImageList: string = "/assets/loadEvento.gif";
+//  preloadImageList: string = "/assets/loadEvento.gif";
+
+  /**url load  */
+  preloadImage_list: string = "/assets/loadEvento.gif";
+  /** clase de preload list */
+  preloadClase: string = "img-evento";
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;

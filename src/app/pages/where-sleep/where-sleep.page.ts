@@ -48,7 +48,9 @@ export class WhereSleepPage {
   locationActive: any[] = [];
 
   /**url load  */
-  preloadImage_list: String = "/assets/load_square.gif";
+  preloadImage_list: string = "/assets/load_square.gif";
+  /** clase de preload list */
+  preloadClase: string = "img-dormir";
 
   /**captura los datos del formulario de filtros */
   dataForm: any = "";

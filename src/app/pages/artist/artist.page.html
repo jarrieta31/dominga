@@ -6,18 +6,9 @@
 
 <ion-content>
   <div id="alto" class="slider">
-    <ion-slides
-      class="sliderPrimero setHeight"
-      scrollbar="false"
-      pager="false"
-      [options]="slideOpts"
-    >
+    <ion-slides class="sliderPrimero setHeight" scrollbar="false" pager="false" [options]="slideOpts">
       <ion-slide *ngFor="let item of sliderArtist" class="sliderHijo">
-        <app-preload
-          [url]="item.imagen.url"
-          [alt]="item.imagen.name"
-          [urlPreload]="preloadImage"
-        ></app-preload>
+        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="preloadImage"></app-preload>
       </ion-slide>
     </ion-slides>
     <!-- </div> -->
@@ -26,31 +17,15 @@
     <div class="filter_place">
       <ion-label
         *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
-        (click)="changeFilterLocation()"
-        id="filters"
-        >localidad</ion-label
-      >
+        (click)="changeFilterLocation()" id="filters">localidad</ion-label>
       <ion-label
         *ngIf=" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
-        class="open_filter"
-        (click)="changeFilterLocation()"
-        id="filters"
-        >{{ optionLocation }}</ion-label
-      >
+        class="open_filter" (click)="changeFilterLocation()" id="filters">{{ optionLocation }}</ion-label>
       <img *ngIf="!selectdistancia" src="/assets/icon/exchange.png" alt="" />
-      <ion-label
-        *ngIf="optionType === null || optionType === 'tipo' || optionType === ''"
-        (click)="changeFilterType()"
-        id="filters"
-        >tipo</ion-label
-      >
-      <ion-label
-        *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''"
-        class="open_filter"
-        (click)="changeFilterType()"
-        id="filters"
-        >{{ optionType }}</ion-label
-      >
+      <ion-label *ngIf="optionType === null || optionType === 'tipo' || optionType === ''" (click)="changeFilterType()"
+        id="filters">tipo</ion-label>
+      <ion-label *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''" class="open_filter"
+        (click)="changeFilterType()" id="filters">{{ optionType }}</ion-label>
     </div>
 
     <div>
@@ -62,20 +37,12 @@
           </div>
           <div>
             <ion-list class="list_type">
-              <ion-radio-group
-                (ionChange)="filterArtist()"
-                formControlName="localidad"
-                class="type_border"
-              >
+              <ion-radio-group (ionChange)="filterArtist()" formControlName="localidad" class="type_border">
                 <ion-item class="filter_list" lines="none">
                   <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
-                <ion-item
-                  class="filter_list"
-                  lines="none"
-                  *ngFor="let loc of lista_localidad_artis"
-                >
+                <ion-item class="filter_list" lines="none" *ngFor="let loc of lista_localidad_artis">
                   <ion-text id="filters">{{ loc }}</ion-text>
                   <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
@@ -92,20 +59,12 @@
           </div>
           <div>
             <ion-list class="list_type">
-              <ion-radio-group
-                (ionChange)="filterArtist()"
-                formControlName="categoria"
-                class="type_border"
-              >
+              <ion-radio-group (ionChange)="filterArtist()" formControlName="categoria" class="type_border">
                 <ion-item class="filter_list" lines="none">
                   <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
-                <ion-item
-                  class="filter_list last"
-                  lines="none"
-                  *ngFor="let tipo of lista_tipo_artis"
-                >
+                <ion-item class="filter_list last" lines="none" *ngFor="let tipo of lista_tipo_artis">
                   <ion-text id="filters">{{ tipo }}</ion-text>
                   <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                 </ion-item>
@@ -121,30 +80,19 @@
   <ion-list>
     <div class="artist" *ngFor="let art of artists | filterArtist:dataForm">
       <div class="imgArtist">
-        <ion-img [src]="art.imagen.url" class="img-elem"></ion-img>
+        <app-preload-list [url]="art.imagen.url" [alt]="art.nombre" [clase]="preloadClase"
+          [urlPreload]="preloadImage_list"></app-preload-list>
       </div>
       <div class="infoArtist">
         <div id="info-art" class="type">{{ art.categoria }}</div>
         <div id="info-art" class="name">{{ art.nombre }}</div>
         <div class="netArtist">
-          <img
-            *ngIf="art.instagram !== null && art.instagram !== undefined && art.instagram !== '' "
-            (click)="openInstagram(art.instagram)"
-            src="/assets/icon/instagram.png"
-            alt="instagram"
-          />
-          <img
-            *ngIf="art.spotify !== null && art.spotify !== undefined && art.spotify !== ''"
-            (click)="openSpotify(art.spotify)"
-            src="/assets/icon/spotify.png"
-            alt="spotify"
-          />
-          <img
-            *ngIf="art.youtube !== null && art.youtube !== undefined && art.youtube !== ''"
-            (click)="verVideo(art.youtube)"
-            src="/assets/icon/youtube.png"
-            alt="youtube"
-          />
+          <img *ngIf="art.instagram !== null && art.instagram !== undefined && art.instagram !== '' "
+            (click)="openInstagram(art.instagram)" src="/assets/icon/instagram.png" alt="instagram" />
+          <img *ngIf="art.spotify !== null && art.spotify !== undefined && art.spotify !== ''"
+            (click)="openSpotify(art.spotify)" src="/assets/icon/spotify.png" alt="spotify" />
+          <img *ngIf="art.youtube !== null && art.youtube !== undefined && art.youtube !== ''"
+            (click)="verVideo(art.youtube)" src="/assets/icon/youtube.png" alt="youtube" />
         </div>
       </div>
     </div>

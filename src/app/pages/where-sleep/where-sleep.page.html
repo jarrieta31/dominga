@@ -1,10 +1,3 @@
-<ion-header>
-  <ion-toolbar color="circuits">
-    <!-- <img slot="start" src="/assets/icon/dormir.png"> -->
-    <ion-icon slot="start" name="bed-outline"></ion-icon>
-    <ion-title>¿Dónde Dormir?</ion-title>
-  </ion-toolbar>
-</ion-header>
 <ion-content>
   <div class="slider">
     <ion-slides
@@ -84,13 +77,12 @@
           <div class="padre">
             <div class="imagen">
               <ion-avatar item-start>
-                <app-preload-list
-                  class="img-elem"
-                  id="foto"
-                  [url]="item.imagen.url"
-                  [alt]="item.nombre"
-                  [urlPreload]="preloadImage_list"
-                ></app-preload-list>
+                  <app-preload-list
+                    [url]="item.imagen.url"
+                    [alt]="item.nombre"
+                    [clase]="preloadClase"
+                    [urlPreload]="preloadImage_list"
+                  ></app-preload-list>
               </ion-avatar>
               <small id="eat-info">{{item.distancia | formatDistancia}}</small>
             </div>

@@ -69,7 +69,9 @@ export class WhereEatPage {
   /**url load  */
   preloadImage: string = "/assets/load.gif";
   /**url load  */
-  preloadImage_list: String = "/assets/load_square.gif";
+  preloadImage_list: string = "/assets/load_square.gif";
+  /** clase de preload list */
+  preloadClase: string = "img-comer";
 
   constructor(
     private loadingCtrl: LoadingController,

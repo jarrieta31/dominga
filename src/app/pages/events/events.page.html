@@ -1,9 +1,3 @@
-<ion-header>
-  <ion-toolbar color="favorite">
-    <ion-icon slot="start" name="calendar-outline"></ion-icon>
-    <ion-title>Eventos</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content>
   <div class="slider">
@@ -203,14 +197,12 @@
         item.direccion)"
       >
         <ion-avatar item-start class="image-event">
-          <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
-          <!-- 
           <app-preload-list [url]="item.imagen.url"
-                            [urlPreload]="preloadImageList"
+                            [urlPreload]="preloadImage_list"
+                            [clase]="preloadClase"
                             [alt]="item.nombre"
                              >
           </app-preload-list>
-          -->
 
         </ion-avatar>
         <div class="info-event">

@@ -73,6 +73,10 @@ export class ArtistPage {
   dep: string = null;
   /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
   msgEmptyPlace: string = null;
+  /**url load  */
+  preloadImage_list: string = "/assets/load_cuadrada.gif";
+  /** clase de preload list */
+  preloadClase: string = "img-artista";
 
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
