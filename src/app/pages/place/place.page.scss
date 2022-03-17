@@ -7,11 +7,20 @@
   z-index: 0;
 }
 
+.accessibility {
+  width: 60%;
+}
 
-.custom {
-    font-size: 38pt;
-    color: var(--ion-color-primary);
-    
+.accessibility-option {
+  width: 45%;
+}
+
+.list_access {
+  margin-right: 60px;
+}
+
+.fab-button-access {
+  margin: 3px;
 }
 
 .empty {
