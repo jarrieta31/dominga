@@ -3,52 +3,27 @@
 </ion-header>
 <ion-content>
   <div id="alto" class="slider">
-    <ion-slides
-      class="sliderPrimero setHeight"
-      scrollbar="false"
-      pager="false"
-      [options]="slideOpts"
-    >
+    <ion-slides class="sliderPrimero setHeight" scrollbar="false" pager="false" [options]="slideOpts">
       <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
         <!-- 
         <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
         -->
-        <app-preload
-          [url]="item.imagen.url"
-          [alt]="item.imagen.name"
-          [urlPreload]="preloadImage"
-        ></app-preload>
+        <app-preload [url]="item.imagen.url" [alt]="item.imagen.name" [urlPreload]="preloadImage"></app-preload>
       </ion-slide>
     </ion-slides>
     <!-- =========>=>=>=> Filtro =========>=>=>=> -->
     <div class="filter_place">
       <ion-label
         *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
-        (click)="changeFilterLocation()"
-        id="filters"
-        >localidad</ion-label
-      >
+        (click)="changeFilterLocation()" id="filters">localidad</ion-label>
       <ion-label
         *ngIf=" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
-        class="open_filter"
-        (click)="changeFilterLocation()"
-        id="filters"
-        >{{ optionLocation }}</ion-label
-      >
+        class="open_filter" (click)="changeFilterLocation()" id="filters">{{ optionLocation }}</ion-label>
       <img *ngIf="!selectdistancia" src="/assets/icon/exchange.png" alt="" />
-      <ion-label
-        *ngIf="optionType === null || optionType === 'tipo' || optionType === ''"
-        (click)="changeFilterType()"
-        id="filters"
-        >tipo</ion-label
-      >
-      <ion-label
-        *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''"
-        class="open_filter"
-        (click)="changeFilterType()"
-        id="filters"
-        >{{ optionType }}</ion-label
-      >
+      <ion-label *ngIf="optionType === null || optionType === 'tipo' || optionType === ''" (click)="changeFilterType()"
+        id="filters">tipo</ion-label>
+      <ion-label *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''" class="open_filter"
+        (click)="changeFilterType()" id="filters">{{ optionType }}</ion-label>
     </div>
 
     <div>
@@ -60,20 +35,12 @@
           </div>
           <div>
             <ion-list class="list_type">
-              <ion-radio-group
-                (ionChange)="filterPlace()"
-                formControlName="localidad"
-                class="type_border"
-              >
+              <ion-radio-group (ionChange)="filterPlace()" formControlName="localidad" class="type_border">
                 <ion-item class="filter_list" lines="none">
                   <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
-                <ion-item
-                  class="filter_list"
-                  lines="none"
-                  *ngFor="let loc of localidades"
-                >
+                <ion-item class="filter_list" lines="none" *ngFor="let loc of localidades">
                   <ion-text id="filters">{{ loc }}</ion-text>
                   <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                 </ion-item>
@@ -90,20 +57,12 @@
           </div>
           <div>
             <ion-list class="list_type">
-              <ion-radio-group
-                (ionChange)="filterPlace()"
-                formControlName="tipo"
-                class="type_border"
-              >
+              <ion-radio-group (ionChange)="filterPlace()" formControlName="tipo" class="type_border">
                 <ion-item class="filter_list" lines="none">
                   <ion-text id="filters">Todo</ion-text>
                   <ion-radio slot="end" value=""></ion-radio>
                 </ion-item>
-                <ion-item
-                  class="filter_list last"
-                  lines="none"
-                  *ngFor="let tipo of tipos"
-                >
+                <ion-item class="filter_list last" lines="none" *ngFor="let tipo of tipos">
                   <ion-text id="filters">{{ tipo }}</ion-text>
                   <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                 </ion-item>
@@ -120,28 +79,37 @@
     <ion-list>
       <ng-container *ngFor="let item of places | filterPlaces:dataForm">
         <ng-container *ngIf="item.vacio !== 1">
-          <ion-card
-            *ngIf="(item.distanciaNumber <= dist || dep != null)"
-            id="{{ item.id }}"
-            (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
-            [routerLink]="['/place-selected', item.id]"
-          >
-            <ion-card-header color="party" id="place-title">
-              {{ item.nombre }}<span class="categoria"
-                >&nbsp;&nbsp;({{item.tipo}})</span
-              >
+          <ion-card *ngIf="(item.distanciaNumber <= dist || dep != null)" id="{{ item.id }}">
+            <ion-card-header color="party" id="place-title" [routerLink]="['/place-selected', item.id]"
+              (click)="getPlace(item.id); sumaVisitaLugar(item.id)">
+              {{ item.nombre }}<span class="categoria">&nbsp;&nbsp;({{item.tipo}})</span>
             </ion-card-header>
             <ion-card-content>
-              <app-preload
-                class="imgCard"
-                [url]="item.imagenHome['url']"
-                [alt]="item.nombre"
-                [urlPreload]="preloadImage"
-              ></app-preload>
-              <div class="duracion">
-                <b class="distancia">{{item.distancia | formatDistancia }} </b>
-              </div>
+              <span [routerLink]="['/place-selected', item.id]" (click)="getPlace(item.id); sumaVisitaLugar(item.id)">
+                <app-preload class="imgCard" [url]="item.imagenHome['url']" [alt]="item.nombre"
+                  [urlPreload]="preloadImage"></app-preload>
+                <div class="duracion">
+                  <b class="distancia">{{item.distancia | formatDistancia }} </b>
+                </div>
+              </span>
+              <ion-fab horizontal="end" vertical="bottom" edge slot="fixed">
+                <ion-fab-button color="circuits">
+                  <ion-icon color="light" class="custom" name="play"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-fab-button color="light">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button color="light">
+                    <ion-icon name="logo-twitter"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button color="light">
+                    <ion-icon name="logo-vimeo"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+              </ion-fab>
             </ion-card-content>
+
           </ion-card>
         </ng-container>
 
@@ -164,10 +132,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-img src="/assets/img/img-skeleton.svg"></ion-img>
-            <ion-skeleton-text
-              animated
-              style="width: 30%; margin: 5px 0 5px 10px"
-            ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 30%; margin: 5px 0 5px 10px"></ion-skeleton-text>
           </ion-card-content>
         </ion-card>
       </ng-container>

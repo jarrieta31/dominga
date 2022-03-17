@@ -128,19 +128,19 @@
         <div id="info-art" class="name">{{ art.nombre }}</div>
         <div class="netArtist">
           <img
-            *ngIf="art.instagram !== null"
+            *ngIf="art.instagram !== null && art.instagram !== undefined && art.instagram !== '' "
             (click)="openInstagram(art.instagram)"
             src="/assets/icon/instagram.png"
             alt="instagram"
           />
           <img
-            *ngIf="art.spotify !== null"
+            *ngIf="art.spotify !== null && art.spotify !== undefined && art.spotify !== ''"
             (click)="openSpotify(art.spotify)"
             src="/assets/icon/spotify.png"
             alt="spotify"
           />
           <img
-            *ngIf="art.youtube !== null"
+            *ngIf="art.youtube !== null && art.youtube !== undefined && art.youtube !== ''"
             (click)="verVideo(art.youtube)"
             src="/assets/icon/youtube.png"
             alt="youtube"

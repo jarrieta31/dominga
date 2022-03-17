@@ -31,16 +31,17 @@
 }
 
 .imgArtist {
-  width: 35%;
+  width: 40%;
   /*height: auto; */
-  min-height: calc(100vw / 3);
+  min-height: calc((100vw - (100vw * 0.08)) * 0.4);
 }
 
 .infoArtist {
+  width: 60%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: left;
+  //align-items: start;
   padding-left: 25px;
 }
 

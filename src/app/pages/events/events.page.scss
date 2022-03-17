@@ -35,16 +35,18 @@ ion-title {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+ion-list {
+  margin: 10px 4%;
+}
+
 .event {
   display: flex;
   flex-direction: row;
-  margin: 0;
 }
 
 .image-event {
   width: 42%;
-  min-height: calc(100vw / 4.5);
-  /*height: auto;*/
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,15 +54,17 @@ ion-title {
 
 .info-event {
   width: 55%;
+  height: 100%;
   // margin-left: 2%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  /*align-items: flex-start; */
 }
 
 .info-event > div {
-  margin: 0 0 2% 0;
+  width: 100%;
+  margin: 0 0 0 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -88,6 +92,7 @@ ion-title {
 
 .img-elem {
   width: 85%;
+  min-height: calc((((100vw) * 0.42) * 0.85 ) / 1.3333);
   border-radius: 5%;
   margin: 0px;
   -webkit-box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.28);
@@ -97,7 +102,6 @@ ion-title {
 
 .event > .info-event {
   align-self: flex-start;
-  margin-top: 8px;
 }
 
 .slider {

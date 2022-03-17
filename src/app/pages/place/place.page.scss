@@ -7,6 +7,13 @@
   z-index: 0;
 }
 
+
+.custom {
+    font-size: 38pt;
+    color: var(--ion-color-primary);
+    
+}
+
 .empty {
   display: flex;
   flex-direction: column;
@@ -74,7 +81,7 @@ ion-label {
 .distancia {
   float: left;
   margin-left: 3%;
-  padding: 3px;
+  padding: 7px 3px ;
   font-family: 'Poppins', sans-serif;
   font-weight: 400 !important;
 }
