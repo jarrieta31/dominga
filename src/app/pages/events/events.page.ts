@@ -243,6 +243,8 @@ export class EventsPage {
       cssClass: "my-custom-class",
       header: "FECHA INCORRECTA",
       message: "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
+      mode: "ios",
+      animated: true,
       buttons: [
         {
           text: "Cerrar",

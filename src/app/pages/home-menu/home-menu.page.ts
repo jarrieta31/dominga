@@ -21,8 +21,8 @@ export class HomeMenuPage {
 
   optionDsitance: number[] = [10, 25, 50, 75, 100, 150];
 
-  deptoSave: String = null;
-  distanceSave: String = null;
+  deptoSave: string = null;
+  distanceSave: string = null;
 
   gps: boolean = false;
 
@@ -40,6 +40,8 @@ export class HomeMenuPage {
       cssClass: "my-custom-class",
       header: "SELECCIONAR FILTRO",
       message: "Debe seleccionar un filtro para continuar",
+      mode: "ios",
+      animated: true,
       buttons: [
         {
           text: "Departamento",
@@ -50,17 +52,46 @@ export class HomeMenuPage {
         {
           text: "Distancia",
           handler: () => {
-            this.distance = true;
+              this.distance = true;
           },
         },
       ],
     });
 
     if (
-      (this.deptoSelected == null || this.deptoSelected == undefined) &&
+      (this.deptoSelected === null || this.deptoSelected === undefined) &&
       !this.depto &&
-      (this.distanceSelected == null || this.distanceSelected == undefined) &&
-      !this.distance
+      (this.distanceSelected === null || this.distanceSelected === undefined) &&
+      !this.distance && this.gps === true
+    )
+      await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log("onDidDismiss resolved with role", role);
+  }
+
+  async presentAlertDepto() {
+    const alert = await this.alertController.create({
+      cssClass: "my-custom-class",
+      header: "SELECCIONAR FILTRO",
+      message: "Debe seleccionar un departamento para continuar, no ha proporcionado permisos de ubicación",
+      mode: "ios",
+      animated: true,
+      buttons: [
+        {
+          text: "Departamento",
+          handler: () => {
+            this.depto = true;
+          },
+        },
+      ],
+    });
+
+    if (
+      (this.deptoSelected === null || this.deptoSelected === undefined) &&
+      !this.depto &&
+      (this.distanceSelected === null || this.distanceSelected === undefined) &&
+      !this.distance && this.gps === false
     )
       await alert.present();
 
@@ -115,6 +146,7 @@ export class HomeMenuPage {
 
     setTimeout(() => {
       this.presentAlert();
+      this.presentAlertDepto();
     }, 2500);
 
     let deptoSave = localStorage.getItem("deptoActivo");
