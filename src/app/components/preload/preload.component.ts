@@ -9,6 +9,7 @@ export class PreloadComponent {
   @Input("url") url: string;
   @Input("alt") alt: string;
   @Input("urlPreload") urlPreload: string;
+  @Input("clase") clase: string;
 
   viewImage = false;
 

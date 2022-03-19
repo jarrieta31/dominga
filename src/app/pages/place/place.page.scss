@@ -129,10 +129,8 @@ ion-card-header {
   border-top-right-radius: 15px !important;
 }
 
-.imgCard {
-  height: auto;
-  width: 100%;
-  min-height: 11.875em;
+.img_min, .img_skeleton {
+  min-height: calc((100vw - (100vw * 0.1)) / 1.7) !important;
 }
 
 .filter_place {

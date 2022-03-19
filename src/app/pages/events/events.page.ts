@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { DatabaseService } from "src/app/services/database.service";
@@ -24,14 +24,13 @@ export class EventsPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
 
-  now = new Date();
   textoBuscar = "";
   today: Date = new Date();
 
   /**url load  */
   preloadImage: string = "/assets/load.gif";
   /**url load preload para lista de ventos  */
-//  preloadImageList: string = "/assets/loadEvento.gif";
+  //  preloadImageList: string = "/assets/loadEvento.gif";
 
   /**url load  */
   preloadImage_list: string = "/assets/loadEvento.gif";
@@ -89,7 +88,8 @@ export class EventsPage {
     private sliderSvc: SlidesService,
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
-    private http: HttpClient
+    private http: HttpClient,
+    private alertCtrl: AlertController
   ) {}
 
   anioActual: number = 0;
@@ -101,7 +101,9 @@ export class EventsPage {
   month: number = 0;
   day: string;
   fullDay: string = "";
+  fullDayNext: string = "";
   month_aux: string = "";
+  month_auxNext: string = "";
 
   /**
    * Slide
@@ -236,18 +238,19 @@ export class EventsPage {
     if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
-  /**
-   * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
-   * @param tipoEventos Arreglo de tipos de eventos. String
-   * @param evento nombre del tipo de evento a verificar.
-   * @returns true o false.
-   */
-  tipoEventoGuradado(tipoEventos: string[], evento: string): boolean {
-    let evento_save: boolean = false;
-    tipoEventos.forEach((ev) => {
-      if (ev == evento) evento_save = true;
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      cssClass: "my-custom-class",
+      header: "FECHA INCORRECTA",
+      message: "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
+      buttons: [
+        {
+          text: "Cerrar",
+        },
+      ],
     });
-    return evento_save;
+
+    await alert.present();
   }
 
   filterEvento() {
@@ -263,31 +266,34 @@ export class EventsPage {
     this.optionDateStart = this.dataform.fecha_inicio;
     this.optionDateEnd = this.dataform.fecha_fin;
 
+    if (this.optionDateStart !== "" && this.optionDateEnd !== "") {
+      if (
+        this.optionDateStart > this.optionDateEnd ||
+        this.optionDateEnd < this.optionDateStart
+      ) {
+        this.optionDateStart = null;
+        this.optionDateEnd = null;
+        this.fecha_inicio = null;
+        this.fecha_fin = null;
+        this.presentAlert();
+      } else {
+        this.optionDateStart = this.dataform.fecha_inicio;
+        this.optionDateEnd = this.dataform.fecha_fin;
+      }
+    } else {
+      this.optionDateStart = this.dataform.fecha_inicio;
+      this.optionDateEnd = this.dataform.fecha_fin;
+    }
+
     if (this.dataform.localidad === "") this.optionLocation = "localidad";
     if (this.dataform.tipo === "") this.optionType = "tipo";
+
+    console.log("form", this.filterForm.value)
   }
 
   actualizarFechas() {
     this.fecha_inicio = this.filterForm.get("fecha_inicio").value;
     this.fecha_fin = this.filterForm.get("fecha_fin").value;
-  }
-
-  /**Ordeno los eventos alfabeticamente por el "Tipo"
-   *  0 : son iguales
-   *  1 : antes
-   * -1 : despues
-   */
-  get eventos_ordenados_asc_xlocalidad(): Eventos[] {
-    let result: Eventos[] = [];
-    const eventos = this.eventos;
-    result = eventos.sort((a, b) => {
-      if (a.tipo.toLocaleLowerCase() > b.tipo.toLocaleLowerCase()) return 1;
-
-      if (a.tipo.toLocaleLowerCase() < b.tipo.toLocaleLowerCase()) return -1;
-
-      if (a.tipo.toLocaleLowerCase() == b.tipo.toLocaleLowerCase()) return 0;
-    });
-    return result;
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
@@ -365,6 +371,11 @@ export class EventsPage {
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 
+  sumarDias(fecha, dias) {
+    fecha.setDate(fecha.getDate() + dias);
+    return fecha;
+  }
+
   ionViewWillEnter() {
     this.sliderSvc.getSliders();
     this.anioActual = new Date().getFullYear();
@@ -389,6 +400,32 @@ export class EventsPage {
       this.month_aux +
       "-" +
       this.day
+    ).toString();
+
+    let nextDay = this.sumarDias(this.today, 1);
+
+    let yearNext: string = nextDay.getFullYear();
+    let monthNext: number = nextDay.getMonth() + 1;
+    let nextDate: string = nextDay.getDate().toString();
+
+    if (nextDate.length === 1) {
+      nextDate = ("0" + nextDay.getDate()).toString();
+    } else {
+      nextDate = nextDay.getDate().toString();
+    }
+
+    if (monthNext < 10) {
+      this.month_auxNext = ("0" + (nextDay.getMonth() + 1)).toString();
+    } else {
+      this.month_auxNext = (nextDay.getMonth() + 1).toString();
+    }
+
+    this.fullDayNext = (
+      yearNext +
+      "-" +
+      this.month_auxNext +
+      "-" +
+      nextDate
     ).toString();
 
     this.customYearValues = [];
@@ -418,7 +455,7 @@ export class EventsPage {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
-        console.log(res)
+        console.log(res);
         this.sliderEvents = res;
       });
 
@@ -436,35 +473,9 @@ export class EventsPage {
     );
 
     if (this.geolocationSvc.posicion$.value !== null) {
-      dto
-        .pipe(
-          // switchMap((ev: Eventos[]) => {
-          //   return forkJoin(
-          //     ev.map((et: Eventos) => {
-          //       return this.getDistance(
-          //         this.geolocationSvc.posicion.longitud,
-          //         this.geolocationSvc.posicion.latitud,
-          //         et.ubicacion.lng,
-          //         et.ubicacion.lat
-          //       ).pipe(
-          //         map((re: any) => {
-          //           let distPl = re.routes[0].distance;
-          //           let hourPl = re.routes[0].duration;
-          //           et.distancia = distPl / 1000;
-          //           et.distanciaNumber = distPl / 1000;
-          //           et.hora = hourPl / 3200;
-          //           et.minuto = (hourPl / 60) % 60;
-          //           return et;
-          //         })
-          //       );
-          //     })
-          //   );
-          // }),
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe((res) => {
-          this.eventos = res;
-        });
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eventos = res;
+      });
     } else {
       this.dbService.getEventos(this.dpto_select).subscribe((res) => {
         this.eventos = res;

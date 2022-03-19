@@ -9,10 +9,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
   },
   {
-    path: 'information',
-    loadChildren: () => import('./pages/information/information.module').then( m => m.InformationPageModule)
-  },
-  {
     path: 'where-sleep',
     loadChildren: () => import('./pages/where-sleep/where-sleep.module').then( m => m.WhereSleepPageModule)
   },

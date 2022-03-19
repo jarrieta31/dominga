@@ -1,11 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-
 import { AlertController, Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Subject, timer } from "rxjs";
-import { GeolocationService } from "./services/geolocation.service";
+import { timer } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -19,16 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   gps: any = null;
 
-  /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
-  private unsubscribe$: Subject<void>;
-
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private geolocationSvc: GeolocationService,
     public alertController: AlertController,
-    private geolocation: Geolocation
   ) {
     this.initializeApp();
   }

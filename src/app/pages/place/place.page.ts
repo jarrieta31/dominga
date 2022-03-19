@@ -106,6 +106,8 @@ export class PlacePage {
   optionType: string = null;
   /**url load  */
   preloadImage: string = "/assets/load.gif";
+  /** clase para lista de preload */
+  preload_card: string = "img_card_place"
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -246,14 +248,9 @@ export class PlacePage {
     );
 
     if (this.geolocationSvc.posicion$.value !== null) {
-      dto
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe(
-          (res) => {
-          this.places = res;
-        });
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.places = res;
+      });
     } else {
       this.placeSvc.getPlaces(this.dep).subscribe((res) => {
         this.places = res;

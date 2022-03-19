@@ -1,5 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 50px;
+  width: auto;
+}
+
+.text_empty {
+  color: #d6d2d1;
+  text-align: center;
+  padding-bottom: 15px;
+  font-size: 1.2em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.icon_empty {
+  font-size: 5em;
+  color: #d6d2d1;
+}
+
 .slider {
   width: 100%;
   position: -webkit-sticky;

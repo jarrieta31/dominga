@@ -77,7 +77,7 @@
                 (ionChange)="filterEvento()"
                 mode="ios"
                 placeholder="desde"
-                doneText="Sleeccionar"
+                doneText="Seleccionar"
                 cancelText="Cancelar"
                 monthShortNames="{{monthShortNames}}"
                 min="{{ fullDay }}"
@@ -94,10 +94,10 @@
                 (ionChange)="filterEvento()"
                 mode="ios"
                 placeholder="hasta"
-                doneText="Sleeccionar"
+                doneText="Seleccionar"
                 cancelText="Cancelar"
                 monthShortNames="{{monthShortNames}}"
-                min="{{ fullDay }}"
+                min="{{ fullDayNext }}"
                 displayFormat="DD MMM YYYY"
                 yearValues="{{ customYearValues }}"
                 formControlName="fecha_fin"
@@ -174,7 +174,8 @@
   <!-- =========<=<=<=< Filtro =========<=<=<=< -->
   <ion-list>
     <ng-container *ngFor="let item of eventos | filterEvents1:dataform">
-      <ion-item
+      <ng-container *ngIf="item.vacio !== 1">
+        <ion-item
         *ngIf="(item.distanciaNumber <= dist || dpto_select != null)"
         class="event"
         (click)="openModalDetailEvent(
@@ -216,6 +217,16 @@
           </div>
         </div>
       </ion-item>
+      </ng-container>
+      
+      <ng-container *ngIf="item.vacio === 1">
+        <div class="empty">
+          <i class="fi fi-rr-sad icon_empty"></i>
+          <div class="text_empty">
+            No hay eventos para mostrar con el filtro seleccionado
+          </div>
+        </div>
+      </ng-container>
     </ng-container>
   </ion-list>
 
