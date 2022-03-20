@@ -15,7 +15,7 @@ export class DatabaseService {
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   initEvents: Eventos[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
-  save_depto: String[] = [];
+  save_depto: string[] = [];
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(
@@ -243,18 +243,23 @@ export class DatabaseService {
           this.save_depto.push(this.depto);
           this.allEvents = arrEvents;
 
-          this.allEvents.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.allEvents.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          }
 
           this.eventos.next(this.allEvents);
         })
@@ -269,33 +274,38 @@ export class DatabaseService {
         }
       });
 
-      this.allEvents.forEach((dist) => {
-        let calcDist = distance(
-          [
-            this.geolocationSvc.posicion.longitud,
-            this.geolocationSvc.posicion.latitud,
-          ],
-          [dist.ubicacion.lng, dist.ubicacion.lat],
-          options
-        );
-        dist.distancia = calcDist;
-        dist.distanciaNumber = calcDist;
-      });
+      if (
+        this.geolocationSvc.posicion !== undefined &&
+        this.geolocationSvc.posicion !== null
+      ) {
+        this.allEvents.forEach((dist) => {
+          let calcDist = distance(
+            [
+              this.geolocationSvc.posicion.longitud,
+              this.geolocationSvc.posicion.latitud,
+            ],
+            [dist.ubicacion.lng, dist.ubicacion.lat],
+            options
+          );
+          dist.distancia = calcDist;
+          dist.distanciaNumber = calcDist;
+        });
+      }
 
       this.eventos.next(this.allEvents);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length != 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
@@ -309,18 +319,23 @@ export class DatabaseService {
             if (init.departamento == dep) this.distanceEvents.push(init);
           });
 
-          this.distanceEvents.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.distanceEvents.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          }
 
           deptoSearch = false;
         } else {
@@ -338,18 +353,24 @@ export class DatabaseService {
                 this.initEvents.push({ id: item.id, ...data });
                 this.distanceEvents.push({ id: item.id, ...data });
               });
-              this.distanceEvents.forEach((dist) => {
-                let calcDist = distance(
-                  [
-                    this.geolocationSvc.posicion.longitud,
-                    this.geolocationSvc.posicion.latitud,
-                  ],
-                  [dist.ubicacion.lng, dist.ubicacion.lat],
-                  options
-                );
-                dist.distancia = calcDist;
-                dist.distanciaNumber = calcDist;
-              });
+
+              if (
+                this.geolocationSvc.posicion !== undefined &&
+                this.geolocationSvc.posicion !== null
+              ) {
+                this.distanceEvents.forEach((dist) => {
+                  let calcDist = distance(
+                    [
+                      this.geolocationSvc.posicion.longitud,
+                      this.geolocationSvc.posicion.latitud,
+                    ],
+                    [dist.ubicacion.lng, dist.ubicacion.lat],
+                    options
+                  );
+                  dist.distancia = calcDist;
+                  dist.distanciaNumber = calcDist;
+                });
+              }
 
               if (!searchDepto) this.save_depto.push(dep);
             })

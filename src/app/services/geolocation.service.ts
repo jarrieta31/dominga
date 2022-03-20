@@ -62,9 +62,6 @@ export class GeolocationService {
     } else {
       this.posicion$ = new BehaviorSubject<Point>(null);
     }
-    //console.log('geolocation.service: ' + this.posicion.longitud + this.posicion.latitud)
-    console.log("geolocation server: ", this.posicion$.value);
-
     this.startGeolocation();
   }
 

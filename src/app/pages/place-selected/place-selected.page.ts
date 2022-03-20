@@ -3,11 +3,9 @@ import { ActionSheetController, ModalController } from "@ionic/angular";
 import { Subscription } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { Place } from "src/app/shared/place";
-import { environment } from "src/environments/environment";
 import { VideoPage } from "../video/video.page";
 import * as Mapboxgl from "mapbox-gl";
-import { ActivatedRoute, Router } from "@angular/router";
-import { PreloadComponent } from '../../components/preload/preload.component';
+import { Router } from "@angular/router";
 import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
 
 declare var $: any;
@@ -47,23 +45,15 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private router: Router,
     private actionSheetController: ActionSheetController,
-    private activatedRoute: ActivatedRoute,
-    private renderer: Renderer2,
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.param = params.get("id");
-      console.log(this.param);
-      this.placeSvc.getPlaceId(this.param);
-    });
-
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
 
       if (this.place.videos.length > 0) {
         this.videos = this.place.videos.filter(
-          (item: any) => item.url !== null
+          (item: any) => (item.url !== null && item.url !== undefined && item.url !== '' && item.url !== ' ')
         );
       }
 
@@ -89,15 +79,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
    */
-  //async cambiarImagen() {
-  //  $(".imgGaleria").click(function () {
-  //    var src = $(this).attr("src");
-  //    $("#foto").attr("src", src);
-  //  });
-  //}
   cambiarImagen(src:string) {
     this.preloadDetails.url = src;
-//    this.renderer.setAttribute(this.foto.nativeElement, "src", src);
   }
 
   irHome() {

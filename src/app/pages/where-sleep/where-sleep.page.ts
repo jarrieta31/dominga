@@ -7,7 +7,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { map, switchMap, takeUntil } from "rxjs/operators";
-import { States } from "src/app/shared/enum/states.enum";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { DatabaseService } from "src/app/services/database.service";
@@ -22,8 +21,6 @@ import { environment } from "src/environments/environment";
 export class WhereSleepPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: States = States.DEFAULT;
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: string = null;

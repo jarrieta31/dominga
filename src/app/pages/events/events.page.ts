@@ -457,7 +457,6 @@ export class EventsPage {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
-        console.log(res);
         this.sliderEvents = res;
       });
 

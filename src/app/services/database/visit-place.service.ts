@@ -121,7 +121,7 @@ export class VisitPlaceService {
          "Error en al traer la informacion de Place ::getVisitasLugar" + err
        );
      })
-     .finally(() => console.log("Finally"));
+     .finally(() => "Finally");
  }
  /**
   * Funcion privada. Se encarga de actualizar los registros de Visitas a Lugares.

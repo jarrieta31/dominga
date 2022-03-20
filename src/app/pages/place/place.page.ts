@@ -212,7 +212,6 @@ export class PlacePage {
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
     }
 
-    console.log("dist", this.dist, "dep", this.dep);
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
       this.filterForm.reset();
@@ -228,7 +227,6 @@ export class PlacePage {
       .pipe(
         map((slider) => slider.filter((s) => s.pantalla === "lugares")),
         takeUntil(this.unsubscribe$),
-        tap(console.log)
       )
       .subscribe((res) => {
         this.sliderPlace = res;

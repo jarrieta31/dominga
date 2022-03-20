@@ -232,18 +232,30 @@ export class PlaceService {
           });
           this.allLugares = arrPlaces;
 
-          this.allLugares.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.allLugares.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          } else if (this.geolocationSvc.posicion === undefined ||
+            this.geolocationSvc.posicion === null) {
+              this.allLugares.forEach((dist) => {
+                dist.distancia = "Ubicación no activa";
+                dist.distanciaNumber = "Ubicación no activa";
+              });
+            }
+
           this.places.next(this.allLugares);
           this.save_depto.push(this.depto);
           searchDepto = false;
@@ -258,18 +270,25 @@ export class PlaceService {
           this.allLugares.push(res);
         }
       });
-      this.allLugares.forEach((dist) => {
-        let calcDist = distance(
-          [
-            this.geolocationSvc.posicion.longitud,
-            this.geolocationSvc.posicion.latitud,
-          ],
-          [dist.ubicacion.lng, dist.ubicacion.lat],
-          options
-        );
-        dist.distancia = calcDist;
-        dist.distanciaNumber = calcDist;
-      });
+
+      if (
+        this.geolocationSvc.posicion !== undefined &&
+        this.geolocationSvc.posicion !== null
+      ) {
+        this.allLugares.forEach((dist) => {
+          let calcDist = distance(
+            [
+              this.geolocationSvc.posicion.longitud,
+              this.geolocationSvc.posicion.latitud,
+            ],
+            [dist.ubicacion.lng, dist.ubicacion.lat],
+            options
+          );
+          dist.distancia = calcDist;
+          dist.distanciaNumber = calcDist;
+        });
+      }
+
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
@@ -296,18 +315,25 @@ export class PlaceService {
           this.initPlace.forEach((init: any) => {
             if (init.departamento == dep) this.distancePlaces.push(init);
           });
-          this.distancePlaces.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
-          });
+
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.distancePlaces.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          }
+
           deptoSearch = false;
         } else {
           this.afs
@@ -323,18 +349,24 @@ export class PlaceService {
                 this.distancePlaces.push({ id: item.id, ...data });
               });
 
-              this.distancePlaces.forEach((dist) => {
-                let calcDist = distance(
-                  [
-                    this.geolocationSvc.posicion.longitud,
-                    this.geolocationSvc.posicion.latitud,
-                  ],
-                  [dist.ubicacion.lng, dist.ubicacion.lat],
-                  options
-                );
-                dist.distancia = calcDist;
-                dist.distanciaNumber = calcDist;
-              });
+              if (
+                this.geolocationSvc.posicion !== undefined &&
+                this.geolocationSvc.posicion !== null
+              ) {
+                this.distancePlaces.forEach((dist) => {
+                  let calcDist = distance(
+                    [
+                      this.geolocationSvc.posicion.longitud,
+                      this.geolocationSvc.posicion.latitud,
+                    ],
+                    [dist.ubicacion.lng, dist.ubicacion.lat],
+                    options
+                  );
+                  dist.distancia = calcDist;
+                  dist.distanciaNumber = calcDist;
+                });
+              }
+
               if (!searchDepto) this.save_depto.push(dep);
             })
             .catch((err) => {

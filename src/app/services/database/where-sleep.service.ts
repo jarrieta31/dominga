@@ -182,7 +182,6 @@ export class WhereSleepService {
   ) {}
 
   getDondeDormir(checkDepto: string) {
-    console.log(this.noData)
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.distanceSleep = [];

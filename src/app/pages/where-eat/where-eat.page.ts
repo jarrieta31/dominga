@@ -9,7 +9,6 @@ import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
 import { HttpClient } from "@angular/common/http";
 import { GeolocationService } from "src/app/services/geolocation.service";
-import { States } from "src/app/shared/enum/states.enum";
 import { DatabaseService } from "src/app/services/database.service";
 import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
