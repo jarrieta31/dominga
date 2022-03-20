@@ -13,7 +13,7 @@
     bicicleta: boolean,
     caminar: boolean,
     patrimonial: boolean,
-    accesibilidad: boolean,
+    accesibilidad?: Accesibilidad,
     descripcion: string,
     descripcionCorta: string,
     imagenHome: {
@@ -38,4 +38,9 @@
     valoraciones?: [],
     videos?: [],
     carpeta: string,
+}
+
+export interface Accesibilidad{
+    banios?: boolean;
+    rampas?: boolean;
 }

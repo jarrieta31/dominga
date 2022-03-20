@@ -34,7 +34,7 @@
     <div class="diva">
       <app-preload-details
         class="imgPrincipal"
-        id="foto"
+        #foto
         [url]="place.imagenPrincipal.url"
         [alt]="place.nombre"
         [urlPreload]="preloadImage"
@@ -45,7 +45,7 @@
         <ion-slide class="slideHijo" *ngFor="let img of place.imagenes">
           <div id="imagenMini">
             <img
-              (click)="cambiarImagen()"
+              (click)="cambiarImagen(img.url)"
               class="imgGaleria"
               src="{{ img.url }}"
             />

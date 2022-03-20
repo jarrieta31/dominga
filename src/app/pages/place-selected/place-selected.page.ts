@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { ActionSheetController, ModalController } from "@ionic/angular";
 import { Subscription } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
@@ -7,6 +7,8 @@ import { environment } from "src/environments/environment";
 import { VideoPage } from "../video/video.page";
 import * as Mapboxgl from "mapbox-gl";
 import { ActivatedRoute, Router } from "@angular/router";
+import { PreloadComponent } from '../../components/preload/preload.component';
+import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
 
 declare var $: any;
 
@@ -16,6 +18,9 @@ declare var $: any;
   styleUrls: ["./place-selected.page.scss"],
 })
 export class PlaceSelectedPage implements OnInit, OnDestroy {
+
+  @ViewChild(PreloadDetailsComponent, {static: true}) preloadDetails:PreloadDetailsComponent;
+
   place: Place = null;
   place_suscription: Subscription;
   mapa: Mapboxgl.Map;
@@ -42,7 +47,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private router: Router,
     private actionSheetController: ActionSheetController,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private renderer: Renderer2,
   ) {}
 
   ngOnInit() {
@@ -83,11 +89,15 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
    */
-  async cambiarImagen() {
-    $(".imgGaleria").click(function () {
-      var src = $(this).attr("src");
-      $("#foto").attr("src", src);
-    });
+  //async cambiarImagen() {
+  //  $(".imgGaleria").click(function () {
+  //    var src = $(this).attr("src");
+  //    $("#foto").attr("src", src);
+  //  });
+  //}
+  cambiarImagen(src:string) {
+    this.preloadDetails.url = src;
+//    this.renderer.setAttribute(this.foto.nativeElement, "src", src);
   }
 
   irHome() {
