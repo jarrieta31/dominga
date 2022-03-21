@@ -1,4 +1,3 @@
-
 <ion-content>
   <div class="slider">
     <ion-slides
@@ -172,82 +171,105 @@
   </div>
 
   <!-- =========<=<=<=< Filtro =========<=<=<=< -->
-  <ion-list>
-    <ng-container *ngFor="let item of eventos | filterEvents1:dataform">
-      <ng-container *ngIf="item.vacio !== 1">
-        <ion-item
-        *ngIf="(item.distanciaNumber <= dist || dpto_select != null)"
-        class="event"
-        (click)="openModalDetailEvent(
-        item.id, 
-        item.fechaInicio, 
-        item.nombre, 
-        item.descripcion, 
-        item['imagen'].url, 
-        item.lugar, 
-        item['ubicacion'].lat, 
-        item['ubicacion'].lng, 
-        item.fechaFin, 
-        item.instagram, 
-        item.ticktAntel, 
-        item.facebook, 
-        item.whatsapp, 
-        item.moneda, 
-        item.precio, 
-        item.precioUnico,
-        item.direccion)"
-      >
-        <ion-avatar item-start class="image-event">
-          <app-preload-list [url]="item.imagen.url"
-                            [urlPreload]="preloadImage_list"
-                            [clase]="preloadClase"
-                            [alt]="item.nombre"
-                             >
-          </app-preload-list>
+  <div>
+    <ion-list>
+      <ng-container *ngFor="let item of eventos | filterEvents1:dataform">
+        <ng-container *ngIf="item.vacio !== 1">
+          <ion-item
+            *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.dbService.noData && item.departamento === dep))"
+            class="event"
+            (click)="openModalDetailEvent(
+          item.id, 
+          item.fechaInicio, 
+          item.nombre, 
+          item.descripcion, 
+          item['imagen'].url, 
+          item.lugar, 
+          item['ubicacion'].lat, 
+          item['ubicacion'].lng, 
+          item.fechaFin, 
+          item.instagram, 
+          item.ticktAntel, 
+          item.facebook, 
+          item.whatsapp, 
+          item.moneda, 
+          item.precio, 
+          item.precioUnico,
+          item.direccion)"
+          >
+            <ion-avatar item-start class="image-event">
+              <app-preload-list
+                [url]="item.imagen.url"
+                [urlPreload]="preloadImage_list"
+                [clase]="preloadClase"
+                [alt]="item.nombre"
+              >
+              </app-preload-list>
+            </ion-avatar>
+            <div class="info-event">
+              <div class="fecha">
+                {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs
+              </div>
+              <div class="titulo">{{item.nombre}}</div>
+              <!-- <div id="filters" class="descripcion">{{ item.descripcion }}</div> -->
+              <div class="descripcion">
+                {{ item.distancia | formatDistancia}}
+              </div>
+            </div>
+          </ion-item>
+        </ng-container>
 
-        </ion-avatar>
-        <div class="info-event">
-          <div class="fecha">
-            {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs
+        <ng-container *ngIf="item.vacio === 1">
+          <div class="empty">
+            <i class="fi fi-rr-sad icon_empty"></i>
+            <div class="text_empty">
+              No hay eventos para mostrar con el filtro seleccionado
+            </div>
           </div>
-          <div class="titulo">{{item.nombre}}</div>
-          <!-- <div id="filters" class="descripcion">{{ item.descripcion }}</div> -->
-          <div  class="descripcion">
-            {{ item.distancia | formatDistancia}}
-          </div>
-        </div>
-      </ion-item>
+        </ng-container>
       </ng-container>
-      
-      <ng-container *ngIf="item.vacio === 1">
-        <div class="empty">
-          <i class="fi fi-rr-sad icon_empty"></i>
-          <div class="text_empty">
-            No hay eventos para mostrar con el filtro seleccionado
-          </div>
-        </div>
-      </ng-container>
-    </ng-container>
-  </ion-list>
+    </ion-list>
 
-  <ion-list *ngIf="eventos.length === 0">
-    <ng-container *ngFor="let item of [1,2,3,4,5,6]">
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <ion-skeleton-text></ion-skeleton-text>
-        </ion-thumbnail>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ng-container>
-  </ion-list>
+    <ion-list *ngIf="eventos.length === 0 && !this.dbService.noData">
+      <ng-container *ngFor="let item of [1,2,3,4,5,6]">
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <ion-skeleton-text></ion-skeleton-text>
+          </ion-thumbnail>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text
+                animated
+                style="width: 80%"
+              ></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text
+                animated
+                style="width: 60%"
+              ></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text
+                animated
+                style="width: 30%"
+              ></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
+    <div *ngIf="this.dbService.noData && dist === null" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">No existen eventos en {{ dep }}</div>
+    </div>
+
+    <div *ngIf="!this.dbService.controlDistance && dist !== null" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">
+        No existen eventos en el rango de {{ dist }} km
+      </div>
+    </div>
+  </div>
 </ion-content>

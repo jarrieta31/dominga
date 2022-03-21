@@ -14,6 +14,9 @@ export class ArtistService {
   depto: String;
   allArtist: Artistas[] = [];
 
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
+
   constructor(private afs: AngularFirestore, private db: DatabaseService) {
     this.artist = new BehaviorSubject<Artistas[]>(this.init_artist);
   }
@@ -51,8 +54,13 @@ export class ArtistService {
             });
 
             this.allArtist = arrArtist;
+
+            if (querySnapshot.size !== 0) {
+              this.save_depto.push(this.depto);
+              this.noData = false;
+            } else this.noData = true;
+
             this.artist.next(this.allArtist);
-            this.save_depto.push(this.depto);
             searchDepto = false;
           })
           .catch((err) => {
@@ -74,8 +82,13 @@ export class ArtistService {
             });
 
             this.allArtist = arrArtist;
+
+            if (querySnapshot.size !== 0) {
+              this.save_depto.push(checkDepto);
+              this.noData = false;
+            } else this.noData = true;
+
             this.artist.next(this.allArtist);
-            this.save_depto.push(checkDepto);
             searchDepto = false;
           })
           .catch((err) => {

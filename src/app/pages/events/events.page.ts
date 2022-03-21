@@ -39,7 +39,7 @@ export class EventsPage {
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
-  dpto_select: string = null;
+  dep: string = null;
   /**captura los datos del formulario de filtros */
   dataform: any = "";
   /**controla si se muestra o no el filtro general de lugares */
@@ -242,7 +242,8 @@ export class EventsPage {
     const alert = await this.alertCtrl.create({
       cssClass: "my-custom-class",
       header: "FECHA INCORRECTA",
-      message: "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
+      message:
+        "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
       mode: "ios",
       animated: true,
       buttons: [
@@ -290,7 +291,7 @@ export class EventsPage {
     if (this.dataform.localidad === "") this.optionLocation = "localidad";
     if (this.dataform.tipo === "") this.optionType = "tipo";
 
-    console.log("form", this.filterForm.value)
+    console.log("form", this.filterForm.value);
   }
 
   actualizarFechas() {
@@ -438,8 +439,19 @@ export class EventsPage {
 
     this.unsubscribe$ = new Subject<void>();
 
-    this.dist = parseInt(localStorage.getItem("distanceActivo"));
-    this.dpto_select = localStorage.getItem("deptoActivo");
+    if (
+      localStorage.getItem("deptoActivo") != undefined &&
+      localStorage.getItem("deptoActivo") != null
+    ) {
+      this.dist = null;
+      this.dep = localStorage.getItem("deptoActivo");
+    } else if (
+      localStorage.getItem("distanceActivo") != undefined &&
+      localStorage.getItem("distanceActivo") != null
+    ) {
+      this.dep = null;
+      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    }
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
@@ -478,7 +490,7 @@ export class EventsPage {
         this.eventos = res;
       });
     } else {
-      this.dbService.getEventos(this.dpto_select).subscribe((res) => {
+      this.dbService.getEventos(this.dep).subscribe((res) => {
         this.eventos = res;
       });
     }

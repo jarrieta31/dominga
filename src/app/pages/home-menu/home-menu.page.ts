@@ -52,7 +52,7 @@ export class HomeMenuPage {
         {
           text: "Distancia",
           handler: () => {
-              this.distance = true;
+            this.distance = true;
           },
         },
       ],
@@ -62,7 +62,8 @@ export class HomeMenuPage {
       (this.deptoSelected === null || this.deptoSelected === undefined) &&
       !this.depto &&
       (this.distanceSelected === null || this.distanceSelected === undefined) &&
-      !this.distance && this.gps === true
+      !this.distance &&
+      this.gps === true
     )
       await alert.present();
 
@@ -74,7 +75,8 @@ export class HomeMenuPage {
     const alert = await this.alertController.create({
       cssClass: "my-custom-class",
       header: "SELECCIONAR FILTRO",
-      message: "Debe seleccionar un departamento para continuar, no ha proporcionado permisos de ubicación",
+      message:
+        "Debe seleccionar un departamento para continuar, no ha proporcionado permisos de ubicación",
       mode: "ios",
       animated: true,
       buttons: [
@@ -91,7 +93,8 @@ export class HomeMenuPage {
       (this.deptoSelected === null || this.deptoSelected === undefined) &&
       !this.depto &&
       (this.distanceSelected === null || this.distanceSelected === undefined) &&
-      !this.distance && this.gps === false
+      !this.distance &&
+      this.gps === false
     )
       await alert.present();
 
@@ -135,6 +138,14 @@ export class HomeMenuPage {
 
   ionViewWillEnter() {
     this.unsubscribe$ = new Subject<void>();
+
+    if (
+      (this.geolocationSvc.posicion === null || this.geolocationSvc.posicion === undefined) &&
+      (localStorage.getItem("distanceActivo") !== null ||
+        localStorage.getItem("distanceActivo") !== undefined)
+    ) {
+      localStorage.removeItem("distanceActivo");
+    }
 
     this.depto = false;
     this.dbService.getDepartamentosActivos();

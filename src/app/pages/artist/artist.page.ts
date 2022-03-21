@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { forkJoin, of, Subject } from "rxjs";
-import { map, switchMap, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { ArtistService } from "src/app/services/database/artist.service";
 import { Artistas } from "src/app/shared/artistas";
 import { LoadingController, ModalController } from "@ionic/angular";
@@ -71,8 +71,8 @@ export class ArtistPage {
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
   dep: string = null;
-  /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
-  msgEmptyPlace: string = null;
+  /**departamento actual con filto por distancia activo */
+  depDist: string;
   /**url load  */
   preloadImage_list: string = "/assets/load_cuadrada.gif";
   /** clase de preload list */
@@ -188,16 +188,12 @@ export class ArtistPage {
     ) {
       this.dist = null;
       this.dep = localStorage.getItem("deptoActivo");
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el departamento de " + this.dep;
     } else if (
       localStorage.getItem("distanceActivo") != undefined &&
       localStorage.getItem("distanceActivo") != null
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el rango de " + this.dist + " km";
     }
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
@@ -231,6 +227,7 @@ export class ArtistPage {
     if (this.geolocationSvc.posicion$.value !== null) {
       posDep
         .pipe(
+          tap((dep) => (this.depDist = dep[1])),
           switchMap((res) => this.artistSvc.getArtist(res[1])),
           takeUntil(this.unsubscribe$)
         )

@@ -36,6 +36,10 @@ export class PlaceService {
   posicion$: Observable<Point>;
   /**se guardan los lugares recibidos desde el filtro distancia */
   distancePlaces: Place[] = [];
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
+  /**controla que existen lugares en el rango de distancia */
+  controlDistance: boolean = false;
 
   deptoLimit: any[] = [
     { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
@@ -202,7 +206,7 @@ export class PlaceService {
     this.allLugares = [];
     this.distancePlaces = [];
 
-    //this.places.next(this.distancePlaces);
+    this.controlDistance = false;
 
     let searchDepto: boolean = false;
 
@@ -248,16 +252,23 @@ export class PlaceService {
               dist.distancia = calcDist;
               dist.distanciaNumber = calcDist;
             });
-          } else if (this.geolocationSvc.posicion === undefined ||
-            this.geolocationSvc.posicion === null) {
-              this.allLugares.forEach((dist) => {
-                dist.distancia = "Ubicación no activa";
-                dist.distanciaNumber = "Ubicación no activa";
-              });
-            }
+          } else if (
+            this.geolocationSvc.posicion === undefined ||
+            this.geolocationSvc.posicion === null
+          ) {
+            this.allLugares.forEach((dist) => {
+              dist.distancia = "Ubicación no activa";
+              dist.distanciaNumber = "Ubicación no activa";
+            });
+          }
+
+          if (querySnapshot.size !== 0) {
+            this.save_depto.push(this.depto);
+            this.noData = false;
+          } else this.noData = true;
 
           this.places.next(this.allLugares);
-          this.save_depto.push(this.depto);
+
           searchDepto = false;
         })
         .catch((err) => {
@@ -289,20 +300,22 @@ export class PlaceService {
         });
       }
 
+      this.allLugares.length !== 0 ? (this.noData = false) : this.noData;
+
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length != 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
@@ -331,6 +344,10 @@ export class PlaceService {
               );
               dist.distancia = calcDist;
               dist.distanciaNumber = calcDist;
+
+              if (calcDist <= this.distance) {
+                this.controlDistance = true;
+              }
             });
           }
 
@@ -364,10 +381,15 @@ export class PlaceService {
                   );
                   dist.distancia = calcDist;
                   dist.distanciaNumber = calcDist;
+
+                  if (calcDist <= this.distance) {
+                    this.controlDistance = true;
+                  }
                 });
               }
 
-              if (!searchDepto) this.save_depto.push(dep);
+              if (!searchDepto && querySnapshot.size !== 0)
+                this.save_depto.push(dep);
             })
             .catch((err) => {
               console.log(err);
@@ -376,6 +398,8 @@ export class PlaceService {
           deptoSearch = false;
         }
       });
+      this.distancePlaces.length !== 0 ? (this.noData = false) : this.noData;
+
       this.places.next(this.distancePlaces);
     }
 

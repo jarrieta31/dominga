@@ -42,6 +42,11 @@ export class DatabaseService {
   /**se guardan los lugares recibidos desde el filtro distancia */
   distanceEvents: Eventos[] = [];
 
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
+  /**controla que existen lugares en el rango de distancia */
+  controlDistance: boolean = false;
+
   deptoLimit: any[] = [
     { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
     {
@@ -212,6 +217,8 @@ export class DatabaseService {
     this.allEvents = [];
     this.distanceEvents = [];
 
+    this.controlDistance = false;
+
     let searchDepto: boolean = false;
 
     const options = { units: "kilometers" };
@@ -240,7 +247,6 @@ export class DatabaseService {
             arrEvents.push({ id: item.id, ...data });
             this.initEvents.push({ id: item.id, ...data });
           });
-          this.save_depto.push(this.depto);
           this.allEvents = arrEvents;
 
           if (
@@ -261,7 +267,14 @@ export class DatabaseService {
             });
           }
 
+          if (querySnapshot.size !== 0) {
+            this.save_depto.push(this.depto);
+            this.noData = false;
+          } else this.noData = true;
+
           this.eventos.next(this.allEvents);
+
+          searchDepto = false;
         })
         .catch((err) => {
           console.log(err);
@@ -291,6 +304,8 @@ export class DatabaseService {
           dist.distanciaNumber = calcDist;
         });
       }
+
+      this.allEvents.length !== 0 ? (this.noData = false) : this.noData;
 
       this.eventos.next(this.allEvents);
     } else if (this.distance != null) {
@@ -334,6 +349,10 @@ export class DatabaseService {
               );
               dist.distancia = calcDist;
               dist.distanciaNumber = calcDist;
+
+              if (calcDist <= this.distance) {
+                this.controlDistance = true;
+              }
             });
           }
 
@@ -369,10 +388,15 @@ export class DatabaseService {
                   );
                   dist.distancia = calcDist;
                   dist.distanciaNumber = calcDist;
+
+                  if (calcDist <= this.distance) {
+                    this.controlDistance = true;
+                  }
                 });
               }
 
-              if (!searchDepto) this.save_depto.push(dep);
+              if (!searchDepto && querySnapshot.size !== 0)
+                this.save_depto.push(dep);
             })
             .catch((err) => {
               console.log(err);
@@ -381,6 +405,8 @@ export class DatabaseService {
           deptoSearch = false;
         }
       });
+      this.distanceEvents.length !== 0 ? (this.noData = false) : this.noData;
+
       this.eventos.next(this.distanceEvents);
     }
 

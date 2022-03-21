@@ -74,14 +74,14 @@
         >
           <div class="padre">
             <div class="imagen">
-                <ion-avatar item-start>
-                    <app-preload-list
-                    [url]="item.imagen.url"
-                    [alt]="item.nombre"
-                    [clase]="preloadClase"
-                    [urlPreload]="preloadImage_list"
-                  ></app-preload-list>
-                </ion-avatar>
+              <ion-avatar item-start>
+                <app-preload-list
+                  [url]="item.imagen.url"
+                  [alt]="item.nombre"
+                  [clase]="preloadClase"
+                  [urlPreload]="preloadImage_list"
+                ></app-preload-list>
+              </ion-avatar>
               <small id="eat-info">{{item.distancia | formatDistancia}}</small>
             </div>
             <div class="info">

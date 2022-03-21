@@ -166,7 +166,7 @@
     </div>
   </ion-list>
 
-  <ion-list *ngIf="artists.length === 0">
+  <ion-list *ngIf="artists.length === 0 && !this.artistSvc.noData">
     <ng-container *ngFor="let item of [1,2,3,4,5,6]">
       <ion-item>
         <ion-thumbnail slot="start">
@@ -186,4 +186,10 @@
       </ion-item>
     </ng-container>
   </ion-list>
+
+  <div *ngIf="this.artistSvc.noData" class="empty">
+    <i class="fi fi-rr-sad icon_empty"></i>
+    <div class="text_empty" *ngIf="dep !== null">No hay artistas en {{ dep }}</div>
+    <div class="text_empty" *ngIf="dist !== null">No hay artistas en {{ depDist }}</div>
+  </div>
 </ion-content>

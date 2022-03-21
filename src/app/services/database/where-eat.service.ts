@@ -299,7 +299,7 @@ export class WhereEatService {
             dist.distancia = calcDist;
             dist.distanciaNumber = calcDist;
 
-            if(calcDist <= this.distance) {
+            if (calcDist <= this.distance) {
               this.controlDistance = true;
             }
           });

@@ -118,7 +118,7 @@
       <ng-container *ngFor="let item of places | filterPlaces:dataForm">
         <ng-container *ngIf="item.vacio !== 1">
           <ion-card
-            *ngIf="(item.distanciaNumber <= dist || dep != null)"
+            *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.placeSvc.noData && item.departamento === dep))"
             id="{{ item.id }}"
           >
             <ion-card-header
@@ -201,7 +201,7 @@
       </ng-container>
     </ion-list>
 
-    <ion-list *ngIf="places.length === 0">
+    <ion-list *ngIf="places.length === 0 && !this.placeSvc.noData">
       <ng-container *ngFor="let item of [1,2,3]">
         <ion-card>
           <ion-card-header>
@@ -219,5 +219,17 @@
         </ion-card>
       </ng-container>
     </ion-list>
+
+    <div *ngIf="this.placeSvc.noData && dist === null" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">No existen lugares en {{ dep }}</div>
+    </div>
+
+    <div *ngIf="!this.placeSvc.controlDistance && dist !== null" class="empty">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div class="text_empty">
+        No existen lugares en el rango de {{ dist }} km
+      </div>
+    </div>
   </div>
 </ion-content>
