@@ -26,6 +26,7 @@ export class EventsPage {
 
   textoBuscar = "";
   today: Date = new Date();
+  now: Date = new Date();
 
   /**url load  */
   preloadImage: string = "/assets/load.gif";
@@ -46,9 +47,6 @@ export class EventsPage {
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
   isFilterDate: boolean = false;
-  /**varibles de filtro por fecha */
-  fecha_inicio: Date = new Date();
-  fecha_fin: Date = new Date(this.fecha_inicio.getDate() + 90);
   /**guardan filtos seleccionados */
   optionLocation: string = null;
   optionType: string = null;
@@ -66,6 +64,8 @@ export class EventsPage {
   checkDistance: boolean = false;
   /**departamente seleccionado actualmente */
   currentDepto: string = this.dbService.selectionDepto;
+  /**dia siguiente al actual */
+  nextDay: any;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
@@ -75,8 +75,6 @@ export class EventsPage {
     localidad: ["", Validators.required],
     fecha_fin: ["", Validators.required],
     fecha_inicio: ["", Validators.required],
-    // moneda   : ["", Validators.required],
-    // precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
@@ -90,7 +88,9 @@ export class EventsPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private alertCtrl: AlertController
-  ) {}
+  ) {
+    this.nextDay = this.sumarDias(this.now, 1);
+  }
 
   anioActual: number = 0;
   customYearValues = [];
@@ -258,7 +258,6 @@ export class EventsPage {
 
   filterEvento() {
     this.dataform = this.filterForm.value;
-    this.actualizarFechas();
 
     if (this.isFilterLocation) this.isFilterLocation = false;
     if (this.isFilterType) this.isFilterType = false;
@@ -276,8 +275,6 @@ export class EventsPage {
       ) {
         this.optionDateStart = null;
         this.optionDateEnd = null;
-        this.fecha_inicio = null;
-        this.fecha_fin = null;
         this.presentAlert();
       } else {
         this.optionDateStart = this.dataform.fecha_inicio;
@@ -292,11 +289,6 @@ export class EventsPage {
     if (this.dataform.tipo === "") this.optionType = "tipo";
 
     console.log("form", this.filterForm.value);
-  }
-
-  actualizarFechas() {
-    this.fecha_inicio = this.filterForm.get("fecha_inicio").value;
-    this.fecha_fin = this.filterForm.get("fecha_fin").value;
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
@@ -405,22 +397,20 @@ export class EventsPage {
       this.day
     ).toString();
 
-    let nextDay = this.sumarDias(this.today, 1);
-
-    let yearNext: string = nextDay.getFullYear();
-    let monthNext: number = nextDay.getMonth() + 1;
-    let nextDate: string = nextDay.getDate().toString();
+    let yearNext: string = this.nextDay.getFullYear();
+    let monthNext: number = this.nextDay.getMonth() + 1;
+    let nextDate: string = this.nextDay.getDate().toString();
 
     if (nextDate.length === 1) {
-      nextDate = ("0" + nextDay.getDate()).toString();
+      nextDate = ("0" + this.nextDay.getDate()).toString();
     } else {
-      nextDate = nextDay.getDate().toString();
+      nextDate = this.nextDay.getDate().toString();
     }
 
     if (monthNext < 10) {
-      this.month_auxNext = ("0" + (nextDay.getMonth() + 1)).toString();
+      this.month_auxNext = ("0" + (this.nextDay.getMonth() + 1)).toString();
     } else {
-      this.month_auxNext = (nextDay.getMonth() + 1).toString();
+      this.month_auxNext = (this.nextDay.getMonth() + 1).toString();
     }
 
     this.fullDayNext = (
