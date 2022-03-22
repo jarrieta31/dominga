@@ -41,6 +41,11 @@ export class EventDetailPage implements OnInit {
   source = timer(0, 1000);
   clock: any;
 
+  /**url load  */
+  preloadImage: string = "/assets/load_1.30.gif";
+  /**clase preload */
+  preloadClass: string = "img-principal";
+
   constructor(
     private modalCtrl: ModalController,
     private browser: InAppBrowser
@@ -86,9 +91,7 @@ export class EventDetailPage implements OnInit {
     );
   }
 
-  async openModalSellingPoint(
-
-  ) {
+  async openModalSellingPoint() {
     const modalSellingPoint = await this.modalCtrl.create({
       component: SellingPointsPage,
       cssClass: "modal-selling-point",

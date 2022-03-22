@@ -13,59 +13,95 @@
 </ion-header>
 <ion-content>
   <div class="padre" id="event-detail-container">
-    <div class="foto"><img src="{{imagen}}" alt="" /></div>
+    <div class="diva">
+      <app-preload-details
+        [url]="imagen"
+        [alt]="titulo"
+        [urlPreload]="preloadImage"
+        [clase]="preloadClass"
+      ></app-preload-details>
+    </div>
     <section>
       <div class="cuenta-regresiva">
-          <div class="time">
-              <ul class="time-list">
-                  <li id="event-detail-container" class="count-bg-one radius"><span id="days">{{day}}</span>Dias</li>
-                  <li id="event-detail-container" class="count-bg-two radius"><span id="hours">{{hours}}</span>Horas</li>
-                  <li id="event-detail-container" class="count-bg-three radius"><span id="minutes">{{minutes}}</span>Minutos</li>
-                  <li id="event-detail-container" class="count-bg-four radius"><span id="seconds">{{seconds}}</span>Segundos</li>
-              </ul>
-          </div>
+        <div class="time">
+          <ul class="time-list">
+            <li id="event-detail-container" class="count-bg-one radius">
+              <span id="days">{{day}}</span>Dias
+            </li>
+            <li id="event-detail-container" class="count-bg-two radius">
+              <span id="hours">{{hours}}</span>Horas
+            </li>
+            <li id="event-detail-container" class="count-bg-three radius">
+              <span id="minutes">{{minutes}}</span>Minutos
+            </li>
+            <li id="event-detail-container" class="count-bg-four radius">
+              <span id="seconds">{{seconds}}</span>Segundos
+            </li>
+          </ul>
+        </div>
       </div>
-  </section>
+    </section>
     <div class="ubicacion">
       <div id="event-detail-container" class="dir">
-        <div id="event-detail-container" class="div-ubicacion" (click)="openMap()">{{ lugar }}</div>
+        <div
+          id="event-detail-container"
+          class="div-ubicacion"
+          (click)="openMap()"
+        >
+          {{ lugar }}
+        </div>
         <i class="fi fi-rr-map-marker mark-info"></i>{{ direccion }}
       </div>
     </div>
     <div class="fecha-hora">
       <div class="fecha">
-        <div id="event-detail-container"  class="div-fecha">Fecha</div>
+        <div id="event-detail-container" class="div-fecha">Fecha</div>
         <div class="fecha-hora_div">
-          <ion-icon name="calendar-outline" class="mark-info"></ion-icon>{{fecha | date: 'dd.MM.yyyy'}}
+          <ion-icon name="calendar-outline" class="mark-info"></ion-icon>{{fecha
+          | date: 'dd.MM.yyyy'}}
         </div>
       </div>
-      <div  class="hora">
+      <div class="hora">
         <div id="event-detail-container" class="div-hora">Hora</div>
-        <div  class="fecha-hora_div">
-          <ion-icon name="time-outline" class="mark-info"></ion-icon>{{fecha | date:'HH:mm'}}
+        <div class="fecha-hora_div">
+          <ion-icon name="time-outline" class="mark-info"></ion-icon>{{fecha |
+          date:'HH:mm'}}
         </div>
       </div>
     </div>
     <div class="descripcion" id="description-event" [innerHTML]="descripcion">
-      {{descripcion}}&nbsp;<a id="event-detail-container" *ngIf="descripcion.length > 250">Ver más</a>
+      {{descripcion}}&nbsp;<a
+        id="event-detail-container"
+        *ngIf="descripcion.length > 250"
+        >Ver más</a
+      >
     </div>
   </div>
   <div class="ticket">
     <div *ngIf="precioUnico && precio > 0" class="entradas">
       <div id="event-detail-container" class="entradas_div">Valor ticket</div>
-      <div id="event-detail-container" class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
+      <div id="event-detail-container" class="precios_div">
+        {{ moneda }}&nbsp;{{ precio }}
+      </div>
     </div>
     <div *ngIf="precioUnico === false && precio > 0" class="entradas">
       <div id="event-detail-container" class="entradas_div">Desde</div>
-      <div id="event-detail-container" class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
+      <div id="event-detail-container" class="precios_div">
+        {{ moneda }}&nbsp;{{ precio }}
+      </div>
     </div>
     <div *ngIf="precio === 0" class="entradas">
       <div id="event-detail-container" class="entradas_div">Entrada</div>
       <div id="event-detail-container" class="precios_div">Gratis</div>
     </div>
-    <div class="precio" (click)="openModalSellingPoint(instagram, tickAntel, facebook, whatsapp)">
+    <div
+      class="precio"
+      (click)="openModalSellingPoint(instagram, tickAntel, facebook, whatsapp)"
+    >
       <div><i class="fas fa-ticket-alt mark-info"></i></div>
-      <div id="event-detail-container" class="puntos-venta">ver puntos de venta</div>
+      <div id="event-detail-container" class="puntos-venta">
+        ver puntos de venta
+      </div>
     </div>
   </div>
 </ion-content>
