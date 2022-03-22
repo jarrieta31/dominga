@@ -15,12 +15,12 @@
           <ion-fab vertical="top" horizontal="start" slot="fixed">
             <ion-fab-button color="dark">
               <ion-icon
-                *ngIf="item.linkTipo !== web"
+                *ngIf="item.linkTipo !== 'web'"
                 name="logo-{{ item.linkTipo }}"
                 class="icon-link"
               ></ion-icon>
               <ion-icon
-                *ngIf="item.linkTipo === web"
+                *ngIf="item.linkTipo === 'web'"
                 name="globe-outline"
                 class="icon-link"
               ></ion-icon>
