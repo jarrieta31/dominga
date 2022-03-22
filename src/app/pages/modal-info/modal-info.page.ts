@@ -33,7 +33,7 @@ export class ModalInfoPage implements OnInit, OnDestroy {
         this.place = res;
 
         if (this.place.telefonos.length > 0) {
-          this.place.telefonos.forEach((tel: String) => {
+          this.place.telefonos.forEach((tel: string) => {
             this.callTel = tel["numero"];
           });
         }

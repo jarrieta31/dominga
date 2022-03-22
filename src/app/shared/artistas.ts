@@ -1,14 +1,14 @@
 export interface Artistas {
-    id: String,
-    carpeta: String,
-    categoria: String,
-    departamento: String,
-    instagram?: String,
-    localidad: String,
-    nombre: String,
+    id: string,
+    carpeta: string,
+    categoria: string,
+    departamento: string,
+    instagram?: string,
+    localidad: string,
+    nombre: string,
     publicado: boolean,
-    spotify?: String,
-    youtube?: String,
+    spotify?: string,
+    youtube?: string,
     imagen: Imagen
 }
 

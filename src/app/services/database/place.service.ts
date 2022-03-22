@@ -13,17 +13,17 @@ export class PlaceService {
   /**Se guardan los lugares del departamento seleccionado */
   places: BehaviorSubject<Place[]>;
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = null;
+  depto: string = null;
   /**Distancia seleccionada actualmente */
   distance: number = null;
   /**Departamento actual para usar cuando se selecciona filtro por distancia */
-  currentDpto: String = null;
+  currentDpto: string = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allLugares: Place[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   initPlace: Place[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
-  save_depto: String[] = [];
+  save_depto: string[] = [];
   /**Lugar seleccionado*/
   place_selected: BehaviorSubject<Place>;
   /**Lugar seleccionado para utilizar en búsuqeda de lugares cercanos */
@@ -409,7 +409,7 @@ export class PlaceService {
   /**Devuelve un lugar específico
    * @param id del lugar a buscar
    */
-  getPlaceId(id: String) {
+  getPlaceId(id: string) {
     this.place_selected = new BehaviorSubject<Place>(null);
     this.near_place = null;
 

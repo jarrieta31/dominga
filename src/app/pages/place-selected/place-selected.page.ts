@@ -32,7 +32,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   near: any[] = [];
   near_places: Subscription;
 
-  param: String = "";
+  param: string = "";
 
   slideOpts = {
     initialSlide: 0,

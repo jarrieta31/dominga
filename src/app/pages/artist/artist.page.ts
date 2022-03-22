@@ -119,7 +119,7 @@ export class ArtistPage {
 
   get lista_localidad_artis() {
     const artisList = this.artists;
-    let artistlocalidadlist: String[] = [];
+    let artistlocalidadlist: string[] = [];
     artisList.forEach((ar) => {
       if (artistlocalidadlist.indexOf(ar.localidad) == -1) {
         artistlocalidadlist.push(ar.localidad);
@@ -130,7 +130,7 @@ export class ArtistPage {
 
   get lista_tipo_artis() {
     const artisList = this.artists;
-    let artisttipolist: String[] = [];
+    let artisttipolist: string[] = [];
     artisList.forEach((ar) => {
       if (artisttipolist.indexOf(ar.categoria) == -1) {
         artisttipolist.push(ar.categoria);

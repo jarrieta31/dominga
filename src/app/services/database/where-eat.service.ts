@@ -11,8 +11,8 @@ import { GeolocationService } from "../geolocation.service";
 export class WhereEatService {
   donde_comer: BehaviorSubject<DondeComer[]>;
   init_dondecomer: DondeComer[] = [];
-  save_depto: String[] = [];
-  depto: String = null;
+  save_depto: string[] = [];
+  depto: string = null;
   distance: number = null;
   allDondeComer: DondeComer[] = [];
 

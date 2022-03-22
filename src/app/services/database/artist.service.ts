@@ -10,8 +10,8 @@ import { DatabaseService } from "../database.service";
 export class ArtistService {
   artist: BehaviorSubject<Artistas[]>;
   init_artist: Artistas[] = [];
-  save_depto: String[] = [];
-  depto: String;
+  save_depto: string[] = [];
+  depto: string;
   allArtist: Artistas[] = [];
 
   /**controla si la base devuelve datos */
