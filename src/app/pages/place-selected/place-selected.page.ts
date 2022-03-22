@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+} from "@angular/core";
 import { ActionSheetController, ModalController } from "@ionic/angular";
 import { Subscription } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
@@ -6,7 +13,7 @@ import { Place } from "src/app/shared/place";
 import { VideoPage } from "../video/video.page";
 import * as Mapboxgl from "mapbox-gl";
 import { Router } from "@angular/router";
-import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
+import { PreloadDetailsComponent } from "../../components/preload-details/preload-details.component";
 
 declare var $: any;
 
@@ -16,8 +23,8 @@ declare var $: any;
   styleUrls: ["./place-selected.page.scss"],
 })
 export class PlaceSelectedPage implements OnInit, OnDestroy {
-
-  @ViewChild(PreloadDetailsComponent, {static: true}) preloadDetails:PreloadDetailsComponent;
+  @ViewChild(PreloadDetailsComponent, { static: true })
+  preloadDetails: PreloadDetailsComponent;
 
   place: Place = null;
   place_suscription: Subscription;
@@ -40,13 +47,17 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**url load  */
   preloadImage: string = "/assets/load_1.30.gif";
   /**clase preload */
-  preloadClass: string = 'img-principal';
+  preloadClass: string = "img-principal";
+  /**clase preload galeria*/
+  preloadClassGaleria: string = "img-galeria";
+  /**clase preload interes*/
+  preloadClassInteres: string = "img-interes";
 
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
     private router: Router,
-    private actionSheetController: ActionSheetController,
+    private actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -55,7 +66,11 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
 
       if (this.place.videos.length > 0) {
         this.videos = this.place.videos.filter(
-          (item: any) => (item.url !== null && item.url !== undefined && item.url !== '' && item.url !== ' ')
+          (item: any) =>
+            item.url !== null &&
+            item.url !== undefined &&
+            item.url !== "" &&
+            item.url !== " "
         );
       }
 
@@ -81,7 +96,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
    */
-  cambiarImagen(src:string) {
+  cambiarImagen(src: string) {
     this.preloadDetails.url = src;
   }
 

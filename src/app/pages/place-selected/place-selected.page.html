@@ -33,7 +33,6 @@
   <div class="padre" id="place-container">
     <div class="diva">
       <app-preload-details
-        class="imgPrincipal"
         #foto
         [url]="place.imagenPrincipal.url"
         [alt]="place.nombre"
@@ -44,12 +43,15 @@
     <div class="divb">
       <ion-slides class="slidePadre" pager="false" [options]="slideOpts">
         <ion-slide class="slideHijo" *ngFor="let img of place.imagenes">
-          <div id="imagenMini">
-            <img
+          <div>
+            <app-preload-details
+              #foto
               (click)="cambiarImagen(img.url)"
-              class="imgGaleria"
-              src="{{ img.url }}"
-            />
+              [url]="img.url"
+              [alt]="img.url"
+              [urlPreload]="preloadImage"
+              [clase]="preloadClassGaleria"
+            ></app-preload-details>
           </div>
         </ion-slide>
       </ion-slides>
@@ -88,7 +90,12 @@
         [routerLink]="['/place-selected',sug.id]"
       >
         <div class="sug">
-          <img class="sug_img" src="{{ sug.image.url }}" alt="" />
+          <app-preload-details
+            [url]="sug.image.url"
+            [alt]="sug.image.url"
+            [urlPreload]="preloadImage"
+            [clase]="preloadClassInteres"
+          ></app-preload-details>
         </div>
         <div class="infoSug">
           <div class="sugNombre">{{ sug.name }}</div>
