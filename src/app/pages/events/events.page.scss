@@ -95,6 +95,14 @@ ion-list {
   align-self: flex-start;
 }
 
+.link {
+  z-index: 1500;
+}
+
+.icon-link {
+  margin: 0 !important;
+}
+
 .slider {
   width: 100%;
   position: -webkit-sticky; // required for Safari

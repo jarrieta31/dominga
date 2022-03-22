@@ -7,9 +7,26 @@
       [options]="slideOpts"
     >
       <ion-slide *ngFor="let item of sliderPlace" class="sliderHijo">
-        <!-- 
-        <ion-img class="imgSlider" [src]="item.imagen.url"></ion-img>
-        -->
+        <a
+          *ngIf="item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined"
+          href="{{ item.link }}"
+          class="link"
+        >
+          <ion-fab vertical="top" horizontal="start" slot="fixed">
+            <ion-fab-button color="dark">
+              <ion-icon
+                *ngIf="item.linkTipo !== web"
+                name="logo-{{ item.linkTipo }}"
+                class="icon-link"
+              ></ion-icon>
+              <ion-icon
+                *ngIf="item.linkTipo === web"
+                name="globe-outline"
+                class="icon-link"
+              ></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </a>
         <app-preload
           [url]="item.imagen.url"
           [alt]="item.imagen.name"
@@ -213,7 +230,7 @@
             </div>
             <ion-skeleton-text
               animated
-              style="width: 30%; margin: 5px 0 5px 10px;"
+              style="width: 30%; margin: 5px 0 5px 10px"
             ></ion-skeleton-text>
           </ion-card-content>
         </ion-card>

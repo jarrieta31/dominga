@@ -120,6 +120,14 @@ p {
   color: #d6d2d1;
 }
 
+.link {
+  z-index: 1500;
+}
+
+.icon-link {
+  margin: 0 !important;
+}
+
 .slider {
   width: 100%;
   position: -webkit-sticky; // required for Safari

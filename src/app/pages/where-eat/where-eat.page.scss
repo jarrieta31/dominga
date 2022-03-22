@@ -97,6 +97,14 @@ small {
   margin: 0px;
 }
 
+.link {
+  z-index: 1500;
+}
+
+.icon-link {
+  margin: 0 !important;
+}
+
 .slider {
   width: 100%;
   position: -webkit-sticky; // required for Safari

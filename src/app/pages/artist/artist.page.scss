@@ -44,6 +44,14 @@
   background-color: #eeeeee;
 }
 
+.link {
+  z-index: 1500;
+}
+
+.icon-link {
+  margin: 0 !important;
+}
+
 .artist {
   display: flex;
   flex-direction: row;
