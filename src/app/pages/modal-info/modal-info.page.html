@@ -1,15 +1,5 @@
 <ion-header>
-  <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
-    <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="places/{{place.id}}"
-        color="back"
-      ></ion-back-button>
-    </ion-buttons>
-    <ion-title color="back"> {{ place.nombre }} </ion-title>
-  </ion-toolbar>
-
-  <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
+  <ion-toolbar color="options">
     <ion-buttons slot="start">
       <ion-back-button
         defaultHref="places/{{place.id}}"
