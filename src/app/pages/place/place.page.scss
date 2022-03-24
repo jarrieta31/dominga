@@ -203,6 +203,9 @@ ion-label {
 .list_type {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
+  min-height: 30px;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .open_filter {
