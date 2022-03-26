@@ -115,8 +115,18 @@
                     <span id="eat-info">Tel: </span>{{ tel.numero }}
                   </p>
                 </div>
-                <ion-icon class="contact" name="logo-instagram"></ion-icon>
-                <ion-icon class="contact" name="logo-whatsapp"></ion-icon>
+                <ion-icon
+                  class="contact"
+                  *ngIf="item.instagram !== null"
+                  name="logo-instagram"
+                  (click)="openInstagram(item.instagram)"
+                ></ion-icon>
+                <ion-icon
+                  class="contact"
+                  *ngIf="item.whatsapp !== null"
+                  name="logo-whatsapp"
+                  (click)="openWhatsapp(item.whatsapp)"
+                ></ion-icon>
               </ion-label>
             </div>
           </div>

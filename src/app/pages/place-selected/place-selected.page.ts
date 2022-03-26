@@ -3,8 +3,6 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef,
-  Renderer2,
 } from "@angular/core";
 import { ActionSheetController, ModalController } from "@ionic/angular";
 import { Subscription } from "rxjs";

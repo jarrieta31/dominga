@@ -1,9 +1,26 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>dominga</ion-title>
+  <ion-toolbar color="information">
+    <ion-buttons slot="start">
+      <ion-back-button
+        (click)="irHome()"
+        color="back"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back" id="nombre">Casa Dominga</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-slides scrollbar="false" pager="false" [options]="slideOpts">
+    <ion-slide *ngFor="let item of dominga">
+      <ion-avatar>
+        <ion-img src="{{ item.url }}" class="img_slide"> </ion-img>
+      </ion-avatar>
+      <div class="info">
+        <ion-text class="titulo"> {{ item.titulo }} </ion-text>
+        <ion-text class="info_detalle"> {{ item.info }} </ion-text>
+      </div>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

@@ -16,6 +16,9 @@ export class DatabaseService {
   initEvents: Eventos[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
   save_depto: string[] = [];
+  /** guarda los datos para pantalla de casa domninga */
+  dominga: any[] = [];
+  casaDominga: BehaviorSubject<any[]>;
 
   // Iniciamos el servicio 'AngularFireDatabase' de Angular Fire
   constructor(
@@ -23,6 +26,7 @@ export class DatabaseService {
     private geolocationSvc: GeolocationService
   ) {
     this.eventos = new BehaviorSubject<Eventos[]>(this.distanceEvents);
+    this.casaDominga = new BehaviorSubject<Eventos[]>(this.dominga);
   }
 
   eventos: BehaviorSubject<Eventos[]>;
@@ -441,5 +445,29 @@ export class DatabaseService {
         console.log(err);
       })
       .finally(() => "Finally");
+  }
+
+  getDominga() {
+    this.dominga = [];
+
+    this.afs
+      .collection("dominga")
+      .ref
+      .get()
+      .then((querySnapshot) => {
+        const arrDominga: any[] = [];
+        querySnapshot.forEach((item) => {
+          const data: any = item.data();
+          arrDominga.push({ id: item.id, ...data });
+        });
+        this.dominga = arrDominga;
+        this.casaDominga.next(this.dominga);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => "Finally");
+
+      return this.casaDominga;
   }
 }

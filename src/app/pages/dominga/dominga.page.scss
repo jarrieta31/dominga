@@ -1,0 +1,42 @@
+ion-toolbar {
+  height: 8vh;
+}
+
+ion-slides {
+  height: 88vh;
+  margin: 2vh 10px;
+  border-radius: 10px !important;
+}
+
+ion-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 10px !important;
+//   -webkit-box-shadow: 0px 0px 4px 0px #000000;
+//   box-shadow: 0px 0px 4px 0px #000000;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-height: 30vh;
+  max-height: 30vh;
+  padding-top: 20px;
+}
+
+.info_detalle {
+  padding-top: 20px;
+}
+
+.titulo {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+ion-avatar {
+  width: 100%;
+  height: auto;
+  --border-radius: 10px 10px 0 0;
+}

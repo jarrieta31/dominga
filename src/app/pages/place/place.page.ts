@@ -174,6 +174,8 @@ export class PlacePage {
         }
       });
     }
+
+    localidades = localidades.sort();
     return localidades;
   }
 
@@ -188,6 +190,8 @@ export class PlacePage {
         }
       });
     }
+
+    tipos = tipos.sort();
     return tipos;
   }
 

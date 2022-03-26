@@ -12,6 +12,7 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { DatabaseService } from "src/app/services/database.service";
 import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 
 @Component({
   selector: "app-where-eat",
@@ -79,7 +80,8 @@ export class WhereEatPage {
     private sliderSvc: SlidesService,
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
-    private databaseSvc: DatabaseService
+    private databaseSvc: DatabaseService,
+    private browser: InAppBrowser,
   ) {}
 
   async show(message: string) {
@@ -152,6 +154,14 @@ export class WhereEatPage {
 
   changeFilterEat() {
     this.isFilterLocation = !this.isFilterLocation;
+  }
+
+  openInstagram(url: string) {
+    this.browser.create(url, "_system");
+  }
+
+  openWhatsapp(url: string) {
+    this.browser.create(url, "_system");
   }
 
   ionViewWillEnter() {
