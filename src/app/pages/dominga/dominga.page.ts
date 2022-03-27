@@ -21,7 +21,7 @@ export class DomingaPage implements OnInit {
   /**Configuración de slider mini galeria */
   slideOpts = {
     initialSlide: 0,
-    speed: 2000,
+    speed: 1000,
     slidesPerView: 3,
     spaceBetween: 0,
     autoplay: true,
