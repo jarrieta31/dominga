@@ -140,12 +140,6 @@ export class EventsPage {
     precioUnico: boolean,
     direccion: string
   ) {
-    if (descripcion.length > 250) {
-      var desc = descripcion.substring(0, 250) + " ...";
-    } else {
-      desc = descripcion;
-    }
-
     this.contadorVisitas(id);
 
     const modal = await this.modalCtrl.create({
@@ -157,8 +151,7 @@ export class EventsPage {
         id: id,
         fecha: fecha,
         titulo: titulo,
-        descripcion: desc,
-        descripcion_completa: descripcion,
+        descripcion: descripcion,
         imagen: imagen,
         lugar: lugar,
         latitud: latitud,

@@ -475,9 +475,27 @@ body.dyslexic {
   h3,
   .info_dominga,
   .titulo_dominga,
-  .info_detalle_dominga {
+  .info_detalle_dominga,
+  .interes,
+  .sugNombre,
+  .sugDistancia,
+  .text_empty,
+  .filter_name,
+  ion-datetime,
+  .filter_list,
+  .fecha,
+  .titulo,
+  .descripcion,
+  .fecha-hora_div,
+  .selling_points_event
+   {
     font-family: "OpenDyslexicRegular" !important;
     font-weight: normal !important;
     font-style: normal !important;
+  }
+
+  #eat-info {
+    padding-left: 5px;
+    padding-bottom: 5px;
   }
 }
