@@ -66,10 +66,6 @@ p {
   width: 25%;
 }
 
-#filters {
-  color: var(--ion-color-dark);
-}
-
 small {
   margin-top: 5px;
   font-family: "Poppins", sans-serif;
@@ -102,10 +98,6 @@ small {
 
 .slider {
   width: 100%;
-  position: -webkit-sticky; // required for Safari
-  position: sticky;
-  top: 0; // required as well.
-  z-index: 1;
 }
 
 .sliderPrimero,
@@ -205,7 +197,7 @@ ion-label {
   height: 35px;
   font-size: 0.9em;
   font-family: "Poppins", sans-serif;
-  color: rgba(116, 108, 108, 0.75);
+  color: var(--ion-color-dark);
   margin: 0 !important;
 }
 
@@ -227,6 +219,9 @@ ion-label {
 .list_location {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
+  min-height: 30px;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .open_filter {

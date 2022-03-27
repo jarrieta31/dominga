@@ -35,10 +35,6 @@ ion-title {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-ion-list {
-  margin: 10px 4%;
-}
-
 .event {
   display: flex;
   flex-direction: row;
@@ -55,11 +51,9 @@ ion-list {
 .info-event {
   width: 55%;
   height: 100%;
-  // margin-left: 2%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /*align-items: flex-start; */
 }
 
 .info-event > div {
@@ -105,10 +99,6 @@ ion-list {
 
 .slider {
   width: 100%;
-  position: -webkit-sticky; // required for Safari
-  position: sticky;
-  top: 0; // required as well.
-  z-index: 10;
 }
 
 .sliderPrimero,
@@ -216,6 +206,9 @@ ion-label {
 .list_type {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
+  min-height: 30px;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .open_acordeon {

@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 
+.list-md {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .empty {
   display: flex;
   flex-direction: column;
@@ -24,13 +29,6 @@
 
 .slider {
   width: 100%;
-  position: -webkit-sticky;
-  position: -moz-sticky;
-  position: -o-sticky;
-  position: -ms-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 .sliderPrimero,
@@ -168,11 +166,6 @@ ion-label {
   width: 100%;
 }
 
-.icon_arrow {
-  float: right;
-  margin-right: 15px;
-}
-
 .type_border > .last:last-child {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
@@ -181,6 +174,9 @@ ion-label {
 .list_type {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
+  min-height: 30px;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .open_filter {

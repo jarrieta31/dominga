@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <div id="alto" class="slider">
+    <div class="slider">
       <ion-slides
         class="sliderPrimero setHeight"
         scrollbar="false"
@@ -40,28 +40,24 @@
         <ion-label
           *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
           (click)="changeFilterLocation()"
-          id="filters"
           >localidad</ion-label
         >
         <ion-label
           *ngIf=" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
           class="open_filter"
           (click)="changeFilterLocation()"
-          id="filters"
           >{{ optionLocation }}</ion-label
         >
         <img *ngIf="!selectdistancia" src="/assets/icon/exchange.png" alt="" />
         <ion-label
           *ngIf="optionType === null || optionType === 'tipo' || optionType === ''"
           (click)="changeFilterType()"
-          id="filters"
           >tipo</ion-label
         >
         <ion-label
           *ngIf="optionType !== null && optionType !== 'tipo' && optionType !== ''"
           class="open_filter"
           (click)="changeFilterType()"
-          id="filters"
           >{{ optionType }}</ion-label
         >
       </div>
@@ -71,7 +67,7 @@
           <!-- Filtro por Localidad  -->
           <div *ngIf="isFilterLocation">
             <div class="filter_name">
-              <span id="filters">Localidad</span>
+              <span>Localidad</span>
             </div>
             <div>
               <ion-list class="list_type">
@@ -81,7 +77,7 @@
                   class="type_border"
                 >
                   <ion-item class="filter_list" lines="none">
-                    <ion-text id="filters">Todo</ion-text>
+                    <ion-text>Todo</ion-text>
                     <ion-radio slot="end" value=""></ion-radio>
                   </ion-item>
                   <ion-item
@@ -89,7 +85,7 @@
                     lines="none"
                     *ngFor="let loc of localidades"
                   >
-                    <ion-text id="filters">{{ loc }}</ion-text>
+                    <ion-text>{{ loc }}</ion-text>
                     <ion-radio slot="end" value="{{ loc }}"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
@@ -101,7 +97,7 @@
           <!-- filtro por Tipo -->
           <div *ngIf="isFilterType">
             <div class="filter_name">
-              <span id="filters">Tipo</span>
+              <span>Tipo</span>
             </div>
             <div>
               <ion-list class="list_type">
@@ -111,7 +107,7 @@
                   class="type_border"
                 >
                   <ion-item class="filter_list" lines="none">
-                    <ion-text id="filters">Todo</ion-text>
+                    <ion-text>Todo</ion-text>
                     <ion-radio slot="end" value=""></ion-radio>
                   </ion-item>
                   <ion-item
@@ -119,7 +115,7 @@
                     lines="none"
                     *ngFor="let tipo of tipos"
                   >
-                    <ion-text id="filters">{{ tipo }}</ion-text>
+                    <ion-text>{{ tipo }}</ion-text>
                     <ion-radio slot="end" value="{{ tipo }}"></ion-radio>
                   </ion-item>
                 </ion-radio-group>

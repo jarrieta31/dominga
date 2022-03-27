@@ -1,93 +1,97 @@
-<ion-content>
-  <div class="slider">
-    <ion-slides
-      class="sliderPrimero setHeight"
-      scrollbar="false"
-      pager="false"
-      [options]="slideOpts"
-    >
-      <ion-slide *ngFor="let item of sliderSleep" class="sliderHijo">
-        <a
-          *ngIf="item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined"
-          href="{{ item.link }}"
-          class="link"
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="slider">
+      <ion-slides
+        class="sliderPrimero setHeight"
+        scrollbar="false"
+        pager="false"
+        [options]="slideOpts"
+      >
+        <ion-slide *ngFor="let item of sliderSleep" class="sliderHijo">
+          <a
+            *ngIf="item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined"
+            href="{{ item.link }}"
+            class="link"
+          >
+            <ion-fab vertical="top" horizontal="start" slot="fixed">
+              <ion-fab-button color="dark">
+                <ion-icon
+                  *ngIf="item.linkTipo !== 'web'"
+                  name="logo-{{ item.linkTipo }}"
+                  class="icon-link"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="item.linkTipo === 'web'"
+                  name="globe-outline"
+                  class="icon-link"
+                ></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+          </a>
+          <app-preload
+            [url]="item.imagen.url"
+            [alt]="item.imagen.name"
+            [urlPreload]="preloadImage"
+          ></app-preload>
+        </ion-slide>
+      </ion-slides>
+  
+      <!-- filtro -->
+      <div
+        *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
+        class="filter_place"
+      >
+        <ion-label (click)="changeFilterSleep()"
+          >localidad</ion-label
         >
-          <ion-fab vertical="top" horizontal="start" slot="fixed">
-            <ion-fab-button color="dark">
-              <ion-icon
-                *ngIf="item.linkTipo !== 'web'"
-                name="logo-{{ item.linkTipo }}"
-                class="icon-link"
-              ></ion-icon>
-              <ion-icon
-                *ngIf="item.linkTipo === 'web'"
-                name="globe-outline"
-                class="icon-link"
-              ></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-        </a>
-        <app-preload
-          [url]="item.imagen.url"
-          [alt]="item.imagen.name"
-          [urlPreload]="preloadImage"
-        ></app-preload>
-      </ion-slide>
-    </ion-slides>
-
-    <!-- filtro -->
-    <div
-      *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
-      class="filter_place"
-    >
-      <ion-label (click)="changeFilterSleep()" id="filters"
-        >localidad</ion-label
+      </div>
+      <div
+        *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
+        class="filter_place"
       >
-    </div>
-    <div
-      *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
-      class="filter_place"
-    >
-      <ion-label (click)="changeFilterSleep()" id="filters" class="open_filter"
-        >{{ optionLocation }}</ion-label
-      >
-    </div>
-
-    <div>
-      <form [formGroup]="filterForm" class="form_filter">
-        <!-- Filtro por Localidad  -->
-        <div *ngIf="isFilterLocation">
-          <div class="filter_name">
-            <span id="filters">Localidad</span>
-          </div>
-          <div>
-            <ion-list class="list_location" (click)="changeFilterSleep()">
-              <ion-radio-group
-                (ionChange)="filterSleep()"
-                formControlName="localidad"
-                class="location_border"
-              >
-                <ion-item class="filter_list" lines="none">
-                  <ion-text id="filters">Todo</ion-text>
-                  <ion-radio slot="end" value=""></ion-radio>
-                </ion-item>
-                <ion-item
-                  class="filter_list last"
-                  lines="none"
-                  *ngFor="let loc of localidades"
+        <ion-label (click)="changeFilterSleep()" id="filters" class="open_filter"
+          >{{ optionLocation }}</ion-label
+        >
+      </div>
+  
+      <div>
+        <form [formGroup]="filterForm" class="form_filter">
+          <!-- Filtro por Localidad  -->
+          <div *ngIf="isFilterLocation">
+            <div class="filter_name">
+              <span id="filters">Localidad</span>
+            </div>
+            <div>
+              <ion-list class="list_location" (click)="changeFilterSleep()">
+                <ion-radio-group
+                  (ionChange)="filterSleep()"
+                  formControlName="localidad"
+                  class="location_border"
                 >
-                  <ion-text id="filters">{{ loc }}</ion-text>
-                  <ion-radio slot="end" value="{{ loc }}"></ion-radio>
-                </ion-item>
-              </ion-radio-group>
-            </ion-list>
+                  <ion-item class="filter_list" lines="none">
+                    <ion-text id="filters">Todo</ion-text>
+                    <ion-radio slot="end" value=""></ion-radio>
+                  </ion-item>
+                  <ion-item
+                    class="filter_list last"
+                    lines="none"
+                    *ngFor="let loc of localidades"
+                  >
+                    <ion-text id="filters">{{ loc }}</ion-text>
+                    <ion-radio slot="end" value="{{ loc }}"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ion-list>
+            </div>
           </div>
-        </div>
-        <!-- filtro por Localidad -->
-      </form>
+          <!-- filtro por Localidad -->
+        </form>
+      </div>
     </div>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content>
   <div>
     <ion-list class="lista">
       <ng-container *ngFor="let item of sleep | filtroDondeComer:dataForm">
