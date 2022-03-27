@@ -22,7 +22,6 @@ export class DomingaPage implements OnInit {
   slideOpts = {
     initialSlide: 0,
     speed: 1000,
-    slidesPerView: 3,
     spaceBetween: 0,
     autoplay: true,
     grabCursor: true,
