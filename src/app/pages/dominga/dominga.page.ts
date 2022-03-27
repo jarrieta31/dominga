@@ -13,6 +13,11 @@ export class DomingaPage implements OnInit {
   /**guarda datos de subscription a casa dominga */
   dominga: any[] = [];
 
+  /**url load  */
+  preloadImage: string = "/assets/load_1.30.gif";
+  /**clase preload */
+  preloadClass: string = "img_dominga";
+
   /**Configuración de slider mini galeria */
   slideOpts = {
     initialSlide: 0,

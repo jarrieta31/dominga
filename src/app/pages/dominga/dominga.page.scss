@@ -4,7 +4,7 @@ ion-toolbar {
 
 ion-slides {
   height: 88vh;
-  margin: 2vh 10px;
+  margin: 2vh 3%;
   border-radius: 10px !important;
 }
 
@@ -13,8 +13,6 @@ ion-slide {
   flex-direction: column;
   justify-content: flex-start;
   border-radius: 10px !important;
-//   -webkit-box-shadow: 0px 0px 4px 0px #000000;
-//   box-shadow: 0px 0px 4px 0px #000000;
 }
 
 .info {
@@ -30,13 +28,14 @@ ion-slide {
 }
 
 .titulo {
-    font-family: "Poppins", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 ion-avatar {
   width: 100%;
   height: auto;
+  min-height: calc((100vw - (100vw * 0.06)) / 1.33);
   --border-radius: 10px 10px 0 0;
 }

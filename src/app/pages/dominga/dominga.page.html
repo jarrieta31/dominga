@@ -15,7 +15,13 @@
   <ion-slides scrollbar="false" pager="false" [options]="slideOpts">
     <ion-slide *ngFor="let item of dominga">
       <ion-avatar>
-        <ion-img src="{{ item.url }}" class="img_slide"> </ion-img>
+        <app-preload-details
+        #foto
+        [url]="item.url"
+        [alt]="item.titulo"
+        [urlPreload]="preloadImage"
+        [clase]="preloadClass"
+      ></app-preload-details>
       </ion-avatar>
       <div class="info">
         <ion-text class="titulo"> {{ item.titulo }} </ion-text>

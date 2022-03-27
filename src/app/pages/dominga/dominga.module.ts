@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { DomingaPageRoutingModule } from './dominga-routing.module';
 
 import { DomingaPage } from './dominga.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DomingaPageRoutingModule
+    DomingaPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [DomingaPage]
 })
