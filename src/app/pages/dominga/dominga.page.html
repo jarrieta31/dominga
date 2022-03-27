@@ -12,16 +12,21 @@
 </ion-header>
 
 <ion-content>
-  <ion-slides scrollbar="false" pager="false" [options]="slideOpts">
+  <ion-slides
+    *ngIf="dominga.length > 0"
+    scrollbar="false"
+    pager="false"
+    [options]="slideOpts"
+  >
     <ion-slide *ngFor="let item of dominga">
       <ion-avatar>
         <app-preload-details
-        #foto
-        [url]="item.url"
-        [alt]="item.titulo"
-        [urlPreload]="preloadImage"
-        [clase]="preloadClass"
-      ></app-preload-details>
+          #foto
+          [url]="item.url"
+          [alt]="item.titulo"
+          [urlPreload]="preloadImage"
+          [clase]="preloadClass"
+        ></app-preload-details>
       </ion-avatar>
       <div class="info">
         <ion-text class="titulo"> {{ item.titulo }} </ion-text>
@@ -29,4 +34,39 @@
       </div>
     </ion-slide>
   </ion-slides>
+
+  <ion-list *ngIf="dominga.length === 0">
+    <ion-slides class="slides_skeleton">
+      <ion-slide class="slide_skeleton" *ngFor="let item of [1]">
+        <div class="img_skeleton">
+          <ion-img src="/assets/img/img-skeleton_1.70.svg"></ion-img>
+        </div>
+        <ion-skeleton-text
+          animated
+          style="width: 30%; height: 20px; margin: 2vh 3%"
+        ></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      </ion-slide>
+    </ion-slides>
+  </ion-list>
 </ion-content>

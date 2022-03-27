@@ -15,6 +15,13 @@ ion-slide {
   border-radius: 10px !important;
 }
 
+.slide_skeleton {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 .info {
   display: flex;
   flex-direction: column;
@@ -34,7 +41,7 @@ ion-slide {
   font-weight: 700;
 }
 
-ion-avatar {
+ion-avatar, .img_skeletom {
   width: 100%;
   height: auto;
   min-height: calc((100vw - (100vw * 0.06)) / 1.33);
