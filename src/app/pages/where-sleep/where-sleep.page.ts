@@ -153,6 +153,8 @@ export class WhereSleepPage {
         }
       });
     }
+
+    localidades = localidades.sort();
     return localidades;
   }
 

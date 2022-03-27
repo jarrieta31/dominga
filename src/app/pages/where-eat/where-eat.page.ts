@@ -107,6 +107,8 @@ export class WhereEatPage {
         }
       });
     }
+
+    localidades = localidades.sort();
     return localidades;
   }
 

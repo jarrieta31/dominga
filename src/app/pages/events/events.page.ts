@@ -304,6 +304,7 @@ export class EventsPage {
         }
       });
     }
+    tipos_eventos = tipos_eventos.sort();
     return tipos_eventos;
   }
 
@@ -323,6 +324,7 @@ export class EventsPage {
         }
       });
     }
+    localidades_eventos = localidades_eventos.sort();
     return localidades_eventos;
   }
 

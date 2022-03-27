@@ -125,6 +125,7 @@ export class ArtistPage {
         artistlocalidadlist.push(ar.localidad);
       }
     });
+    artistlocalidadlist = artistlocalidadlist.sort();
     return artistlocalidadlist;
   }
 
@@ -136,6 +137,7 @@ export class ArtistPage {
         artisttipolist.push(ar.categoria);
       }
     });
+    artisttipolist = artisttipolist.sort();
     return artisttipolist;
   }
 
