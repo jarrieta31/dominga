@@ -154,6 +154,14 @@
 	--ion-color-party-contrast-rgb: 0,0,0;
 	--ion-color-party-shade: #b491e0;
 	--ion-color-party-tint: #d1aefe;
+
+  /**accessibility */
+  --ion-color-accessibility: #ffffff;
+	--ion-color-accessibility-rgb: 255,255,255;
+	--ion-color-accessibility-contrast: #000000;
+	--ion-color-accessibility-contrast-rgb: 0,0,0;
+	--ion-color-accessibility-shade: #e0e0e0;
+	--ion-color-accessibility-tint: #ffffff;
 }
 
 .ion-color-information {
@@ -248,6 +256,15 @@
   --ion-color-tint: var(--ion-color-text-tint);
 }
 
+.ion-color-accessibility {
+	--ion-color-base: var(--ion-color-accessibility);
+	--ion-color-base-rgb: var(--ion-color-accessibility-rgb);
+	--ion-color-contrast: var(--ion-color-accessibility-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-accessibility-contrast-rgb);
+	--ion-color-shade: var(--ion-color-accessibility-shade);
+	--ion-color-tint: var(--ion-color-accessibility-tint);
+}
+
 /*
  * Dark Colors
  * -------------------------------------------
@@ -330,6 +347,13 @@ body.dark {
   --ion-color-text-contrast-rgb: 255, 255, 255;
   --ion-color-text-shade: #1e2023;
   --ion-color-text-tint: #383a3e;
+
+  --ion-color-accessibility: #ffffff;
+	--ion-color-accessibility-rgb: 255,255,255;
+	--ion-color-accessibility-contrast: #000000;
+	--ion-color-accessibility-contrast-rgb: 0,0,0;
+	--ion-color-accessibility-shade: #e0e0e0;
+	--ion-color-accessibility-tint: #ffffff;
 }
 
 /*
@@ -448,7 +472,10 @@ body.dyslexic {
   #place-description,
   #all-description,
   ion-label,
-  h3 {
+  h3,
+  .info_dominga,
+  .titulo_dominga,
+  .info_detalle_dominga {
     font-family: "OpenDyslexicRegular" !important;
     font-weight: normal !important;
     font-style: normal !important;
