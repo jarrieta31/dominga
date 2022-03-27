@@ -69,7 +69,7 @@ export class WhereEatPage {
   /**url load  */
   preloadImage: string = "/assets/load.gif";
   /**url load  */
-  preloadImage_list: string = "/assets/load_square.gif";
+  preloadImage_list: string = "/assets/load_cuadrada.gif";
   /** clase de preload list */
   preloadClase: string = "img-comer";
 
