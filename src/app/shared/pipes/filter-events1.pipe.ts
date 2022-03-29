@@ -6,6 +6,8 @@ import { Eventos } from "../eventos";
 })
 export class FilterEvents1Pipe implements PipeTransform {
   transform(eventos: Eventos[], dataform: any): Eventos[] | any[] {
+    let dist: string = localStorage.getItem("distanceActivo");
+    let distFound: boolean = false;
     if (dataform.length === 0) {
       return eventos;
     }
@@ -19,13 +21,13 @@ export class FilterEvents1Pipe implements PipeTransform {
 
     let fec_ini = new Date();
 
-  if (
-    dataform.fecha_inicio === "" ||
-    dataform.fecha_inicio === undefined || 
-    dataform.fecha_inicio === null
-  ) {
-    dataform.fecha_inicio = new Date(fec_ini);
-  }
+    if (
+      dataform.fecha_inicio === "" ||
+      dataform.fecha_inicio === undefined ||
+      dataform.fecha_inicio === null
+    ) {
+      dataform.fecha_inicio = new Date(fec_ini);
+    }
 
     let fec_has =
       "Fri Dec 31 2100 00:00:00 GMT-0300 (hora estándar de Uruguay)";
@@ -56,9 +58,9 @@ export class FilterEvents1Pipe implements PipeTransform {
       dataform.fecha_fin = fullDate;
     }
 
-    if(dataform.fecha_inicio > dataform.fecha_fin) {
-      dataform.fecha_inicio = '';
-      dataform.fecha_fin = '';
+    if (dataform.fecha_inicio > dataform.fecha_fin) {
+      dataform.fecha_inicio = "";
+      dataform.fecha_fin = "";
       return eventos;
     }
 
@@ -67,7 +69,7 @@ export class FilterEvents1Pipe implements PipeTransform {
         ev.tipo.toLowerCase().includes(dataform.tipo) &&
         ev.localidad.toLowerCase().includes(dataform.localidad) &&
         dataform.fecha_inicio <= ev.fechaInicio &&
-        dataform.fecha_fin >= ev.fechaInicio
+        dataform.fecha_fin >= ev.fechaFin
       );
     });
 
@@ -76,6 +78,20 @@ export class FilterEvents1Pipe implements PipeTransform {
         vacio: 1,
       },
     ];
+
+    if (dist !== null) {
+      if (ev.length > 0) {
+        ev.forEach((event) => {
+          if (event.distancia < parseInt(dist)) {
+            distFound = true;
+          }
+        });
+      }
+
+      if (distFound === false) {
+        return vacio;
+      }
+    }
 
     if (ev.length === 0) {
       return vacio;

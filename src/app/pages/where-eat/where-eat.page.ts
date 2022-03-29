@@ -216,10 +216,12 @@ export class WhereEatPage {
 
     if (this.geolocationSvc.posicion$.value !== null) {
       dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eat = [];
         this.eat = res;
       });
     } else {
       this.eatSvc.getDondeComer(this.dep).subscribe((res) => {
+        this.eat = [];
         this.eat = res;
       });
     }

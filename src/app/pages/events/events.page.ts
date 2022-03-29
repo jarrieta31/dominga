@@ -469,10 +469,12 @@ export class EventsPage {
 
     if (this.geolocationSvc.posicion$.value !== null) {
       dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eventos = [];
         this.eventos = res;
       });
     } else {
       this.dbService.getEventos(this.dep).subscribe((res) => {
+        this.eventos = [];
         this.eventos = res;
       });
     }

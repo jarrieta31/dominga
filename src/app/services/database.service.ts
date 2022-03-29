@@ -248,10 +248,11 @@ export class DatabaseService {
           querySnapshot.forEach((item) => {
             const data: any = item.data();
             data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
+            data.fechaFin = new Date(data.fechaFin["seconds"] * 1000);
             arrEvents.push({ id: item.id, ...data });
             this.initEvents.push({ id: item.id, ...data });
           });
-          this.allEvents = JSON.parse(JSON.stringify(arrEvents));
+          this.allEvents = arrEvents;
 
           if (
             this.geolocationSvc.posicion !== undefined &&
@@ -373,6 +374,7 @@ export class DatabaseService {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
                 data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
+                data.fechaFin = new Date(data.fechaFin["seconds"] * 1000);
                 this.initEvents.push({ id: item.id, ...data });
                 this.distanceEvents.push({ id: item.id, ...data });
               });

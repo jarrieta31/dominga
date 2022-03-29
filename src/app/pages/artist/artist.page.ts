@@ -234,10 +234,12 @@ export class ArtistPage {
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
+          this.artists = [];
           this.artists = res;
         });
     } else {
       this.artistSvc.getArtist(this.dep).subscribe((res) => {
+        this.artists = [];
         this.artists = res;
       });
     }

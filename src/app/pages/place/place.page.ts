@@ -251,10 +251,12 @@ export class PlacePage {
 
     if (this.geolocationSvc.posicion$.value !== null) {
       dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.places = [];
         this.places = res;
       });
     } else {
       this.placeSvc.getPlaces(this.dep).subscribe((res) => {
+        this.places = [];
         this.places = res;
       });
     }
