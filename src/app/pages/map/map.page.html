@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar color="information">
     <ion-buttons slot="start">
-            <ion-back-button (click)="regresar()"></ion-back-button>
+            <ion-back-button color="back" (click)="regresar()"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Ir a {{ nombre }}</ion-title>
+    <ion-title color="back">Ir a {{ nombre }}</ion-title>
 
-    <ion-label slot="end">      
-      <ion-icon name="{{icon}}"></ion-icon> 
+    <ion-label slot="end" color="back">      
+      <ion-icon color="back" name="{{icon}}"></ion-icon> 
       {{distancia | formatDistancia}}       
     </ion-label>
     

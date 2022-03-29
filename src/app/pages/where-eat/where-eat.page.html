@@ -41,9 +41,7 @@
         *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
         class="filter_place"
       >
-        <ion-label (click)="changeFilterEat()"
-          >localidad</ion-label
-        >
+        <ion-label (click)="changeFilterEat()">localidad</ion-label>
       </div>
       <div
         *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
@@ -116,7 +114,11 @@
                 <div class="infoAbajo">
                   <h3 id="eat-info">{{ item.direccion }}</h3>
                   <p id="eat-info" *ngFor="let tel of item.telefonos">
-                    <span id="eat-info">Tel: </span>{{ tel.numero }}
+                    <span
+                      id="eat-info"
+                      *ngIf="tel.numero !== null && tel.numero !== undefined && tel.numero !== '' && tel.numero !== ' '"
+                      >Tel: </span
+                    >{{ tel.numero }}
                   </p>
                 </div>
                 <ion-icon

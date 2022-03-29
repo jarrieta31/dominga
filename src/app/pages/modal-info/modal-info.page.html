@@ -20,7 +20,7 @@
     <ion-row>
       <ion-col id="web">
         <div class="ion-text-center">
-          <div class="circulo_red" *ngIf="place.web?.length > 0">
+          <div class="circulo_red">
             <div (click)="openWeb()">
               <ion-icon name="globe-outline"></ion-icon>
             </div>
@@ -29,7 +29,7 @@
       </ion-col>
       <ion-col id="facebook">
         <div class="ion-text-center">
-          <div class="circulo_red" *ngIf="place.facebook?.length > 0">
+          <div class="circulo_red">
             <div (click)="openFacebook()">
               <ion-icon class="icon-fb" name="logo-facebook"></ion-icon>
             </div>
@@ -38,7 +38,7 @@
       </ion-col>
       <ion-col id="instagram">
         <div class="ion-text-center">
-          <div class="circulo_red" *ngIf="place.instagram?.length > 0">
+          <div class="circulo_red">
             <a href="{{ place.instagram }}"
               ><ion-icon name="logo-instagram"></ion-icon
             ></a>
@@ -46,7 +46,7 @@
         </div>
       </ion-col>
       <ion-col id="whatsapp">
-        <div class="ion-text-center" *ngIf="place.whatsapp?.length > 0">
+        <div class="ion-text-center">
           <div class="circulo_red_wpp">
             <a href="{{ place.whatsapp }}"
               ><ion-icon name="logo-whatsapp"></ion-icon
@@ -55,7 +55,7 @@
         </div>
       </ion-col>
       <ion-col id="phone">
-        <div class="ion-text-center" *ngIf="place.telefonos?.length > 0">
+        <div class="ion-text-center">
           <div class="circulo_red" (click)="callPhone()">
             <ion-icon name="call-outline"></ion-icon>
           </div>

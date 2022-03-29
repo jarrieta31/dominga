@@ -35,25 +35,26 @@
           ></app-preload>
         </ion-slide>
       </ion-slides>
-  
+
       <!-- filtro -->
       <div
         *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
         class="filter_place"
       >
-        <ion-label (click)="changeFilterSleep()"
-          >localidad</ion-label
-        >
+        <ion-label (click)="changeFilterSleep()">localidad</ion-label>
       </div>
       <div
         *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
         class="filter_place"
       >
-        <ion-label (click)="changeFilterSleep()" id="filters" class="open_filter"
+        <ion-label
+          (click)="changeFilterSleep()"
+          id="filters"
+          class="open_filter"
           >{{ optionLocation }}</ion-label
         >
       </div>
-  
+
       <div>
         <form [formGroup]="filterForm" class="form_filter">
           <!-- Filtro por Localidad  -->
@@ -116,7 +117,11 @@
                 <div class="infoAbajo">
                   <h3 id="eat-info">{{ item.direccion }}</h3>
                   <p id="eat-info" *ngFor="let tel of item.telefonos">
-                    <span id="eat-info">Tel: </span>{{ tel.numero }}
+                    <span
+                      id="eat-info"
+                      *ngIf="tel.numero !== null && tel.numero !== undefined && tel.numero !== '' && tel.numero !== ' '"
+                      >Tel: </span
+                    >{{ tel.numero }}
                   </p>
                 </div>
                 <ion-icon
