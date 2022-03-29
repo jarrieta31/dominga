@@ -398,7 +398,7 @@ export class PlaceService {
           deptoSearch = false;
         }
       });
-      this.distancePlaces.length !== 0 ? (this.noData = false) : this.noData;
+      this.distancePlaces.length !== 0 ? this.noData = false : this.noData = true;
 
       this.places.next(this.distancePlaces);
     }

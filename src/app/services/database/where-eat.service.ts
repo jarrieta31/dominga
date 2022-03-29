@@ -259,7 +259,7 @@ export class WhereEatService {
         dist.distanciaNumber = calcDist;
       });
 
-      this.allDondeComer.length !== 0 ? (this.noData = false) : this.noData;
+      this.allDondeComer.length !== 0 ? this.noData = false : this.noData = true;
 
       this.donde_comer.next(this.allDondeComer);
     } else if (this.distance != null) {
@@ -345,7 +345,7 @@ export class WhereEatService {
         }
       });
 
-      this.distanceEat.length !== 0 ? (this.noData = false) : this.noData;
+      this.distanceEat.length !== 0 ? this.noData = false : this.noData = true;
 
       this.donde_comer.next(this.distanceEat);
     }

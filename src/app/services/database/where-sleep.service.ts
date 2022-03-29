@@ -266,7 +266,7 @@ export class WhereSleepService {
         dist.distanciaNumber = calcDist;
       });
 
-      this.allDormir.length !== 0 ? this.noData = false : this.noData;
+      this.allDormir.length !== 0 ? this.noData = false : this.noData = true;
 
       this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
@@ -352,7 +352,7 @@ export class WhereSleepService {
         }
       });
 
-      this.distanceSleep.length !== 0 ? this.noData = false : this.noData;
+      this.distanceSleep.length !== 0 ? this.noData = false : this.noData = true;
       
       this.donde_dormir.next(this.distanceSleep);
     }
