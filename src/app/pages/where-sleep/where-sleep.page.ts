@@ -220,10 +220,12 @@ export class WhereSleepPage {
           takeUntil(this.unsubscribe$)
         )
         .subscribe((res) => {
+          this.sleep = [];
           this.sleep = res;
         });
     } else {
       this.sleepSvc.getDondeDormir(this.dep).subscribe((res) => {
+        this.sleep = [];
         this.sleep = res;
       });
     }
