@@ -220,7 +220,7 @@ export class WhereEatPage {
         this.eat = res;
       });
     } else {
-      this.eatSvc.getDondeComer(this.dep).subscribe((res) => {
+      this.eatSvc.getDondeComer(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
         this.eat = [];
         this.eat = res;
       });

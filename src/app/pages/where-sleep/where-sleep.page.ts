@@ -224,7 +224,7 @@ export class WhereSleepPage {
           this.sleep = res;
         });
     } else {
-      this.sleepSvc.getDondeDormir(this.dep).subscribe((res) => {
+      this.sleepSvc.getDondeDormir(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
         this.sleep = [];
         this.sleep = res;
       });

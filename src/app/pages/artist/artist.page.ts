@@ -235,10 +235,10 @@ export class ArtistPage {
         )
         .subscribe((res) => {
           this.artists = [];
-          this.artists = res;
+          this.artists = res; 
         });
     } else {
-      this.artistSvc.getArtist(this.dep).subscribe((res) => {
+      this.artistSvc.getArtist(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
         this.artists = [];
         this.artists = res;
       });

@@ -203,20 +203,20 @@ export class PlacePage {
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
     if (
-      localStorage.getItem("deptoActivo") != undefined &&
-      localStorage.getItem("deptoActivo") != null
+      localStorage.getItem("deptoActivo") !== undefined &&
+      localStorage.getItem("deptoActivo") !== null
     ) {
       this.dist = null;
       this.dep = localStorage.getItem("deptoActivo");
     } else if (
-      localStorage.getItem("distanceActivo") != undefined &&
-      localStorage.getItem("distanceActivo") != null
+      localStorage.getItem("distanceActivo") !== undefined &&
+      localStorage.getItem("distanceActivo") !== null
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
     }
 
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+    if (localStorage.getItem("deptoActivo") !== this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
       this.filterForm.reset();
       this.dataForm = "";
@@ -255,7 +255,7 @@ export class PlacePage {
         this.places = res;
       });
     } else {
-      this.placeSvc.getPlaces(this.dep).subscribe((res) => {
+      this.placeSvc.getPlaces(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
         this.places = [];
         this.places = res;
       });

@@ -473,7 +473,7 @@ export class EventsPage {
         this.eventos = res;
       });
     } else {
-      this.dbService.getEventos(this.dep).subscribe((res) => {
+      this.dbService.getEventos(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
         this.eventos = [];
         this.eventos = res;
       });
