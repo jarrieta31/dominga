@@ -234,7 +234,7 @@ export class PlaceService {
             arrPlaces.push({ id: item.id, ...data });
             this.initPlace.push({ id: item.id, ...data });
           });
-          this.allLugares = arrPlaces;
+          this.allLugares = JSON.parse(JSON.stringify(arrPlaces));
 
           if (
             this.geolocationSvc.posicion !== undefined &&

@@ -211,7 +211,7 @@ export class WhereEatService {
             this.init_dondecomer.push({ id: item.id, ...data });
           });
 
-          this.allDondeComer = arrDondeComer;
+          this.allDondeComer = JSON.parse(JSON.stringify(arrDondeComer));
 
           this.allDondeComer.forEach((dist) => {
             let calcDist = distance(

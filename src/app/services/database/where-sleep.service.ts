@@ -184,6 +184,7 @@ export class WhereSleepService {
   getDondeDormir(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
+    this.allDormir = [];
     this.distanceSleep = [];
 
     this.controlDistance = false;
@@ -215,7 +216,7 @@ export class WhereSleepService {
             arrSleep.push({ id: item.id, ...data });
             this.init_dondedormir.push({ id: item.id, ...data });
           });
-          this.allDormir = arrSleep;
+          this.allDormir = JSON.parse(JSON.stringify(arrSleep));
 
           this.allDormir.forEach((dist) => {
             let calcDist = distance(

@@ -251,7 +251,7 @@ export class DatabaseService {
             arrEvents.push({ id: item.id, ...data });
             this.initEvents.push({ id: item.id, ...data });
           });
-          this.allEvents = arrEvents;
+          this.allEvents = JSON.parse(JSON.stringify(arrEvents));
 
           if (
             this.geolocationSvc.posicion !== undefined &&
@@ -419,32 +419,38 @@ export class DatabaseService {
 
   allDepartament: Departament[] = [];
   departamentosActivos: BehaviorSubject<Departament[]>;
+  deptoFound: boolean = false;
   /**
    * Obtener departamentos activos
    */
   getDepartamentosActivos() {
-    this.allDepartament = [];
     this.departamentosActivos = new BehaviorSubject<Departament[]>(
       this.allDepartament
     );
 
-    this.afs
-      .collection("departamentos")
-      .ref.where("status", "==", true)
-      .get()
-      .then((querySnapshot) => {
-        const arrDeptos: any[] = [];
-        querySnapshot.forEach((item) => {
-          const data: any = item.data();
-          arrDeptos.push({ id: item.id, ...data });
-        });
-        this.allDepartament = arrDeptos;
-        this.departamentosActivos.next(this.allDepartament);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => "Finally");
+    if (this.deptoFound === false) {
+      this.afs
+        .collection("departamentos")
+        .ref.where("status", "==", true)
+        .get()
+        .then((querySnapshot) => {
+          const arrDeptos: any[] = [];
+          querySnapshot.forEach((item) => {
+            const data: any = item.data();
+            arrDeptos.push({ id: item.id, ...data });
+          });
+          this.allDepartament = JSON.parse(JSON.stringify(arrDeptos));
+          this.departamentosActivos.next(this.allDepartament);
+
+          this.deptoFound = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => "Finally");
+    } else {
+      this.departamentosActivos.next(this.allDepartament);
+    }
   }
 
   getDominga() {
@@ -452,15 +458,14 @@ export class DatabaseService {
 
     this.afs
       .collection("dominga")
-      .ref
-      .get()
+      .ref.get()
       .then((querySnapshot) => {
         const arrDominga: any[] = [];
         querySnapshot.forEach((item) => {
           const data: any = item.data();
           arrDominga.push({ id: item.id, ...data });
         });
-        this.dominga = arrDominga;
+        this.dominga = JSON.parse(JSON.stringify(arrDominga));
         this.casaDominga.next(this.dominga);
       })
       .catch((err) => {
@@ -468,6 +473,6 @@ export class DatabaseService {
       })
       .finally(() => "Finally");
 
-      return this.casaDominga;
+    return this.casaDominga;
   }
 }

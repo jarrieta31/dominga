@@ -53,7 +53,7 @@ export class ArtistService {
               this.init_artist.push({ id: item.id, ...data });
             });
 
-            this.allArtist = arrArtist;
+            this.allArtist = JSON.parse(JSON.stringify(arrArtist));
 
             if (querySnapshot.size !== 0) {
               this.save_depto.push(this.depto);
@@ -81,7 +81,7 @@ export class ArtistService {
               this.init_artist.push({ id: item.id, ...data });
             });
 
-            this.allArtist = arrArtist;
+            this.allArtist = JSON.parse(JSON.stringify(arrArtist));
 
             if (querySnapshot.size !== 0) {
               this.save_depto.push(checkDepto);
