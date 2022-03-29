@@ -225,27 +225,6 @@ li {
   font-family: "Poppins", sans-serif;
 }
 
-@media only screen and (min-height: 750px) {
-  .ticket {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: sticky;
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -o-sticky;
-    position: -ms-sticky;
-    bottom: 0;
-    right: 0;
-    z-index: 1001;
-    top: 100vh;
-    width: 100%;
-    //height: 60px;
-    background-color: var(--ion-color-text);
-    border-top: 10px solid var(--ion-color-back);
-  }
-}
-
 @media only screen and (max-width: 325px) {
   .time-list {
     font-size: 15px;
