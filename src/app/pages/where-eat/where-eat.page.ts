@@ -81,7 +81,7 @@ export class WhereEatPage {
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
-    private browser: InAppBrowser,
+    private browser: InAppBrowser
   ) {}
 
   async show(message: string) {
@@ -220,10 +220,13 @@ export class WhereEatPage {
         this.eat = res;
       });
     } else {
-      this.eatSvc.getDondeComer(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-        this.eat = [];
-        this.eat = res;
-      });
+      this.eatSvc
+        .getDondeComer(this.dep)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res) => {
+          this.eat = [];
+          this.eat = res;
+        });
     }
     /************************************************************************************ */
   }

@@ -277,9 +277,8 @@ export class DatabaseService {
             this.noData = false;
           } else this.noData = true;
 
-          this.eventos.next(this.allEvents);
-
           searchDepto = false;
+          this.eventos.next(this.allEvents);
         })
         .catch((err) => {
           console.log(err);
@@ -413,6 +412,17 @@ export class DatabaseService {
       });
       this.distanceEvents.length !== 0 ? (this.noData = false) : this.noData;
 
+      this.distanceEvents.sort((a, b) => {
+        if (a.fechaInicio < b.fechaInicio) {
+          return -1;
+        }
+
+        if (a.fechaInicio > b.fechaInicio) {
+          return 1;
+        }
+
+        return 0;
+      });
       this.eventos.next(this.distanceEvents);
     }
 

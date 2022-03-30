@@ -182,6 +182,7 @@ export class WhereSleepService {
   ) {}
 
   getDondeDormir(checkDepto: string) {
+    console.log(this.save_depto);
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allDormir = [];
@@ -238,9 +239,23 @@ export class WhereSleepService {
             this.noData = true;
           }
 
-          this.donde_dormir.next(this.allDormir);
+          this.allDormir.sort((a, b) => {
+            const nombreA = a.nombre.toLowerCase();
+            const nombreB = b.nombre.toLowerCase();
+            if (nombreA < nombreB) {
+              return -1;
+            }
+
+            if (nombreA > nombreB) {
+              return 1;
+            }
+
+            return 0;
+          });
 
           searchDepto = false;
+          this.donde_dormir.next(this.allDormir);
+
         })
         .catch((err) => {
           console.log(err);
@@ -266,7 +281,23 @@ export class WhereSleepService {
         dist.distanciaNumber = calcDist;
       });
 
-      this.allDormir.length !== 0 ? this.noData = false : this.noData = true;
+      this.allDormir.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
+
+      this.allDormir.sort((a, b) => {
+        const nombreA = a.nombre.toLowerCase();
+        const nombreB = b.nombre.toLowerCase();
+        if (nombreA < nombreB) {
+          return -1;
+        }
+
+        if (nombreA > nombreB) {
+          return 1;
+        }
+
+        return 0;
+      });
 
       this.donde_dormir.next(this.allDormir);
     } else if (this.distance != null) {
@@ -306,7 +337,7 @@ export class WhereSleepService {
             dist.distancia = calcDist;
             dist.distanciaNumber = calcDist;
 
-            if(calcDist <= this.distance) {
+            if (calcDist <= this.distance) {
               this.controlDistance = true;
             }
           });
@@ -336,7 +367,7 @@ export class WhereSleepService {
                 dist.distancia = calcDist;
                 dist.distanciaNumber = calcDist;
 
-                if(calcDist <= this.distance) {
+                if (calcDist <= this.distance) {
                   this.controlDistance = true;
                 }
               });
@@ -352,8 +383,24 @@ export class WhereSleepService {
         }
       });
 
-      this.distanceSleep.length !== 0 ? this.noData = false : this.noData = true;
-      
+      this.distanceSleep.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
+
+      this.distanceSleep.sort((a, b) => {
+        const nombreA = a.nombre.toLowerCase();
+        const nombreB = b.nombre.toLowerCase();
+        if (nombreA < nombreB) {
+          return -1;
+        }
+
+        if (nombreA > nombreB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
       this.donde_dormir.next(this.distanceSleep);
     }
 

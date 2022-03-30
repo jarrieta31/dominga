@@ -231,9 +231,22 @@ export class WhereEatService {
             this.noData = false;
           } else this.noData = true;
 
-          this.donde_comer.next(this.allDondeComer);
+          this.allDondeComer.sort((a, b) => {
+            const nombreA = a.nombre.toLowerCase();
+            const nombreB = b.nombre.toLowerCase();
+            if (nombreA < nombreB) {
+              return -1;
+            }
+
+            if (nombreA > nombreB) {
+              return 1;
+            }
+
+            return 0;
+          });
 
           searchDepto = false;
+          this.donde_comer.next(this.allDondeComer);
         })
         .catch((err) => {
           console.log(err);
@@ -259,7 +272,23 @@ export class WhereEatService {
         dist.distanciaNumber = calcDist;
       });
 
-      this.allDondeComer.length !== 0 ? this.noData = false : this.noData = true;
+      this.allDondeComer.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
+
+      this.allDondeComer.sort((a, b) => {
+        const nombreA = a.nombre.toLowerCase();
+        const nombreB = b.nombre.toLowerCase();
+        if (nombreA < nombreB) {
+          return -1;
+        }
+
+        if (nombreA > nombreB) {
+          return 1;
+        }
+
+        return 0;
+      });
 
       this.donde_comer.next(this.allDondeComer);
     } else if (this.distance != null) {
@@ -345,7 +374,23 @@ export class WhereEatService {
         }
       });
 
-      this.distanceEat.length !== 0 ? this.noData = false : this.noData = true;
+      this.distanceEat.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
+
+      this.distanceEat.sort((a, b) => {
+        const nombreA = a.nombre.toLowerCase();
+        const nombreB = b.nombre.toLowerCase();
+        if (nombreA < nombreB) {
+          return -1;
+        }
+
+        if (nombreA > nombreB) {
+          return 1;
+        }
+
+        return 0;
+      });
 
       this.donde_comer.next(this.distanceEat);
     }
