@@ -9,13 +9,9 @@ import { GeolocationService } from "../geolocation.service";
   providedIn: "root",
 })
 export class WhereSleepService {
-  /**Se guardan los lugares del departamento seleccionado */
-  donde_dormir: BehaviorSubject<DondeDormir[]>;
   /**Nombre del departamento seleccionado actualmente*/
   depto: string = null;
   distance: number = null;
-  /**Guarda todos los lugares del departamento seleccionado actualmente*/
-  allDormir: DondeDormir[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   init_dondedormir: DondeDormir[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
@@ -179,10 +175,18 @@ export class WhereSleepService {
   constructor(
     private afs: AngularFirestore,
     private geolocationSvc: GeolocationService
-  ) {}
+  ) {
+    this.donde_dormir = new BehaviorSubject<DondeDormir[]>(
+      this.init_dondedormir
+    );
+  }
+
+  /**Se guardan los lugares del departamento seleccionado */
+  donde_dormir: BehaviorSubject<DondeDormir[]>;
+  /**Guarda todos los lugares del departamento seleccionado actualmente*/
+  allDormir: DondeDormir[] = [];
 
   getDondeDormir(checkDepto: string) {
-    console.log(this.save_depto);
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allDormir = [];
@@ -190,18 +194,17 @@ export class WhereSleepService {
 
     this.controlDistance = false;
 
+    let searchDepto: boolean = false;
+
     const options = { units: "kilometers" };
 
-    this.donde_dormir = new BehaviorSubject<DondeDormir[]>(
-      this.init_dondedormir
-    );
-
-    let searchDepto: boolean = false;
-    this.save_depto.forEach((search) => {
-      if (search == this.depto) {
-        searchDepto = true;
-      }
-    });
+    if (this.depto != null) {
+      this.save_depto.forEach((search) => {
+        if (search == this.depto) {
+          searchDepto = true;
+        }
+      });
+    }
 
     if (this.depto != null && !searchDepto) {
       this.afs
@@ -211,26 +214,40 @@ export class WhereSleepService {
         .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
-          const arrSleep: DondeDormir[] = [];
+          const mapSleep = new Map();
           querySnapshot.forEach((item) => {
             const data: any = item.data();
-            arrSleep.push({ id: item.id, ...data });
-            this.init_dondedormir.push({ id: item.id, ...data });
-          });
-          this.allDormir = JSON.parse(JSON.stringify(arrSleep));
 
-          this.allDormir.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
+            let sleep = { id: item.id, ...data };
+            mapSleep.set(sleep.id, { ...data });
+            
+            let test = this.init_dondedormir.find(function (element) {
+              return element.id === sleep.id;
+            });
+
+            if (test === undefined) {
+              this.init_dondedormir.push(sleep);
+            }
           });
+          this.allDormir = JSON.parse(JSON.stringify([...mapSleep.values()]));
+
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.allDormir.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          }
 
           if (querySnapshot.size !== 0) {
             this.save_depto.push(this.depto);
@@ -255,31 +272,35 @@ export class WhereSleepService {
 
           searchDepto = false;
           this.donde_dormir.next(this.allDormir);
-
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => "Fin");
-    } else if (searchDepto) {
-      this.allDormir = [];
+    } else if (this.depto != null && searchDepto) {
       this.init_dondedormir.forEach((res) => {
         if (res.departamento == this.depto) {
           this.allDormir.push(res);
         }
       });
-      this.allDormir.forEach((dist) => {
-        let calcDist = distance(
-          [
-            this.geolocationSvc.posicion.longitud,
-            this.geolocationSvc.posicion.latitud,
-          ],
-          [dist.ubicacion.lng, dist.ubicacion.lat],
-          options
-        );
-        dist.distancia = calcDist;
-        dist.distanciaNumber = calcDist;
-      });
+
+      if (
+        this.geolocationSvc.posicion !== undefined &&
+        this.geolocationSvc.posicion !== null
+      ) {
+        this.allDormir.forEach((dist) => {
+          let calcDist = distance(
+            [
+              this.geolocationSvc.posicion.longitud,
+              this.geolocationSvc.posicion.latitud,
+            ],
+            [dist.ubicacion.lng, dist.ubicacion.lat],
+            options
+          );
+          dist.distancia = calcDist;
+          dist.distanciaNumber = calcDist;
+        });
+      }
 
       this.allDormir.length !== 0
         ? (this.noData = false)
@@ -313,7 +334,7 @@ export class WhereSleepService {
       });
 
       limitCurrent.forEach((dep: string) => {
-        if (this.save_depto.length !== 0) {
+        if (this.save_depto.length != 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
               deptoSearch = true;
@@ -325,22 +346,29 @@ export class WhereSleepService {
           this.init_dondedormir.forEach((init: any) => {
             if (init.departamento == dep) this.distanceSleep.push(init);
           });
-          this.distanceSleep.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
 
-            if (calcDist <= this.distance) {
-              this.controlDistance = true;
-            }
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.distanceSleep.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+
+              if (calcDist <= this.distance) {
+                this.controlDistance = true;
+              }
+            });
+          }
+
           deptoSearch = false;
         } else {
           this.afs
@@ -352,25 +380,40 @@ export class WhereSleepService {
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
-                this.init_dondedormir.push({ id: item.id, ...data });
-                this.distanceSleep.push({ id: item.id, ...data });
-              });
-              this.distanceSleep.forEach((dist) => {
-                let calcDist = distance(
-                  [
-                    this.geolocationSvc.posicion.longitud,
-                    this.geolocationSvc.posicion.latitud,
-                  ],
-                  [dist.ubicacion.lng, dist.ubicacion.lat],
-                  options
-                );
-                dist.distancia = calcDist;
-                dist.distanciaNumber = calcDist;
+               
+                let sleep = { id: item.id, ...data };
+console.log(sleep.nombre)
+                let test = this.init_dondedormir.find(function (element) {
+                  return element.id === sleep.id;
+                });
 
-                if (calcDist <= this.distance) {
-                  this.controlDistance = true;
+                if (test === undefined) {
+                  this.init_dondedormir.push(sleep);
+                  this.distanceSleep.push(sleep);
                 }
               });
+
+              if (
+                this.geolocationSvc.posicion !== undefined &&
+                this.geolocationSvc.posicion !== null
+              ) {
+                this.distanceSleep.forEach((dist) => {
+                  let calcDist = distance(
+                    [
+                      this.geolocationSvc.posicion.longitud,
+                      this.geolocationSvc.posicion.latitud,
+                    ],
+                    [dist.ubicacion.lng, dist.ubicacion.lat],
+                    options
+                  );
+                  dist.distancia = calcDist;
+                  dist.distanciaNumber = calcDist;
+
+                  if (calcDist <= this.distance) {
+                    this.controlDistance = true;
+                  }
+                });
+              }
 
               if (!searchDepto && querySnapshot.size !== 0)
                 this.save_depto.push(dep);

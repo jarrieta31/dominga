@@ -46,14 +46,25 @@ export class ArtistService {
           .where("publicado", "==", true)
           .get()
           .then((querySnapshot) => {
-            const arrArtist: Artistas[] = [];
+            const mapArtist = new Map();
             querySnapshot.forEach((item) => {
               const data: any = item.data();
-              arrArtist.push({ id: item.id, ...data });
-              this.init_artist.push({ id: item.id, ...data });
+
+              let artistReq = { id: item.id, ...data };
+              mapArtist.set(artistReq.id, { ...data });
+
+              let test = this.init_artist.find(function (element) {
+                return element.id === artistReq.id;
+              });
+
+              if (test === undefined) {
+                this.init_artist.push(artistReq);
+              }
             });
 
-            this.allArtist = JSON.parse(JSON.stringify(arrArtist));
+            this.allArtist = JSON.parse(
+              JSON.stringify([...mapArtist.values()])
+            );
 
             if (querySnapshot.size !== 0) {
               this.save_depto.push(this.depto);
@@ -74,14 +85,24 @@ export class ArtistService {
           .where("publicado", "==", true)
           .get()
           .then((querySnapshot) => {
-            const arrArtist: Artistas[] = [];
+            const mapArtistDist = new Map();
             querySnapshot.forEach((item) => {
               const data: any = item.data();
-              arrArtist.push({ id: item.id, ...data });
-              this.init_artist.push({ id: item.id, ...data });
+              let artistDist = { id: item.id, ...data };
+              mapArtistDist.set(artistDist.id, { ...data });
+
+              let test = this.init_artist.find(function (element) {
+                return element.id === artistDist.id;
+              });
+
+              if (test === undefined) {
+                this.init_artist.push(artistDist);
+              }
             });
 
-            this.allArtist = JSON.parse(JSON.stringify(arrArtist));
+            this.allArtist = JSON.parse(
+              JSON.stringify([...mapArtistDist.values()])
+            );
 
             if (querySnapshot.size !== 0) {
               this.save_depto.push(checkDepto);

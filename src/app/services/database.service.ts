@@ -216,6 +216,7 @@ export class DatabaseService {
    * Obtener eventos desde fecha de hoy
    */
   getEventos(checkDepto: string) {
+    // console.log(this.initEvents);
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allEvents = [];
@@ -244,15 +245,25 @@ export class DatabaseService {
         .orderBy("fechaInicio", "asc")
         .get()
         .then((querySnapshot) => {
-          const arrEvents: any[] = [];
+          const mapEvents = new Map();
           querySnapshot.forEach((item) => {
             const data: any = item.data();
             data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
             data.fechaFin = new Date(data.fechaFin["seconds"] * 1000);
-            arrEvents.push({ id: item.id, ...data });
-            this.initEvents.push({ id: item.id, ...data });
+
+            let evento = { id: item.id, ...data };
+            mapEvents.set(evento.id, { ...data });
+
+            let test = this.initEvents.find(function (element) {
+              return element.id === evento.id;
+            });
+
+            if (test === undefined) {
+              this.initEvents.push(evento);
+            }
           });
-          this.allEvents = arrEvents;
+
+          this.allEvents = [...mapEvents.values()];
 
           if (
             this.geolocationSvc.posicion !== undefined &&
@@ -278,6 +289,7 @@ export class DatabaseService {
           } else this.noData = true;
 
           searchDepto = false;
+
           this.eventos.next(this.allEvents);
         })
         .catch((err) => {
@@ -374,8 +386,17 @@ export class DatabaseService {
                 const data: any = item.data();
                 data.fechaInicio = new Date(data.fechaInicio["seconds"] * 1000);
                 data.fechaFin = new Date(data.fechaFin["seconds"] * 1000);
-                this.initEvents.push({ id: item.id, ...data });
-                this.distanceEvents.push({ id: item.id, ...data });
+
+                let evento = { id: item.id, ...data };
+
+                let test = this.initEvents.find(function (element) {
+                  return element.id === evento.id;
+                });
+
+                if (test === undefined) {
+                  this.initEvents.push(evento);
+                  this.distanceEvents.push(evento);
+                }
               });
 
               if (
@@ -423,6 +444,7 @@ export class DatabaseService {
 
         return 0;
       });
+
       this.eventos.next(this.distanceEvents);
     }
 

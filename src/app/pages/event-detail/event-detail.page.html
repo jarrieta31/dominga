@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar color="information">
     <ion-buttons slot="start">
       <ion-back-button
@@ -72,6 +72,8 @@
     <div class="descripcion" id="description-event" [innerHTML]="descripcion">
     </div>
   </div>
+</ion-content>
+<ion-footer class="ion-no-border">
   <div class="ticket">
     <div *ngIf="precioUnico && precio > 0" class="entradas">
       <div id="event-detail-container" class="entradas_div">Valor ticket</div>
@@ -99,4 +101,4 @@
       </div>
     </div>
   </div>
-</ion-content>
+</ion-footer>

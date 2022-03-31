@@ -204,14 +204,23 @@ export class WhereEatService {
         .orderBy("nombre")
         .get()
         .then((querySnapshot) => {
-          const arrDondeComer: DondeComer[] = [];
+          const mapEat = new Map();
           querySnapshot.forEach((item) => {
             const data: any = item.data();
-            arrDondeComer.push({ id: item.id, ...data });
-            this.init_dondecomer.push({ id: item.id, ...data });
+
+            let eat = { id: item.id, ...data };
+            mapEat.set(eat.id, { ...data });
+
+            let test = this.init_dondecomer.find(function (element) {
+              return element.id === eat.id;
+            });
+
+            if (test === undefined) {
+              this.init_dondecomer.push(eat);
+            }
           });
 
-          this.allDondeComer = JSON.parse(JSON.stringify(arrDondeComer));
+          this.allDondeComer = JSON.parse(JSON.stringify([...mapEat.values()]));
 
           this.allDondeComer.forEach((dist) => {
             let calcDist = distance(
@@ -343,8 +352,17 @@ export class WhereEatService {
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
-                this.init_dondecomer.push({ id: item.id, ...data });
-                this.distanceEat.push({ id: item.id, ...data });
+
+                let eatDist = { id: item.id, ...data };
+
+                let test = this.init_dondecomer.find(function (element) {
+                  return element.id === eatDist.id;
+                });
+
+                if (test === undefined) {
+                  this.init_dondecomer.push(eatDist);
+                  this.distanceEat.push(eatDist);
+                }
               });
 
               this.distanceEat.forEach((dist) => {

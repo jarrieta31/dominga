@@ -228,13 +228,22 @@ export class PlaceService {
         .orderBy("prioridad")
         .get()
         .then((querySnapshot) => {
-          const arrPlaces: Place[] = [];
+          const mapPlaces = new Map();
           querySnapshot.forEach((item) => {
             const data: any = item.data();
-            arrPlaces.push({ id: item.id, ...data });
-            this.initPlace.push({ id: item.id, ...data });
+
+            let placesRequest = { id: item.id, ...data };
+            mapPlaces.set(placesRequest.id, { ...data });
+
+            let test = this.initPlace.find(function (element) {
+              return element.id === placesRequest.id;
+            });
+
+            if (test === undefined) {
+              this.initPlace.push(placesRequest);
+            }
           });
-          this.allLugares = JSON.parse(JSON.stringify(arrPlaces));
+          this.allLugares = JSON.parse(JSON.stringify([...mapPlaces.values()]));
 
           if (
             this.geolocationSvc.posicion !== undefined &&
@@ -362,8 +371,17 @@ export class PlaceService {
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
-                this.initPlace.push({ id: item.id, ...data });
-                this.distancePlaces.push({ id: item.id, ...data });
+
+                let placeDist = { id: item.id, ...data };
+
+                let test = this.initPlace.find(function (element) {
+                  return element.id === placeDist.id;
+                });
+
+                if (test === undefined) {
+                  this.initPlace.push(placeDist);
+                  this.distancePlaces.push(placeDist);
+                }
               });
 
               if (
@@ -398,7 +416,9 @@ export class PlaceService {
           deptoSearch = false;
         }
       });
-      this.distancePlaces.length !== 0 ? this.noData = false : this.noData = true;
+      this.distancePlaces.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
 
       this.places.next(this.distancePlaces);
     }
