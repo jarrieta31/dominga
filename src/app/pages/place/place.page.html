@@ -144,7 +144,7 @@
               [routerLink]="['/place-selected', item.id]"
               (click)="getPlace(item.id); sumaVisitaLugar(item.id)"
             >
-              <span color="back">{{ item.nombre }}</span><span class="categoria"
+              <span class="title_place">{{ item.nombre }}</span><span class="categoria"
                 >&nbsp;&nbsp;({{item.tipo}})</span
               >
             </ion-card-header>

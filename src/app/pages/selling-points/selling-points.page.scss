@@ -56,7 +56,11 @@ ion-text > p {
   text-align: center;
   font-size: 1.2em;
   font-weight: bold;
-  font-family: "Poppins", sans-serif;;
+  font-family: "Poppins", sans-serif;
+}
+
+.title_selling {
+  color: var(--ion-color-back);
 }
 
 .close {
