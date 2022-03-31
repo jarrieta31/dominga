@@ -82,14 +82,14 @@
       </div>
     </div>
     <div *ngIf="precioUnico === false && precio > 0" class="entradas">
-      <div id="event-detail-container" class="entradas_div">Desde</div>
-      <div id="event-detail-container" class="precios_div">
+      <div id="event-detail-container" color="dark" class="entradas_div">Desde</div>
+      <div id="event-detail-container" color="dark" class="precios_div">
         {{ moneda }}&nbsp;{{ precio }}
       </div>
     </div>
     <div *ngIf="precio === 0" class="entradas">
-      <div id="event-detail-container" class="entradas_div">Entrada</div>
-      <div id="event-detail-container" class="precios_div">Gratis</div>
+      <div id="event-detail-container" color="dark" class="entradas_div">Entrada</div>
+      <div id="event-detail-container" color="dark" class="precios_div">Gratis</div>
     </div>
     <div
       class="precio"
