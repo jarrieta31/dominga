@@ -46,6 +46,11 @@ export class EventDetailPage implements OnInit {
   /**clase preload */
   preloadClass: string = "img-principal";
 
+  /**controla si fecha inicio es igual a fecha fin */
+  dateControl: boolean = false;
+  /**controla si fecha inicio es identica a fecha fin  */
+  controlHour: boolean = false;
+
   constructor(
     private modalCtrl: ModalController,
     private browser: InAppBrowser
@@ -57,6 +62,15 @@ export class EventDetailPage implements OnInit {
       this.end = new Date(this.fecha);
       this.showDate();
     });
+
+    const f = new Date(this.fecha);
+    const ff = new Date(this.fechaFin);
+    const fi = f.getDate() + "-" + f.getMonth() + "-" + f.getFullYear();
+    const ffn = ff.getDate() + "-" + ff.getMonth() + "-" + ff.getFullYear();
+
+    if (fi === ffn) this.dateControl = true;
+
+    if(this.fecha.valueOf() === this.fechaFin.valueOf()) this.controlHour = true;
   }
 
   /**

@@ -60,17 +60,27 @@
           <ion-icon name="calendar-outline" class="mark-info"></ion-icon>{{fecha
           | date: 'dd.MM.yyyy'}}
         </div>
+        <div
+          class="fecha-hora_div"
+          *ngIf="!dateControl"
+        >
+          <ion-icon name="calendar-outline" class="mark-info"></ion-icon
+          >{{fechaFin | date: 'dd.MM.yyyy'}}
+        </div>
       </div>
       <div class="hora">
         <div id="event-detail-container" class="div-hora">Hora</div>
-        <div class="fecha-hora_div">
+        <div class="fecha-hora_div" *ngIf="fecha !== fechaFin">
           <ion-icon name="time-outline" class="mark-info"></ion-icon>{{fecha |
-          date:'HH:mm'}}
+          date:'HH:mm'}} <span *ngIf="!controlHour">a {{fechaFin | date:'HH:mm'}}</span>
         </div>
       </div>
     </div>
-    <div class="descripcion" id="description-event" [innerHTML]="descripcion">
-    </div>
+    <div
+      class="descripcion"
+      id="description-event"
+      [innerHTML]="descripcion"
+    ></div>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
