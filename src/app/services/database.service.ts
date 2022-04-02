@@ -222,6 +222,8 @@ export class DatabaseService {
     this.allEvents = [];
     this.distanceEvents = [];
 
+    let currentDate = new Date();
+
     this.controlDistance = false;
 
     let searchDepto: boolean = false;
@@ -321,7 +323,7 @@ export class DatabaseService {
         return 0;
       });
       this.initEvents.forEach((res) => {
-        if (res.departamento == this.depto) {
+        if (res.departamento == this.depto && res.fechaFin >= currentDate) {
           this.allEvents.push(res);
         }
       });
@@ -370,7 +372,7 @@ export class DatabaseService {
 
         if (deptoSearch) {
           this.initEvents.forEach((init: any) => {
-            if (init.departamento == dep) this.distanceEvents.push(init);
+            if (init.departamento == dep && init.fechaFin >= currentDate) this.distanceEvents.push(init);
           });
 
           if (
