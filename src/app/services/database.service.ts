@@ -222,6 +222,8 @@ export class DatabaseService {
     this.allEvents = [];
     this.distanceEvents = [];
 
+    let currentDate = new Date();
+
     this.controlDistance = false;
 
     let searchDepto: boolean = false;
@@ -240,9 +242,9 @@ export class DatabaseService {
       this.afs
         .collection("eventos")
         .ref.where("departamento", "==", this.selectionDepto)
-        .where("fechaInicio", ">=", this.today)
+        .where("fechaFin", ">=", this.today)
         .where("publicado", "==", true)
-        .orderBy("fechaInicio", "asc")
+        .orderBy("fechaFin", "asc")
         .get()
         .then((querySnapshot) => {
           const mapEvents = new Map();
@@ -290,6 +292,18 @@ export class DatabaseService {
 
           searchDepto = false;
 
+          this.allEvents.sort((a, b) => {
+            if (a.fechaInicio < b.fechaInicio) {
+              return -1;
+            }
+
+            if (a.fechaInicio > b.fechaInicio) {
+              return 1;
+            }
+
+            return 0;
+          });
+
           this.eventos.next(this.allEvents);
         })
         .catch((err) => {
@@ -297,8 +311,19 @@ export class DatabaseService {
         })
         .finally(() => "Finally");
     } else if (this.depto != null && searchDepto) {
+      this.initEvents.sort((a, b) => {
+        if (a.fechaInicio < b.fechaInicio) {
+          return -1;
+        }
+
+        if (a.fechaInicio > b.fechaInicio) {
+          return 1;
+        }
+
+        return 0;
+      });
       this.initEvents.forEach((res) => {
-        if (res.departamento == this.depto) {
+        if (res.departamento == this.depto && res.fechaFin >= currentDate) {
           this.allEvents.push(res);
         }
       });
@@ -347,7 +372,7 @@ export class DatabaseService {
 
         if (deptoSearch) {
           this.initEvents.forEach((init: any) => {
-            if (init.departamento == dep) this.distanceEvents.push(init);
+            if (init.departamento == dep && init.fechaFin >= currentDate) this.distanceEvents.push(init);
           });
 
           if (
@@ -377,9 +402,9 @@ export class DatabaseService {
           this.afs
             .collection("eventos")
             .ref.where("departamento", "==", dep)
-            .where("fechaInicio", ">=", this.today)
+            .where("fechaFin", ">=", this.today)
             .where("publicado", "==", true)
-            .orderBy("fechaInicio", "asc")
+            .orderBy("fechaFin", "asc")
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {

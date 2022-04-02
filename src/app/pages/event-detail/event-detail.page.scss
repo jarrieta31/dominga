@@ -157,6 +157,21 @@ a {
 
 // Cuenta regresiva
 
+.event_start {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+  padding: 20px;
+  font-size: 1.3em;
+  color: var(--ion-color-back);
+  background-color: var(--ion-color-party);
+  border-radius: 5px;
+}
+
 section {
   margin: 6px 0 8px 0;
 }
