@@ -242,7 +242,7 @@ export class DatabaseService {
         .ref.where("departamento", "==", this.selectionDepto)
         .where("fechaFin", ">=", this.today)
         .where("publicado", "==", true)
-        .orderBy("fechaInicio", "asc")
+        .orderBy("fechaFin", "asc")
         .get()
         .then((querySnapshot) => {
           const mapEvents = new Map();
@@ -290,6 +290,18 @@ export class DatabaseService {
 
           searchDepto = false;
 
+          this.allEvents.sort((a, b) => {
+            if (a.fechaInicio < b.fechaInicio) {
+              return -1;
+            }
+
+            if (a.fechaInicio > b.fechaInicio) {
+              return 1;
+            }
+
+            return 0;
+          });
+
           this.eventos.next(this.allEvents);
         })
         .catch((err) => {
@@ -297,6 +309,17 @@ export class DatabaseService {
         })
         .finally(() => "Finally");
     } else if (this.depto != null && searchDepto) {
+      this.initEvents.sort((a, b) => {
+        if (a.fechaInicio < b.fechaInicio) {
+          return -1;
+        }
+
+        if (a.fechaInicio > b.fechaInicio) {
+          return 1;
+        }
+
+        return 0;
+      });
       this.initEvents.forEach((res) => {
         if (res.departamento == this.depto) {
           this.allEvents.push(res);
@@ -379,7 +402,7 @@ export class DatabaseService {
             .ref.where("departamento", "==", dep)
             .where("fechaFin", ">=", this.today)
             .where("publicado", "==", true)
-            .orderBy("fechaInicio", "asc")
+            .orderBy("fechaFin", "asc")
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
