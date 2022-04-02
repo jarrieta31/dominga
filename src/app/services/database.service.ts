@@ -240,7 +240,7 @@ export class DatabaseService {
       this.afs
         .collection("eventos")
         .ref.where("departamento", "==", this.selectionDepto)
-        .where("fechaInicio", ">=", this.today)
+        .where("fechaFin", ">=", this.today)
         .where("publicado", "==", true)
         .orderBy("fechaInicio", "asc")
         .get()
@@ -377,7 +377,7 @@ export class DatabaseService {
           this.afs
             .collection("eventos")
             .ref.where("departamento", "==", dep)
-            .where("fechaInicio", ">=", this.today)
+            .where("fechaFin", ">=", this.today)
             .where("publicado", "==", true)
             .orderBy("fechaInicio", "asc")
             .get()

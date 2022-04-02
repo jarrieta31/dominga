@@ -22,7 +22,7 @@
       ></app-preload-details>
     </div>
     <section>
-      <div class="cuenta-regresiva">
+      <div class="cuenta-regresiva" *ngIf="day !== 0 || hours !== 0 || minutes !== 0 || seconds !== 0, else start">
         <div class="time">
           <ul class="time-list">
             <li id="event-detail-container" class="count-bg-one radius">
@@ -40,6 +40,11 @@
           </ul>
         </div>
       </div>
+      <ng-template #start>
+        <div class="cuenta-regresiva">
+          Evento en curso
+        </div>
+      </ng-template>
     </section>
     <div class="ubicacion">
       <div id="event-detail-container" class="dir">
