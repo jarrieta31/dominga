@@ -222,18 +222,23 @@ export class WhereEatService {
 
           this.allDondeComer = JSON.parse(JSON.stringify([...mapEat.values()]));
 
-          this.allDondeComer.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.allDondeComer.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          }
 
           if (querySnapshot.size !== 0) {
             this.save_depto.push(this.depto);
@@ -268,18 +273,23 @@ export class WhereEatService {
         }
       });
 
-      this.allDondeComer.forEach((dist) => {
-        let calcDist = distance(
-          [
-            this.geolocationSvc.posicion.longitud,
-            this.geolocationSvc.posicion.latitud,
-          ],
-          [dist.ubicacion.lng, dist.ubicacion.lat],
-          options
-        );
-        dist.distancia = calcDist;
-        dist.distanciaNumber = calcDist;
-      });
+      if (
+        this.geolocationSvc.posicion !== undefined &&
+        this.geolocationSvc.posicion !== null
+      ) {
+        this.allDondeComer.forEach((dist) => {
+          let calcDist = distance(
+            [
+              this.geolocationSvc.posicion.longitud,
+              this.geolocationSvc.posicion.latitud,
+            ],
+            [dist.ubicacion.lng, dist.ubicacion.lat],
+            options
+          );
+          dist.distancia = calcDist;
+          dist.distanciaNumber = calcDist;
+        });
+      }
 
       this.allDondeComer.length !== 0
         ? (this.noData = false)
@@ -325,22 +335,28 @@ export class WhereEatService {
           this.init_dondecomer.forEach((init: any) => {
             if (init.departamento == dep) this.distanceEat.push(init);
           });
-          this.distanceEat.forEach((dist) => {
-            let calcDist = distance(
-              [
-                this.geolocationSvc.posicion.longitud,
-                this.geolocationSvc.posicion.latitud,
-              ],
-              [dist.ubicacion.lng, dist.ubicacion.lat],
-              options
-            );
-            dist.distancia = calcDist;
-            dist.distanciaNumber = calcDist;
 
-            if (calcDist <= this.distance) {
-              this.controlDistance = true;
-            }
-          });
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.distanceEat.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                options
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+
+              if (calcDist <= this.distance) {
+                this.controlDistance = true;
+              }
+            });
+          }
           deptoSearch = false;
         } else {
           this.afs
@@ -365,22 +381,26 @@ export class WhereEatService {
                 }
               });
 
-              this.distanceEat.forEach((dist) => {
-                let calcDist = distance(
-                  [
-                    this.geolocationSvc.posicion.longitud,
-                    this.geolocationSvc.posicion.latitud,
-                  ],
-                  [dist.ubicacion.lng, dist.ubicacion.lat],
-                  options
-                );
-                dist.distancia = calcDist;
-                dist.distanciaNumber = calcDist;
-                if (calcDist <= this.distance) {
-                  this.controlDistance = true;
-                }
-              });
-
+              if (
+                this.geolocationSvc.posicion !== undefined &&
+                this.geolocationSvc.posicion !== null
+              ) {
+                this.distanceEat.forEach((dist) => {
+                  let calcDist = distance(
+                    [
+                      this.geolocationSvc.posicion.longitud,
+                      this.geolocationSvc.posicion.latitud,
+                    ],
+                    [dist.ubicacion.lng, dist.ubicacion.lat],
+                    options
+                  );
+                  dist.distancia = calcDist;
+                  dist.distanciaNumber = calcDist;
+                  if (calcDist <= this.distance) {
+                    this.controlDistance = true;
+                  }
+                });
+              }
               if (!searchDepto && querySnapshot.size !== 0)
                 this.save_depto.push(dep);
             })

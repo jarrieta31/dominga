@@ -32,7 +32,6 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ComponentsModule } from './components/components.module';
-import { Network } from '@ionic-native/network/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -69,7 +68,6 @@ export function gpsProviderFactory(provider: GpsProvider){
     Geolocation,
     InAppBrowser,
     Keyboard,
-    Network,
     Platform,
     ScreenOrientation,
     SplashScreen,
