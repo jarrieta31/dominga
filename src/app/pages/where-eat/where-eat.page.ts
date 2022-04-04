@@ -75,7 +75,7 @@ export class WhereEatPage {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private eatSvc: WhereEatService,
+    public eatSvc: WhereEatService,
     private fb: FormBuilder,
     private sliderSvc: SlidesService,
     private http: HttpClient,

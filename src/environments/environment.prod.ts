@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   firebaseConfig: {
     apiKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
     authDomain: "appdominga.firebaseapp.com",
@@ -12,5 +12,6 @@ export const environment = {
   },
   firebaseAPIKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
   mapBoxToken: "pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA",
-  casaDominga: { "longitud": -56.7145, "latitud": -34.340007 }
+  urlMopboxDepto: "https://api.mapbox.com/geocoding/v5/mapbox.places/",
+  urlMapboxDistance: "https://api.mapbox.com/directions/v5/mapbox/driving/" 
 };

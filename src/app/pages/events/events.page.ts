@@ -79,7 +79,7 @@ export class EventsPage {
   constructor(
     private veService: VisitEventService, //Servicio contador de visitas eventos.
     private modalCtrl: ModalController,
-    private dbService: DatabaseService,
+    public dbService: DatabaseService,
     private sliderSvc: SlidesService,
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,

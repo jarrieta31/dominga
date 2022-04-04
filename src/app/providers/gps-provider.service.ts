@@ -19,8 +19,9 @@ export class GpsProvider {
     }
 
     async getUbicacionInicial() {
+    
         const platformReady = await this.platform.ready();
-        console.log('ready>', platformReady)
+        console.log('ready: ', platformReady)
         //await this.verEstadoGps(platformReady);
         return this.geolocation.getCurrentPosition().then(
             pos => {

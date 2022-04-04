@@ -71,7 +71,7 @@ export class WhereSleepPage {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private sleepSvc: WhereSleepService,
+    public sleepSvc: WhereSleepService,
     private fb: FormBuilder,
     private sliderSvc: SlidesService,
     private geolocationSvc: GeolocationService,

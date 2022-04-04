@@ -23,7 +23,7 @@ import { environment } from "src/environments/environment";
 export class ArtistPage {
   constructor(
     private fb: FormBuilder,
-    private artistSvc: ArtistService,
+    public artistSvc: ArtistService,
     private loadingCtrl: LoadingController,
     private sliderSvc: SlidesService,
     private modalCtrl: ModalController,

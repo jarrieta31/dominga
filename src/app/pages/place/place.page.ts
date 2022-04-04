@@ -49,7 +49,7 @@ export class PlacePage {
     private geolocationSvc: GeolocationService,
     private visitPlaceSvc: VisitPlaceService,
     private databaseSvc: DatabaseService,
-    private placeSvc: PlaceService,
+    public placeSvc: PlaceService,
     private browser: InAppBrowser,
     private http: HttpClient,
     private fb: FormBuilder,

@@ -13,6 +13,8 @@ export interface DondeDormir {
   hora: string | number;
   minuto: string | number;
   mostrar?: boolean;
+  instagram: string;
+  whatsapp: string;
 }
 
 export interface Imagen {
